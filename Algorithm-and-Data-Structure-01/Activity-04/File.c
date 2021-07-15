@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <strings.h>
 
 typedef struct produto
 {
@@ -23,7 +24,7 @@ int main()
     
     printf("%s \n", prodC.descricao);
 
-    strcpy(vet[2]->descricao, "Mouse Sem Fio");
+    strcpy(vet[2].descricao, "Mouse Sem Fio");
 
     printf("%s \n", prodC.descricao);
 
