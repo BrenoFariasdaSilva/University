@@ -23,7 +23,8 @@ build(){
       OUTPUT=`basename $FILE` 
       OUTPUT="/tmp/${OUTPUT%.*}"
       echo "## Building $FILE to $OUTPUT"
-      gcc "$FILE" -o "OUTPUT"
+      #-lm (load math) is required when math.h is used on Linux
+      gcc "$FILE" -o "OUTPUT" -lm
    done
 }
 
