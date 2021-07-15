@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "lista_alocacao_dinamica.c"
+#include "List-DynamicMemory.h"
 
 int main()
 {

@@ -1,28 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-
-//Exercise 01
-void inverte_string(char* str);
-//Exercise 02
-int qtde_vogais1(char* str);
-void qtde_vogais2(char* str, int* saida);
-//Exercise 03
-char* copia_string(char* str);
-//Exercise 04
-int* cria_vetor1(int tam, int valor);
-bool cria_vetor2(int tam, int valor, int** saida);
-//Exercise 05
-int* clone1(int tam, int valor);
-bool clone2(int tam, int valor, int** saida);
-//Exercise 06
-int* aleatorio1(int tam);
-bool aleatorio2(int tam, int** saida);
-//Exercise 07
-int dobra_tamanho(int** v, int tam);
-//Exercise 08
-int** cria_matriz(int linhas, int colunas, int valor);
+#include "List-DynamicMemory.h"
 
 /***********************************************
 * FUNCOES AUXILIARES
@@ -157,35 +133,31 @@ bool cria_vetor2(int tam, int valor, int** saida)
     return true;
 }
 
-int* vetor_cloneA(int valor, int tam)
+int* vetor_cloneA(int *valor, int tam)
 {
     if (tam < 1) return false;
-
-    int* vetor = valor;
 
     int* vet = (int*) malloc (tam * sizeof(int));
 
     for (int i = 0; i < tam; i++)
     {
-        vet[i] = vetor[i];
+        vet[i] = valor[i];
     }
     
     return vet;
 }
 
-bool vetor_cloneB(int valor, int tam, int** saida)
+bool vetor_cloneB(int *valor, int tam, int** saida)
 {
     if (tam < 1) return false;
     
-    int* vector = valor;
-
     int* Vetor = (int*) malloc (tam * sizeof(int));
 
     *saida = Vetor;
 
     for (int i = 0; i < tam; i++)
     {
-        Vetor[i] = vector[i];
+        Vetor[i] = valor[i];
     }
     
     return true;
