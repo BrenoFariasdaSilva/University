@@ -11,7 +11,7 @@ Na parte do processamento desenvolva uma função responsável por efetuar o cá
 
 float AverageCalculator (const float grade1, const float grade2, const float grade3);
 
-float main(float argc, char const *argv[])
+float main(int argc, char const *argv[])
 {
     float grade1 = 0;
     float grade2 = 0;
