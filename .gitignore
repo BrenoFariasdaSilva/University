@@ -1,2 +1,5 @@
 .DS_Store
 a.out
+
+# Compiled libraries
+*.o
