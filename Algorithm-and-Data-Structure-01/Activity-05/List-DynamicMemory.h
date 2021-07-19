@@ -14,8 +14,8 @@ char* copia_string(char* str);
 int* cria_vetor1(int tam, int valor);
 bool cria_vetor2(int tam, int valor, int** saida);
 //Exercise 05
-int* clone1(int tam, int valor);
-bool clone2(int tam, int valor, int** saida);
+int* clone1(int *valor, int tam);
+bool clone2(int *valor, int tam, int** saida);
 //Exercise 06
 int* aleatorio1(int tam);
 bool aleatorio2(int tam, int** saida);
