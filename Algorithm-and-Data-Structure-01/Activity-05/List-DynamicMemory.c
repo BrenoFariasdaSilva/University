@@ -1,55 +1,24 @@
 #include "List-DynamicMemory.h"
 
-/***********************************************
-* FUNCOES AUXILIARES
-************************************************/
-void imprimir_vetor(int* v, int tam){
-    printf("[");
-    for (int i=0; i < tam; i++){
-        printf("%d", v[i]);
-        if(i<tam-1) printf(",");
-    }
-    printf("]");
-}
-
-void toString_vetor(int* v, int tam, char* saida){
-    saida[0] = '\0';
-    strcat(saida, "[");
-    
-    char elemento[20];
-    for (int i=0; i < tam; i++){
-        sprintf(elemento, "%d", v[i]);
-        strcat(saida, elemento);
-        if(i<tam-1) strcat(saida, ",");
-    }
-    strcat(saida, "]");
-}
-
-/***********************************************
-* IMPLEMENTACAO
-************************************************/
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
 void inverte_string(char* str)
 {
-    int count = sizeof(str) + 1;
+    int count = 0;
 
-    char* AuxStr = (char*) malloc (count * sizeof (char));
-
-    for (int i = 0; i < count; i++)
+    for(; str[count] != '\0'; count++)
     {
-        AuxStr[i] = str[i];
+    }
+
+    for (int i = 0, j = count - 1; i < (count / 2); i++, j--)
+    {
+        char hold = str[i];
+        str[i] = str[j];
+        str[j] = hold;
     } 
 
-    printf("AuxStr %s \n", AuxStr);
-
-    for (int i = 0, j = count - 2; i < count; i++, j--)
-    {
-        str[i] = AuxStr[j];
-    } 
-
-    str[count - 1] = '\0';
-
-    free (AuxStr);
 }
 
 int qtde_vogais1(char* str)
@@ -82,20 +51,18 @@ void qtde_vogais2(char* str, int* saida)
 
 char* copia_string(char* str)
 {
-    int chars = 0;
+    int chars = 1;
 
     for(int i = 0; str[i] != '\0'; i++)
     {
         chars++;
     }
 
-    const int Count = (chars * sizeof(char) + 1);
+    const int count = (chars * sizeof(char));
 
-    printf("Count: %d \n", Count);
+    char* CopyStr = (char*) malloc (count * sizeof (char));
 
-    char* CopyStr = (char*) malloc (Count * sizeof (char));
-
-    for (int i = 0; i < Count; i++)
+    for (int i = 0; i < count; i++)
     {
         CopyStr[i] = str[i];
     }
@@ -105,8 +72,11 @@ char* copia_string(char* str)
 
 int* cria_vetor1(int tam, int valor)
 {
-    if (tam < 1) return false;
-
+    if (tam < 1)
+    {
+        return false;
+    } 
+        
     int* vet = (int*) malloc (tam * sizeof(int));
 
     for (int i = 0; i < tam; i++)
@@ -119,7 +89,10 @@ int* cria_vetor1(int tam, int valor)
 
 bool cria_vetor2(int tam, int valor, int** saida)
 {
-    if (tam < 1) return false;
+    if (tam < 1)
+    {
+        return false;
+    } 
     
     int* Vetor = (int*) malloc (tam * sizeof(int));
 
@@ -129,49 +102,58 @@ bool cria_vetor2(int tam, int valor, int** saida)
     {
         Vetor[i] = valor;
     }
-    
+
     return true;
 }
 
-int* vetor_cloneA(int *valor, int tam)
+int* clone1(int *valor, int tam)
 {
-    if (tam < 1) return false;
+    if (tam < 1)
+    {
+        return false;
+    } 
 
-    int* vet = (int*) malloc (tam * sizeof(int));
+    int* vector = (int*) malloc (tam * sizeof(int));
 
     for (int i = 0; i < tam; i++)
     {
-        vet[i] = valor[i];
+        vector[i] = valor[i];
     }
     
-    return vet;
+    return vector;
 }
 
-bool vetor_cloneB(int *valor, int tam, int** saida)
+bool clone2(int *valor, int tam, int** saida)
 {
-    if (tam < 1) return false;
+    if (tam < 1)
+    {
+        return false;
+    } 
     
-    int* Vetor = (int*) malloc (tam * sizeof(int));
-
-    *saida = Vetor;
+    int* Vector = (int*) malloc (tam * sizeof(int));
 
     for (int i = 0; i < tam; i++)
     {
-        Vetor[i] = valor[i];
+        Vector[i] = valor[i];
     }
+
+    *saida = Vector;
     
     return true;
 }
 
 int* aleatorio1(int tam)
 {
-    if (tam < 1) return false;
+    if (tam < 1)
+    {
+        return false;
+    }
 
     int* vet = (int*) malloc (tam * sizeof(int));
 
     for (int i = 0; i < tam; i++)
     {
-        vet[i] = 1 + rand() % 10;
+        vet[i] = 1 + rand() % 9;
     }
     
     return vet;
@@ -179,7 +161,10 @@ int* aleatorio1(int tam)
 
 bool aleatorio2(int tam, int** saida)
 {
-    if (tam < 1) return false;
+    if (tam < 1)
+    {
+        return false;
+    }
 
     int* vet = (int*) malloc (tam * sizeof(int));
 
@@ -187,7 +172,7 @@ bool aleatorio2(int tam, int** saida)
 
     for (int i = 0; i < tam; i++)
     {
-        vet[i] = 1 + rand() % 10;
+        vet[i] = rand() % 9;
     }
     
     return true;
@@ -195,7 +180,10 @@ bool aleatorio2(int tam, int** saida)
 
 int dobra_tamanho(int** v, int tam)
 {
-    if (tam < 1) return false;
+    if (tam < 1)
+    {
+        return false;
+    } 
 
     int* vet = (int*) malloc ((2 *tam) * sizeof(int));
 
@@ -212,25 +200,29 @@ int dobra_tamanho(int** v, int tam)
         }
     }
 
-    *v = vet;
-
     free (v);
+    *v = vet;
 
     return (2 * tam);
 }
 
 int** cria_matriz(int linhas, int colunas, int valor)
 {
-    if (linhas < 1 || colunas < 1) return false;
-
-    int** vetor;
-    vetor = (int**) calloc (2, sizeof(int*));
-    vetor[0] = (int*) calloc (linhas, sizeof(int));
-    vetor[1] = (int*) calloc (colunas, sizeof(int));
-
-    for (int i = 0; i < 2; i++)
+    if (linhas < 1 || colunas < 1)
     {
-        for (int j = 0; j < 3; j++)
+        return false;
+    }
+
+    int** vetor = (int**) malloc (linhas * sizeof(int*));
+    
+    for (int i = 0; i < linhas; i++)
+    {
+        vetor[i] = (int*) calloc (colunas, sizeof(int));
+    }
+
+    for (int i = 0; i < linhas; i++)
+    {
+        for (int j = 0; j < colunas; j++)
         {
             vetor[i][j] = valor;
         }
@@ -238,4 +230,3 @@ int** cria_matriz(int linhas, int colunas, int valor)
 
     return vetor;
 }
-
