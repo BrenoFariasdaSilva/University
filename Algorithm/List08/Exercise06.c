@@ -13,13 +13,13 @@ int main()
     int result = 0;
 
     printf("Digite a primeira string:");
-    scanf("%99[^\n]", &Str1);
+    fgets(Str1, SIZE, stdin);
     printf("\n");
 
     getchar();
 
     printf("Digite a segunda string: \n");
-    scanf("%99[^\n]", &Str2);
+    fgets(Str2, SIZE, stdin);
     printf("\n");
         
     stringToUpper(Str1, Str2);         
