@@ -34,7 +34,7 @@ int main ()
         getchar();
 
         printf("Write your type: \n");
-        scanf("%[^\n]", &people[i].type);
+        scanf("%[^\n]s", &people[i].type);
 
         printf("\n");
 
