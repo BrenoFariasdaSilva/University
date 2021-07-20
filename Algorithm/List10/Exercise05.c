@@ -41,7 +41,7 @@ int main ()
     for (int i = 0; i < SIZE; i++)
     {
         printf("Write your name: \n");
-        scanf("%[^\n]", &person[i].name);
+        fgets (person[i].name, 50, stdin);
 
         printf("Write the day you were born: \n");
         scanf("%d", &person[i].day);
