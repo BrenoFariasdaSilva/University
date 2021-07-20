@@ -200,7 +200,7 @@ int dobra_tamanho(int** v, int tam)
         }
     }
 
-    free (v);
+    free (*v);
     *v = vet;
 
     return (2 * tam);
