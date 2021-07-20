@@ -4,9 +4,9 @@
 
 int main() 
 {
-    const int tam[SIZE] = {3, 2, 3};
-    const int v1[SIZE] = {1, 2, 3};
-    const int v2[SIZE] = {4, 5, 6};
+    int tam[SIZE] = {3, 2, 3};
+    int v1[SIZE] = {1, 2, 3};
+    int v2[SIZE] = {4, 5, 6};
 
     int totalElementos = 0;
 
