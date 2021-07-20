@@ -10,7 +10,7 @@ int main()
     int wordsCount = 0;
 
     printf("Digite uma string:");
-    scanf("%99[^\n]", &str);
+    fgets(str, SIZE, stdin);
     printf("\n");
 
     getchar();
