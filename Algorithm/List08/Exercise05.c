@@ -1,13 +1,15 @@
 #include <stdio.h>
 
+#define SIZE 100
+
 void stringToUpper(char str[]);
 
 int main()
 {
-    char Str[100] = {0};
+    char Str[SIZE] = {0};
 
     printf("Digite uma string: \n");
-    scanf("%99[^\n]", &Str);
+    fgets(Str, SIZE, stdin);
 
     stringToUpper(Str);
       
