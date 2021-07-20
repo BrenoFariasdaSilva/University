@@ -14,7 +14,7 @@ void printString()
     char Str[10] = {};
 
     printf("Digite uma string: \n");
-    scanf("%s", &Str);
+    scanf("%s", Str);
 
     printf("%s", Str);
 }
