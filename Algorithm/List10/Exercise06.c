@@ -25,16 +25,15 @@ int main ()
     for (int i = 0; i < SIZE; i++)
     {
         printf("Write your name: \n");
-        scanf("%[^\n]", &people[i].name);
-        getchar();
+        fgets (people[i].name, 50, stdin);
 
         printf("Write the day you were born: \n");
-        scanf("%d", &people[i].salary);
+        scanf("%f", &people[i].salary);
 
         getchar();
 
         printf("Write your type: \n");
-        scanf("%[^\n]s", &people[i].type);
+        fgets (people[i].type, 50, stdin);
 
         printf("\n");
 
