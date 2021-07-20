@@ -7,7 +7,7 @@ int main()
     char Str[10] = {0}, separator = {0};
 
     printf("Digite uma string: \n");
-    scanf("%s", &Str);
+    scanf("%s", Str);
 
     getchar();
 
