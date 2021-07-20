@@ -5,10 +5,10 @@ void printStringReversed(char str[]);
 
 int main()
 {
-    char Str[10] = {};  
+    char Str[10] = {0};  
 
     printf("Digite uma string: \n");
-    scanf("%s", &Str);
+    fgets(Str, 10, stdin);
 
     printStringReversed(Str);
       
