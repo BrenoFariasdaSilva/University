@@ -32,10 +32,10 @@ void batchReport(int* max, int* min)
 
         else
         {
-            if (input > max)
+            if (input > *max)
                 *max = input;
 
-            if (input < min)
+            if (input < *min)
                 *min = input;
         }
     }
