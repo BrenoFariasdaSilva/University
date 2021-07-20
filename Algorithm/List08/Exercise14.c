@@ -12,7 +12,7 @@ int main()
     printf("Digite uma String:");
     scanf("%99[^\n]", str);
 
-    int result = stringContains(&str, "da");    
+    int result = stringContains(str, "da");    
 
     if (result != 0)
         printf("%s \n", str);      
