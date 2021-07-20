@@ -5,7 +5,7 @@ void printBoxFilled(const int width, const int height, const char ch);
 int main()
 {
     int width = 0, height = 0;
-    char character = NULL; 
+    char character = '\0'; 
 
     printf("Digite a largura e a altura da caixa: ");
     scanf("%d %d", &width, &height);
