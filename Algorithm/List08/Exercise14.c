@@ -49,7 +49,7 @@ int stringContains(char str[], char sub[])
                 str[i + j] = 32;
             }
 
-            stringTrim(&str);
+            stringTrim(str);
 
             times++;
         }
