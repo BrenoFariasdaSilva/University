@@ -1,6 +1,6 @@
 all:
 	gcc -c BinaryTree.c
 	gcc main.c *.o -o main
-	main > result.txt
+	./main > result.txt
 	rm -f *.o
-	rm -f main
+	rm -f ./main
