@@ -3,6 +3,13 @@ a.out
 
 # Compiled C libraries
 *.o
+*.ko
+*.obj
+*.elf
+
+# Executables
+*.exe
+*.out
 
 # Java
 .mtj.tmp/
