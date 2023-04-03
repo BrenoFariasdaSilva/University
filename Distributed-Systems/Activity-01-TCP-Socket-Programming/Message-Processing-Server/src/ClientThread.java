@@ -11,6 +11,9 @@ public class ClientThread implements Runnable {
     DataOutputStream out;
     Socket clientSocket;
 
+    final static String successMessage = "SUCCESS";
+    final static String errorMessage = "ERROR";
+
     public ClientThread (Socket clientSocket) {
         try {
             this.clientSocket = clientSocket;
@@ -35,9 +38,16 @@ public class ClientThread implements Runnable {
                 if (buffer.equals("EXIT")) { break; }
                 else if (buffer.contains("CONNECT")) { out.writeUTF(connect(buffer)); }
                 else if (buffer.equals("PWD")) { out.writeUTF(this.pwd()); }
-                else if (buffer.contains("CHDIR")) { out.writeUTF(this.chdir()); }
+                else if (buffer.contains("CHDIR")) {
+                    String[] pathValue = buffer.split(" ", 2);
+                    out.writeUTF(this.chdir(pathValue[1]));
+                }
+
                 else if (buffer.contains("GETFILES")) { out.writeUTF(this.getFiles(currentPath).toString()); }
                 else if (buffer.contains("GETDIRS")) { out.writeUTF(this.getDirs(currentPath).toString()); }
+                else {
+                    System.out.println("Invalid input!");
+                }
             }
 
         } catch (EOFException eofe) {
@@ -59,8 +69,8 @@ public class ClientThread implements Runnable {
     public String connect(final String buffer) {
         String[] login = buffer.split(",");
         System.out.println("Login Credentials: " + Arrays.toString(login));
-        if (this.authenticate(login[1], login[2])) { return "SUCCESS"; }
-        return "ERROR";
+        if (this.authenticate(login[1], login[2])) { return successMessage; }
+        return errorMessage;
     }
 
     public boolean authenticate(final String username, final String password) {
@@ -75,9 +85,12 @@ public class ClientThread implements Runnable {
         return currentPath;
     }
 
-    public String chdir() {
-        System.out.println("ToDo");
-        return "ToDo";
+    public String chdir(String newPath) {
+        File folder = new File(newPath);
+
+        if (folder.isDirectory()) { return successMessage; }
+
+        return errorMessage;
     }
 
     public ArrayList<String> getFiles(String currentPath) throws IOException {
