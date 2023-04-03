@@ -51,7 +51,7 @@ public class ClientThread implements Runnable {
             }
 
         } catch (EOFException eofe) {
-                System.out.println("EOF: " + eofe.getMessage());
+            System.out.println("EOF: " + eofe.getMessage());
         } catch (IOException ioe) {
             System.out.println("IOE: " + ioe.getMessage());
         } finally {
