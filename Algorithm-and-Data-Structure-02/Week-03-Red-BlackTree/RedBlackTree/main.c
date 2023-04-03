@@ -46,7 +46,7 @@ bool alreadyInserted (int* vector, const int key)
 
 void testB ()
 {
-	int* vector = int* random_vector (SIZE, 100, 42);
+	int* vector = random_vector (SIZE, 100, 42);
 
 	printf("Unsorted Vector: ");
 	printVector(vector, SIZE);
