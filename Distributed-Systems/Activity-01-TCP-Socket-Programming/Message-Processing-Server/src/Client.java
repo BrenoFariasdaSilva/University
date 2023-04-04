@@ -33,6 +33,8 @@ public class Client {
                 out.writeUTF(buffer);      	// envia a mensagem para o servidor
 
                 buffer = in.readUTF();      // aguarda resposta do servidor
+
+                if
                 System.out.println("Server disse: " + buffer);
             }
         } catch (EOFException eofe){

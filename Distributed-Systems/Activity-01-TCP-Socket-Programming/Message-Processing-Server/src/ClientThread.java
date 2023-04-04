@@ -88,9 +88,9 @@ public class ClientThread implements Runnable {
 
     public String pwd() throws IOException {
         Path currentRelativePath = Paths.get("");
-        String currentPath = currentRelativePath.toAbsolutePath().toString();
-        this.out.writeUTF(currentPath);
-        return currentPath;
+        String currentAbsolutePath = currentRelativePath.toAbsolutePath().toString();
+        this.out.writeUTF(currentAbsolutePath);
+        return currentAbsolutePath;
     }
 
     public String chdir(String newPath) {
