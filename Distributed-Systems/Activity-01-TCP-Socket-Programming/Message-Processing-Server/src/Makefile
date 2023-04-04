@@ -1,9 +1,9 @@
 compile:
-    javac Server.java
-    javac Client.java
+	javac Server.java
+	javac Client.java
 
 server:
-    java Server
+	java Server
 
 client:
-    java Client
+	java Client

@@ -2,9 +2,7 @@ import java.net.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
 public class ClientThread implements Runnable {
     DataInputStream in;
@@ -30,21 +28,30 @@ public class ClientThread implements Runnable {
             String buffer = "";
             String currentPath = "";
 
-            while (buffer != "EXIT") {
+            while (!buffer.equals("EXIT")) {
                 buffer = in.readUTF();   /* aguarda o envio de dados */
 
-                System.out.println("Cliente disse: " + buffer);
+                System.out.printf("Cliente disse: '%s'\n", buffer);
 
-                if (buffer.contains("CONNECT")) {
-                    out.writeUTF(connect(buffer));
+                if (buffer.contains("CONNECT")) { // CONNECT user, password
+                    System.out.println("Implement");
+                    String[] login = buffer.split(" ", 3);
+                    // String encryptedPassword = this.getSHA512(login[2]);
+                    out.writeUTF(connect(login[2]));
                 } else if (buffer.equals("PWD")) {
-                    out.writeUTF(this.pwd());
+                    currentPath = this.pwd();
+                    out.writeUTF(currentPath);
                 } else if (buffer.contains("CHDIR")) {
                     String[] pathValue = buffer.split(" ", 2);
                     out.writeUTF(this.chdir(pathValue[1]));
-                } else if (buffer.contains("GETFILES")) {
-                    out.writeUTF(this.getFiles(currentPath).toString());
-                } else if (buffer.contains("GETDIRS")) {
+                } else if (buffer.equals("GETFILES")) {
+                    List<String> files = this.getFiles(currentPath);
+                    final int numberOfFiles = files.size();
+                    System.out.println("Number of files " + numberOfFiles);
+                    var builder = new StringBuilder();
+                    for (int i = 0; i < numberOfFiles; i++) { builder.append(files.get(i)); }
+                    out.writeUTF(builder.toString());
+                } else if (buffer.equals("GETDIRS")) {
                     out.writeUTF(this.getDirs(currentPath).toString());
                 } else {
                     System.out.println("Invalid input!");
@@ -94,14 +101,20 @@ public class ClientThread implements Runnable {
         return errorMessage;
     }
 
-    public ArrayList<String> getFiles(String currentPath) throws IOException {
+    public List<String> getFiles(String currentPath) throws IOException {
         File folder = new File(currentPath);
         ArrayList<String> fileList = new ArrayList<>();
 
-        this.out.writeUTF(String.valueOf(Objects.requireNonNull(folder.listFiles()).length));
-        if (folder.listFiles() == null) { return fileList; } // Trying to avoid null pointer exception
+        File[] files = folder.listFiles();
+        if (files == null) { return Collections.emptyList(); }
+        this.out.writeUTF(String.valueOf(files.length));
 
-        for (File f : Objects.requireNonNull(folder.listFiles())) { fileList.add(f.getName()); }
+        for (File f : Objects.requireNonNull(files)) { fileList.add(f.getName()); }
+
+        final int numberOfFiles = fileList.size();
+
+        System.out.println("Number of files in GETFILES function: " + numberOfFiles);
+        System.out.println(fileList.toString());
 
         return fileList;
     }

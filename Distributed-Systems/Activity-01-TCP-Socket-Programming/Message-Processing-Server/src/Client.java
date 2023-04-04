@@ -6,17 +6,19 @@ import java.security.MessageDigest;
 
 public class Client {
     public static void main(String[] args) {
-        Socket clientSocket = null; // socket do cliente
         Scanner reader = new Scanner(System.in); // ler mensagens via teclado
 
-        try{
-            // Endereço e porta do servidor
-            int serverPort = 6666;
-            InetAddress serverAddr = InetAddress.getByName("127.0.0.1"); // Instância no localhost.
+        // Endereço e porta do servidor
+        int serverPort = 6666;
+        InetAddress serverAddr = null; // Instância no localhost.
+        try {
+            serverAddr = InetAddress.getByName("127.0.0.1");
+        } catch (UnknownHostException e) {
+            System.out.println("Host desconhecido!");
+            return;
+        }
 
-            // conecta com o servidor
-            clientSocket = new Socket(serverAddr, serverPort);
-
+        try (var clientSocket = new Socket(serverAddr, serverPort)) { // Var infere o tipo sozinho. Só se usa com variáveis locais.
             // cria objetos de leitura e escrita
             DataInputStream in = new DataInputStream( clientSocket.getInputStream());
             DataOutputStream out = new DataOutputStream( clientSocket.getOutputStream());
@@ -24,32 +26,19 @@ public class Client {
             // protocolo de comunicação
             String buffer = "";
 
-            while (buffer != "EXIT") {
+            while (!buffer.equals("EXIT")) {
                 System.out.print("Mensagem: ");
                 buffer = reader.nextLine(); // lê mensagem via teclado
 
-                if (buffer.contains("CONNECT")) { // CONNECT user, password
-                    System.out.println("Implement");
-                    String[] login = buffer.split(" ", 3);
-                    // String encryptedPassword = this.getSHA512(login[2]);
-                }
                 out.writeUTF(buffer);      	// envia a mensagem para o servidor
 
                 buffer = in.readUTF();      // aguarda resposta do servidor
                 System.out.println("Server disse: " + buffer);
             }
-        } catch (UnknownHostException ue){
-            System.out.println("Socket:" + ue.getMessage());
         } catch (EOFException eofe){
             System.out.println("EOF:" + eofe.getMessage());
         } catch (IOException ioe){
             System.out.println("IO:" + ioe.getMessage());
-        } finally {
-            try {
-                clientSocket.close(); // Fechar o socket para não haver problema de socket em uso.
-            } catch (IOException ioe) {
-                System.out.println("IO: " + ioe);;
-            }
         }
     }
 
