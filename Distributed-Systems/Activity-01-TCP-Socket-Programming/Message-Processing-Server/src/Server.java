@@ -17,6 +17,7 @@ public class Server {
 
                 System.out.println("Cliente conectado ... Criando thread ...");
                 ClientThread clientThread = new ClientThread(clientSocket);
+                Thread myThread = new Thread(clientThread);
 
                 /* inicializa a thread */
                 clientThread.run();

@@ -28,6 +28,11 @@ public class Client {
                 System.out.print("Mensagem: ");
                 buffer = reader.nextLine(); // lê mensagem via teclado
 
+                if (buffer.contains("CONNECT")) { // CONNECT user, password
+                    System.out.println("Implement");
+                    String[] login = buffer.split(" ", 3);
+                    // String encryptedPassword = this.getSHA512(login[2]);
+                }
                 out.writeUTF(buffer);      	// envia a mensagem para o servidor
 
                 buffer = in.readUTF();      // aguarda resposta do servidor

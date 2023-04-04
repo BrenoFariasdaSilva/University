@@ -30,22 +30,23 @@ public class ClientThread implements Runnable {
             String buffer = "";
             String currentPath = "";
 
-            while (true) {
+            while (buffer != "EXIT") {
                 buffer = in.readUTF();   /* aguarda o envio de dados */
 
                 System.out.println("Cliente disse: " + buffer);
 
-                if (buffer.equals("EXIT")) { break; }
-                else if (buffer.contains("CONNECT")) { out.writeUTF(connect(buffer)); }
-                else if (buffer.equals("PWD")) { out.writeUTF(this.pwd()); }
-                else if (buffer.contains("CHDIR")) {
+                if (buffer.contains("CONNECT")) {
+                    out.writeUTF(connect(buffer));
+                } else if (buffer.equals("PWD")) {
+                    out.writeUTF(this.pwd());
+                } else if (buffer.contains("CHDIR")) {
                     String[] pathValue = buffer.split(" ", 2);
                     out.writeUTF(this.chdir(pathValue[1]));
-                }
-
-                else if (buffer.contains("GETFILES")) { out.writeUTF(this.getFiles(currentPath).toString()); }
-                else if (buffer.contains("GETDIRS")) { out.writeUTF(this.getDirs(currentPath).toString()); }
-                else {
+                } else if (buffer.contains("GETFILES")) {
+                    out.writeUTF(this.getFiles(currentPath).toString());
+                } else if (buffer.contains("GETDIRS")) {
+                    out.writeUTF(this.getDirs(currentPath).toString());
+                } else {
                     System.out.println("Invalid input!");
                 }
             }
