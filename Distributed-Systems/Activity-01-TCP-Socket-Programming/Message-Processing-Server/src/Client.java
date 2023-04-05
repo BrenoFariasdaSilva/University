@@ -31,11 +31,18 @@ public class Client {
                 buffer = reader.nextLine(); // lê mensagem via teclado
 
                 out.writeUTF(buffer);      	// envia a mensagem para o servidor
-
                 buffer = in.readUTF();      // aguarda resposta do servidor
 
-                if
-                System.out.println("Server disse: " + buffer);
+                if (buffer.equals("GETFILES") || buffer.equals("GETDIRS")) {
+                    final int numberOfContent = Integer.parseInt(buffer);
+                    System.out.print("Server disse: ");
+                    for (int i = 0; i < numberOfContent; i++) {
+                        System.out.print(in.readUTF());
+                        if (i < numberOfContent - 1) { System.out.println(", "); }
+                    }
+                } else {
+                    System.out.println("Server disse: " + buffer);
+                }
             }
         } catch (EOFException eofe){
             System.out.println("EOF:" + eofe.getMessage());

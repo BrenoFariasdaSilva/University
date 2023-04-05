@@ -26,7 +26,7 @@ public class ClientThread implements Runnable {
     public void run() {
         try {
             String buffer = "";
-            String currentPath = "";
+            String currentPath = "/"; // Começa com / por ser um servidor linux
 
             while (!buffer.equals("EXIT")) {
                 buffer = in.readUTF();   /* aguarda o envio de dados */
