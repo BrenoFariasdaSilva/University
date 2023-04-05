@@ -10,6 +10,7 @@ public class Server {
             ServerSocket listenSocket = new ServerSocket(serverPort);
 
             while (true) {
+                // TODO: Como implementar uma lógica para suportar múltiplos clientes.
                 System.out.println("Servidor aguardando conexao ...");
 
                 /* aguarda conexoes */

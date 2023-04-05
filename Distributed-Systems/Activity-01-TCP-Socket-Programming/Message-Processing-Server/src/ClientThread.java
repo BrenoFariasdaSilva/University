@@ -1,6 +1,5 @@
 import java.net.*;
 import java.io.*;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -26,7 +25,8 @@ public class ClientThread implements Runnable {
     public void run() {
         try {
             String buffer = "";
-            String currentRelativePath = "/"; // Começa com / por ser um servidor linux
+            StringBuilder currentRelativePath = new StringBuilder("/"); // Começa com / por ser um servidor linux
+            boolean authenticated = false;
 
             while (!buffer.equals("EXIT")) {
                 buffer = in.readUTF();   /* aguarda o envio de dados */
@@ -34,17 +34,26 @@ public class ClientThread implements Runnable {
                 System.out.printf("Cliente disse: '%s'\n", buffer);
 
                 if (buffer.contains("CONNECT")) { // CONNECT user, password
-                    System.out.println("Implement");
                     String[] login = buffer.split(" ", 3);
+
+//                    if (this.createUserDirectory(login[1])) {
+//                        System.out.println("User " + login[1] + " is alreayd logged!");
+//                    } else {
+//                        out.writeUTF(connect(login[2]));
+//                    }
                     // String encryptedPassword = this.getSHA512(login[2]);
-                    out.writeUTF(connect(login[2]));
+
                 } else if (buffer.equals("PWD")) {
-                    out.writeUTF(this.pwd(currentRelativePath));
+                    out.writeUTF(this.pwd(currentRelativePath.toString()));
                 } else if (buffer.contains("CHDIR")) {
                     String[] pathValue = buffer.split(" ", 2);
-                    out.writeUTF(this.chdir(pathValue[1]));
+                    if (this.chdir(currentRelativePath, pathValue[1])) {
+                        out.writeUTF(successMessage);
+                    } else {
+                        out.writeUTF(errorMessage);
+                    }
                 } else if (buffer.equals("GETFILES")) {
-                    List<String> files = this.getFiles(currentRelativePath);
+                    List<String> files = this.getFiles(currentRelativePath.toString());
                     out.writeUTF(String.valueOf(files.size()));
                     if (files.size() > 0) {
                         var builder = new StringBuilder();
@@ -56,7 +65,7 @@ public class ClientThread implements Runnable {
                     }
 
                 } else if (buffer.equals("GETDIRS")) {
-                    List<String> folders = this.getDirs(currentRelativePath);
+                    List<String> folders = this.getDirs(currentRelativePath.toString());
                     out.writeUTF(String.valueOf(folders.size()));
                     if (folders.size() > 0) {
                         var builder = new StringBuilder();
@@ -87,6 +96,17 @@ public class ClientThread implements Runnable {
         System.out.println("Thread de comunicação cliente finalizada.");
     }
 
+    public void createUserDirectory(final String user) {
+        File userDirectory = new File("./users/" + user);
+        if (!userDirectory.exists()){
+            userDirectory.mkdirs();
+        }
+    }
+
+    public String getAbsolutePath () {
+        return Paths.get("").toAbsolutePath().toString();
+    }
+
     public String connect(final String buffer) {
         String[] login = buffer.split(",");
         System.out.println("Login Credentials: " + Arrays.toString(login));
@@ -103,19 +123,19 @@ public class ClientThread implements Runnable {
         return currentRelativePath;
     }
 
-    public String chdir(String newPath) {
-        File folder = new File(newPath);
+    public boolean chdir(StringBuilder currentRelativePath, String folder) {
+        File cdFolder = new File(this.getAbsolutePath());
 
-        if (folder.isDirectory()) { return successMessage; }
+        if (cdFolder.isDirectory()) {
+            currentRelativePath.append(folder);
+            return true;
+        }
 
-        return errorMessage;
+        return false;
     }
 
     public List<String> getFiles(final String currentRelativePath) throws IOException {
-        String absolutePath = Paths.get("").toAbsolutePath().toString();
-        absolutePath.concat(currentRelativePath);
-
-        File[] folder = new File(absolutePath).listFiles();
+        File[] folder = new File(this.getAbsolutePath()).listFiles();
         ArrayList<String> fileList = new ArrayList<>();
 
         if (folder == null) { return Collections.emptyList(); }
