@@ -26,7 +26,7 @@ public class ClientThread implements Runnable {
     public void run() {
         try {
             String buffer = "";
-            String currentPath = "/"; // Começa com / por ser um servidor linux
+            String currentRelativePath = "/"; // Começa com / por ser um servidor linux
 
             while (!buffer.equals("EXIT")) {
                 buffer = in.readUTF();   /* aguarda o envio de dados */
@@ -38,21 +38,25 @@ public class ClientThread implements Runnable {
                     String[] login = buffer.split(" ", 3);
                     // String encryptedPassword = this.getSHA512(login[2]);
                     out.writeUTF(connect(login[2]));
-                } else if (buffer.equals("PWD")) {
-                    currentPath = this.pwd();
-                    out.writeUTF(currentPath);
+                } else if (buffer.equals("PWD") || buffer.equals("pwd")) {
+                    out.writeUTF(this.pwd(currentRelativePath));
                 } else if (buffer.contains("CHDIR")) {
                     String[] pathValue = buffer.split(" ", 2);
                     out.writeUTF(this.chdir(pathValue[1]));
-                } else if (buffer.equals("GETFILES")) {
-                    List<String> files = this.getFiles(currentPath);
-                    final int numberOfFiles = files.size();
-                    System.out.println("Number of files " + numberOfFiles);
-                    var builder = new StringBuilder();
-                    for (int i = 0; i < numberOfFiles; i++) { builder.append(files.get(i)); }
-                    out.writeUTF(builder.toString());
+                } else if (buffer.equals("GETFILES") || buffer.equals("getfiles")) {
+                    List<String> files = this.getFiles(currentRelativePath);
+                    out.writeUTF(String.valueOf(files.size()));
+                    if (files.size() > 0) {
+                        var builder = new StringBuilder();
+                        for (int i = 0; i < files.size(); i++) {
+                            builder.append(files.get(i));
+                            if (i < files.size() - 1) { builder.append("\n"); }
+                        }
+                        out.writeUTF(builder.toString());
+                    }
+
                 } else if (buffer.equals("GETDIRS")) {
-                    out.writeUTF(this.getDirs(currentPath).toString());
+                    out.writeUTF(this.getDirs(currentRelativePath).toString());
                 } else {
                     System.out.println("Invalid input!");
                 }
@@ -86,11 +90,8 @@ public class ClientThread implements Runnable {
         return true;
     }
 
-    public String pwd() throws IOException {
-        Path currentRelativePath = Paths.get("");
-        String currentAbsolutePath = currentRelativePath.toAbsolutePath().toString();
-        this.out.writeUTF(currentAbsolutePath);
-        return currentAbsolutePath;
+    public String pwd(String currentRelativePath) throws IOException {
+        return currentRelativePath;
     }
 
     public String chdir(String newPath) {
@@ -101,27 +102,23 @@ public class ClientThread implements Runnable {
         return errorMessage;
     }
 
-    public List<String> getFiles(String currentPath) throws IOException {
-        File folder = new File(currentPath);
+    public List<String> getFiles(final String currentRelativePath) throws IOException {
+        String absolutePath = Paths.get("").toAbsolutePath().toString();
+        absolutePath.concat(currentRelativePath);
+
+        File[] folder = new File(absolutePath).listFiles();
         ArrayList<String> fileList = new ArrayList<>();
 
-        File[] files = folder.listFiles();
-        if (files == null) { return Collections.emptyList(); }
-        this.out.writeUTF(String.valueOf(files.length));
+        if (folder == null) { return Collections.emptyList(); }
 
-        for (File f : Objects.requireNonNull(files)) { fileList.add(f.getName()); }
-
-        final int numberOfFiles = fileList.size();
-
-        System.out.println("Number of files in GETFILES function: " + numberOfFiles);
-        System.out.println(fileList.toString());
+        for (File f : Objects.requireNonNull(folder)) { fileList.add(f.getName()); }
 
         return fileList;
     }
 
-    public ArrayList<String> getDirs(String currentPath) throws IOException {
+    public ArrayList<String> getDirs(String currentRelativePath) throws IOException {
         // public String[] list() and public boolean isDirectory()
-        File folder = new File(currentPath);
+        File folder = new File(currentRelativePath);
         this.out.writeUTF(String.valueOf(Objects.requireNonNull(folder.listFiles()).length));
 
         ArrayList<String> fileList = new ArrayList<>();

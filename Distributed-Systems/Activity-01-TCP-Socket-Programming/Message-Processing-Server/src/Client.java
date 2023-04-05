@@ -25,23 +25,20 @@ public class Client {
 
             // protocolo de comunicação
             String buffer = "";
+            String lastMessage = "";
 
             while (!buffer.equals("EXIT")) {
                 System.out.print("Mensagem: ");
                 buffer = reader.nextLine(); // lê mensagem via teclado
+                lastMessage = buffer;
 
                 out.writeUTF(buffer);      	// envia a mensagem para o servidor
                 buffer = in.readUTF();      // aguarda resposta do servidor
+                System.out.println("Server disse: " + buffer);
 
-                if (buffer.equals("GETFILES") || buffer.equals("GETDIRS")) {
+                if (lastMessage.equals("GETFILES") || lastMessage.equals("GETDIRS")) {
                     final int numberOfContent = Integer.parseInt(buffer);
-                    System.out.print("Server disse: ");
-                    for (int i = 0; i < numberOfContent; i++) {
-                        System.out.print(in.readUTF());
-                        if (i < numberOfContent - 1) { System.out.println(", "); }
-                    }
-                } else {
-                    System.out.println("Server disse: " + buffer);
+                    System.out.println(in.readUTF());
                 }
             }
         } catch (EOFException eofe){
