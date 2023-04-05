@@ -1,6 +1,8 @@
+import java.math.BigInteger;
 import java.net.*;
 import java.io.*;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
 import java.util.*;
 
 public class ClientThread implements Runnable {
@@ -33,16 +35,10 @@ public class ClientThread implements Runnable {
 
                 System.out.printf("Cliente disse: '%s'\n", buffer);
 
-                if (buffer.contains("CONNECT")) { // CONNECT user, password
-                    String[] login = buffer.split(" ", 3);
-
-//                    if (this.createUserDirectory(login[1])) {
-//                        System.out.println("User " + login[1] + " is alreayd logged!");
-//                    } else {
-//                        out.writeUTF(connect(login[2]));
-//                    }
-                    // String encryptedPassword = this.getSHA512(login[2]);
-
+                if (buffer.contains("CONNECT")) { // CONNECT user,password
+                    //TODO: Enviar apenas o username e o password. Fix
+                    String loginCredentials = buffer.replace("CONNECT ", "");
+                    out.writeUTF(this.connect(buffer.toString()));
                 } else if (buffer.equals("PWD")) {
                     out.writeUTF(this.pwd(currentRelativePath.toString()));
                 } else if (buffer.contains("CHDIR")) {
@@ -96,6 +92,24 @@ public class ClientThread implements Runnable {
         System.out.println("Thread de comunicação cliente finalizada.");
     }
 
+    public boolean authenticate(final String username, final String password) {
+        if (this.getSHA512(username).equals(password)) { return true; }
+        return false;
+    }
+
+    public String getSHA512(String password) {
+        String encryptedPassword = "";
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-512");
+            digest.reset();
+            digest.update(password.getBytes("utf8"));
+            encryptedPassword = String.format("%0128x", new BigInteger(1, digest.digest()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return encryptedPassword;
+    }
+
     public void createUserDirectory(final String user) {
         File userDirectory = new File("./users/" + user);
         if (!userDirectory.exists()){
@@ -108,15 +122,12 @@ public class ClientThread implements Runnable {
     }
 
     public String connect(final String buffer) {
-        String[] login = buffer.split(",");
-        System.out.println("Login Credentials: " + Arrays.toString(login));
-        if (this.authenticate(login[1], login[2])) { return successMessage; }
-        return errorMessage;
-    }
+        String[] loginCredentials = buffer.split(",");
+        System.out.println("USERNAME: " + loginCredentials[0]);
+        System.out.println("PASSWORD: " + loginCredentials[1]);
 
-    public boolean authenticate(final String username, final String password) {
-        System.out.println("ToDo");
-        return true;
+        if (this.authenticate(loginCredentials[0], loginCredentials[1])) { return successMessage; }
+        return errorMessage;
     }
 
     public String pwd(String currentRelativePath) throws IOException {
@@ -150,10 +161,7 @@ public class ClientThread implements Runnable {
     }
 
     public List<String> getDirs(final String currentRelativePath) throws IOException {
-        String absolutePath = Paths.get("").toAbsolutePath().toString();
-        absolutePath.concat(currentRelativePath);
-
-        File[] folder = new File(absolutePath).listFiles();
+        File[] folder = new File(this.getAbsolutePath()).listFiles();
         ArrayList<String> fileList = new ArrayList<>();
 
         if (folder == null) { return Collections.emptyList(); }
