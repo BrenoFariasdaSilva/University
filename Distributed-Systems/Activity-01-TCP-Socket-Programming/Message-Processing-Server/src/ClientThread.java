@@ -38,12 +38,12 @@ public class ClientThread implements Runnable {
                     String[] login = buffer.split(" ", 3);
                     // String encryptedPassword = this.getSHA512(login[2]);
                     out.writeUTF(connect(login[2]));
-                } else if (buffer.equals("PWD") || buffer.equals("pwd")) {
+                } else if (buffer.equals("PWD")) {
                     out.writeUTF(this.pwd(currentRelativePath));
                 } else if (buffer.contains("CHDIR")) {
                     String[] pathValue = buffer.split(" ", 2);
                     out.writeUTF(this.chdir(pathValue[1]));
-                } else if (buffer.equals("GETFILES") || buffer.equals("getfiles")) {
+                } else if (buffer.equals("GETFILES")) {
                     List<String> files = this.getFiles(currentRelativePath);
                     out.writeUTF(String.valueOf(files.size()));
                     if (files.size() > 0) {
@@ -56,9 +56,18 @@ public class ClientThread implements Runnable {
                     }
 
                 } else if (buffer.equals("GETDIRS")) {
-                    out.writeUTF(this.getDirs(currentRelativePath).toString());
+                    List<String> folders = this.getDirs(currentRelativePath);
+                    out.writeUTF(String.valueOf(folders.size()));
+                    if (folders.size() > 0) {
+                        var builder = new StringBuilder();
+                        for (int i = 0; i < folders.size(); i++) {
+                            builder.append(folders.get(i));
+                            if (i < folders.size() - 1) { builder.append("\n"); }
+                        }
+                        out.writeUTF(builder.toString());
+                    }
                 } else {
-                    System.out.println("Invalid input!");
+                    out.writeUTF("Invalid input!");
                 }
             }
 
@@ -111,20 +120,29 @@ public class ClientThread implements Runnable {
 
         if (folder == null) { return Collections.emptyList(); }
 
-        for (File f : Objects.requireNonNull(folder)) { fileList.add(f.getName()); }
+        for (File f : Objects.requireNonNull(folder)) {
+            if (!f.isDirectory()) {
+                fileList.add(f.getName());
+            }
+        }
 
         return fileList;
     }
 
-    public ArrayList<String> getDirs(String currentRelativePath) throws IOException {
-        // public String[] list() and public boolean isDirectory()
-        File folder = new File(currentRelativePath);
-        this.out.writeUTF(String.valueOf(Objects.requireNonNull(folder.listFiles()).length));
+    public List<String> getDirs(final String currentRelativePath) throws IOException {
+        String absolutePath = Paths.get("").toAbsolutePath().toString();
+        absolutePath.concat(currentRelativePath);
 
+        File[] folder = new File(absolutePath).listFiles();
         ArrayList<String> fileList = new ArrayList<>();
-        if (folder.listFiles() == null) { return fileList; } // Trying to avoid null pointer exception
 
-        for (File f : Objects.requireNonNull(folder.listFiles())) { if (f.isDirectory()) { fileList.add(f.getName()); } }
+        if (folder == null) { return Collections.emptyList(); }
+
+        for (File f : Objects.requireNonNull(folder)) {
+            if (f.isDirectory()) {
+                fileList.add(f.getName());
+            }
+        }
 
         return fileList;
     }
