@@ -38,16 +38,16 @@ public class ClientThread implements Runnable {
             StringBuilder currentRelativePath = new StringBuilder("/"); // Começa com / por ser um servidor linux
             boolean authenticated = false;
 
-            while (!buffer.equals("EXIT")) {
+            while (true) {
                 buffer = in.readUTF();   /* aguarda o envio de dados */
 
                 System.out.printf("Cliente disse: '%s'\n", buffer);
+                if (buffer.equals("EXIT")) { System.out.println("CLIENTE FINALIZADO"); return; }
 
                 // TODO: Finish logic of the authenticated users.
-                if (!authenticated) {
+                if (!authenticated) { // User is not authenticated
                     if (buffer.contains("CONNECT")) {
-                        out.writeUTF(this.connect(buffer.substring(8), currentRelativePath));
-                        authenticated = true;
+                        authenticated = this.connect(buffer.substring(8), currentRelativePath);
                     } else {
                         out.writeUTF("Forbidden Command! Please connect into your user!");
                     }
@@ -132,14 +132,16 @@ public class ClientThread implements Runnable {
         return Paths.get("").toAbsolutePath().toString();
     }
 
-    public String connect(final String buffer, StringBuilder currentRelativePath) {
+    public boolean connect(final String buffer, StringBuilder currentRelativePath) throws IOException {
         String[] loginCredentials = buffer.split(",");
 
         if (this.authenticate(loginCredentials[1])) {
             this.createUserDirectory(loginCredentials[0], currentRelativePath);
-            return successMessage;
+            this.outputMessage(true);
+            return true;
         }
-        return errorMessage;
+        this.outputMessage(false);
+        return false;
     }
 
     public String pwd(String currentRelativePath) throws IOException {
@@ -162,29 +164,21 @@ public class ClientThread implements Runnable {
     }
 
     public List<String> getFiles(final String currentRelativePath) throws IOException {
-        File[] folder = new File(this.getAbsolutePath().concat(currentRelativePath)).listFiles();
-        ArrayList<String> fileList = new ArrayList<>();
-        System.out.println("PATH: " + this.getAbsolutePath().concat(currentRelativePath));
-
-        if (folder == null) { return Collections.emptyList(); }
-
-        for (File f : Objects.requireNonNull(folder)) {
-            if (!f.isDirectory()) {
-                fileList.add(f.getName());
-            }
-        }
-
-        return fileList;
+        return this.getAllFiles(currentRelativePath, false);
     }
 
     public List<String> getDirs(final String currentRelativePath) throws IOException {
+        return this.getAllFiles(currentRelativePath, true);
+    }
+
+    public List<String> getAllFiles (final String currentRelativePath, final boolean wantDirectory) {
         File[] folder = new File(this.getAbsolutePath().concat(currentRelativePath)).listFiles();
         ArrayList<String> fileList = new ArrayList<>();
 
         if (folder == null) { return Collections.emptyList(); }
 
         for (File f : Objects.requireNonNull(folder)) {
-            if (f.isDirectory()) {
+            if (f.isDirectory() && wantDirectory) { // True && false ->
                 fileList.add(f.getName());
             }
         }
