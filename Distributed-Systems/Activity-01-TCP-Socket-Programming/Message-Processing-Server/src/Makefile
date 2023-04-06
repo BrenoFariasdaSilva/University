@@ -13,3 +13,6 @@ server-run:
 
 client-run:
 	clear; java Client
+
+remove:
+	rm *.class

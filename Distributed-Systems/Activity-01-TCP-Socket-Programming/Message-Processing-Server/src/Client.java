@@ -43,7 +43,7 @@ public class Client {
 
                 if (lastMessage.equals("GETFILES") || lastMessage.equals("GETDIRS")) {
                     final int numberOfContent = Integer.parseInt(buffer);
-                    System.out.println(in.readUTF());
+                    if (numberOfContent != 0) { System.out.println(in.readUTF()); }
                 }
             }
         } catch (EOFException eofe){

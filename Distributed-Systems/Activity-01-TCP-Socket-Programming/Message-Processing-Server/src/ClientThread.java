@@ -48,24 +48,19 @@ public class ClientThread implements Runnable {
                         out.writeUTF(this.connect(buffer.substring(8), currentRelativePath));
                         authenticated = true;
                     } else {
-                        out.writeUTF("FORBIDDEN! Please connect into your user!");
+                        out.writeUTF("Forbidden Command! Please connect into your user!");
                     }
-                } else {
+                } else { // User is authenticated.
                     if (buffer.contains("CONNECT") ) {
-                        out.writeUTF("The user");
+                        out.writeUTF("The user is already logged in!");
                     } else if (buffer.equals("PWD")) {
                         out.writeUTF(this.pwd(currentRelativePath.toString()));
                     } else if (buffer.contains("CHDIR")) {
                         String[] pathValue = buffer.split(" ", 2);
-                        if (this.chdir(currentRelativePath, pathValue[1])) {
-                            out.writeUTF(successMessage);
-                        } else {
-                            out.writeUTF(errorMessage);
-                        }
+                         this.outputMessage(this.chdir(currentRelativePath, pathValue[1]));
                     } else if (buffer.equals("GETFILES")) {
                         List<String> files = this.getFiles(currentRelativePath.toString());
                         this.multipleOutput(files);
-
                     } else if (buffer.equals("GETDIRS")) {
                         List<String> folders = this.getDirs(currentRelativePath.toString());
                         this.multipleOutput(folders);
@@ -91,8 +86,9 @@ public class ClientThread implements Runnable {
         System.out.println("Thread de comunicação cliente finalizada.");
     }
 
-    private void multipleOutput(List<String> files) throws IOException {
+    public void multipleOutput(List<String> files) throws IOException {
         out.writeUTF(String.valueOf(files.size()));
+//        if (files.size() )
         if (files.size() > 0) {
             var builder = new StringBuilder();
             for (int i = 0; i < files.size(); i++) {
@@ -102,6 +98,14 @@ public class ClientThread implements Runnable {
                 }
             }
             out.writeUTF(builder.toString());
+        }
+    }
+
+    public void outputMessage (boolean validateConditional) throws IOException {
+        if (validateConditional) {
+            out.writeUTF(successMessage);
+        } else {
+            out.writeUTF(errorMessage);
         }
     }
 
@@ -120,6 +124,7 @@ public class ClientThread implements Runnable {
         currentRelativePath.delete(0, currentRelativePath.length());
         currentRelativePath.append("/");
         currentRelativePath.append(user);
+//        currentRelativePath.append("/");
     }
 
     public String getAbsolutePath () {
@@ -143,8 +148,12 @@ public class ClientThread implements Runnable {
     public boolean chdir(StringBuilder currentRelativePath, String folder) {
         File cdFolder = new File(this.getAbsolutePath());
 
+        int lastChar = currentRelativePath.length();
+        if (currentRelativePath.lastIndexOf("/") != lastChar) { currentRelativePath.append("/"); }
+
         if (cdFolder.isDirectory()) {
             currentRelativePath.append(folder);
+//            currentRelativePath.append("/");
             return true;
         }
 
@@ -154,6 +163,7 @@ public class ClientThread implements Runnable {
     public List<String> getFiles(final String currentRelativePath) throws IOException {
         File[] folder = new File(this.getAbsolutePath().concat(currentRelativePath)).listFiles();
         ArrayList<String> fileList = new ArrayList<>();
+        System.out.println("PATH: " + this.getAbsolutePath().concat(currentRelativePath));
 
         if (folder == null) { return Collections.emptyList(); }
 
