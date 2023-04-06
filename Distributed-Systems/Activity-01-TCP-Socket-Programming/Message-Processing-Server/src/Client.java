@@ -30,6 +30,7 @@ public class Client {
             // protocolo de comunicação
             String buffer = "";
             String lastMessage = "";
+            boolean loggedIn = false;
 
             while (true) {
                 System.out.print(ANSI_GREEN + "Mensagem: " + ANSI_RESET);
@@ -45,9 +46,11 @@ public class Client {
 
                 out.writeUTF(buffer);      	// envia a mensagem para o servidor
                 buffer = in.readUTF();      // aguarda resposta do servidor
+                if (buffer.equals(-1)) { buffer = in.readUTF(); }
                 System.out.println(ANSI_GREEN + "Server disse: " + ANSI_CYAN + buffer + ANSI_RESET);
 
-                if (lastMessage.equals("GETFILES") || lastMessage.equals("GETDIRS")) {
+                if (lastMessage.contains("CONNECT") && buffer.equals("SUCCESS")) { loggedIn = true; }
+                if ((lastMessage.equals("GETFILES") || lastMessage.equals("GETDIRS")) && loggedIn) {
                     final int numberOfContent = Integer.parseInt(buffer);
                     if (numberOfContent != 0) { System.out.println(ANSI_CYAN + in.readUTF() + ANSI_RESET); }
                 }

@@ -58,7 +58,7 @@ public class ClientThread implements Runnable {
                         out.writeUTF("The user is already logged in!");
                     } else if (buffer.equals("PWD")) {
                         out.writeUTF(this.pwd(currentRelativePath.toString()));
-                    } else if (buffer.contains("CHDIR")) {
+                    } else if (buffer.contains("CHDIR")) { // TODO: Fix CHDIR is returning SUCCESS with non-existing folders
                         String[] pathValue = buffer.split(" ", 2);
                          this.outputMessage(this.chdir(currentRelativePath, pathValue[1]));
                     } else if (buffer.equals("GETFILES")) {
@@ -150,15 +150,20 @@ public class ClientThread implements Runnable {
         return currentRelativePath;
     }
 
-    public boolean chdir(StringBuilder currentRelativePath, String folder) {
+    public boolean chdir(StringBuilder currentRelativePath, String folder) throws IOException {
         File cdFolder = new File(this.getAbsolutePath());
 
-        int lastChar = currentRelativePath.length();
-        if (currentRelativePath.lastIndexOf("/") != lastChar) { currentRelativePath.append("/"); }
+        if (folder.equals(".")) { return true; }
+        if (folder.equals("..")) {
+            currentRelativePath.replace(currentRelativePath.lastIndexOf("/"), currentRelativePath.length(), "");
+            System.out.println("new currentPath: " + currentRelativePath);
+            return true;
+        }
 
-        if (cdFolder.isDirectory()) {
+        if (currentRelativePath.lastIndexOf("/") != currentRelativePath.length()) { currentRelativePath.append("/"); }
+
+        if (this.getDirs(currentRelativePath.toString()).contains(folder)) {
             currentRelativePath.append(folder);
-//            currentRelativePath.append("/");
             return true;
         }
 
@@ -170,7 +175,10 @@ public class ClientThread implements Runnable {
     }
 
     public List<String> getDirs(final String currentRelativePath) throws IOException {
-        return this.getAllFiles(currentRelativePath, true);
+        ArrayList<String> dirsList = (ArrayList<String>) this.getAllFiles(currentRelativePath, true);
+        dirsList.add(".");
+        dirsList.add("..");
+        return dirsList;
     }
 
     public List<String> getAllFiles (final String currentRelativePath, final boolean wantDirectory) {
@@ -181,6 +189,8 @@ public class ClientThread implements Runnable {
 
         for (File f : Objects.requireNonNull(folder)) {
             if (f.isDirectory() && wantDirectory) { // True && false ->
+                fileList.add(f.getName());
+            } else if (!f.isDirectory() && !wantDirectory) { //
                 fileList.add(f.getName());
             }
         }
