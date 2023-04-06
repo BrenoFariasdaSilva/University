@@ -7,7 +7,6 @@ import java.util.*;
 // TODO: Use JAVADOC
 // TODO: Create functions for repeated code
 // TODO: Simplify code
-// TODO: Make work with multiple clients! Ask Campiolo help!
 
 public class ClientThread implements Runnable {
     public static final String ANSI_RESET = "\u001B[0m";
