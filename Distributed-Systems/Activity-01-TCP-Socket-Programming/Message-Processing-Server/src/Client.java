@@ -32,6 +32,11 @@ public class Client {
                 buffer = reader.nextLine(); // lê mensagem via teclado
                 lastMessage = buffer;
 
+                if (buffer.contains("CONNECT")) {
+                    String[] loginCredentials = buffer.substring(8).split(",");
+                    buffer = "CONNECT " + loginCredentials[0] + "," + getSHA512(loginCredentials[1]);
+                }
+
                 out.writeUTF(buffer);      	// envia a mensagem para o servidor
                 buffer = in.readUTF();      // aguarda resposta do servidor
                 System.out.println("Server disse: " + buffer);
@@ -48,7 +53,7 @@ public class Client {
         }
     }
 
-    public String getSHA512(String password) {
+    public static String getSHA512(String password) {
         String encryptedPassword = "";
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-512");
