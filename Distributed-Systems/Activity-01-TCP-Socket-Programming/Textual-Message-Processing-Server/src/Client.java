@@ -69,9 +69,7 @@ public class Client {
             digest.reset();
             digest.update(password.getBytes("utf8"));
             encryptedPassword = String.format("%0128x", new BigInteger(1, digest.digest()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
         return encryptedPassword;
     }
 }

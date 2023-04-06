@@ -1,7 +1,6 @@
 import java.net.*;
 import java.io.*;
 import java.nio.file.Paths;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 // TODO: Use JAVADOC
@@ -60,7 +59,7 @@ public class ClientThread implements Runnable {
                         out.writeUTF("The user is already logged in!");
                     } else if (buffer.equals("PWD")) {
                         out.writeUTF(this.pwd(currentRelativePath.toString()));
-                    } else if (buffer.contains("CHDIR")) { // TODO: Fix CHDIR is returning SUCCESS with non-existing folders
+                    } else if (buffer.contains("CHDIR")) {
                         String[] pathValue = buffer.split(" ", 2);
                          this.outputMessage(this.chdir(currentRelativePath, pathValue[1]));
                     } else if (buffer.equals("GETFILES")) {
@@ -93,14 +92,12 @@ public class ClientThread implements Runnable {
 
     public void multipleOutput(List<String> files) throws IOException {
         out.writeUTF(String.valueOf(files.size()));
-//        if (files.size() )
+
         if (files.size() > 0) {
             var builder = new StringBuilder();
             for (int i = 0; i < files.size(); i++) {
                 builder.append(files.get(i));
-                if (i < files.size() - 1) {
-                    builder.append("\n");
-                }
+                if (i < files.size() - 1) { builder.append("\n"); }
             }
             out.writeUTF(builder.toString());
         }
@@ -130,7 +127,6 @@ public class ClientThread implements Runnable {
         currentRelativePath.delete(0, currentRelativePath.length());
         currentRelativePath.append("/");
         currentRelativePath.append(user);
-//        currentRelativePath.append("/");
     }
 
     public String getAbsolutePath () {
@@ -193,13 +189,12 @@ public class ClientThread implements Runnable {
         if (folder == null) { return Collections.emptyList(); }
 
         for (File f : Objects.requireNonNull(folder)) {
-            if (f.isDirectory() && wantDirectory) { // True && false ->
+            if (f.isDirectory() && wantDirectory) {
                 fileList.add(f.getName());
-            } else if (!f.isDirectory() && !wantDirectory) { //
+            } else if (!f.isDirectory() && !wantDirectory) {
                 fileList.add(f.getName());
             }
         }
-
         return fileList;
     }
 }
