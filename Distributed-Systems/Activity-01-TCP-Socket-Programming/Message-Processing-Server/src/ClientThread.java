@@ -1,12 +1,13 @@
 import java.net.*;
 import java.io.*;
 import java.nio.file.Paths;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 // TODO: Use JAVADOC
 // TODO: Create functions for repeated code
 // TODO: Simplify code
-// TODO: Put colors on terminal output for better legibility.
+// TODO: Make work with multiple clients! Ask Campiolo help!
 
 public class ClientThread implements Runnable {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -23,6 +24,8 @@ public class ClientThread implements Runnable {
 
     final static String successMessage = "SUCCESS";
     final static String errorMessage = "ERROR";
+
+    static String user = "";
 
     public ClientThread (Socket clientSocket) {
         try {
@@ -120,7 +123,8 @@ public class ClientThread implements Runnable {
     }
 
     public void createUserDirectory(final String user, StringBuilder currentRelativePath) {
-        File userDirectory = new File("./" + user);
+        File userDirectory = new File("./".concat(user));
+
         if (!userDirectory.exists()){
             userDirectory.mkdirs();
         }
@@ -138,6 +142,7 @@ public class ClientThread implements Runnable {
         String[] loginCredentials = buffer.split(",");
 
         if (this.authenticate(loginCredentials[1])) {
+            user = loginCredentials[0];
             this.createUserDirectory(loginCredentials[0], currentRelativePath);
             this.outputMessage(true);
             return true;
@@ -151,14 +156,15 @@ public class ClientThread implements Runnable {
     }
 
     public boolean chdir(StringBuilder currentRelativePath, String folder) throws IOException {
-        File cdFolder = new File(this.getAbsolutePath());
-
         if (folder.equals(".")) { return true; }
-        if (folder.equals("..")) {
-            currentRelativePath.replace(currentRelativePath.lastIndexOf("/"), currentRelativePath.length(), "");
-            System.out.println("new currentPath: " + currentRelativePath);
-            return true;
+        else if (folder.equals("..")) {
+            if (currentRelativePath.toString().equals("/" + user)) { return false; } else {
+                currentRelativePath.replace(currentRelativePath.lastIndexOf("/"), currentRelativePath.length(), "");
+                return true;
+            }
         }
+
+        File cdFolder = new File(this.getAbsolutePath());
 
         if (currentRelativePath.lastIndexOf("/") != currentRelativePath.length()) { currentRelativePath.append("/"); }
 
