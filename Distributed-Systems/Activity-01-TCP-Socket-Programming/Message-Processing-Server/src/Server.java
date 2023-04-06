@@ -24,7 +24,7 @@ public class Server {
                 Thread myThread = new Thread(clientThread);
 
                 /* inicializa a thread */
-                clientThread.run();
+                myThread.start();
             }
 
         } catch (IOException ioError) {
