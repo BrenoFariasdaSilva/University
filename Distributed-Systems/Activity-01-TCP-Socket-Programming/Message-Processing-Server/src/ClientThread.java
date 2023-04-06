@@ -6,6 +6,7 @@ import java.util.*;
 // TODO: Use JAVADOC
 // TODO: Create functions for repeated code
 // TODO: Simplify code
+// TODO: Put colors on terminal output for better legibility.
 
 public class ClientThread implements Runnable {
     DataInputStream in;
