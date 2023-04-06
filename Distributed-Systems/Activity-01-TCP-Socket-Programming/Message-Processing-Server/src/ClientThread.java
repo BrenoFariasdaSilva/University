@@ -3,6 +3,10 @@ import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
 
+// TODO: Use JAVADOC
+// TODO: Create functions for repeated code
+// TODO: Simplify code
+
 public class ClientThread implements Runnable {
     DataInputStream in;
     DataOutputStream out;
@@ -40,10 +44,15 @@ public class ClientThread implements Runnable {
 
                 // TODO: Finish logic of the authenticated users.
                 if (!authenticated) {
-                    System.out.println("ERROR 403 - FORBIDDEN! Please autenticate!");
-                } else {
                     if (buffer.contains("CONNECT")) {
                         out.writeUTF(this.connect(buffer.substring(8), currentRelativePath));
+                        authenticated = true;
+                    } else {
+                        out.writeUTF("FORBIDDEN! Please connect into your user!");
+                    }
+                } else {
+                    if (buffer.contains("CONNECT") ) {
+                        out.writeUTF("The user");
                     } else if (buffer.equals("PWD")) {
                         out.writeUTF(this.pwd(currentRelativePath.toString()));
                     } else if (buffer.contains("CHDIR")) {
@@ -55,31 +64,11 @@ public class ClientThread implements Runnable {
                         }
                     } else if (buffer.equals("GETFILES")) {
                         List<String> files = this.getFiles(currentRelativePath.toString());
-                        out.writeUTF(String.valueOf(files.size()));
-                        if (files.size() > 0) {
-                            var builder = new StringBuilder();
-                            for (int i = 0; i < files.size(); i++) {
-                                builder.append(files.get(i));
-                                if (i < files.size() - 1) {
-                                    builder.append("\n");
-                                }
-                            }
-                            out.writeUTF(builder.toString());
-                        }
+                        this.multipleOutput(files);
 
                     } else if (buffer.equals("GETDIRS")) {
                         List<String> folders = this.getDirs(currentRelativePath.toString());
-                        out.writeUTF(String.valueOf(folders.size()));
-                        if (folders.size() > 0) {
-                            var builder = new StringBuilder();
-                            for (int i = 0; i < folders.size(); i++) {
-                                builder.append(folders.get(i));
-                                if (i < folders.size() - 1) {
-                                    builder.append("\n");
-                                }
-                            }
-                            out.writeUTF(builder.toString());
-                        }
+                        this.multipleOutput(folders);
                     } else {
                         out.writeUTF("Invalid input!");
                     }
@@ -100,6 +89,20 @@ public class ClientThread implements Runnable {
             }
         }
         System.out.println("Thread de comunicação cliente finalizada.");
+    }
+
+    private void multipleOutput(List<String> files) throws IOException {
+        out.writeUTF(String.valueOf(files.size()));
+        if (files.size() > 0) {
+            var builder = new StringBuilder();
+            for (int i = 0; i < files.size(); i++) {
+                builder.append(files.get(i));
+                if (i < files.size() - 1) {
+                    builder.append("\n");
+                }
+            }
+            out.writeUTF(builder.toString());
+        }
     }
 
     public boolean authenticate(final String password) {
@@ -149,7 +152,7 @@ public class ClientThread implements Runnable {
     }
 
     public List<String> getFiles(final String currentRelativePath) throws IOException {
-        File[] folder = new File(this.getAbsolutePath()).listFiles();
+        File[] folder = new File(this.getAbsolutePath().concat(currentRelativePath)).listFiles();
         ArrayList<String> fileList = new ArrayList<>();
 
         if (folder == null) { return Collections.emptyList(); }
@@ -164,7 +167,7 @@ public class ClientThread implements Runnable {
     }
 
     public List<String> getDirs(final String currentRelativePath) throws IOException {
-        File[] folder = new File(this.getAbsolutePath()).listFiles();
+        File[] folder = new File(this.getAbsolutePath().concat(currentRelativePath)).listFiles();
         ArrayList<String> fileList = new ArrayList<>();
 
         if (folder == null) { return Collections.emptyList(); }

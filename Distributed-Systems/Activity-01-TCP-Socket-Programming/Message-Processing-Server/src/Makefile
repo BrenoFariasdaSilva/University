@@ -1,9 +1,15 @@
 compile:
-	javac Server.java
-	javac Client.java
+	clear; javac Server.java
+	clear; javac Client.java
 
 server:
-	java Server
+	javac Server.java; clear; java Server
 
 client:
-	java Client
+	javac Client.java; clear; java Client
+
+server-run:
+	clear; java Server
+
+client-run:
+	clear; java Client
