@@ -5,6 +5,10 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 
 public class Client {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in); // ler mensagens via teclado
 
@@ -14,7 +18,7 @@ public class Client {
         try {
             serverAddr = InetAddress.getByName("127.0.0.1");
         } catch (UnknownHostException e) {
-            System.out.println("Host desconhecido!");
+            System.out.println(ANSI_GREEN + "Host desconhecido!" + ANSI_RESET);
             return;
         }
 
@@ -27,10 +31,12 @@ public class Client {
             String buffer = "";
             String lastMessage = "";
 
-            while (!buffer.equals("EXIT")) {
-                System.out.print("Mensagem: ");
+            while (true) {
+                System.out.print(ANSI_GREEN + "Mensagem: " + ANSI_RESET);
                 buffer = reader.nextLine(); // lê mensagem via teclado
                 lastMessage = buffer;
+
+                if (buffer.equals("EXIT")) { return; }
 
                 if (buffer.contains("CONNECT")) {
                     String[] loginCredentials = buffer.substring(8).split(",");
@@ -39,17 +45,17 @@ public class Client {
 
                 out.writeUTF(buffer);      	// envia a mensagem para o servidor
                 buffer = in.readUTF();      // aguarda resposta do servidor
-                System.out.println("Server disse: " + buffer);
+                System.out.println(ANSI_GREEN + "Server disse: " + ANSI_CYAN + buffer + ANSI_RESET);
 
                 if (lastMessage.equals("GETFILES") || lastMessage.equals("GETDIRS")) {
                     final int numberOfContent = Integer.parseInt(buffer);
-                    if (numberOfContent != 0) { System.out.println(in.readUTF()); }
+                    if (numberOfContent != 0) { System.out.println(ANSI_CYAN + in.readUTF() + ANSI_RESET); }
                 }
             }
         } catch (EOFException eofe){
-            System.out.println("EOF:" + eofe.getMessage());
+            System.out.println(ANSI_GREEN + "EOF:" + ANSI_CYAN + eofe.getMessage() + ANSI_RESET);
         } catch (IOException ioe){
-            System.out.println("IO:" + ioe.getMessage());
+            System.out.println(ANSI_CYAN + "IO:" + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
         }
     }
 

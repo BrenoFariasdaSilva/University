@@ -9,6 +9,9 @@ import java.util.*;
 // TODO: Put colors on terminal output for better legibility.
 
 public class ClientThread implements Runnable {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_CYAN = "\u001B[36m";
     DataInputStream in;
     DataOutputStream out;
     Socket clientSocket;
@@ -27,7 +30,7 @@ public class ClientThread implements Runnable {
             in = new DataInputStream(clientSocket.getInputStream());
             out = new DataOutputStream(clientSocket.getOutputStream());
         } catch (IOException ioe) {
-            System.out.println("Connection:" + ioe.getMessage());
+            System.out.println(ANSI_GREEN + "Connection:" + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
         }
     }
 
@@ -41,10 +44,9 @@ public class ClientThread implements Runnable {
             while (true) {
                 buffer = in.readUTF();   /* aguarda o envio de dados */
 
-                System.out.printf("Cliente disse: '%s'\n", buffer);
-                if (buffer.equals("EXIT")) { System.out.println("CLIENTE FINALIZADO"); return; }
+                System.out.println(ANSI_GREEN + "Cliente disse: " + ANSI_CYAN + buffer + ANSI_RESET);
+                if (buffer.equals("EXIT")) { System.out.println(ANSI_GREEN + "CLIENTE FINALIZADO" + ANSI_RESET); break; }
 
-                // TODO: Finish logic of the authenticated users.
                 if (!authenticated) { // User is not authenticated
                     if (buffer.contains("CONNECT")) {
                         authenticated = this.connect(buffer.substring(8), currentRelativePath);
@@ -72,9 +74,9 @@ public class ClientThread implements Runnable {
             }
 
         } catch (EOFException eofe) {
-            System.out.println("EOF: " + eofe.getMessage());
+            System.out.println(ANSI_CYAN + "EOF: " + ANSI_CYAN + eofe.getMessage() + ANSI_RESET);
         } catch (IOException ioe) {
-            System.out.println("IOE: " + ioe.getMessage());
+            System.out.println(ANSI_CYAN + "IOE: " + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
         } finally {
             try {
                 in.close();
@@ -84,7 +86,7 @@ public class ClientThread implements Runnable {
                 System.err.println("IOE: " + ioe);
             }
         }
-        System.out.println("Thread de comunicação cliente finalizada.");
+        System.out.println(ANSI_CYAN + "Thread de comunicação cliente finalizada." + ANSI_RESET);
     }
 
     public void multipleOutput(List<String> files) throws IOException {
