@@ -1,11 +1,25 @@
 import java.net.*;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Scanner;
+
+// TODO: Implement checksum.
 
 public class Client {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_CYAN = "\u001B[36m";
+
+    public static final String ADDFILE = "1";
+    public static final String DELETE = "2";
+    public static final String GETFILELIST = "3";
+    public static final String GETFILE = "4";
+
+    public static final int maxHeaderSize = 1 + 1 + 1 + 256;
+
+    public static ByteBuffer byteIn;
+    public static ByteBuffer byteOut = ByteBuffer.allocate(maxHeaderSize);
 
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in); // ler mensagens via teclado
@@ -27,14 +41,34 @@ public class Client {
 
             // protocolo de comunicação
             String buffer = "";
+            String commandType = "0";
 
             while (true) {
-                System.out.print(ANSI_GREEN + "Mensagem: " + ANSI_RESET);
+                System.out.println(ANSI_CYAN + "Insert the header informations: \n" + ANSI_RESET);
+                for (int i = 0; i < 4; i ++) {
+                     byteOut.put(reader.nextLine().getBytes());
+                }
+
+                out.write(byteOut.toString().getBytes());
+                System.out.println("byteOut.toString().getBytes()): " + byteOut.toString());
+
+                switch (commandType) {
+                    case ADDFILE:
+                        byteOut = ByteBuffer.allocate(259);
+                        break;
+                    case DELETE:
+                        break;
+                    case GETFILELIST:
+                        break;
+                    case GETFILE:
+                        break;
+                }
+
                 buffer = reader.nextLine(); // lê mensagem via teclado
 
                 if (buffer.equals("EXIT")) { return; }
 
-                out.writeUTF(buffer);      	// envia a mensagem para o servidor
+                out.writeUTF(buffer);          // envia a mensagem para o servidor
                 buffer = in.readUTF();      // aguarda resposta do servidor
             }
         } catch (EOFException eofe){

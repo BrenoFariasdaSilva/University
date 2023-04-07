@@ -1,16 +1,21 @@
 import java.net.*;
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.nio.file.Paths;
 import java.util.*;
 
-// TODO: Use JAVADOC
-// TODO: Create functions for repeated code
-// TODO: Simplify code
+// TODO: Use JAVADOC.
+// TODO: Create functions for repeated code.
+// TODO: Simplify code.
+// TODO: Implement log system with some library.
 
 public class ClientThread implements Runnable {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_CYAN = "\u001B[36m";
+
+    public static ByteBuffer byteInput;
+    public static ByteBuffer byteOutput;
     Socket clientSocket;
 
     public ClientThread (Socket clientSocket) {
