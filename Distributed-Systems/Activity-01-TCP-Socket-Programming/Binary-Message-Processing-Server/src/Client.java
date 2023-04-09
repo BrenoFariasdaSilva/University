@@ -17,8 +17,8 @@ public class Client {
 
     public static final int maxHeaderSize = 1 + 1 + 1 + 256;
 
-    public static ByteBuffer byteIn;
-    public static ByteBuffer byteOut;
+    public static ByteBuffer byteInput;
+    public static ByteBuffer byteOutput;
     public static final byte request = 1;
 
     public static void main(String[] args) {
@@ -55,15 +55,14 @@ public class Client {
                     case GETFILE -> headerInformation[0] = GETFILE;
                     case default -> System.out.println("Invalid command!");
                 }
-                byteOut = ByteBuffer.allocate(maxHeaderSize);
-                byteOut.put(0, request); // Static because the client only send requests
-                byteOut.put(1, headerInformation[0].getBytes());
+                byteOutput = ByteBuffer.allocate(maxHeaderSize);
+                byteOutput.put(0, request); // Static because the client only send requests
+                byteOutput.put(1, headerInformation[0].getBytes());
                 byte filenameLength = (byte) headerInformation[1].length();
-                byteOut.put(2, filenameLength);
-                byteOut.put(0, headerInformation[1].getBytes());
+                byteOutput.put(2, filenameLength);
+                byteOutput.put(0, headerInformation[1].getBytes());
 
-                out.write(byteOut.array());
-
+                out.write(byteOutput.array());
             }
         } catch (EOFException eofe){
             System.out.println(ANSI_GREEN + "EOF:" + ANSI_CYAN + eofe.getMessage() + ANSI_RESET);
