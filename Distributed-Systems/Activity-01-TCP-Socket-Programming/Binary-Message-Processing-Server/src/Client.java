@@ -28,7 +28,7 @@ public class Client {
         int serverPort = 6666;
         InetAddress serverAddr = null; // Instância no localhost.
         try {
-            serverAddr = InetAddress.getByName("127.0.0.1");
+            serverAddr = InetAddress.getByName("localhost"); // 127.0.0.1
         } catch (UnknownHostException e) {
             System.out.println(ANSI_GREEN + "Host desconhecido!" + ANSI_RESET);
             return;
