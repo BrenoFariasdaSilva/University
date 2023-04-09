@@ -1,7 +1,6 @@
 import java.net.*;
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 // TODO: Implement checksum.
@@ -19,7 +18,8 @@ public class Client {
     public static final int maxHeaderSize = 1 + 1 + 1 + 256;
 
     public static ByteBuffer byteIn;
-    public static ByteBuffer byteOut = ByteBuffer.allocate(maxHeaderSize);
+    public static ByteBuffer byteOut;
+    public static final byte request = 1;
 
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in); // ler mensagens via teclado
@@ -39,37 +39,31 @@ public class Client {
             DataInputStream in = new DataInputStream( clientSocket.getInputStream());
             DataOutputStream out = new DataOutputStream( clientSocket.getOutputStream());
 
-            // protocolo de comunicação
-            String buffer = "";
-            String commandType = "0";
-
             while (true) {
-                System.out.println(ANSI_CYAN + "Insert the header informations: \n" + ANSI_RESET);
-                for (int i = 0; i < 4; i ++) {
-                     byteOut.put(reader.nextLine().getBytes());
+                System.out.println(ANSI_CYAN + "Insert the header information's: \n" + ANSI_RESET); // Operation name and filename (if exists);
+                String[] headerInformation = reader.nextLine().split(" ");
+
+                if (headerInformation[0].equals("EXIT")) { return; };
+
+                switch (headerInformation[0]) {
+                    case ADDFILE -> headerInformation[0] = ADDFILE;
+                    case DELETE -> headerInformation[0] = DELETE;
+                    case GETFILELIST -> {
+                        headerInformation[0] = GETFILELIST;
+                        headerInformation[2] = "";
+                    }
+                    case GETFILE -> headerInformation[0] = GETFILE;
+                    case default -> System.out.println("Invalid command!");
                 }
+                byteOut = ByteBuffer.allocate(maxHeaderSize);
+                byteOut.put(0, request); // Static because the client only send requests
+                byteOut.put(1, headerInformation[0].getBytes());
+                byte filenameLength = (byte) headerInformation[1].length();
+                byteOut.put(2, filenameLength);
+                byteOut.put(0, headerInformation[1].getBytes());
 
-                out.write(byteOut.toString().getBytes());
-                System.out.println("byteOut.toString().getBytes()): " + byteOut.toString());
+                out.write(byteOut.array());
 
-                switch (commandType) {
-                    case ADDFILE:
-                        byteOut = ByteBuffer.allocate(259);
-                        break;
-                    case DELETE:
-                        break;
-                    case GETFILELIST:
-                        break;
-                    case GETFILE:
-                        break;
-                }
-
-                buffer = reader.nextLine(); // lê mensagem via teclado
-
-                if (buffer.equals("EXIT")) { return; }
-
-                out.writeUTF(buffer);          // envia a mensagem para o servidor
-                buffer = in.readUTF();      // aguarda resposta do servidor
             }
         } catch (EOFException eofe){
             System.out.println(ANSI_GREEN + "EOF:" + ANSI_CYAN + eofe.getMessage() + ANSI_RESET);
