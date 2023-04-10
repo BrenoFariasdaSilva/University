@@ -54,7 +54,7 @@ public class Client {
                 }
 
                 // Wait for the response from server
-                // in.read() // Blocking call
+                 // in.read(byteInput) // Blocking call
 
             }
         } catch (EOFException eofe){
@@ -65,7 +65,7 @@ public class Client {
     }
 
     public ByteBuffer createHeader (final String operation, final String filename) {
-        byteOutput = ByteBuffer.allocate(headerSize);
+        byteOutput = ByteBuffer.allocate(headerSize); // Order is already BIG_ENDIAN
         byteOutput.put(0, request); // Static because the client only send requests
         byteOutput.put(1, operation.getBytes()); // Value of operation in position 1
         byte filenameLength = (byte) filename.length(); // Filename length

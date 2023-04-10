@@ -25,7 +25,7 @@ public class ClientThread implements Runnable {
     public static final int getFileListResponseHeader = 1 + 1 + 1 + 2;
     public static final int getFileResponseHeader = 1 + 1 + 1 + 4;
 
-    public static final int sucessStatusCode = 1;
+    public static final int successStatusCode = 1;
     public static final int errorStatusCode = 2;
 
     public static ByteBuffer byteInput;
@@ -53,9 +53,7 @@ public class ClientThread implements Runnable {
             this.createUserDirectory(user, currentRelativePath);
 
             while (true) {
-                byteInput = ByteBuffer.allocateDirect(in.read());
-
-                System.out.println(ANSI_GREEN + "Cliente disse: " + ANSI_RESET);
+                byteInput = ByteBuffer.allocateDirect(in.read()); // Order is already BIG_ENDIAN
 
                 int commandID = byteInput.get(1);
                 byte filenameLength = byteInput.get(2);
@@ -125,7 +123,6 @@ public class ClientThread implements Runnable {
     // Operations folder = absolutePath + /user
     public void createUserDirectory(final String user, StringBuilder currentRelativePath) {
         File userDirectory = new File("./".concat(user));
-        System.out.println("userDirectory.getAbsolutePath(): " + userDirectory.getAbsolutePath());
 
         if (!userDirectory.exists()){
             userDirectory.mkdirs();
