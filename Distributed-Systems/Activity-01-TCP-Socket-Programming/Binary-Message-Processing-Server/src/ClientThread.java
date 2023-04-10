@@ -1,4 +1,3 @@
-import java.lang.reflect.GenericArrayType;
 import java.net.*;
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -67,15 +66,10 @@ public class ClientThread implements Runnable {
                     case ADDFILE -> {
                         System.out.println(ANSI_CYAN + "ADD FILE" + ANSI_RESET);
                         byteInput = ByteBuffer.allocateDirect(in.read());
-                        // It's reading the next byte from the input stream and putting it in the byte buffer.
                         int fileLength = byteInput.getInt(3);
-                        // It's reading the next 4 bytes from the input stream and putting it in the byte buffer.
                         byte[] fileContent = new byte[fileLength];
-                        // It's creating a byte array with the size of the file.
                         in.read(fileContent);
-                        // It's reading the file content from the input stream and putting it in the byte array.
-                        this.addFile(filename, fileContent, currentRelativePath);
-                        // It's calling the addFile function with the filename, file content and the current relative path.
+                        byteOutput.put(3, (byte) this.addFile(filename, fileContent, currentRelativePath));
                     }
                     case DELETE -> {
                         System.out.println(ANSI_CYAN + "DELETE" + ANSI_RESET);
@@ -114,6 +108,8 @@ public class ClientThread implements Runnable {
             throw new RuntimeException(e);
         } finally {
             try {
+                in.close();
+                out.close();
                 clientSocket.close();
                 System.out.println(ANSI_CYAN + "Thread de comunicação cliente finalizada." + ANSI_RESET);
             } catch (IOException ioe) {
@@ -122,20 +118,25 @@ public class ClientThread implements Runnable {
         }
     }
 
-    private void addFile(String filename, byte[] fileContent, StringBuilder currentRelativePath) {
-        // TODO: Check if file already exists.
-
+    private int addFile(String filename, byte[] fileContent, StringBuilder currentRelativePath) {
         File file = new File(this.getAbsolutePath() + "/" + user + "/" + filename);
 
         if (!file.exists()) {
             try {
-                file.createNewFile();
+                if (file.createNewFile()) {
+                    System.out.println(ANSI_CYAN + "File created: " + file.getName() + ANSI_RESET);
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    fileOutputStream.write(fileContent);
+                    fileOutputStream.close();
+                } else {
+                    System.out.println(ANSI_CYAN + "File already exists." + ANSI_RESET);
+                }
+                return successStatusCode;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-        // Now we have to write the file content inside the file
+        return errorStatusCode;
     }
 
     private int deleteFile(String filename, StringBuilder currentRelativePath) {

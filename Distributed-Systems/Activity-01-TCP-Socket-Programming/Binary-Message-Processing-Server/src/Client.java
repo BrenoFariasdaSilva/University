@@ -21,7 +21,8 @@ public class Client {
     public static ByteBuffer byteOutput;
     public static final byte request = 1;
 
-    public void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        Socket clientSocket = null;
         Scanner reader = new Scanner(System.in); // ler mensagens via teclado
 
         // Endereço e porta do servidor
@@ -29,12 +30,8 @@ public class Client {
         InetAddress serverAddr = null; // Instância no localhost.
         try {
             serverAddr = InetAddress.getByName("localhost"); // 127.0.0.1
-        } catch (UnknownHostException e) {
-            out.println(ANSI_GREEN + "Host desconhecido!" + ANSI_RESET);
-            return;
-        }
+            clientSocket = new Socket(serverAddr, serverPort);
 
-        try (var clientSocket = new Socket(serverAddr, serverPort)) { // Var infere o tipo sozinho. Só se usa com variáveis locais.
             // cria objetos de leitura e escrita
             DataInputStream in = new DataInputStream( clientSocket.getInputStream());
             DataOutputStream out = new DataOutputStream( clientSocket.getOutputStream());
@@ -43,7 +40,10 @@ public class Client {
                 System.out.println(ANSI_CYAN + "Insert the header information's: \n" + ANSI_RESET); // Operation name and filename (if exists);
                 String[] headerInformation = reader.nextLine().split(" ");
 
-                if (headerInformation[0].equals("EXIT")) { return; };
+                if (headerInformation[0].equals("EXIT")) {
+                    clientSocket.close();
+                    return;
+                }
 
                 switch (headerInformation[0]) {
                     case ADDFILE -> addFile(out, headerInformation[1]);
@@ -54,17 +54,20 @@ public class Client {
                 }
 
                 // Wait for the response from server
-                 // in.read(byteInput) // Blocking call
+                // in.read(byteInput) // Blocking call
 
             }
         } catch (EOFException eofe){
             out.println(ANSI_GREEN + "EOF:" + ANSI_CYAN + eofe.getMessage() + ANSI_RESET);
         } catch (IOException ioe){
             out.println(ANSI_CYAN + "IO:" + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
+        } finally {
+            clientSocket.close();
+            reader.close();
         }
     }
 
-    public ByteBuffer createHeader (final String operation, final String filename) {
+    public static ByteBuffer createHeader(final String operation, final String filename) {
         byteOutput = ByteBuffer.allocate(headerSize); // Order is already BIG_ENDIAN
         byteOutput.put(0, request); // Static because the client only send requests
         byteOutput.put(1, operation.getBytes()); // Value of operation in position 1
@@ -75,12 +78,12 @@ public class Client {
         return byteOutput;
     }
 
-    public boolean fileExists (final String filename) {
+    public static boolean fileExists (final String filename) {
         File file = new File("resources/" + filename);
         return file.exists();
     }
 
-    public void sendFileByPerByte (final String filename) { // ASK: O Cliente tem que esperar alguma confirmação antes de enviar o arquivo
+    public static void sendFileByPerByte(final String filename) { // ASK: O Cliente tem que esperar alguma confirmação antes de enviar o arquivo
         try {
             File file = new File("resources/" + filename); // File to be sent
 
@@ -99,18 +102,18 @@ public class Client {
         }
     }
 
-    public void addFile (DataOutputStream out, final String filename) {
+    public static void addFile (DataOutputStream out, final String filename) {
         try {
-            if (!this.fileExists(filename)) { System.out.println("File \"" + filename + "\" does not exists!"); }
+            if (!fileExists(filename)) { System.out.println("File \"" + filename + "\" does not exists!"); }
 
             out.write(createHeader(ADDFILE, filename).array());
-            this.sendFileByPerByte(filename);
+            sendFileByPerByte(filename);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void deleteFile (DataOutputStream out, final String filename) throws IOException {
+    public static void deleteFile (DataOutputStream out, final String filename) throws IOException {
         try {
             out.write(createHeader(DELETE, filename).array());
         } catch (Exception e) {
@@ -118,7 +121,7 @@ public class Client {
         }
     }
 
-    public void getFileList (DataOutputStream out) {
+    public static void getFileList (DataOutputStream out) {
         try {
             out.write(createHeader(GETFILELIST, "").array());
         } catch (Exception e) {
@@ -126,7 +129,7 @@ public class Client {
         }
     }
 
-    public void getFile (DataOutputStream out, final String filename) {
+    public static void getFile (DataOutputStream out, final String filename) {
         try {
             out.write(createHeader(GETFILE, filename).array());
         } catch (Exception e) {
