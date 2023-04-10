@@ -57,7 +57,7 @@ public class ClientThread implements Runnable {
 
                 System.out.println(ANSI_GREEN + "Cliente disse: " + ANSI_RESET);
 
-                int commandID = byteInput.get(0);
+                int commandID = byteInput.get(1);
                 byte filenameLength = byteInput.get(2);
                 String filename = new String(byteInput.array(), 3, filenameLength, StandardCharsets.UTF_8);
 
