@@ -3,7 +3,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.Scanner;
 
-// TODO: Implement checksum.
+import static java.lang.System.out;
 
 public class Client {
     public static final String ANSI_RESET = "\u001B[0m";
@@ -30,7 +30,7 @@ public class Client {
         try {
             serverAddr = InetAddress.getByName("localhost"); // 127.0.0.1
         } catch (UnknownHostException e) {
-            System.out.println(ANSI_GREEN + "Host desconhecido!" + ANSI_RESET);
+            out.println(ANSI_GREEN + "Host desconhecido!" + ANSI_RESET);
             return;
         }
 
@@ -46,74 +46,91 @@ public class Client {
                 if (headerInformation[0].equals("EXIT")) { return; };
 
                 switch (headerInformation[0]) {
-                    case ADDFILE -> out.write(addFile(headerInformation[1]).array());
-                    case DELETE -> out.write(deleteFile(headerInformation[1]).array());
-                    case GETFILELIST -> out.write(getFileList().array());
-                    case GETFILE -> out.write(getFile(headerInformation[1]).array());
+                    case ADDFILE -> addFile(out, headerInformation[1]);
+                    case DELETE -> deleteFile(out, headerInformation[1]);
+                    case GETFILELIST -> getFileList(out);
+                    case GETFILE -> getFile(out, headerInformation[1]);
                     case default -> System.out.println("Invalid command!");
                 }
+
+                // Wait for the response from server
+                // in.read() // Blocking call
+
             }
         } catch (EOFException eofe){
-            System.out.println(ANSI_GREEN + "EOF:" + ANSI_CYAN + eofe.getMessage() + ANSI_RESET);
+            out.println(ANSI_GREEN + "EOF:" + ANSI_CYAN + eofe.getMessage() + ANSI_RESET);
         } catch (IOException ioe){
-            System.out.println(ANSI_CYAN + "IO:" + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
+            out.println(ANSI_CYAN + "IO:" + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
         }
     }
 
-    public ByteBuffer addFile (final String filename) {
+    public ByteBuffer createHeader (final String operation, final String filename) {
+        byteOutput = ByteBuffer.allocate(headerSize);
+        byteOutput.put(0, request); // Static because the client only send requests
+        byteOutput.put(1, operation.getBytes()); // Value of operation in position 1
+        byte filenameLength = (byte) filename.length(); // Filename length
+        byteOutput.put(2, filenameLength); // Filename length in position 2
+        byteOutput.put(3, filename.getBytes()); // Filename in position 3
+
+        return byteOutput;
+    }
+
+    public boolean fileExists (final String filename) {
+        File file = new File("resources/" + filename);
+        return file.exists();
+    }
+
+    public void sendFileByPerByte (final String filename) {
         try {
-            File file = new File(filename); // File to be sent
+            File file = new File("resources/" + filename); // File to be sent
+
             byte[] fileContent = new byte[(int) file.length()]; // File content
             FileInputStream fileInputStream = new FileInputStream(file); // File input stream
-            fileInputStream.read(fileContent); // Read file content
-            fileInputStream.close(); // Close file input stream
 
-            byteOutput = ByteBuffer.allocate(headerSize); // + fileContent.length?
-            byteOutput.put(0, request); // Static because the client only send requests
-            byteOutput.put(1, ADDFILE.getBytes()); // Value of ADDFILE (1) in position 1
-            byte filenameLength = (byte) filename.length(); // Filename length
-            byteOutput.put(2, filenameLength); // Filename length in position 2
-            byteOutput.put(3, filename.getBytes()); // Filename in position 3
-//            byteOutput.put(headerSize, fileContent); // File content in position 4
-
-            return byteOutput;
+            // send file content byte by byte
+            for (long sizeFile = fileContent.length; sizeFile > 0; sizeFile--) {
+                byte b = (byte) fileInputStream.read();
+                out.write(b);
+            }
         } catch (FileNotFoundException fnfe) {
-            System.out.println(ANSI_GREEN + "File not found:" + ANSI_CYAN + fnfe.getMessage() + ANSI_RESET);
-        } catch (IOException ioe) {
-            System.out.println(ANSI_GREEN + "IO:" + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
+            out.println(ANSI_GREEN + "File not found:" + ANSI_CYAN + fnfe.getMessage() + ANSI_RESET);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
-    public ByteBuffer deleteFile (final String filename) {
-        byteOutput = ByteBuffer.allocate(headerSize);
-        byteOutput.put(0, request); // Static because the client only send requests
-        byteOutput.put(1, DELETE.getBytes()); // Value of DELETE (2) in position 1
-        byte filenameLength = (byte) filename.length(); // Filename length
-        byteOutput.put(2, filenameLength); // Filename length in position 2
-        byteOutput.put(3, filename.getBytes()); // Filename in position 3
+    public void addFile (DataOutputStream out, final String filename) {
+        try {
+            if (!this.fileExists(filename)) { System.out.println("File \"" + filename + "\" does not exists!"); }
 
-        return byteOutput;
+            out.write(createHeader(ADDFILE, filename).array());
+            this.sendFileByPerByte(filename);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public ByteBuffer getFileList () {
-        byteOutput = ByteBuffer.allocate(headerSize);
-        byteOutput.put(0, request); // Static because the client only send requests
-        byteOutput.put(1, GETFILELIST.getBytes()); // Value of GETFILELIST (3) in position 1
-        byteOutput.put(2, (byte) 0); // Filename length in position 2
-        byteOutput.put(3, "".getBytes()); // Filename in position 3
-
-        return byteOutput;
+    public void deleteFile (DataOutputStream out, final String filename) throws IOException {
+        try {
+            out.write(createHeader(DELETE, filename).array());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public ByteBuffer getFile (final String filename) {
-        byteOutput = ByteBuffer.allocate(headerSize);
-        byteOutput.put(0, request); // Static because the client only send requests
-        byteOutput.put(1, GETFILE.getBytes()); // Value of GETFILE (4) in position 1
-        byte filenameLength = (byte) filename.length(); // Filename length
-        byteOutput.put(2, filenameLength); // Filename length in position 2
-        byteOutput.put(3, filename.getBytes()); // Filename in position 3
+    public void getFileList (DataOutputStream out) {
+        try {
+            out.write(createHeader(GETFILELIST, "").array());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-        return byteOutput;
+    public void getFile (DataOutputStream out, final String filename) {
+        try {
+            out.write(createHeader(GETFILE, filename).array());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
