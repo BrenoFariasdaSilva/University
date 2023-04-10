@@ -80,7 +80,7 @@ public class Client {
         return file.exists();
     }
 
-    public void sendFileByPerByte (final String filename) {
+    public void sendFileByPerByte (final String filename) { // ASK: O Cliente tem que esperar alguma confirmação antes de enviar o arquivo
         try {
             File file = new File("resources/" + filename); // File to be sent
 

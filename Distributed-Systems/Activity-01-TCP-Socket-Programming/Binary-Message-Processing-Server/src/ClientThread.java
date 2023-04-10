@@ -1,3 +1,4 @@
+import java.lang.reflect.GenericArrayType;
 import java.net.*;
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -24,9 +25,12 @@ public class ClientThread implements Runnable {
     public static final int addFileResponseHeader = 1 + 1 + 1 + 4;
     public static final int getFileListResponseHeader = 1 + 1 + 1 + 2;
     public static final int getFileResponseHeader = 1 + 1 + 1 + 4;
+    public static final int fileListHeaderList = 256;
 
     public static final int successStatusCode = 1;
     public static final int errorStatusCode = 2;
+
+    public static final byte response = 2;
 
     public static ByteBuffer byteInput;
     public static ByteBuffer byteOutput;
@@ -62,22 +66,34 @@ public class ClientThread implements Runnable {
                 switch (commandID) {
                     case ADDFILE -> {
                         System.out.println(ANSI_CYAN + "ADD FILE" + ANSI_RESET);
-                        byte[] fileContent = new byte[byteInput.capacity() - 3 - filenameLength];
-                        byteInput.get(fileContent, 0, fileContent.length);
-//                        this.addFile(filename, fileContent, currentRelativePath);
+                        byteInput = ByteBuffer.allocateDirect(in.read());
+                        // It's reading the next byte from the input stream and putting it in the byte buffer.
+                        int fileLength = byteInput.getInt(3);
+                        // It's reading the next 4 bytes from the input stream and putting it in the byte buffer.
+                        byte[] fileContent = new byte[fileLength];
+                        // It's creating a byte array with the size of the file.
+                        in.read(fileContent);
+                        // It's reading the file content from the input stream and putting it in the byte array.
+                        this.addFile(filename, fileContent, currentRelativePath);
+                        // It's calling the addFile function with the filename, file content and the current relative path.
                     }
                     case DELETE -> {
                         System.out.println(ANSI_CYAN + "DELETE" + ANSI_RESET);
-//                        this.deleteFile(filename, currentRelativePath);
+                        this.deleteFile(filename, currentRelativePath);
                     }
                     case GETFILELIST -> {
                         System.out.println(ANSI_CYAN + "GET FILE LIST" + ANSI_RESET);
                         List<String> fileList = this.getFiles(currentRelativePath.toString());
-                        byteOutput = ByteBuffer.allocateDirect(fileList.size() * 256);
-                        for (String file : fileList) {
-                            byteOutput.put(file.getBytes(StandardCharsets.UTF_8));
-                        }
+                        byteOutput = this.responseHeader(GETFILELIST, successStatusCode, getFileListResponseHeader);
+                        byteOutput.put(3, (byte) fileList.size());
                         out.write(byteOutput.array());
+
+                        byteOutput = ByteBuffer.allocateDirect(fileListHeaderList);
+                        for (String file : fileList) {
+                            byteOutput.put(0, (byte) file.length());
+                            byteOutput.put(1, file.getBytes(StandardCharsets.UTF_8));
+                            out.write(byteOutput.array());
+                        }
                     }
                     case GETFILE -> {
                         System.out.println(ANSI_CYAN + "GET FILE" + ANSI_RESET);
@@ -92,7 +108,6 @@ public class ClientThread implements Runnable {
                     }
                     default -> System.out.println(ANSI_CYAN + "Unknown command" + ANSI_RESET);
                 }
-
             }
 
         } catch (IOException e) {
@@ -107,20 +122,40 @@ public class ClientThread implements Runnable {
         }
     }
 
-    private void responseHeader (int commandID, int status) {
-        byteOutput = ByteBuffer.allocateDirect(inputHeaderSize);
-        byteOutput.put((byte) commandID);
-        byteOutput.put((byte) status);
-        try {
-            out.write(byteOutput.array());
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void addFile(String filename, byte[] fileContent, StringBuilder currentRelativePath) {
+        // TODO: Check if file already exists.
+
+        File file = new File(this.getAbsolutePath() + "/" + user + "/" + filename);
+
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
+        // Now we have to write the file content inside the file
     }
 
+    private int deleteFile(String filename, StringBuilder currentRelativePath) {
+        File file = new File(this.getAbsolutePath() + "/" + user);
 
-    // Create a user folder in order to make all files operation inside that's folder:
-    // Operations folder = absolutePath + /user
+        if (file.exists()) {
+            file.delete();
+            return successStatusCode;
+        }
+        return errorStatusCode;
+    }
+
+    public ByteBuffer responseHeader (final int commandID, final int status, final int size) {
+        byteOutput = ByteBuffer.allocateDirect(size);
+        byteOutput.put(0, response);
+        byteOutput.put(1, (byte) commandID);
+        byteOutput.put(2, (byte) status);
+        return byteOutput;
+    }
+
     public void createUserDirectory(final String user, StringBuilder currentRelativePath) {
         File userDirectory = new File("./".concat(user));
 
