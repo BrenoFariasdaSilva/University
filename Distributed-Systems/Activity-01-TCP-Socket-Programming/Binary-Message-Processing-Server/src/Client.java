@@ -20,6 +20,7 @@ public class Client {
     public static ByteBuffer byteInput;
     public static ByteBuffer byteOutput;
     public static final byte request = 1;
+    public static String user = "user";
 
     public static void main(String[] args) throws IOException {
         Socket clientSocket = null;
@@ -79,13 +80,13 @@ public class Client {
     }
 
     public static boolean fileExists (final String filename) {
-        File file = new File("resources/" + filename);
+        File file = new File(user + "/" + filename);
         return file.exists();
     }
 
     public static void sendFileByPerByte(final String filename) { // ASK: O Cliente tem que esperar alguma confirmação antes de enviar o arquivo
         try {
-            File file = new File("resources/" + filename); // File to be sent
+            File file = new File(user + "/" + filename); // File to be sent
 
             byte[] fileContent = new byte[(int) file.length()]; // File content
             FileInputStream fileInputStream = new FileInputStream(file); // File input stream
