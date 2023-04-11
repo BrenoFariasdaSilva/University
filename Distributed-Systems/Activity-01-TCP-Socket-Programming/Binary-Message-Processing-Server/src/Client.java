@@ -50,7 +50,7 @@ public class Client {
                     case DELETE -> deleteFile(out, headerInformation[1]);
                     case GETFILELIST -> getFileList(out);
                     case GETFILE -> getFile(out, headerInformation[1]);
-                    case default -> System.out.println("Invalid command!");
+                    default -> System.out.println("Invalid command!");
                 }
 
                 // Wait for the response from server
