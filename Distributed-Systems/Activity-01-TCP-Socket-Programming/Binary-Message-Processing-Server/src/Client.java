@@ -16,6 +16,7 @@ public class Client {
     public static final String GETFILE = "4";
 
     public static final int headerSize = 1 + 1 + 1 + 256;
+    public static final int maxFilenameSize = 256;
 
     public static ByteBuffer byteInput;
     public static ByteBuffer byteOutput;
@@ -55,6 +56,7 @@ public class Client {
                 }
 
                 // Wait for the response from server
+                bytes =
                 // in.read(byteInput) // Blocking call
 
             }
@@ -84,7 +86,7 @@ public class Client {
         return file.exists();
     }
 
-    public static void sendFileByPerByte(final String filename) { // ASK: O Cliente tem que esperar alguma confirmação antes de enviar o arquivo
+    public static void sendFileByPerByte(final String filename) { // Send file byte by byte
         try {
             File file = new File(user + "/" + filename); // File to be sent
 
@@ -105,10 +107,15 @@ public class Client {
 
     public static void addFile (DataOutputStream out, final String filename) {
         try {
-            if (!fileExists(filename)) { System.out.println("File \"" + filename + "\" does not exists!"); }
+            File file = new File(user + "/" + filename); // File to be sent
+            if (!file.exists()) { System.out.println("File \"" + filename + "\" does not exists!"); }
 
-            out.write(createHeader(ADDFILE, filename).array());
-            sendFileByPerByte(filename);
+            if (filename.length() <= maxFilenameSize) {
+                ByteBuffer requestHeader = createHeader(ADDFILE, filename);
+                out.write(requestHeader.array(), 0, requestHeader.limit()); // Send the header
+                sendFileByPerByte(filename); // Send the file
+            }
+            else { System.out.println(ANSI_GREEN + "Filename too long!" + ANSI_RESET); }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
