@@ -15,6 +15,9 @@ public class Client {
     public static final String GETFILELIST = "3";
     public static final String GETFILE = "4";
 
+    public static final int successStatusCode = 1;
+    public static final int errorStatusCode = 2;
+
     public static final int headerSize = 1 + 1 + 1 + 256;
     public static final int maxFilenameSize = 256;
 
@@ -47,17 +50,57 @@ public class Client {
                     return;
                 }
 
-                switch (headerInformation[0]) {
-                    case ADDFILE -> addFile(out, headerInformation[1]);
-                    case DELETE -> deleteFile(out, headerInformation[1]);
-                    case GETFILELIST -> getFileList(out);
-                    case GETFILE -> getFile(out, headerInformation[1]);
+                switch (headerInformation[0]) { // Operation name and filename (if exists);
+                    case ADDFILE -> {
+                        addFile(out, headerInformation[1]);
+                        in.read(byteInput.array()); // Blocking call
+                        if (byteInput.get(2) == successStatusCode) {
+                            System.out.println(ANSI_GREEN + "File added successfully!" + ANSI_RESET);
+                        } else {
+                            System.out.println(ANSI_GREEN + "File already exists!" + ANSI_RESET);
+                        }
+                    }
+                    case DELETE -> {
+                        deleteFile(out, headerInformation[1]);
+                        in.read(byteInput.array()); // Blocking call
+                        if (byteInput.get(2) == successStatusCode) {
+                            System.out.println(ANSI_GREEN + "File deleted successfully!" + ANSI_RESET);
+                        } else {
+                            System.out.println(ANSI_GREEN + "File does not exists!" + ANSI_RESET);
+                        }
+                    }
+                    case GETFILELIST -> {
+                        getFileList(out);
+                        in.read(byteInput.array()); // Blocking call
+                        if (byteInput.get(2) == successStatusCode) {
+                            System.out.println(ANSI_GREEN + "File list received successfully!" + ANSI_RESET);
+                            for (int i = 0; i < byteInput.get(4); i++) { // Print file list
+                                byte filenameLength = in.readByte();
+                                byte[] filename = new byte[filenameLength];
+                            }
+                        } else {
+                            System.out.println(ANSI_GREEN + "File list is empty!" + ANSI_RESET);
+                        }
+                    }
+                    case GETFILE -> {
+                        getFile(out, headerInformation[1]);
+                        in.read(byteInput.array()); // Blocking call
+                        if (byteInput.get(2) == successStatusCode) {
+                            System.out.println(ANSI_GREEN + "File received successfully!" + ANSI_RESET);
+                        } else {
+                            System.out.println(ANSI_GREEN + "File does not exists!" + ANSI_RESET);
+                        }
+                    }
                     default -> System.out.println("Invalid command!");
                 }
 
                 // Wait for the response from server
-                bytes =
-                // in.read(byteInput) // Blocking call
+                in.read(byteInput.array()); // Blocking call
+
+                byte response = byteInput.get(0);
+                byte operation = byteInput.get(1);
+                byte statusCode = byteInput.get(2);
+
 
             }
         } catch (EOFException eofe){
@@ -79,11 +122,6 @@ public class Client {
         byteOutput.put(3, filename.getBytes()); // Filename in position 3
 
         return byteOutput;
-    }
-
-    public static boolean fileExists (final String filename) {
-        File file = new File(user + "/" + filename);
-        return file.exists();
     }
 
     public static void sendFileByPerByte(final String filename) { // Send file byte by byte
@@ -108,14 +146,17 @@ public class Client {
     public static void addFile (DataOutputStream out, final String filename) {
         try {
             File file = new File(user + "/" + filename); // File to be sent
-            if (!file.exists()) { System.out.println("File \"" + filename + "\" does not exists!"); }
+            if (!file.exists()) { // File does not exist
+                System.out.println(ANSI_GREEN + "File does not exists!" + ANSI_RESET);
+                return;
+            }
 
-            if (filename.length() <= maxFilenameSize) {
-                ByteBuffer requestHeader = createHeader(ADDFILE, filename);
+            if (filename.length() <= maxFilenameSize) { // Filename size is valid
+                ByteBuffer requestHeader = createHeader(ADDFILE, filename); // Create the header
                 out.write(requestHeader.array(), 0, requestHeader.limit()); // Send the header
                 sendFileByPerByte(filename); // Send the file
             }
-            else { System.out.println(ANSI_GREEN + "Filename too long!" + ANSI_RESET); }
+            else { System.out.println(ANSI_GREEN + "Filename too long!" + ANSI_RESET); } // Filename too long
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
