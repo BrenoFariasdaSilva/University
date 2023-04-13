@@ -1,0 +1,157 @@
+import os
+import socket
+import threading
+import logging
+
+from colorama import Style
+
+# Macros:
+class backgroundColors:
+    OKCYAN = "\033[96m"
+    OKGREEN = "\033[92m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+
+serverAddress = ("", 6666) # Server address
+maxNumberOfConnections = 5 # Max number of connections
+SUCESS = 1 # Sucess message
+ERROR = 2 # Error message
+RESPONSE = 2 # Response message
+ADDFILE = 1 # ADDFILE command
+DELETE = 2 # DELETE command
+GETFILESLIST = 3 # GETFILESLIST command
+GETFILE = 4 # GETFILE command
+MAXFILENAMESIZE = 256 # Max size of the filename
+
+# Create a socket object
+serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Family: IPv4 e Type: Stream (TCP)
+serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Reuse the address
+serverSocket.bind(serverAddress) # Bind the socket to the address
+
+# Define o formato do log
+formatLog = '%(asctime)-1s %(userIP)s %(userPort)s %(message)s'
+logging.basicConfig(format=formatLog, level=20)
+nameLog = logging.getLogger('TCP_Server')
+
+def connectionClient(ip, port, connection):
+    dados = {'userIP': ip, 'userPort': port}
+    
+    if not os.path.exists("./server"): # If the directory doesn't exist
+        os.makedirs("./server") # Create the directory
+
+    while True:
+        responseHeader = bytearray(3) # 1 Byte for the message type, 1 Byte for the command and 1 Byte for the status code
+        responseHeader[0] = RESPONSE # RESPONSE in the header inside position 0
+
+        # Receive the message
+        messageReceived = bytearray(connection.recv(1024)) # Why 1024? Because it's the max size of the message
+        messageType = int(messageReceived[0]) # Message type
+        commandId = int(messageReceived[1]) # Command ID
+        fileNameSize = int(messageReceived[2]) # Size of the filename
+        fileName = messageReceived[3:].decode('utf-8') # Filename
+
+        if (commandId == ADDFILE):
+            nameLog.info('Protocol: %s', 'Received ADDFILE request', extra=dados)
+            archiveSize = int.from_bytes(connection.recv(4), byteorder='big')
+            archive = connection.recv(archiveSize).decode('utf-8')
+            nameLog.info('Protocol: %s', ' Download finished', extra=dados)
+
+            with open('./server/' + fileName, 'w+b') as archiveFile:
+                archiveFile.write(archive)
+
+            archive = os.listdir(path='./server/')
+            if fileName in archive:
+                responseHeader[2] = SUCESS
+                nameLog.info('Protocol: %s','Successfully ADDFILE', extra=dados)
+            else:
+                responseHeader[2] = ERROR
+                nameLog.info('Protocol: %s','Unsuccessfully ADDFILE', extra=dados)
+
+            responseHeader[1] = ADDFILE
+            connection.send(responseHeader)
+            nameLog.info('Protocol: %s','Response ADDFILE sent', extra=dados)
+
+        elif (commandId == DELETE):
+            nameLog.info('Protocol: %s','Received DELETE request', extra=dados)
+            if os.path.isfile('./server/' + fileName):
+                os.remove('./server/' + fileName)
+
+                if os.path.isfile('./server/' + fileName):
+                    responseHeader[2] = ERROR
+                    nameLog.info('Protocol: %s','Unsuccessfully DELETE ', extra=dados)
+                else:
+                    responseHeader[2] = SUCESS
+                    nameLog.info('Protocol: %s','Successfully DELETE ', extra=dados)
+
+            connection.send(responseHeader)
+            nameLog.info('Protocol: %s','Response DELETE sent ', extra=dados)
+
+        elif (commandId == GETFILESLIST):
+
+            nameLog.info('Protocol: %s','Received GETFILESLIST request', extra=dados)
+            quantityFiles = 0
+            files: list[str] = []
+            directory = os.listdir('./server/')
+            responseHeader[1] = GETFILESLIST
+            filenameSizeResponseHeader = 0
+
+            for filename in directory:
+                if os.path.isfile(str('./server/' + filename)):
+                    quantityFiles = quantityFiles + 1
+                    files.append(str(filename))
+
+            if quantityFiles > 0:
+                responseHeader[2] = SUCESS
+                connection.send(responseHeader)
+                connection.send(quantityFiles.to_bytes(2, byteorder="big"))
+                for filename in files:
+                    filenameSizeResponseHeader = len(filename)
+                    connection.send(filenameSizeResponseHeader.to_bytes(1, byteorder="big"))
+                    connection.send(filename.encode())
+                    nameLog.info('Protocol: %s','Response GETFILELIST sent', extra=dados)
+
+            else:
+                nameLog.info('Protocol: %s','Unsucessfully GETFILELIST', extra=dados)
+                responseHeader[2] = ERROR
+                connection.send(responseHeader)
+                nameLog.info('Protocol: %s','Response GETFILELIST sent', extra=dados)
+
+        elif (commandId == GETFILE):
+            nameLog.info('Protocol: %s','Received GETLIST request', extra=dados)
+            responseHeader[1] = GETFILE
+            archive = os.listdir('./server/')
+
+            if len(fileName) <= MAXFILENAMESIZE and fileName in archive:
+                responseHeader[2] = SUCESS
+                connection.send(responseHeader)
+                nameLog.info('Protocol: %s','Response GETLIST sent', extra=dados)
+                fileSize = (os.stat('./server/' + fileName).st_size).to_bytes(4, byteorder="big")
+                connection.send(fileSize)
+                fileOpen = open('./server/' + fileName, 'rb')
+                file = fileOpen.read()
+                nameLog.info('Protocol: %s','Starting upload', extra=dados)
+                connection.send(file)
+                nameLog.info('Protocol: %s','Upload finished', extra=dados)
+                fileOpen.close()
+
+            else:
+                nameLog.info('Protocol: %s','Unsuccessfully GETFILE', extra=dados)
+                responseHeader[2] = ERROR
+                connection.send(responseHeader)
+                nameLog.info('Protocol: %s','Response GETFILE sent', extra=dados)
+
+def main():
+    threads = [] # Vector of threads
+
+    while True:
+        serverSocket.listen(maxNumberOfConnections) # Listen for connections
+        (connection, (ip, port)) = serverSocket.accept() # Accept the connection
+        dados = {'userIP': ip, 'userPort': port} # Define the format of the log
+        nameLog.info('Protocol info: %s','connection established', extra=dados) # Log the connection
+
+        thread = threading.Thread(target=connectionClient, args=(ip, port, connection,)) # Create a thread
+        thread.start() # Start the thread
+        threads.append(thread) # Add the thread to the vector
+
+if __name__ == "__main__":
+    main()
