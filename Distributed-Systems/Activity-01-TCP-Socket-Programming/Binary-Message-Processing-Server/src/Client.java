@@ -70,7 +70,7 @@ public class Client {
                         }
                     }
                     case GETFILELIST -> {
-                        getFileList(out);
+                        getFileList(out, in);
                         in.read(byteInput.array()); // Blocking call
                         if (byteInput.get(2) == successStatusCode) {
                             System.out.println(ANSI_GREEN + "File list received successfully!" + ANSI_RESET);
@@ -83,7 +83,7 @@ public class Client {
                         }
                     }
                     case GETFILE -> {
-                        getFile(out, headerInformation[1]);
+                        getFile(out, in, headerInformation[1]);
                         in.read(byteInput.array()); // Blocking call
                         if (byteInput.get(2) == successStatusCode) {
                             System.out.println(ANSI_GREEN + "File received successfully!" + ANSI_RESET);
@@ -170,17 +170,40 @@ public class Client {
         }
     }
 
-    public static void getFileList (DataOutputStream out) {
+    public static void getFileList (DataOutputStream out, DataInputStream in) {
         try {
             out.write(createHeader(GETFILELIST, "").array());
+            if (in.read(byteInput.array()) == successStatusCode) { // Blocking call
+                System.out.println(ANSI_GREEN + "File list received successfully!" + ANSI_RESET);
+                for (int i = 0; i < byteInput.get(4); i++) { // Print file list
+                    byte filenameLength = in.readByte(); // Blocking call
+                    byte[] filename = new byte[filenameLength]; // Filename
+                    in.read(filename); // Blocking call
+                    System.out.println(ANSI_GREEN + "File " + (i + 1) + ": " + ANSI_CYAN + new String(filename) + ANSI_RESET);
+                }
+            } else {
+                System.out.println(ANSI_GREEN + "Error receiving file list!" + ANSI_RESET);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void getFile (DataOutputStream out, final String filename) {
+    public static void getFile (DataOutputStream out, DataInputStream in, final String filename) {
         try {
             out.write(createHeader(GETFILE, filename).array());
+            if (in.read(byteInput.array()) == successStatusCode) { // Blocking call
+                System.out.println(ANSI_GREEN + "File received successfully!" + ANSI_RESET);
+                byte filenameLength = in.readByte(); // Blocking call
+                byte[] responseFilename = new byte[filenameLength]; // Filename
+                in.read(responseFilename); // Blocking call
+                System.out.println(ANSI_GREEN + "File name: " + ANSI_CYAN + new String(responseFilename) + ANSI_RESET);
+                byte[] fileContent = new byte[byteInput.get(4)]; // File content
+                in.read(fileContent); // Blocking call
+                System.out.println(ANSI_GREEN + "File content: " + ANSI_CYAN + new String(fileContent) + ANSI_RESET);
+            } else {
+                System.out.println(ANSI_GREEN + "Error receiving file!" + ANSI_RESET);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
