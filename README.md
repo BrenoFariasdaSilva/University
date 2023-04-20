@@ -1,56 +1,109 @@
 # University Exercises [![Build Status](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml/badge.svg)](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml)
 
-This repo is made with the objective of showing the content taught at a computer science university.
-Here you can find basically all exercises I'm solving during my University journey. This repo will contain lots of folders inside of it, each of one related to one subject. It won't be limited to one language, but any exercise related to coding.
+## Languages:
+<img src="https://github.com/devicons/devicon/blob/master/icons/c/c-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/cplusplus/cplusplus-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original.svg"  width="3%" height="3%">
+
+This repo is made with the objective of showing the content taught at a computer science university. \
+Here you can find basically all exercises I'm solving during my University journey. This repo will contain lots of folders inside of it, each of one related to one subject, so it won't be limited to one language, but any exercise related to my university course at UTFPR-CM (Universidade Tecnológica Federal do Paraná campus Campo Mourão). \
 You can use this repository as a way to measure your learning to ensure you know all the fundamentals taught in college.
 
 ## Installation
 
-### C
+* C:
+  ```bash
+  # C:
+  sudo apt install build-essential -y
+  sudo apt-get install manpages-dev -y
+  ```
 
-**Linux**: If you are using **linux**, just open the terminal and run the following command: 
+* C++:
+  ```bash
+  # C++:
+  sudo apt install clang-12 -y
+  ```
 
-```bash
-$ sudo apt install build-essential
-```
+* Python:
+  ```bash
+  # Python:
+  sudo apt-get install python3 python3-venv python3-pip -y
+  ```
 
-It will require your computer password, as well as a message asking for you to confirm the package installation.
+* Zip and Unzip Tools: Zip and Unzip might be some necessary tools to install SDKMAN
+  ```bash
+  # Unzip:
+  sudo apt-get install unzip -y
 
-If you are using VisualStudio, install the following extensions and then you are ready to code in C/C++
+  # Zip:
+  sudo apt-get install zip -y
+  ```
 
-```bash
-C/C++
-C/C+ Compile Run
-Code Runner
-```
+* SDKMAN Tool: SDKMAN is a tool for managing parallel versions of multiple Software Development Kits on most Unix based systems. \
+It provides a convenient Command Line Interface (CLI) and API for installing, switching, removing and listing Candidates.
 
-**Windows**: If you are using **Windows**, just open [MinGW website](http://mingw-w64.org/doku.php/download) and download the version for your system. MinGW contains all the GCC Package you need.
-After installing MinGW, open it and select to install the following packages:
-```bash
-minggw32-base-bin
-minggw32-gcc-g++-bin
-```
-After, open Windows File Manager, go to MinGW installation folder and open "bin" folder. Copy the folder adress and type "path" on Windows Search Bar. Open it and click on "Environment Variables" then, on System Variables, click on "Path" and then click on "New" and paste the adress of MinGW bin folder. After that, restart your Computer.
-
-### Java
-```bash
-$ sudo apt install default-jre -y
-$ sudo apt install default-jdk -y
-```
+  ```bash
+  # SDKMAN:
+  curl -s "https://get.sdkman.io" | bash
+  source "$HOME/.sdkman/bin/sdkman-init.sh"
+  sdk version
+  ```
+* Java Language via SDKMAN:
+  ```bash
+  # Java:
+  sdk install java
+  java -version
+  ```
 
 ## How to Run
 
-### C
-```bash
-$ make
-```
+* If there is a file in the folder called Makefile:
+  ```bash
+  make
+  ```
 
-### Java
-```bash
-$ javac ./{ProgramName}.java
-$ java {ProgramName without extension}
-```
+* If there isn't a file in the folder called Makefile:
 
+  * C: \
+  C is a general-purpose computer programming language. 
+    ```bash
+    # if there is external file to link
+    gcc -c linkedLibrary.c  # Linked files here
+    gcc main.c linkedLibrary.o -o main
+    ./main
+    
+    # if there isn't external file to link
+    gcc {ProgramName}.c -o {OutProgramName}
+    # Example: gcc main.c -o main
+    ./{ProgramName}
+    #Example: ./main
+    ```
+
+  * C++: \
+  C++ is a high-level, general-purpose programming language.
+    ```bash
+    g++ -o {OutputProgramName} {ProgramName}.cpp
+    # Example: g++ -o main main.cpp
+    ./{ProgramName}
+    #Example: ./main
+    ```
+
+  * Python: \
+  Python is a high-level, general-purpose programming language.
+    ```bash
+    python3 ./{ProgramName}.py
+    # Example: python3 ./main.py 
+    ```
+
+  * Java: \
+  Java is a high-level, class-based, object-oriented programming language.
+    ```bash
+    # Compile the application using the Java compiler (JVM):
+    javac ./{ProgramName}.java
+    # Example: javac ./main.java 
+
+    # Run the application.
+    java ./{ProgramName without extension}
+    # Example: javac ./main
+    ```
 
 ## Contributing
 Code improvement recommendations are welcome, but keep in mind that many exercises will be very simple, with a lot of room for improvement, after all here is all the history of my learning progress.
