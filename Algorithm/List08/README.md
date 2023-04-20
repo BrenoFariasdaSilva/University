@@ -1,1 +1,0 @@
-Exercises related to Strings
