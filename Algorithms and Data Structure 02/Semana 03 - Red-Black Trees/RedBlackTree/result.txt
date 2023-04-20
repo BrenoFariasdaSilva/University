@@ -1,0 +1,101 @@
+First Test:
+
+Added Items:
+(r)70
+	(l)39
+	(r)88
+Removed Item: 70
+(r)88
+	(l)39
+
+Second Test: 
+
+Added Items:
+(r)10
+	(l)4
+		(l)2
+			(r)3
+		(r)6
+			(l)5
+			(r)7
+	(r)20
+Removed Item: 10
+(r)20
+	(l)4
+		(l)2
+			(r)3
+		(r)6
+			(l)5
+			(r)7
+Removed Item: 4
+(r)20
+	(l)5
+		(l)2
+			(r)3
+		(r)6
+			(r)7
+Removed Item: 5
+(r)20
+	(l)6
+		(l)2
+			(r)3
+		(r)7
+
+Third Test: 
+
+Added Items:
+(r)30
+	(l)15
+		(l)4
+			(l)0
+			(r)7
+		(r)20
+			(l)17
+				(r)19
+			(r)25
+	(r)50
+		(l)40
+			(r)47
+Removed Item: 0
+(r)30
+	(l)15
+		(l)4
+			(r)7
+		(r)20
+			(l)17
+				(r)19
+			(r)25
+	(r)50
+		(l)40
+			(r)47
+Removed Item: 30
+(r)40
+	(l)15
+		(l)4
+			(r)7
+		(r)20
+			(l)17
+				(r)19
+			(r)25
+	(r)50
+		(l)47
+Removed Item: 15
+(r)40
+	(l)17
+		(l)4
+			(r)7
+		(r)20
+			(l)19
+			(r)25
+	(r)50
+		(l)47
+Removed Item: 20
+(r)40
+	(l)17
+		(l)4
+			(r)7
+		(r)25
+			(l)19
+	(r)50
+		(l)47
+

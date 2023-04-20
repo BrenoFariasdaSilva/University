@@ -1,0 +1,7 @@
+LEIA-ME
+
+Formato de Relatório da SBC.
+
+Formato de artigo da SBC: http://www.sbc.org.br/documentos-da-sbc/summary/169-templates-para-artigos-e-capitulos-de-livros
+
+Formato de artigo da SBC no overleaf: https://www.overleaf.com/latex/templates/sbc-conferences-template/blbxwjwzdngr
