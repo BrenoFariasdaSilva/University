@@ -1,7 +1,7 @@
 all:
-	gcc -c linkedLibrary.c
-	gcc main.c linkedLibrary.o -o main
-	./main
+	# gcc -c linkedLibrary.c
+	# gcc main.c linkedLibrary.o -o main
+	# ./main
 
 clean:
-	rm -f *.o main
+	# rm -f *.o main
