@@ -24,7 +24,7 @@ public class Client {
     public static ByteBuffer byteInput;
     public static ByteBuffer byteOutput;
     public static final byte request = 1;
-    public static String user = "user";
+    public static String user = "client";
 
     public static void main(String[] args) throws IOException {
         Socket clientSocket = null;
@@ -42,6 +42,10 @@ public class Client {
             DataOutputStream out = new DataOutputStream( clientSocket.getOutputStream());
 
             while (true) {
+                // Create user directory
+                StringBuilder currentRelativePath = new StringBuilder("/"); // Começa com / por ser um servidor linux
+                createUserDirectory(user, currentRelativePath);
+
                 System.out.println(ANSI_CYAN + "Insert the header information's: \n" + ANSI_RESET); // Operation name and filename (if exists);
                 String[] headerInformation = reader.nextLine().split(" ");
 
@@ -50,10 +54,13 @@ public class Client {
                     return;
                 }
 
+                // headerInformation[0] = operation name
+                // headerInformation[1] = filename (if exists)
+
                 switch (headerInformation[0]) { // Operation name and filename (if exists);
                     case ADDFILE -> {
                         addFile(out, headerInformation[1]);
-                        in.read(byteInput.array()); // Blocking call
+                        in.read(byteInput.array()); // Blocking call. Wait for server response.
                         if (byteInput.get(2) == successStatusCode) {
                             System.out.println(ANSI_GREEN + "File added successfully!" + ANSI_RESET);
                         } else {
@@ -74,12 +81,16 @@ public class Client {
                         in.read(byteInput.array()); // Blocking call
                         if (byteInput.get(2) == successStatusCode) {
                             System.out.println(ANSI_GREEN + "File list received successfully!" + ANSI_RESET);
-                            for (int i = 0; i < byteInput.get(4); i++) { // Print file list
-                                byte filenameLength = in.readByte();
-                                byte[] filename = new byte[filenameLength];
+                            int quantityOfFiles = in.readInt();
+                            System.out.println(ANSI_GREEN + "Quantity of files: " + quantityOfFiles + ANSI_RESET);
+                            for (int i = 0; i < quantityOfFiles; i++) {
+                                int filenameSize = in.readInt();
+                                byte[] filename = new byte[filenameSize];
+                                in.read(filename);
+                                System.out.println(ANSI_GREEN + "File " + (i + 1) + ": " + new String(filename) + ANSI_RESET);
                             }
                         } else {
-                            System.out.println(ANSI_GREEN + "File list is empty!" + ANSI_RESET);
+                            System.out.println(ANSI_GREEN + "ERROR getting file list!" + ANSI_RESET);
                         }
                     }
                     case GETFILE -> {
@@ -87,6 +98,13 @@ public class Client {
                         in.read(byteInput.array()); // Blocking call
                         if (byteInput.get(2) == successStatusCode) {
                             System.out.println(ANSI_GREEN + "File received successfully!" + ANSI_RESET);
+                            int fileSize = in.readInt();
+                            System.out.println(ANSI_GREEN + "File size: " + fileSize + ANSI_RESET);
+                            byte[] fileContent = new byte[fileSize];
+                            in.read(fileContent);
+                            FileOutputStream fileOutputStream = new FileOutputStream(headerInformation[1]);
+                            fileOutputStream.write(fileContent);
+                            fileOutputStream.close();
                         } else {
                             System.out.println(ANSI_GREEN + "File does not exists!" + ANSI_RESET);
                         }
@@ -111,6 +129,17 @@ public class Client {
             clientSocket.close();
             reader.close();
         }
+    }
+
+    public static void createUserDirectory(final String user, StringBuilder currentRelativePath) {
+        File userDirectory = new File("./".concat(user));
+
+        if (!userDirectory.exists()){
+            userDirectory.mkdirs();
+        }
+        currentRelativePath.delete(0, currentRelativePath.length());
+        currentRelativePath.append("/");
+        currentRelativePath.append(user);
     }
 
     public static ByteBuffer createHeader(final String operation, final String filename) {
@@ -146,6 +175,8 @@ public class Client {
     public static void addFile (DataOutputStream out, final String filename) {
         try {
             File file = new File(user + "/" + filename); // File to be sent
+            // print file path
+            System.out.println(ANSI_GREEN + "File path: " + file.getAbsolutePath() + ANSI_RESET);
             if (!file.exists()) { // File does not exist
                 System.out.println(ANSI_GREEN + "File does not exists!" + ANSI_RESET);
                 return;
@@ -155,8 +186,9 @@ public class Client {
                 ByteBuffer requestHeader = createHeader(ADDFILE, filename); // Create the header
                 out.write(requestHeader.array(), 0, requestHeader.limit()); // Send the header
                 sendFileByPerByte(filename); // Send the file
-            }
-            else { System.out.println(ANSI_GREEN + "Filename too long!" + ANSI_RESET); } // Filename too long
+            } else {
+                System.out.println(ANSI_GREEN + "Filename too long!" + ANSI_RESET);
+            } // Filename too long
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

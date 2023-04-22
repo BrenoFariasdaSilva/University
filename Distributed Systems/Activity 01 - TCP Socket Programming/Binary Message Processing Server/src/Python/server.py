@@ -33,8 +33,21 @@ formatLog = '%(asctime)-1s %(userIP)s %(userPort)s %(message)s'
 logging.basicConfig(format=formatLog, level=20)
 nameLog = logging.getLogger('TCP_Server')
 
+def main():
+    threads = [] # Vector of threads
+
+    while True:
+        serverSocket.listen(maxNumberOfConnections) # Listen for connections
+        (connection, (ip, port)) = serverSocket.accept() # Accept the connection
+        data = {'userIP': ip, 'userPort': port} # Define the format of the log
+        nameLog.info('Protocol info: %s','connection established', extra=data) # Log the connection
+
+        thread = threading.Thread(target=connectionClient, args=(ip, port, connection,)) # Create a thread
+        thread.start() # Start the thread
+        threads.append(thread) # Add the thread to the vector
+
 def connectionClient(ip, port, connection):
-    dados = {'userIP': ip, 'userPort': port}
+    data = {'userIP': ip, 'userPort': port}
     
     if not os.path.exists("./server"): # If the directory doesn't exist
         os.makedirs("./server") # Create the directory
@@ -44,17 +57,18 @@ def connectionClient(ip, port, connection):
         responseHeader[0] = RESPONSE # RESPONSE in the header inside position 0
 
         # Receive the message
-        messageReceived = bytearray(connection.recv(1024)) # Why 1024? Because it's the max size of the message
+        messageReceived = bytearray(connection.recv(1024))
         messageType = int(messageReceived[0]) # Message type
         commandId = int(messageReceived[1]) # Command ID
         fileNameSize = int(messageReceived[2]) # Size of the filename
         fileName = messageReceived[3:].decode('utf-8') # Filename
 
         if (commandId == ADDFILE):
-            nameLog.info('Protocol: %s', 'Received ADDFILE request', extra=dados)
+            nameLog.info('Protocol: %s', 'Received ADDFILE request', extra=data)
             archiveSize = int.from_bytes(connection.recv(4), byteorder='big')
-            archive = connection.recv(archiveSize).decode('utf-8')
-            nameLog.info('Protocol: %s', ' Download finished', extra=dados)
+            archive = b'' # Archive received from the client (byte array)
+            archive = connection.recv(archiveSize)
+            nameLog.info('Protocol: %s', 'Download finished', extra=data)
 
             with open('./server/' + fileName, 'w+b') as archiveFile:
                 archiveFile.write(archive)
@@ -62,33 +76,33 @@ def connectionClient(ip, port, connection):
             archive = os.listdir(path='./server/')
             if fileName in archive:
                 responseHeader[2] = SUCESS
-                nameLog.info('Protocol: %s','Successfully ADDFILE', extra=dados)
+                nameLog.info('Protocol: %s','Successfully ADDFILE', extra=data)
             else:
                 responseHeader[2] = ERROR
-                nameLog.info('Protocol: %s','Unsuccessfully ADDFILE', extra=dados)
+                nameLog.info('Protocol: %s','Unsuccessfully ADDFILE', extra=data)
 
             responseHeader[1] = ADDFILE
             connection.send(responseHeader)
-            nameLog.info('Protocol: %s','Response ADDFILE sent', extra=dados)
+            nameLog.info('Protocol: %s','Response ADDFILE sent', extra=data)
 
         elif (commandId == DELETE):
-            nameLog.info('Protocol: %s','Received DELETE request', extra=dados)
+            nameLog.info('Protocol: %s','Received DELETE request', extra=data)
             if os.path.isfile('./server/' + fileName):
                 os.remove('./server/' + fileName)
 
                 if os.path.isfile('./server/' + fileName):
                     responseHeader[2] = ERROR
-                    nameLog.info('Protocol: %s','Unsuccessfully DELETE ', extra=dados)
+                    nameLog.info('Protocol: %s','Unsuccessfully DELETE ', extra=data)
                 else:
                     responseHeader[2] = SUCESS
-                    nameLog.info('Protocol: %s','Successfully DELETE ', extra=dados)
+                    nameLog.info('Protocol: %s','Successfully DELETE ', extra=data)
 
             connection.send(responseHeader)
-            nameLog.info('Protocol: %s','Response DELETE sent ', extra=dados)
+            nameLog.info('Protocol: %s','Response DELETE sent ', extra=data)
 
         elif (commandId == GETFILESLIST):
 
-            nameLog.info('Protocol: %s','Received GETFILESLIST request', extra=dados)
+            nameLog.info('Protocol: %s','Received GETFILESLIST request', extra=data)
             quantityFiles = 0
             files: list[str] = []
             directory = os.listdir('./server/')
@@ -108,50 +122,37 @@ def connectionClient(ip, port, connection):
                     filenameSizeResponseHeader = len(filename)
                     connection.send(filenameSizeResponseHeader.to_bytes(1, byteorder="big"))
                     connection.send(filename.encode())
-                    nameLog.info('Protocol: %s','Response GETFILELIST sent', extra=dados)
+                    nameLog.info('Protocol: %s','Response GETFILELIST sent', extra=data)
 
             else:
-                nameLog.info('Protocol: %s','Unsucessfully GETFILELIST', extra=dados)
+                nameLog.info('Protocol: %s','Unsucessfully GETFILELIST', extra=data)
                 responseHeader[2] = ERROR
                 connection.send(responseHeader)
-                nameLog.info('Protocol: %s','Response GETFILELIST sent', extra=dados)
+                nameLog.info('Protocol: %s','Response GETFILELIST sent', extra=data)
 
         elif (commandId == GETFILE):
-            nameLog.info('Protocol: %s','Received GETLIST request', extra=dados)
+            nameLog.info('Protocol: %s','Received GETLIST request', extra=data)
             responseHeader[1] = GETFILE
             archive = os.listdir('./server/')
 
             if len(fileName) <= MAXFILENAMESIZE and fileName in archive:
                 responseHeader[2] = SUCESS
                 connection.send(responseHeader)
-                nameLog.info('Protocol: %s','Response GETLIST sent', extra=dados)
+                nameLog.info('Protocol: %s','Response GETLIST sent', extra=data)
                 fileSize = (os.stat('./server/' + fileName).st_size).to_bytes(4, byteorder="big")
                 connection.send(fileSize)
                 fileOpen = open('./server/' + fileName, 'rb')
                 file = fileOpen.read()
-                nameLog.info('Protocol: %s','Starting upload', extra=dados)
+                nameLog.info('Protocol: %s','Starting upload', extra=data)
                 connection.send(file)
-                nameLog.info('Protocol: %s','Upload finished', extra=dados)
+                nameLog.info('Protocol: %s','Upload finished', extra=data)
                 fileOpen.close()
 
             else:
-                nameLog.info('Protocol: %s','Unsuccessfully GETFILE', extra=dados)
+                nameLog.info('Protocol: %s','Unsuccessfully GETFILE', extra=data)
                 responseHeader[2] = ERROR
                 connection.send(responseHeader)
-                nameLog.info('Protocol: %s','Response GETFILE sent', extra=dados)
-
-def main():
-    threads = [] # Vector of threads
-
-    while True:
-        serverSocket.listen(maxNumberOfConnections) # Listen for connections
-        (connection, (ip, port)) = serverSocket.accept() # Accept the connection
-        dados = {'userIP': ip, 'userPort': port} # Define the format of the log
-        nameLog.info('Protocol info: %s','connection established', extra=dados) # Log the connection
-
-        thread = threading.Thread(target=connectionClient, args=(ip, port, connection,)) # Create a thread
-        thread.start() # Start the thread
-        threads.append(thread) # Add the thread to the vector
+                nameLog.info('Protocol: %s','Response GETFILE sent', extra=data)
 
 if __name__ == "__main__":
     main()

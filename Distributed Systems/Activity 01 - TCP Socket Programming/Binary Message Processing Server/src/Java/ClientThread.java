@@ -34,7 +34,7 @@ public class ClientThread implements Runnable {
     public static ByteBuffer byteInput;
     public static ByteBuffer byteOutput;
 
-    public static String user = "user";
+    public static String user = "server";
     DataInputStream in;
     DataOutputStream out;
     Socket clientSocket;
@@ -64,19 +64,33 @@ public class ClientThread implements Runnable {
 
                 switch (commandID) {
                     case ADDFILE -> {
-                        System.out.println(ANSI_CYAN + "ADD FILE" + ANSI_RESET);
+                        System.out.println(ANSI_CYAN + "ADD FILE Request" + ANSI_RESET);
                         byteInput = ByteBuffer.allocateDirect(in.read());
                         int fileLength = byteInput.getInt(3);
                         byte[] fileContent = new byte[fileLength];
                         in.read(fileContent);
-                        byteOutput.put(3, (byte) this.addFile(filename, fileContent, currentRelativePath));
+
+                        // Save file to server folder
+                        FileOutputStream fileOutputStream = new FileOutputStream(currentRelativePath + filename);
+                        fileOutputStream.write(fileContent);
+                        fileOutputStream.close();
+
+                        // Search for file in server folder. If it was, then return successStatusCode
+                        File file = new File(currentRelativePath + filename);
+                        if (file.exists()) {
+                            byteOutput = this.responseHeader(ADDFILE, successStatusCode, addFileResponseHeader);
+                            byteOutput.put(3, (byte) this.addFile(filename, fileContent, currentRelativePath));
+                        } else {
+                            byteOutput = this.responseHeader(ADDFILE, errorStatusCode, addFileResponseHeader);
+                            byteOutput.put(3, (byte) 0);
+                        }
                     }
                     case DELETE -> {
-                        System.out.println(ANSI_CYAN + "DELETE" + ANSI_RESET);
+                        System.out.println(ANSI_CYAN + "DELETE Request" + ANSI_RESET);
                         this.deleteFile(filename, currentRelativePath);
                     }
                     case GETFILELIST -> {
-                        System.out.println(ANSI_CYAN + "GET FILE LIST" + ANSI_RESET);
+                        System.out.println(ANSI_CYAN + "GET FILE LIST Request" + ANSI_RESET);
                         List<String> fileList = this.getFiles(currentRelativePath.toString());
                         byteOutput = this.responseHeader(GETFILELIST, successStatusCode, getFileListResponseHeader);
                         byteOutput.put(3, (byte) fileList.size());
@@ -90,7 +104,7 @@ public class ClientThread implements Runnable {
                         }
                     }
                     case GETFILE -> {
-                        System.out.println(ANSI_CYAN + "GET FILE" + ANSI_RESET);
+                        System.out.println(ANSI_CYAN + "GET FILE Request" + ANSI_RESET);
 //                        byte[] fileContent = this.getFile(filename, currentRelativePath);
 //                        byteOutput = ByteBuffer.allocateDirect(fileContent.length + 3 + filenameLength);
 //                        byteOutput.put((byte) GETFILE);

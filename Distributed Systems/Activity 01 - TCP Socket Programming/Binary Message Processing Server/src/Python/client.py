@@ -33,8 +33,18 @@ clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Family: IPv4 
 clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Reuse the address
 clientSocket.connect(serverAddress) # Connect to the server
 
+def main():
+    while True:
+        userInput = input(backgroundColors.OKGREEN + "Enter a command: " + Style.RESET_ALL) # User input
+
+        if (len(userInput.split())) > 1: # if the user input has more than one word
+            command = userInput.split()[0] # command
+            filename = userInput.split()[1] # filename
+
+        switch(filename, command.upper())
+
 # Validate the command inserted by the user
-# Recieve the command from the user and a filename if it"s necessary
+# Recieve the command from the user and a filename if it's necessary
 def switch(filename, command):
     if not os.path.exists("./client"): # If the directory doesn't exist
             os.makedirs("./client") # Create the directory
@@ -52,12 +62,12 @@ def switch(filename, command):
                 
                 OpenFile = open("./client/" + filename, "rb") # Open the file in binary mode
                 fileBytes = OpenFile.read() # Read the file in bytes
-                clientSocket.send(fileBytes) # Send the file in bytes to the serve
+                clientSocket.send(fileBytes) # Send the file in bytes to the server
 
                 confirmation = int(clientSocket.recv(standardResponseHeaderSize)[statusCodePosition]) # Confirmation if the file was added or not
                 
                 if (confirmation == SUCESS): # If the file was added
-                    print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + "transfered!" + Style.RESET_ALL)
+                    print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + " transfered!" + Style.RESET_ALL)
                 else: # If the file was not added
                     print(backgroundColors.FAIL + "ERROR transfering the file " + backgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
 
@@ -68,8 +78,10 @@ def switch(filename, command):
         standardRequestHeader[1] = DELETE # DELETE in the header inside position 1
         standardRequestHeader[2] = len(filename) # Size of the filename in the header inside position 2
         clientSocket.send(standardRequestHeader + bytearray(filename.encode())) # Send the standard header and the filename
+        
+        confirmation = clientSocket.recv(standardResponseHeaderSize)[statusCodePosition]
 
-        if ((clientSocket.recv(3)[statusCodePosition]) == SUCESS): # If the file was deleted
+        if (confirmation == SUCESS): # If the file was deleted
             print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + backgroundColors.OKGREEN + " deleted!" + Style.RESET_ALL)
         else: # If the file was not deleted
             print(backgroundColors.FAIL + "ERROR deleting the file " + backgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
@@ -78,13 +90,15 @@ def switch(filename, command):
         standardRequestHeader[1] = GETFILESLIST # GETFILESLIST in the header inside position 1
         standardRequestHeader[2] = 0 # Size of the filename in the header inside position 2
         clientSocket.send(standardRequestHeader) # Send the standard header
+        
+        confirmation = clientSocket.recv(standardResponseHeaderSize)[statusCodePosition]
 
-        if (clientSocket.recv(standardResponseHeaderSize)[statusCodePosition] == SUCESS):
+        if (confirmation == SUCESS):
             quantityFiles = int.from_bytes(clientSocket.recv(2), "big") # Quantity of files in the server in Big Endian
             print(backgroundColors.OKGREEN + "Files in the server:" + Style.RESET_ALL)
             for i in range(quantityFiles): # Print the files in the server
-                fileSize = int.from_bytes(clientSocket.recv(1), "big") # Size of the file in bytes in Big Endian
-                print(backgroundColors.OKCYAN + clientSocket.recv(fileSize).decode() + Style.RESET_ALL) # Print the file name
+                filenameSize = int.from_bytes(clientSocket.recv(1), "big") # Size of the file in bytes in Big Endian
+                print(backgroundColors.OKCYAN + clientSocket.recv(filenameSize).decode() + Style.RESET_ALL) # Print the file name
         else:
             print(backgroundColors.FAIL + "ERROR getting the files list!" + Style.RESET_ALL)
             
@@ -105,16 +119,6 @@ def switch(filename, command):
             
     else:
         print(backgroundColors.FAIL + "Invalid command!" + Style.RESET_ALL)
-        
-def main():
-    while True:
-        userInput = input(backgroundColors.OKGREEN + "Enter a command: " + Style.RESET_ALL) # User input
-
-        if (len(userInput.split())) > 1: # if the user input has more than one word
-            command = userInput.split()[0] # command
-            filename = userInput.split()[1] # filename
-
-        switch(filename, command.upper())
 
 if __name__ == "__main__":
     main()
