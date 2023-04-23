@@ -38,16 +38,26 @@ def main():
         userInput = input(backgroundColors.OKGREEN + "Enter a command: " + Style.RESET_ALL) # User input
 
         if (len(userInput.split())) > 1: # if the user input has more than one word
-            command = userInput.split()[0] # command
+            command = userInput.split()[0].upper() # command
             filename = userInput.split()[1] # filename
-
-        switch(filename, command.upper())
-
+            switch(command, filename)
+        else:
+            command = userInput.upper()
+            switch(command, "")
+                                                                                              
 # Validate the command inserted by the user
 # Recieve the command from the user and a filename if it's necessary
-def switch(filename, command):
+def switch(command, filename):
     if not os.path.exists("./client"): # If the directory doesn't exist
-            os.makedirs("./client") # Create the directory
+        os.makedirs("./client") # Create the directory
+        
+    if (command == "EXIT"):
+        # send the exit command to the server
+        standardRequestHeader[1] = 5 # 5 is the exit command
+        clientSocket.send(standardRequestHeader)
+        print(backgroundColors.OKGREEN + "Connection closed" + Style.RESET_ALL)
+        clientSocket.close()
+        exit()
             
     if command == validCommands[0]: # ADDFILE
         standardRequestHeader[1] = ADDFILE # ADDFILE in the header inside position 1
@@ -67,7 +77,7 @@ def switch(filename, command):
                 confirmation = int(clientSocket.recv(standardResponseHeaderSize)[statusCodePosition]) # Confirmation if the file was added or not
                 
                 if (confirmation == SUCESS): # If the file was added
-                    print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + " transfered!" + Style.RESET_ALL)
+                    print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + backgroundColors.OKGREEN + " transfered!" + Style.RESET_ALL)
                 else: # If the file was not added
                     print(backgroundColors.FAIL + "ERROR transfering the file " + backgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
 
@@ -95,12 +105,12 @@ def switch(filename, command):
 
         if (confirmation == SUCESS):
             quantityFiles = int.from_bytes(clientSocket.recv(2), "big") # Quantity of files in the server in Big Endian
-            print(backgroundColors.OKGREEN + "Files in the server:" + Style.RESET_ALL)
+            print(f"{backgroundColors.OKGREEN}Files in the server: {backgroundColors.OKCYAN}{quantityFiles}{Style.RESET_ALL}")
             for i in range(quantityFiles): # Print the files in the server
                 filenameSize = int.from_bytes(clientSocket.recv(1), "big") # Size of the file in bytes in Big Endian
                 print(backgroundColors.OKCYAN + clientSocket.recv(filenameSize).decode() + Style.RESET_ALL) # Print the file name
         else:
-            print(backgroundColors.FAIL + "ERROR getting the files list!" + Style.RESET_ALL)
+            print(backgroundColors.FAIL + "ERROR getting the files list: Empty Directory!" + Style.RESET_ALL)
             
     elif command == validCommands[3]: # GETFILE
         standardRequestHeader[1] = GETFILE # GETFILE in the header inside position 1
@@ -108,11 +118,12 @@ def switch(filename, command):
         clientSocket.send(standardRequestHeader + bytearray(filename.encode())) # Send the standard header and the filename
 
         if (clientSocket.recv(standardResponseHeaderSize)[statusCodePosition] == SUCESS): # If the file was found
-            fileSize = int.from_bytes(clientSocket.recv(4), "big") # Size of the file in bytes in Big Endian
-            directoryFiles = clientSocket.recv(fileSize.to_bytes) # File in bytes
+            fileSize = int.from_bytes(clientSocket.recv(4), byteorder="big") # Size of the file in bytes in Big Endian
+            file = b'' # File in bytes
+            file = clientSocket.recv(fileSize) # Recieve the file in bytes
 
             with open("./client/" + filename, "w+b") as files: # Create a file with the name of the file in the server
-                files.write(directoryFiles) # Write the file in bytes in the file created
+                files.write(file) # Write the file in bytes in the file created
             print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + backgroundColors.OKGREEN + " transfered!" + Style.RESET_ALL)
         else:
             print(backgroundColors.FAIL + "ERROR recieving the file " + backgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
