@@ -19,6 +19,7 @@ DELETE = 2 # DELETE command
 GETFILESLIST = 3 # GETFILESLIST command
 GETFILE = 4 # GETFILE command
 EXIT = 5 # EXIT command
+CLIENTDIRECTORY = "./client" # Client directory
 standardResponseHeaderSize = 3 # Size of the standard response header
 statusCodePosition = 2 # Position of the status code in the response header
 
@@ -49,8 +50,8 @@ def main():
 # Validate the command inserted by the user
 # Recieve the command from the user and a filename if it's necessary
 def switch(command, filename):
-    if not os.path.exists("./client"): # If the directory doesn't exist
-        os.makedirs("./client") # Create the directory
+    if not os.path.exists(CLIENTDIRECTORY): # If the directory doesn't exist
+        os.makedirs(CLIENTDIRECTORY) # Create the directory
         
     if (command == validCommands[4]): # EXIT
         client_exit()
@@ -76,24 +77,23 @@ def client_exit():
 def addfile(filename):
     standardRequestHeader[1] = ADDFILE # ADDFILE in the header inside position 1
     standardRequestHeader[2] = len(filename) # Size of the filename in the header inside position 2
-    directoryFiles = os.listdir("./client") # List of files in the directory
+    directoryFiles = os.listdir(CLIENTDIRECTORY) # List of files in the client directory
 
-    if (directoryFiles.__contains__(filename)):
-        if (len(filename) < MAXFILENAMESIZE):
-            clientSocket.send(standardRequestHeader + bytearray(filename.encode())) # Send the standard header and the filename
-            fileSize = os.path.getsize("./client/" + filename) # Size of the file in bytes and in Big Endian
-            clientSocket.send(fileSize.to_bytes(4, "big")) # Send the size of the file in bytes with a size of 4 bytes  
-            
-            OpenFile = open("./client/" + filename, "rb") # Open the file in binary mode
-            fileBytes = OpenFile.read() # Read the file in bytes
-            clientSocket.send(fileBytes) # Send the file in bytes to the server
+    if ((directoryFiles.__contains__(filename)) and (len(filename) < MAXFILENAMESIZE)):
+        clientSocket.send(standardRequestHeader + bytearray(filename.encode())) # Send the standard header and the filename
+        fileSize = os.path.getsize(CLIENTDIRECTORY + "/" + filename) # Size of the file in bytes
+        clientSocket.send(fileSize.to_bytes(4, "big")) # Send the size of the file in bytes with a size of 4 bytes  
+        
+        OpenFile = open(CLIENTDIRECTORY + "/" + filename, "rb") # Open the file in bytes
+        fileBytes = OpenFile.read() # Read the file in bytes
+        clientSocket.send(fileBytes) # Send the file in bytes to the server
 
-            confirmation = int(clientSocket.recv(standardResponseHeaderSize)[statusCodePosition]) # Confirmation if the file was added or not
-            
-            if (confirmation == SUCESS): # If the file was added
-                print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + backgroundColors.OKGREEN + " transfered!" + Style.RESET_ALL)
-            else: # If the file was not added
-                print(backgroundColors.FAIL + "ERROR transfering the file " + backgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
+        confirmation = int(clientSocket.recv(standardResponseHeaderSize)[statusCodePosition]) # Confirmation if the file was added or not
+        
+        if (confirmation == SUCESS): # If the file was added
+            print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + backgroundColors.OKGREEN + " transfered!" + Style.RESET_ALL)
+        else: # If the file was not added
+            print(backgroundColors.FAIL + "ERROR transfering the file " + backgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
 
     else:
         print(backgroundColors.FAIL + "File " + backgroundColors.OKCYAN + filename + backgroundColors.FAIL + " not found!" + Style.RESET_ALL)
@@ -136,7 +136,7 @@ def getfile(filename):
         file = b'' # File in bytes
         file = clientSocket.recv(fileSize) # Recieve the file in bytes
 
-        with open("./client/" + filename, "w+b") as files: # Create a file with the name of the file in the server
+        with open(CLIENTDIRECTORY + "/" + filename, "w+b") as files:
             files.write(file) # Write the file in bytes in the file created
         print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + backgroundColors.OKGREEN + " transfered!" + Style.RESET_ALL)
     else:
