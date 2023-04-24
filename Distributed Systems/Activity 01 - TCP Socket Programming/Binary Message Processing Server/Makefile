@@ -1,7 +1,7 @@
-server-run:
+run-server:
 	clear; python3 server.py
 
-client-run:
+run-client:
 	clear; python3 client.py
 
 remove:

@@ -1,3 +1,5 @@
+# This file handles the server side of the application.
+
 import os
 import socket
 import threading
@@ -6,7 +8,7 @@ import logging
 from colorama import Style
 
 # Macros:
-class backgroundColors:
+class backgroundColors: # Colors for the terminal
     OKCYAN = "\033[96m"
     OKGREEN = "\033[92m"
     WARNING = "\033[93m"
@@ -23,6 +25,7 @@ GETFILESLIST = 3 # GETFILESLIST command
 GETFILE = 4 # GETFILE command
 EXIT = 5 # EXIT command
 MAXFILENAMESIZE = 256 # Max size of the filename
+SERVERDIRECTORY = "./server" # Server directory
 
 # Create a socket object
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Family: IPv4 e Type: Stream (TCP)
@@ -34,6 +37,8 @@ formatLog = '%(asctime)-1s %(userIP)s %(userPort)s %(message)s'
 logging.basicConfig(format=formatLog, level=20)
 nameLog = logging.getLogger('TCP_Server')
 
+# This is the main function
+# It creates a thread for each connection
 def main():
     threads = [] # Vector of threads
 
@@ -47,11 +52,14 @@ def main():
         thread.start() # Start the thread
         threads.append(thread) # Add the thread to the vector
 
+# This function handles the connection with the client
+# It receives the ip, port and the connection socket object
+# It processes the request and sends the response
 def connectionClient(ip, port, connection):
     data = {'userIP': ip, 'userPort': port}
     
-    if not os.path.exists("./server"): # If the directory doesn't exist
-        os.makedirs("./server") # Create the directory
+    if not os.path.exists(SERVERDIRECTORY): # If the directory doesn't exist
+        os.makedirs(SERVERDIRECTORY) # Create the directory
 
     while True:
         responseHeader = bytearray(3) # 1 Byte for the message type, 1 Byte for the command and 1 Byte for the status code
@@ -76,10 +84,16 @@ def connectionClient(ip, port, connection):
         elif (commandId == GETFILE):
             getFile(filename, connection, data, responseHeader)
 
+# This function handles the exit command
+# It receives the data (ip and port) which is used in the log
 def exit(data):
     nameLog.info('Protocol: %s', 'Received EXIT request', extra=data)
     nameLog.info('Protocol: %s', 'Connection closed', extra=data)
 
+# This function handles the add file command
+# It receives the filename, the connection socket object, the data (ip and port) which is used in the log and the response header
+# It verifies if the file exists, if it doesn't it creates the file
+# Then it sends the response header with the status code
 def addFile(filename, connection, data, responseHeader):
     nameLog.info('Protocol: %s', 'Received ADDFILE request', extra=data)
     archiveSize = int.from_bytes(connection.recv(4), byteorder='big')
@@ -87,10 +101,10 @@ def addFile(filename, connection, data, responseHeader):
     archive = connection.recv(archiveSize)
     nameLog.info('Protocol: %s', 'Download finished', extra=data)
 
-    with open('./server/' + filename, 'w+b') as archiveFile:
+    with open(SERVERDIRECTORY + '/' + filename, 'w+b') as archiveFile:
         archiveFile.write(archive)
 
-    archive = os.listdir(path='./server/')
+    archive = os.listdir(path=SERVERDIRECTORY + '/')
     if filename in archive:
         responseHeader[2] = SUCESS
         nameLog.info('Protocol: %s','Successfully ADDFILE', extra=data)
@@ -101,13 +115,17 @@ def addFile(filename, connection, data, responseHeader):
     responseHeader[1] = ADDFILE
     connection.send(responseHeader)
     nameLog.info('Protocol: %s','Response ADDFILE sent', extra=data)
-    
+
+# This function handles the delete command
+# It receives the filename, the connection socket object, the data (ip and port) which is used in the log and the response header
+# It verifies if the file exists, if it does it deletes the file
+# Then it verifies if the file was deleted and sends the response header with the status code    
 def delete(filename, connection, data, responseHeader):
     nameLog.info('Protocol: %s','Received DELETE request', extra=data)
-    if os.path.isfile('./server/' + filename):
-        os.remove('./server/' + filename)
+    if os.path.isfile(SERVERDIRECTORY + '/' + filename):
+        os.remove(SERVERDIRECTORY + '/' + filename)
 
-        if os.path.isfile('./server/' + filename):
+        if os.path.isfile(SERVERDIRECTORY + '/' + filename):
             responseHeader[2] = ERROR
             nameLog.info('Protocol: %s','Unsuccessfully DELETE ', extra=data)
         else:
@@ -117,16 +135,20 @@ def delete(filename, connection, data, responseHeader):
     connection.send(responseHeader)
     nameLog.info('Protocol: %s','Response DELETE sent ', extra=data)
     
+# This function handles the get files list command
+# It receives the connection socket object, the data (ip and port) which is used in the log and the response header
+# It verifies if there are files in the directory, if there are it sends the response header with the status code and the quantity of files
+# Then it sends the response header with the status code and each file name with its size
 def getFilesList(connection, data, responseHeader):
     nameLog.info('Protocol: %s','Received GETFILESLIST request', extra=data)
     quantityFiles = 0
     files: list[str] = []
-    directory = os.listdir('./server/')
+    directory = os.listdir(SERVERDIRECTORY + '/')
     responseHeader[1] = GETFILESLIST
     filenameSizeResponseHeader = 0
 
     for filename in directory:
-        if os.path.isfile(str('./server/' + filename)):
+        if os.path.isfile(str(SERVERDIRECTORY + '/' + filename)):
             quantityFiles = quantityFiles + 1
             files.append(str(filename))
 
@@ -145,19 +167,25 @@ def getFilesList(connection, data, responseHeader):
         responseHeader[2] = ERROR
         connection.send(responseHeader)
         nameLog.info('Protocol: %s','Response GETFILESLIST sent', extra=data)
-        
+
+# This function handles the get file command
+# It receives the filename, the connection socket object, the data (ip and port) which is used in the log and the response header
+# It verifies if the file exists
+# If it does, it sends the response header with the success status code and the file size
+# Then it sends the file to the client
+# Else it sends the response header with the error status code         
 def getFile(filename, connection, data, responseHeader):
     nameLog.info('Protocol: %s','Received GETFILE request', extra=data)
     responseHeader[1] = GETFILE
-    archive = os.listdir('./server/')
+    archive = os.listdir(SERVERDIRECTORY + '/')
 
     if len(filename) <= MAXFILENAMESIZE and filename in archive:
         responseHeader[2] = SUCESS
         connection.send(responseHeader)
         nameLog.info('Protocol: %s','Response GETFILE sent', extra=data)
-        fileSize = (os.stat('./server/' + filename).st_size).to_bytes(4, byteorder="big")
+        fileSize = (os.stat(SERVERDIRECTORY + '/' + filename).st_size).to_bytes(4, byteorder="big")
         connection.send(fileSize)
-        fileOpen = open('./server/' + filename, 'rb')
+        fileOpen = open(SERVERDIRECTORY + '/' + filename, 'rb')
         file = fileOpen.read()
         nameLog.info('Protocol: %s','Starting upload', extra=data)
         connection.send(file)
@@ -170,5 +198,6 @@ def getFile(filename, connection, data, responseHeader):
         connection.send(responseHeader)
         nameLog.info('Protocol: %s','Response GETFILE sent', extra=data)
 
+# This function is the one who calls the main functions of the program
 if __name__ == "__main__":
     main()

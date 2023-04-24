@@ -61,7 +61,7 @@ public class Client {
                 out.writeUTF(buffer);      	// Send the message to the server
                 buffer = in.readUTF();      // Wait for the server to respond
 
-                if (buffer.equals(-1)) { buffer = in.readUTF(); } // If the server response is -1, it means 
+                if (buffer.equals(-1)) { buffer = in.readUTF(); } // If the server response is -1, read the next message
                 System.out.println(ANSI_GREEN + "Server disse: " + ANSI_CYAN + buffer + ANSI_RESET);
 
                 if (lastMessage.contains("CONNECT") && buffer.equals("SUCCESS")) { loggedIn = true; } // If the user is logged in and the last message was CONNECT, set loggedIn to true

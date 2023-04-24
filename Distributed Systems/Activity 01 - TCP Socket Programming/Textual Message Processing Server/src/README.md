@@ -1,7 +1,7 @@
 
 # TCP Socket Programming
 ```bash
-Programming a TCP socket server and client using Java.  
+Programming a TCP socket server and client that communicates with each other using text-based commands in Java.
 @author Breno Farias da Silva  
 @date 24/04/2023
 ```
@@ -12,65 +12,65 @@ But, before that, make sure you have makefile installed on your machine.
 sudo apt install make -y
 ```
 - On the first terminal, type:  
-```bash
+    ```bash
     make server
-```
+    ```
 - On the second terminal, type:  
-```bash
+    ```bash
     make client
-```
+    ```
 ## How to use
 ### Commands:
-- CONNECT *user*,*password* -> Tries to establish a connection with the client
-- PWD -> Shows the current directory
-- GETFILES -> Shows all files in the current directory
-- CHDIR *directoryName* -> Changes the current directory to the *directoryName*
-- GETDIRS -> Shows all directories in the current directory
-- EXIT -> Closes the client connection
+- **CONNECT** *user*,*password* -> Tries to establish a connection with the client
+- **PWD** -> Shows the current directory
+- **GETFILES** -> Shows all files in the current directory
+- **CHDIR** *directoryName* -> Changes the current directory to the *directoryName*
+- **GETDIRS** -> Shows all directories in the current directory
+- **EXIT** -> Closes the client connection
 
 ## Example of usage
-- On the server terminal, type:
-```bash
+- Open the first terminal, type:
+    ```bash
     make server
-```
-- On the client terminal, type:
-```bash
+    ```
+- Open the second terminal, type:
+    ```bash
     make client
-```
+    ```
 - On the client terminal, type:
-```bash
+    ```bash
     CONNECT guest,guest
-```
+    ```
 - On the client terminal, type:
-```bash
+    ```bash
     PWD
-```
+    ```
 - On the client terminal, type:
-```bash
+    ```bash
     GETFILES
-```
+    ```
 - On the client terminal, type:
-```bash
+    ```bash
     GETDIRS
-```
+    ```
 - On the client terminal, type:
-```bash
+    ```bash
     CHDIR {insert here a directory name that was shown in the GETDIRS command}
-```
+    ```
 - On the client terminal, type:
-```bash
+    ```bash
     PWD
-```
+    ```
 - On the client terminal, type:
-```bash
+    ```bash
     EXIT
-```
+    ```
 
 ## Libraries
-* java.io.*;
-* java.net.*;
-* java.util.*;
-* java.math.BigInteger;
-* java.nio.file.Paths;
-* java.security.MessageDigest;
-* java.util.Scanner;
+* **java.io** -> Used to read and write files
+* **java.net** -> Used to create the server and client sockets
+* **java.util** -> Used to create the scanner and the arraylist
+* **java.math.BigInteger** -> Used to convert the hash to a string
+* **java.nio.file.Paths;** -> Used to get the current directory
+* **java.security.MessageDigest** -> Used to create the hash
+* **java.util.Scanner** -> Used to read the user input

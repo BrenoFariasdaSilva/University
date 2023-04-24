@@ -1,9 +1,11 @@
+# This file handles the client side of the application. 
+
 import os
 import socket
 from colorama import Style
 
 # Macros:
-class backgroundColors:
+class backgroundColors: # Colors for the terminal
     OKCYAN = "\033[96m"
     OKGREEN = "\033[92m"
     WARNING = "\033[93m"
@@ -35,6 +37,8 @@ clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Family: IPv4 
 clientSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Reuse the address
 clientSocket.connect(serverAddress) # Connect to the server
 
+# This is the main function
+# It receives the user input and calls the switch function for handling user input as it should 
 def main():
     while True:
         userInput = input(backgroundColors.OKGREEN + "Enter a command: " + Style.RESET_ALL) # User input
@@ -47,8 +51,8 @@ def main():
             command = userInput.upper()
             switch(command, "")
                                                                                               
-# Validate the command inserted by the user
-# Recieve the command from the user and a filename if it's necessary
+# This function validates the command inserted by the user, as well as creating the directory for the operations
+# It recieves the command from the user and a filename if it's necessary
 def switch(command, filename):
     if not os.path.exists(CLIENTDIRECTORY): # If the directory doesn't exist
         os.makedirs(CLIENTDIRECTORY) # Create the directory
@@ -65,15 +69,19 @@ def switch(command, filename):
         getfile(filename)
     else:
         print(backgroundColors.FAIL + "Invalid command!" + Style.RESET_ALL)
-        
+
+# This function handles the EXIT command
+# This is done by sending the standard header with the EXIT command and closing the socket    
 def client_exit():
     standardRequestHeader[1] = EXIT # EXIT in the header inside position 1
     standardRequestHeader[2] = 0 # Size of the filename in the header inside position 2
     clientSocket.send(standardRequestHeader) # Send the standard header
     clientSocket.close() # Close the socket
     print(backgroundColors.OKGREEN + "Connection closed!" + Style.RESET_ALL)
-    exit(0)
-    
+    exit(0) # Exit the program
+   
+# This functions handles the ADDFILE command
+# It receives the filename and sends the standard header with the ADDFILE command, the size of the filename and the filename    
 def addfile(filename):
     standardRequestHeader[1] = ADDFILE # ADDFILE in the header inside position 1
     standardRequestHeader[2] = len(filename) # Size of the filename in the header inside position 2
@@ -97,7 +105,9 @@ def addfile(filename):
 
     else:
         print(backgroundColors.FAIL + "File " + backgroundColors.OKCYAN + filename + backgroundColors.FAIL + " not found!" + Style.RESET_ALL)
-    
+   
+# This function handles the DELETE command
+# It receives the file filename to be deleted and sends the standard header with the DELETE command, the size of the filename and the filename 
 def delete(filename):
     standardRequestHeader[1] = DELETE # DELETE in the header inside position 1
     standardRequestHeader[2] = len(filename) # Size of the filename in the header inside position 2
@@ -109,13 +119,16 @@ def delete(filename):
         print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + backgroundColors.OKGREEN + " deleted!" + Style.RESET_ALL)
     else: # If the file was not deleted
         print(backgroundColors.FAIL + "ERROR deleting the file " + backgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
-        
+       
+# This function handles the GETFILESLIST command
+# It sends the standard header with the GETFILESLIST command and waits for the server to confirm the operation
+# If the server answers as the operation was successful, it receives the quantity of files in the server and prints them        
 def getfileslist():
     standardRequestHeader[1] = GETFILESLIST # GETFILESLIST in the header inside position 1
     standardRequestHeader[2] = 0 # Size of the filename in the header inside position 2
     clientSocket.send(standardRequestHeader) # Send the standard header
     
-    confirmation = clientSocket.recv(standardResponseHeaderSize)[statusCodePosition]
+    confirmation = clientSocket.recv(standardResponseHeaderSize)[statusCodePosition] # 
 
     if (confirmation == SUCESS):
         quantityFiles = int.from_bytes(clientSocket.recv(2), "big") # Quantity of files in the server in Big Endian
@@ -125,7 +138,10 @@ def getfileslist():
             print(backgroundColors.OKCYAN + clientSocket.recv(filenameSize).decode() + Style.RESET_ALL) # Print the file name
     else:
         print(backgroundColors.FAIL + "ERROR getting the files list: Empty Directory!" + Style.RESET_ALL)
-    
+  
+# This function handles the GETFILE command
+# It receives the file filename to be downloaded and sends the standard header with the GETFILE command, the size of the filename and the filename
+# If the server confirms the operation, it receives the size of the file in bytes and the file in bytes and creates a file with the same name in the client directory
 def getfile(filename):
     standardRequestHeader[1] = GETFILE # GETFILE in the header inside position 1
     standardRequestHeader[2] = len(filename) # Size of the filename in the header inside position 2
@@ -142,5 +158,6 @@ def getfile(filename):
     else:
         print(backgroundColors.FAIL + "ERROR recieving the file " + backgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
 
+# This function is the one who calls the main functions of the program
 if __name__ == "__main__":
     main()
