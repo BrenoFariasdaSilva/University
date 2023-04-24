@@ -3,6 +3,13 @@ import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
 
+/***
+ *  TCP Socket Programming Activity.
+ * @author Breno Farias
+ * @date 24/09/2022
+ * @subject Distributed Systems
+ */
+
 // TODO: Use JAVADOC
 // TODO: Create functions for repeated code
 // TODO: Simplify code
@@ -17,7 +24,8 @@ public class ClientThread implements Runnable {
 
     final static String[] preProcessedHashes = {
             "8871f959957ee6ebfd5d585aa03691e7affb6c5c4a2c31b648906ab235645358cd0efba62245f401aa38fddcf7db34169dcf655ae5631a79a5c4fcdf2f9f33df", // breno
-            "7aa9c772629c40ccdd9061c0fcf46432c74b64c6ab6dcbda0959953a6f63c2c854b29df07ceaeb96c6034731b7a40db7a4645310c8814d7d8da8c1147e9f3691" // campiolo
+            "7aa9c772629c40ccdd9061c0fcf46432c74b64c6ab6dcbda0959953a6f63c2c854b29df07ceaeb96c6034731b7a40db7a4645310c8814d7d8da8c1147e9f3691", // campiolo
+            "b0e0ec7fa0a89577c9341c16cff870789221b310a02cc465f464789407f83f377a87a97d635cac2666147a8fb5fd27d56dea3d4ceba1fc7d02f422dda6794e3c" // guest
     };
 
     final static String successMessage = "SUCCESS";

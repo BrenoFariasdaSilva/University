@@ -4,6 +4,13 @@ import java.util.Scanner;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
+/***
+ *  TCP Socket Programming Activity.
+ * @author Breno Farias
+ * @date 24/09/2022
+ * @subject Distributed Systems
+ */
+
 public class Client {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
