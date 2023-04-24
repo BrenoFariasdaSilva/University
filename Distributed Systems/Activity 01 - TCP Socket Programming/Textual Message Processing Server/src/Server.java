@@ -4,8 +4,13 @@ import java.io.*;
 /***
  *  TCP Socket Programming Activity.
  * @author Breno Farias
- * @date 24/09/2022
  * @subject Distributed Systems
+ * @date 16/03/2022
+ * @lastUpdate 24/04/2022
+ * This file is the server side of the application.
+ * It creates a socket and waits for connections.
+ * It also creates a thread for each client that connects to the server.
+ * The thread created is to allow multiple clients to connect to the server, due to TCP socket being a blocking socket.
  */
 
 public class Server {
@@ -22,11 +27,11 @@ public class Server {
                     System.out.println(ANSI_GREEN + "Servidor aguardando conexao ..." + ANSI_RESET);
 
                     /* aguarda conexoes */
-                    Socket clientSocket = listenSocket.accept();
+                    Socket clientSocket = listenSocket.accept(); // Chamada bloqueante
 
                     System.out.println(ANSI_GREEN + "Cliente conectado ... Criando thread ..." + ANSI_RESET);
-                    ClientThread clientThread = new ClientThread(clientSocket);
-                    Thread myThread = new Thread(clientThread);
+                    ClientThread clientThread = new ClientThread(clientSocket); // cria uma thread para o cliente
+                    Thread myThread = new Thread(clientThread); 
 
                     /* inicializa a thread */
                     myThread.start();

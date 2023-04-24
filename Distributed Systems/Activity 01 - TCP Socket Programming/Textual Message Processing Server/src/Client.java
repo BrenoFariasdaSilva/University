@@ -7,8 +7,15 @@ import java.security.MessageDigest;
 /***
  *  TCP Socket Programming Activity.
  * @author Breno Farias
- * @date 24/09/2022
  * @subject Distributed Systems
+ * @date 16/03/2022
+ * @lastUpdate 24/04/2022
+ * This file is the client side of the application.
+ * This file creates a TCP socket in order to communicate with the server.
+ * It's responsible for sending messages to the server.
+ * It also receives messages from the server.
+ * It's also responsible for encrypting the password into SHA512.
+ * And validate user input, so the server don't get loaded with invalid inputs
  */
 
 public class Client {
@@ -19,47 +26,47 @@ public class Client {
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in); // ler mensagens via teclado
 
-        // Endereço e porta do servidor
+        // Address and port of the server
         int serverPort = 6666;
-        InetAddress serverAddr = null; // Instância no localhost.
+        InetAddress serverAddr = null; // Create an instance of InetAddress
         try {
-            serverAddr = InetAddress.getByName("localhost"); // 127.0.0.1
+            serverAddr = InetAddress.getByName("localhost"); // Get the IP address of the server, which is localhost = 127.0.0.1
         } catch (UnknownHostException e) {
             System.out.println(ANSI_GREEN + "Host desconhecido!" + ANSI_RESET);
             return;
         }
 
-        try (var clientSocket = new Socket(serverAddr, serverPort)) { // Var infere o tipo sozinho. Só se usa com variáveis locais.
-            // cria objetos de leitura e escrita
+        try (var clientSocket = new Socket(serverAddr, serverPort)) { // Var inferes the type of the variable, which can only be used with local variables
+            // Create the read and write objects for the socket
             DataInputStream in = new DataInputStream( clientSocket.getInputStream());
             DataOutputStream out = new DataOutputStream( clientSocket.getOutputStream());
 
-            // protocolo de comunicação
+            // Create the variables to handle the user input
             String buffer = "";
             String lastMessage = "";
             boolean loggedIn = false;
 
             while (true) {
                 System.out.print(ANSI_GREEN + "Mensagem: " + ANSI_RESET);
-                buffer = reader.nextLine(); // lê mensagem via teclado
+                buffer = reader.nextLine(); // lRead the user input
                 lastMessage = buffer;
 
-                if (buffer.equals("EXIT")) { return; }
+                if (buffer.equals("EXIT")) { return; } // Close the socket and exit the program
 
-                if (buffer.contains("CONNECT")) {
+                if (buffer.contains("CONNECT")) { // If the user is trying to connect, encrypt the password
                     String[] loginCredentials = buffer.substring(8).split(",");
                     buffer = "CONNECT " + loginCredentials[0] + "," + getSHA512(loginCredentials[1]);
                 }
 
-                out.writeUTF(buffer);      	// envia a mensagem para o servidor
-                buffer = in.readUTF();      // aguarda resposta do servidor
+                out.writeUTF(buffer);      	// Send the message to the server
+                buffer = in.readUTF();      // Wait for the server to respond
                 if (buffer.equals(-1)) { buffer = in.readUTF(); }
                 System.out.println(ANSI_GREEN + "Server disse: " + ANSI_CYAN + buffer + ANSI_RESET);
 
-                if (lastMessage.contains("CONNECT") && buffer.equals("SUCCESS")) { loggedIn = true; }
-                if ((lastMessage.equals("GETFILES") || lastMessage.equals("GETDIRS")) && loggedIn) {
+                if (lastMessage.contains("CONNECT") && buffer.equals("SUCCESS")) { loggedIn = true; } // If the user is logged in and the last message was CONNECT, set loggedIn to true
+                if ((lastMessage.equals("GETFILES") || lastMessage.equals("GETDIRS")) && loggedIn) { // If the user is logged in and the last message was GETFILES or GETDIRS, print the server response
                     final int numberOfContent = Integer.parseInt(buffer);
-                    if (numberOfContent != 0) { System.out.println(ANSI_CYAN + in.readUTF() + ANSI_RESET); }
+                    if (numberOfContent != 0) { System.out.println(ANSI_CYAN + in.readUTF() + ANSI_RESET); } // If the server response is not 0, print the server response
                 }
             }
         } catch (EOFException eofe){
@@ -69,13 +76,18 @@ public class Client {
         }
     }
 
+    /**
+     * This method is responsible for encrypting the password into SHA512.
+     * @param password The password to be encrypted.
+     * @return The encrypted password.
+     */
     public static String getSHA512(String password) {
         String encryptedPassword = "";
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-512");
-            digest.reset();
-            digest.update(password.getBytes("utf8"));
-            encryptedPassword = String.format("%0128x", new BigInteger(1, digest.digest()));
+            MessageDigest digest = MessageDigest.getInstance("SHA-512"); // Get the SHA-512 instance
+            digest.reset(); // Reset the digest
+            digest.update(password.getBytes("utf8")); // Update the digest with the password bytes in UTF-8
+            encryptedPassword = String.format("%0128x", new BigInteger(1, digest.digest())); // Encrypt the password
         } catch (Exception e) { e.printStackTrace(); }
         return encryptedPassword;
     }

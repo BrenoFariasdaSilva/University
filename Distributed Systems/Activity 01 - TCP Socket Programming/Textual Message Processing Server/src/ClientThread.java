@@ -6,8 +6,14 @@ import java.util.*;
 /***
  *  TCP Socket Programming Activity.
  * @author Breno Farias
- * @date 24/09/2022
  * @subject Distributed Systems
+ * @date 16/03/2022
+ * @lastUpdate 24/04/2022
+ * This file is the server side of the application, which is called by the Server.java file.
+ * Here is the implementation of the thread that is created for each client that connects to the server.
+ * It's responsible for receiving messages from the client and sending messages to the client.
+ * It also validates the user input, just like the Client.java file does, but it also validates the user's password.
+ * It's main purpose is to receive commands from the client and execute them.
  */
 
 // TODO: Use JAVADOC
@@ -15,14 +21,14 @@ import java.util.*;
 // TODO: Simplify code
 
 public class ClientThread implements Runnable {
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_RESET = "\u001B[0m"; // Variavel for reseting terminal output color
+    public static final String ANSI_GREEN = "\u001B[32m"; // Variable for changing terminal output color to green
+    public static final String ANSI_CYAN = "\u001B[36m"; // Variable for changing terminal output color to cyan
     DataInputStream in;
     DataOutputStream out;
     Socket clientSocket;
 
-    final static String[] preProcessedHashes = {
+    final static String[] preProcessedHashes = { // pre processed hashed for authenticate user in CONNECT command
             "8871f959957ee6ebfd5d585aa03691e7affb6c5c4a2c31b648906ab235645358cd0efba62245f401aa38fddcf7db34169dcf655ae5631a79a5c4fcdf2f9f33df", // breno
             "7aa9c772629c40ccdd9061c0fcf46432c74b64c6ab6dcbda0959953a6f63c2c854b29df07ceaeb96c6034731b7a40db7a4645310c8814d7d8da8c1147e9f3691", // campiolo
             "b0e0ec7fa0a89577c9341c16cff870789221b310a02cc465f464789407f83f377a87a97d635cac2666147a8fb5fd27d56dea3d4ceba1fc7d02f422dda6794e3c" // guest
