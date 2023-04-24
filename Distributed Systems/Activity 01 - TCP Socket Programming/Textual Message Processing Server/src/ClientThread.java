@@ -49,15 +49,18 @@ public class ClientThread implements Runnable {
         }
     }
 
+    /*
+     * This function is responsible for executing the thread that was created for each client that connects to the server.
+     */
     @Override
     public void run() {
         try {
             String buffer = "";
-            StringBuilder currentRelativePath = new StringBuilder("/"); // Começa com / por ser um servidor linux
+            StringBuilder currentRelativePath = new StringBuilder("/"); // Starts at root directory
             boolean authenticated = false;
 
             while (true) {
-                buffer = in.readUTF();   /* aguarda o envio de dados */
+                buffer = in.readUTF();   // Waits for client to send a message
 
                 System.out.println(ANSI_GREEN + "Cliente disse: " + ANSI_CYAN + buffer + ANSI_RESET);
                 if (buffer.equals("EXIT")) { System.out.println(ANSI_GREEN + "CLIENTE FINALIZADO" + ANSI_RESET); break; }
@@ -70,20 +73,20 @@ public class ClientThread implements Runnable {
                     }
                 } else { // User is authenticated.
                     if (buffer.contains("CONNECT") ) {
-                        out.writeUTF("The user is already logged in!");
+                        out.writeUTF("The user is already logged in!"); // User is already logged in
                     } else if (buffer.equals("PWD")) {
-                        out.writeUTF(this.pwd(currentRelativePath.toString()));
+                        out.writeUTF(this.pwd(currentRelativePath.toString())); // Prints current directory
                     } else if (buffer.contains("CHDIR")) {
                         String[] pathValue = buffer.split(" ", 2);
-                         this.outputMessage(this.chdir(currentRelativePath, pathValue[1]));
+                         this.outputMessage(this.chdir(currentRelativePath, pathValue[1])); // Changes directory
                     } else if (buffer.equals("GETFILES")) {
-                        List<String> files = this.getFiles(currentRelativePath.toString());
-                        this.multipleOutput(files);
+                        List<String> files = this.getFiles(currentRelativePath.toString()); // Gets files from current directory
+                        this.multipleOutput(files); // Sends files to client
                     } else if (buffer.equals("GETDIRS")) {
-                        List<String> folders = this.getDirs(currentRelativePath.toString());
-                        this.multipleOutput(folders);
+                        List<String> folders = this.getDirs(currentRelativePath.toString()); // Gets folders from current directory
+                        this.multipleOutput(folders); // Sends folders to client
                     } else {
-                        out.writeUTF("Invalid input!");
+                        out.writeUTF("Invalid input!"); // Invalid input
                     }
                 }
             }
@@ -104,6 +107,11 @@ public class ClientThread implements Runnable {
         System.out.println(ANSI_CYAN + "Thread de comunicação cliente finalizada." + ANSI_RESET);
     }
 
+    /*
+     * This function is responsible for sending multiple messages to the client using the DataOutputStream.
+     * @param files - List of files or folders to be sent to the client.
+     * @return void
+     */
     public void multipleOutput(List<String> files) throws IOException {
         out.writeUTF(String.valueOf(files.size()));
 
@@ -117,6 +125,11 @@ public class ClientThread implements Runnable {
         }
     }
 
+    /*
+     * This function is responsible for sending a success or error message to the client using the DataOutputStream.
+     * @param validateConditional - Boolean value that determines if the message will be sent or not.
+     * @return void
+     */
     public void outputMessage (boolean validateConditional) throws IOException {
         if (validateConditional) {
             out.writeUTF(successMessage);
@@ -125,6 +138,11 @@ public class ClientThread implements Runnable {
         }
     }
 
+    /*
+     * This function is responsible for authenticating the user credentials using the pre-processed hashes.
+     * @param password - Password to be authenticated.
+     * @return boolean - Returns true if the password is valid, false otherwise.
+     */
     public boolean authenticate(final String password) {
         for (String preProcessedHash : preProcessedHashes) {
             if (preProcessedHash.equals(password)) { return true; }
@@ -132,6 +150,12 @@ public class ClientThread implements Runnable {
         return false;
     }
 
+    /*
+     * This function is responsible for creating a user directory in the server when the user logs in.
+     * @param user - User to be created.
+     * @param currentRelativePath - Current directory path.
+     * @return void
+     */
     public void createUserDirectory(final String user, StringBuilder currentRelativePath) {
         File userDirectory = new File("./".concat(user));
 
@@ -143,10 +167,21 @@ public class ClientThread implements Runnable {
         currentRelativePath.append(user);
     }
 
+    /*
+     * This function is responsible for getting the absolute path of the server.
+     * @return String - Returns the absolute path of the server.
+     */
     public String getAbsolutePath () {
         return Paths.get("").toAbsolutePath().toString();
     }
 
+    /*
+     * This function is responsible for connecting the user to the server.
+     * @param buffer - Buffer containing the user credentials, which are separated by a comma.
+     * @param currentRelativePath - Current directory path.
+     * @return boolean - Returns true if the user is connected, false otherwise.
+     * @comment - The user credentials is like this: user,password
+     */
     public boolean connect(final String buffer, StringBuilder currentRelativePath) throws IOException {
         String[] loginCredentials = buffer.split(",");
 
@@ -160,10 +195,26 @@ public class ClientThread implements Runnable {
         return false;
     }
 
+    /*
+     * This function is responsible for returning the working directory (PWD).
+     * @param currentRelativePath - Current directory path.
+     * @return String - Returns the current directory path.
+     */
     public String pwd(String currentRelativePath) throws IOException {
         return currentRelativePath;
     }
 
+    /*
+     * This function is responsible for changing the working directory (CHDIR).
+     * @param currentRelativePath - Current directory path.
+     * @param folder - Folder to be changed.
+     * @return boolean - Returns true if the folder is changed, false otherwise.
+     * @comment - The folder can be ".", ".." or a folder name.
+     * @comment - The folder "." is the current directory.
+     * @comment - The folder ".." is the parent directory.
+     * @comment - The folder name is a folder inside the current directory.
+     * @comment - currentRelativePath is a StringBuilder object, which stores something like this: /user/folder
+     */
     public boolean chdir(StringBuilder currentRelativePath, String folder) throws IOException {
         if (folder.equals(".")) { return true; }
         else if (folder.equals("..")) {
@@ -172,8 +223,6 @@ public class ClientThread implements Runnable {
                 return true;
             }
         }
-
-        File cdFolder = new File(this.getAbsolutePath());
 
         if (currentRelativePath.lastIndexOf("/") != currentRelativePath.length()) { currentRelativePath.append("/"); }
 
@@ -185,10 +234,20 @@ public class ClientThread implements Runnable {
         return false;
     }
 
+    /*
+     * This function is responsible for returning the list of files or folders in the current directory (DIR).
+     * @param currentRelativePath - Current directory path.
+     * @return List<String> - Returns a list of files or folders in the current directory.
+     */
     public List<String> getFiles(final String currentRelativePath) throws IOException {
         return this.getAllFiles(currentRelativePath, false);
     }
 
+    /*
+     * This function is responsible for returning the list of folders in the current directory (DIR).
+     * @param currentRelativePath - Current directory path.
+     * @return List<String> - Returns a list of folders in the current directory.
+     */
     public List<String> getDirs(final String currentRelativePath) throws IOException {
         ArrayList<String> dirsList = (ArrayList<String>) this.getAllFiles(currentRelativePath, true);
         dirsList.add(".");
@@ -196,6 +255,12 @@ public class ClientThread implements Runnable {
         return dirsList;
     }
 
+    /*
+     * This function is responsible for returning the list of files or folders in the current directory.
+     * @param currentRelativePath - Current directory path.
+     * @param wantDirectory - Boolean value that determines if the list will contain folders or files.
+     * @return List<String> - Returns a list of files or folders in the current directory.
+     */
     public List<String> getAllFiles (final String currentRelativePath, final boolean wantDirectory) {
         File[] folder = new File(this.getAbsolutePath().concat(currentRelativePath)).listFiles();
         ArrayList<String> fileList = new ArrayList<>();
