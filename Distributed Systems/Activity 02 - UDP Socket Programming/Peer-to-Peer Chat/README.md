@@ -1,7 +1,12 @@
 
 # UDP Socket Programming
-```bash
+```
 Programming a UDP socket peer-to-peer (P2P) connection to send messages between it's peers.
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + 
+| Message Type | Nick Size | Nick [Nick Size] (1-64 bytes) |
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + 
+| Message Size | Message [Message Size] (0-255 bytes)      |
++ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + 
 ```
 @author Breno Farias da Silva  
 @date 24/04/2023
