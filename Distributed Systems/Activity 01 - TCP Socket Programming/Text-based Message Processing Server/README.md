@@ -67,10 +67,10 @@ sudo apt install make -y
     ```
 
 ## Libraries
-* **java.io** -> Used to read and write files
-* **java.net** -> Used to create the server and client sockets
-* **java.util** -> Used to create the scanner and the arraylist
-* **java.math.BigInteger** -> Used to convert the hash to a string
-* **java.nio.file.Paths;** -> Used to get the current directory
-* **java.security.MessageDigest** -> Used to create the hash
-* **java.util.Scanner** -> Used to read the user input
+* **java.io** -> Used to read and write files.
+* **java.net** -> Used to create the server and client sockets.
+* **java.util** -> Used to create the scanner and the arraylist.
+* **java.math.BigInteger** -> Used to convert the hash to a string.
+* **java.nio.file.Paths;** -> Used to get the current directory.
+* **java.security.MessageDigest** -> Used to create the hash.
+* **java.util.Scanner** -> Used to read the user input.
