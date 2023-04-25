@@ -1,16 +1,15 @@
 
 # UDP Socket Programming
-```
-Programming a UDP socket peer-to-peer (P2P) connection to send messages between it's peers.
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + 
-| Message Type | Nick Size | Nick [Nick Size] (1-64 bytes) |
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + 
-| Message Size | Message [Message Size] (0-255 bytes)      |
-+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + 
-```
-@author Breno Farias da Silva  
-@date 24/04/2023
-```
+@author Breno Farias da Silva    
+@date 24/04/2023  
+Programming a UDP socket peer-to-peer (P2P) connection to send messages between it's peers.  
+As it is a UDP connection, a well-known header is needed to be implemented in order to make the communication possible.  
+| Message Type (1 byte) | Nick Size (1 byte) | Nick (1-64 bytes) |
+|:-:|---|---|
+
+| Message Size (1 byte) | Message Content (0-255 bytes) | | |
+|--:|---|---|---|
+
 ## How to run
 In order to run this project, you need to open at least two terminals inside this folder, one for each peer you wanna have.
 But, before that, make sure you have makefile installed on your machine.
