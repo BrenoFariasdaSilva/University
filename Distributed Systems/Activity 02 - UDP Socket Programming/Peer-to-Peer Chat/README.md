@@ -9,6 +9,7 @@ As it is a UDP connection, a well-known header is needed to be implemented in or
 
 | Message Size (1 byte) | Message Content (0-255 bytes) | | |
 |--:|---|---|---|
+Which for a datagram of 322 bytes (1 + 1 + 64 + 1 + 255).
 
 ## How to run
 In order to run this project, you need to open at least two terminals inside this folder, one for each peer you wanna have.
