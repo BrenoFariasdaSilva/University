@@ -141,9 +141,19 @@ def createDatagram(nick, messageType, messageContent):
 def isEcho(message):
     command = message.split(" ")[0]
     if (command.upper() == "ECHO"):
-        message = message[5:]
         return True
     return False
+
+# This function verify if the ECHO message is empty 
+# @param message: The message to verify
+# @param username: The username of the peer
+# @return: None
+# @logic: This function will verify if the ECHO message is empty and if it is, it will add the username to the message
+def emptyEcho(message, username):
+    message = message[5:]
+    if (len(message) == 0):
+        message = username + " said ECHO"
+    return message
 
 # This function handles the client
 # @param HOST: The host of the peer
@@ -168,6 +178,8 @@ def client(HOST, PORT, username): # Send messages
                 messageType = URL
             elif (isEcho(message)):
                 messageType = ECHO
+                message = emptyEcho(message, username)
+
             clientSocket.sendto(createDatagram(username, messageType, message), (HOST, PORT))
       
 # This function is the one who calls the main functions of the program
