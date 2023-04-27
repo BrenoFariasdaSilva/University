@@ -148,7 +148,7 @@ def isEcho(message):
 # @param message: The message to verify
 # @param username: The username of the peer
 # @return: None
-# @logic: This function will verify if the ECHO message is empty and if it is, it will add the username to the message
+# @logic: This function will verify if the ECHO message is empty after removing the "ECHO" word. If it is empty, it will replace it with a default message
 def emptyEcho(message, username):
     message = message[5:]
     if (len(message) == 0):
