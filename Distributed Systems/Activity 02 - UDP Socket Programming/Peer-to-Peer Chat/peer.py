@@ -179,7 +179,6 @@ def client(HOST, PORT, username): # Send messages
             elif (isEcho(message)):
                 messageType = ECHO
                 message = emptyEcho(message, username)
-
             clientSocket.sendto(createDatagram(username, messageType, message), (HOST, PORT))
       
 # This function is the one who calls the main functions of the program
