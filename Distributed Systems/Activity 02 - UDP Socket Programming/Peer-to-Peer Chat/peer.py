@@ -155,6 +155,29 @@ def emptyEcho(message, username):
         message = username + " said ECHO"
     return message
 
+# This function verify if the message is too long
+# @param message: The message to verify
+# @return: True if the message is too long, False otherwise
+# @logic: This function will verify if the message is too long according to the length valid range for the datagram
+def isMessageTooLong(message):
+    if (len(message) > 256):
+        return True
+    return False
+
+# This function sends the datagram
+# @param message: The message to send
+# @param messageType: The type of the message
+# @param username: The username of the peer
+# @param HOST: The host of the peer
+# @param PORT: The port of the peer
+# @return: None
+# @logic: This function will send the datagram to the server if the message is not too long
+def sendMessage(message, messageType, username, HOST, PORT):
+    if (isMessageTooLong(message)):
+            print(f"{backgroundColors.FAIL}The message is too long. Please try again.{Style.RESET_ALL}")
+            return
+    clientSocket.sendto(createDatagram(username, messageType, message), (HOST, PORT))
+
 # This function handles the client
 # @param HOST: The host of the peer
 # @param PORT: The port of the peer
@@ -168,8 +191,6 @@ def client(HOST, PORT, username): # Send messages
 
         if (message.lower() == "exit"):
             break
-        elif (len(message) < 0 and len(message) > 256):
-            print(f"{backgroundColors.FAIL}Invalid message. Please try again.{Style.RESET_ALL}")
         else:
             messageType = NORMALMESSAGE
             if (emoji_count(emoji.emojize(message)) > 0):
@@ -179,7 +200,7 @@ def client(HOST, PORT, username): # Send messages
             elif (isEcho(message)):
                 messageType = ECHO
                 message = emptyEcho(message, username)
-            clientSocket.sendto(createDatagram(username, messageType, message), (HOST, PORT))
+            sendMessage(message, messageType, username, HOST, PORT)
       
 # This function is the one who calls the main functions of the program
 # @param: None
