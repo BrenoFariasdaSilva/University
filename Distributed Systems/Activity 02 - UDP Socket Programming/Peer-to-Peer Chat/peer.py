@@ -118,6 +118,7 @@ def messageFormat(nick, messageType, messageContent, PORT):
         print(f"{backgroundColors.OKGREEN}{nick} URL{backgroundColors.OKCYAN}: {messageContent}{Style.RESET_ALL}")
     elif messageType == ECHO:
         print(f"{backgroundColors.OKGREEN}{nick} ECHO{backgroundColors.OKCYAN}: {messageContent}{Style.RESET_ALL}")
+        emptyEcho(messageContent, nick)
         clientSocket.sendto(createDatagram(nick, NORMALMESSAGE, messageContent), (HOST, PORT))
     else:
         print(f"{backgroundColors.FAIL}Invalid message type.{Style.RESET_ALL}", end=" ")
