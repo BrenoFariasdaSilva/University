@@ -35,10 +35,14 @@ There is not specific command to use, simply type the message you want to send a
     ```bash
     make
     ```
+    It will ask for a nickname, type whatever you want and press enter.  
+    Then, it will ask if you wanna act as a "server" or a "client", type client and press enter.
 * On the second terminal, type:  
     ```bash
     make
     ```
+    It will ask for a nickname, type whatever you want, but try not to have duplicated nicknames, and press enter.
+    Then, it will ask if you wanna act as a "server" or a "client", type server and press enter.
 * On any of the terminals, type:  
     ```bash
     Hello, how are you?
@@ -46,6 +50,12 @@ There is not specific command to use, simply type the message you want to send a
     And after pressing enter, you will see the message on the other terminal.  
     Then, you can type any message you want and press enter to send it to the other terminal.
     This message is configured as a normal message, so it will be sent to all the peers connected to the network.
+
+    ### Quick Disclaimer:
+    This is a **peer-to-peer (P2P) connection**, so the messages will be sent to all the peers connected to the network.   
+    When prompted about whether you wanna act as a "client" or a "server", it **only affects which of the threads (the one who handles message sending or message receiving) it's in the background and which is in the foregroung**, alright? It doesn't affect the way the messages are received or the change it to a client-server connection.  
+    When choosing the "client" option, the foreground thread will be the one who handles message sending, and the background thread will be the one who handles message receiving.  
+    When choosing the "server" option, the foreground thread will be the one who handles message receiving, and the background thread will be the one who handles message sending.
 ### URL
 * On the first terminal, type:  
     ```bash
