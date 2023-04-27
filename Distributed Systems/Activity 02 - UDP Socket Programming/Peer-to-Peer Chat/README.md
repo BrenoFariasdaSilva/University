@@ -22,17 +22,55 @@ sudo apt install make -y
     ```bash
     make
     ```
-- On the second terminal, type:  
+* On the second terminal, type:  
     ```bash
     make
     ```
 ## How to use
-### Commands:
-- **Normal Message** -> Sends a message to all peers.
-- **Emoji** -> Sends a emoji to all peers.
-- **URL** -> Sends a URL to all peers.
-- **ECHO** -> Sends a message to all peers and to itself to indicate that the user is active.
+After running the make command on both terminals, you will be able to communicate between them.  
+There is not specific command to use, simply type the message you want to send and press enter and the algorithm will do the rest.
 
 ## Example of usage
+* On the first terminal, type:  
+    ```bash
+    make
+    ```
+* On the second terminal, type:  
+    ```bash
+    make
+    ```
+* On any of the terminals, type:  
+    ```bash
+    Hello, how are you?
+    ```
+    And after pressing enter, you will see the message on the other terminal.  
+    Then, you can type any message you want and press enter to send it to the other terminal.
+    This message is configured as a normal message, so it will be sent to all the peers connected to the network.
+### URL
+* On the first terminal, type:  
+    ```bash
+    https://www.example.com
+    ```
+    This message is configured as an URL message, so it will be sent to all the peers connected to the network.
+    The other peers (terminals) will receive this message and will be able to access the URL by clicking on it.
+### Emoji
+* On the first terminal, type:  
+    ```bash
+    :penguin:
+    ```
+    This message is configured as an emoji message, so it will be sent to all the peers connected to the network.
+    The other peers (terminals) will receive this message and will be able to see the processed emoji on the message.
+### Echo
+* On the second terminal, type:  
+    ```bash
+    echo typeSomethingHereOrNot
+    ```
+    This message is configured as an echo message, so it will be sent to all the peers connected to the network.
+    The other peers (terminals) will receive this message and will be able to see the processed echo on the message.
+
 
 ## Libraries
+- **socket** -> The socket library provides low-level networking support in Python. It allows Python programs to send and receive data across a network, using sockets to establish connections and transfer data. Sockets can be used to create servers and clients for a wide range of network protocols, including TCP/IP, UDP, and HTTP.
+- **threading** -> The threading library provides high-level support for working with threads in Python. Threads are a way to run multiple tasks concurrently within a single process, allowing programs to take advantage of multiple CPU cores and improve performance. The threading library provides tools for creating and managing threads, including a Thread class, synchronization primitives like locks and semaphores, and tools for working with thread-local data.
+- **emoji** -> The emoji library provides tools for working with emoji characters in Python. Emoji are graphical symbols that are often used to represent emotions or ideas in text messages, social media posts, and other forms of online communication. The emoji library provides tools for working with emoji characters, including functions for encoding and decoding emoji characters, searching for emoji in text, and generating random emoji sequences.
+- **re** -> The re library provides support for working with regular expressions in Python. Regular expressions are a powerful tool for searching and manipulating text, allowing programs to match patterns of characters and perform complex text processing tasks. The re library provides functions for compiling regular expressions, searching for patterns in text, and performing substitutions and other manipulations on text using regular expressions.
