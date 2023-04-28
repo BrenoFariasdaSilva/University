@@ -4,6 +4,7 @@
 Programming a TCP socket server and client that communicates with each other using binary commands in Python.
 @author Breno Farias da Silva  
 @date 24/04/2023
+@[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2001%20-%20TCP%20Socket%20Programming/Binary%20Message%20Processing%20Server)
 ```
 ## How to run
 In order to run this project, you need to open two terminals inside this folder, one for the server and another for the client.
