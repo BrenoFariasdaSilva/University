@@ -5,7 +5,7 @@ Programming a TCP socket server and client that communicates with each other usi
 @author Breno Farias da Silva  
 @date 24/04/2023
 ```
-@[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2001%20-%20TCP%20Socket%20Programming/Text-based%20Message%20Processing%20Server)
+[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2001%20-%20TCP%20Socket%20Programming/Text-based%20Message%20Processing%20Server)
 ## How to compile and run
 In order to compile this project, you need to open two terminals inside this folder, one for the server and another for the client.
 But, before that, make sure you have makefile installed on your machine.
