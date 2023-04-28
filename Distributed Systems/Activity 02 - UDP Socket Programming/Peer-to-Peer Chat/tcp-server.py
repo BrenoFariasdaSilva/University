@@ -20,7 +20,7 @@ class backgroundColors:
 
 ## Host and port
 HOST = "localhost" # Localhost
-PORT = 7000 # Port
+PORT = 8000 # Port
 
 # Peers dictionary that holds the nickname and IP address of the peers
 # Example: peersList = {"nickname": "IP address"}
