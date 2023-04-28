@@ -23,8 +23,13 @@ HOST = "localhost" # Localhost
 PORT = 7000 # Port
 
 # Peers dictionary that holds the nickname and IP address of the peers
-# Example: peers = {"nickname": "IP address"}
-peers = {}
+# Example: peersList = {"nickname": "IP address"}
+peersList = {}
+
+# Another dictionary that holds the nickname, holds the last state of the peer
+# Example: peersState = {"nickname": True}
+# Also, every peer state starts in False
+peersState = {}
 
 # Create a socket object
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # TCP socket
@@ -51,16 +56,21 @@ def main():
 # It will also check if the peer is still connected to the network every 2 seconds
 def handleConnection(connection, peerAddress):
     nickname = connection.recv(64).decode("utf-8") # Receive the nickname of the peer
-    peers[nickname] = peerAddress[0] # Add the nickname and IP address of the peer to the list
+    peersList[nickname] = peerAddress[0] # Add the nickname and IP address of the peer to the list
+    peersState[nickname] = False # Add the nickname and the state of the peer to the list. The state is False because the peer connection has not yet been announced to all the peers
     print(f"{backgroundColors.OKGREEN}Added {nickname} to the list{Style.RESET_ALL}")
     while True:
         try:
             connection.sendall(bytes("OK", "utf-8")) # Send OK to the peer
             connection.recv(1) # Receive the OK from the peer
-            notifyPeers(nickname, peerAddress[0], True) # Notify the peers that the peer has joined the network
+            # check if the peer new state is different from the old state
+            if (peersState[nickname] != True):
+                notifyPeers(nickname, peerAddress[0], True) # Notify the peers that the peer has joined the network
+                peersState[nickname] = True # Update the state of the peer
         except:
             print(f"{backgroundColors.FAIL}{nickname} disconnected{Style.RESET_ALL}")
-            del peers[nickname] # Remove the peer from the list
+            del peersList[nickname] # Remove the peer from the list
+            del peersState[nickname] # Remove the peer from the list
             notifyPeers(nickname, peerAddress[0], False) # Notify the peers that the peer has left the network
             break
         time.sleep(2) # Wait 2 seconds
@@ -73,7 +83,7 @@ def handleConnection(connection, peerAddress):
 # @return: None
 # @logic: This function will notify the peers that a peer has joined or left the network
 def notifyPeers(nickname, IPAddress, joined):
-    for peer in peers:
+    for peer in peersList:
         if (peer != nickname):
             if (joined):
                 print(f"{backgroundColors.OKGREEN}{nickname} with IP address {IPAddress} has joined the network{Style.RESET_ALL}")
