@@ -58,11 +58,10 @@ def handleConnection(connection, peerAddress):
     nickname = connection.recv(64).decode("utf-8") # Receive the nickname of the peer
     peersList[nickname] = peerAddress[0] # Add the nickname and IP address of the peer to the list
     peersState[nickname] = False # Add the nickname and the state of the peer to the list. The state is False because the peer connection has not yet been announced to all the peers
-    print(f"{backgroundColors.OKGREEN}Added {nickname} to the list{Style.RESET_ALL}")
+    print(f"{backgroundColors.OKGREEN}Added {nickname} to the list of connected peers{Style.RESET_ALL}")
     while True:
         try:
-            connection.sendall(bytes("OK", "utf-8")) # Send OK to the peer
-            connection.recv(1) # Receive the OK from the peer
+            connection.sendall(bytes("ECHO", "utf-8")) # Send a message to the peer
             # check if the peer new state is different from the old state
             if (peersState[nickname] != True):
                 notifyPeers(nickname, peerAddress[0], True) # Notify the peers that the peer has joined the network
@@ -80,12 +79,14 @@ def handleConnection(connection, peerAddress):
 # @param: nickname of the peer
 # @param: IP address of the peer
 # @param: joined, if the peer has joined or left the network
+# @param: connection: The connection object of the peer
 # @return: None
 # @logic: This function will notify the peers that a peer has joined or left the network
-def notifyPeers(nickname, IPAddress, joined):
+def notifyPeers(nickname, IPAddress, joined, connection):
+    # send the number of peers in the network 
     for peer in peersList:
         if (peer != nickname):
             if (joined):
-                print(f"{backgroundColors.OKGREEN}{nickname} with IP address {IPAddress} has joined the network{Style.RESET_ALL}")
+                connection.sendall(bytes(f"{nickname}:{IPAddress} has joined the network", "utf-8"))
             else:
-                print(f"{backgroundColors.FAIL}{nickname} with IP address {IPAddress} has left the network{Style.RESET_ALL}")
+                connection.sendall(bytes(f"{nickname}:{IPAddress} has left the network", "utf-8"))

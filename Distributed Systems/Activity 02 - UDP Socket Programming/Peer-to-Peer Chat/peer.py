@@ -100,12 +100,24 @@ def createThreads(username):
             # Além de, quando o client sair, ele precisa fecha a conexão com o servidor tcp: sock.close()
             threading.Thread(target=server, args=(HOST, PORTS[0])).start() 
             threading.Thread(target=client, args=(HOST, PORTS[1], username)).start()
+            threading.Thread(target=tcp_server, args=(username)).start()
         elif (option == "client"):
             threading.Thread(target=client, args=(HOST, PORTS[0], username)).start()
             threading.Thread(target=server, args=(HOST, PORTS[1])).start()
         else:
             print(f"{backgroundColors.FAIL}Invalid option. Please try again.{Style.RESET_ALL}")
 
+# This function represents the connection with the TCP server
+# @param username: The username of the peer
+# @return: None
+# @logic: This function will connect the peer with the TCP server and send the nickname,
+# and wait for possible changes in the list or echo messages to validate if this peer is still connected
+def tcp_server(username):
+    sock.connect((TCP_IP, TCP_PORT))
+    sock.send(username.encode())
+    while True:
+        data = sock.recv(1024)
+        print(f"{backgroundColors.OKGREEN}TCP-Server said: {data.decode()}{Style.RESET_ALL}")
 # This function represents the server
 # @param HOST: The host of the peer
 # @param PORT: The port of the peer
