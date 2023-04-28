@@ -2,6 +2,8 @@
 # UDP Socket Programming
 @author Breno Farias da Silva    
 @date 24/04/2023  
+@last update 28/04/2021  
+@[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2002%20-%20UDP%20Socket%20Programming/Peer-to-Peer%20Chat)  
 Programming a UDP socket peer-to-peer (P2P) connection to send messages between it's peers.  
 As it is a UDP connection, a well-known header is needed to be implemented in order to make the communication possible.  
 | Message Type (1 byte) | Nick Size (1 byte) | Nick (1-64 bytes) |
