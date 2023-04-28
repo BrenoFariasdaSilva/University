@@ -47,6 +47,14 @@ URL_REGEX = r"(^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%.\+~#=]{1,256}\.[a-zA-Z0-9()]
 # Create a socket object
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP socket
 
+# --------------------------------------------------------------- #
+# TCP Server related macros
+TCP_IP = "localhost" # IP address of the TCP server
+TCP_PORT = 8000 # Port of the TCP server
+
+# create a TCP socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 # This is the main function
 # @param: None
 # @return: None
@@ -83,6 +91,13 @@ def createThreads(username):
         print(f"{backgroundColors.OKGREEN}Will you be acting as a server or a client?{Style.RESET_ALL}")
         option = input().lower()
         if (option == "server"):
+            # Aqui é feita a criação do "servidor" e do "cliente" em threads diferentes
+            # Como faço ou onde coloco o código que faz a conexão com o servidor TCP?   
+            # Esse daqui: sock.connect((TCP_IP, TCP_PORT)) ?
+            # Crio outra thread só para isso?
+            # Além disso, quando a conexão é feita, o peer precisa enviar um pacote com o seu nickname para o servidor tcp.
+            # Algo como: sock.send(nickname.encode())
+            # Além de, quando o client sair, ele precisa fecha a conexão com o servidor tcp: sock.close()
             threading.Thread(target=server, args=(HOST, PORTS[0])).start() 
             threading.Thread(target=client, args=(HOST, PORTS[1], username)).start()
         elif (option == "client"):
