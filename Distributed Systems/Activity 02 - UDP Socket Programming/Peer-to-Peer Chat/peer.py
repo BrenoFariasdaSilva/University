@@ -1,4 +1,5 @@
 # This file handles the peer operations
+# @Note: Everything that is with ## is related to the Optional TCP server
 # TODO: Optional TCP server for holding the peers list, like nickname and IP address
 # TODO: After closing the program, the TCP should remove the peer from the list
 # TODO: Every 2 seconds, the TCP should send a message to the peers to check if there is
@@ -49,11 +50,11 @@ clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP socket
 
 # --------------------------------------------------------------- #
 # TCP Server related macros
-TCP_IP = "localhost" # IP address of the TCP server
-TCP_PORT = 8000 # Port of the TCP server
+# # TCP_IP = "localhost" # IP address of the TCP server
+# # TCP_PORT = 8000 # Port of the TCP server
 
-# create a TCP socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# # # create a TCP socket
+# # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # This is the main function
 # @param: None
@@ -91,19 +92,20 @@ def createThreads(username):
         print(f"{backgroundColors.OKGREEN}Will you be acting as a server or a client?{Style.RESET_ALL}")
         option = input().lower()
         if (option == "server"):
-            # Aqui é feita a criação do "servidor" e do "cliente" em threads diferentes
-            # Como faço ou onde coloco o código que faz a conexão com o servidor TCP?   
-            # Esse daqui: sock.connect((TCP_IP, TCP_PORT)) ?
-            # Crio outra thread só para isso?
-            # Além disso, quando a conexão é feita, o peer precisa enviar um pacote com o seu nickname para o servidor tcp.
-            # Algo como: sock.send(nickname.encode())
-            # Além de, quando o client sair, ele precisa fecha a conexão com o servidor tcp: sock.close()
+            # # Aqui é feita a criação do "servidor" e do "cliente" em threads diferentes
+            # # Como faço ou onde coloco o código que faz a conexão com o servidor TCP?   
+            # # Esse daqui: sock.connect((TCP_IP, TCP_PORT)) ?
+            # # Crio outra thread só para isso? Ou vou precisar de mais duas threads? Uma para envio de mensagens e outra para recebimento?
+            # # Além disso, quando a conexão é feita, o peer precisa enviar um pacote com o seu nickname para o servidor tcp.
+            # # Algo como: sock.send(nickname.encode())
+            # # Além de, quando o client sair, ele precisa fecha a conexão com o servidor tcp: sock.close()
             threading.Thread(target=server, args=(HOST, PORTS[0])).start() 
             threading.Thread(target=client, args=(HOST, PORTS[1], username)).start()
-            threading.Thread(target=tcp_server, args=(username)).start()
+            # # threading.Thread(target=tcp_server, args=(username)).start()
         elif (option == "client"):
             threading.Thread(target=client, args=(HOST, PORTS[0], username)).start()
             threading.Thread(target=server, args=(HOST, PORTS[1])).start()
+            # # # threading.Thread(target=tcp_server, args=(username)).start()
         else:
             print(f"{backgroundColors.FAIL}Invalid option. Please try again.{Style.RESET_ALL}")
 
@@ -112,12 +114,13 @@ def createThreads(username):
 # @return: None
 # @logic: This function will connect the peer with the TCP server and send the nickname,
 # and wait for possible changes in the list or echo messages to validate if this peer is still connected
-def tcp_server(username):
-    sock.connect((TCP_IP, TCP_PORT))
-    sock.send(username.encode())
-    while True:
-        data = sock.recv(1024)
-        print(f"{backgroundColors.OKGREEN}TCP-Server said: {data.decode()}{Style.RESET_ALL}")
+# # def tcp_server(username):
+# #     sock.connect((TCP_IP, TCP_PORT))
+# #     sock.send(username.encode())
+# #     while True:
+# #         data = sock.recv(1024)
+# #         print(f"{backgroundColors.OKGREEN}TCP-Server said: {data.decode()}{Style.RESET_ALL}")
+
 # This function represents the server
 # @param HOST: The host of the peer
 # @param PORT: The port of the peer
