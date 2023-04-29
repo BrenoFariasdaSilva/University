@@ -2,17 +2,20 @@
 # UDP Socket Programming
 @author Breno Farias da Silva    
 @date 29/04/2023  
-@last update 28/04/2021  
-@[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2002%20-%20UDP%20Socket%20Programming/Peer-to-Peer%20Chat)  
-Programming a UDP socket peer-to-peer (P2P) connection to send messages between it's peers.  
-As it is a UDP connection, a well-known header is needed to be implemented in order to make the communication possible.  
-| Message Type (1 byte) | Nick Size (1 byte) | Nick (1-64 bytes) |
-|:-:|---|---|
+@last update 29/04/2021  
+@[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2002%20-%20UDP%20Socket%20Programming/UDP%20File%20Upload%20System)  
+Programming a UDP socket which is used into a client-server connection to upload files from the client to the server. The server recieves fragments of the file into batches of 1024 bytes and then reassembles them into a single file using the fragment position as a reference. After that, the server validates the file using a checksum hash  
+**Initial datagram**:
+| File Size (4 bytes) | Filename (255 byte) | Checksum (32 bytes) | Number of fragments (4 bytes) |
+|:-:|---|---|---|
 
-| Message Size (1 byte) | Message Content (0-255 bytes) | | |
-|--:|---|---|---|  
+**File fragments datagram**:
+| File Fragment (1024 bytes) | Fragment Position (8 bytes) |
+|--:|---|
 
-Which for a datagram of 322 bytes (1 + 1 + 64 + 1 + 255).
+**Last datagram**:
+| File Fragment (1024 bytes) | Fragment Position (8 bytes) | Checksum (32 bytes) |
+|--:|---|---|
 
 ## How to run
 In order to run this project, you need to open at least two terminals inside this folder, one for each peer you wanna have.
@@ -22,11 +25,11 @@ sudo apt install make -y
 ```
 * On the first terminal, type:  
     ```bash
-    make
+    make server
     ```
 * On the second terminal, type:  
-    ```bash
-    make
+    ```bash 
+    make client
     ```
 ## How to use
 After running the make command on both terminals, you will be able to communicate between them.  
