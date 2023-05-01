@@ -20,6 +20,7 @@ DATAGRAMSIZE = 1024 # The size of the data chunk to send
 
 # Commands
 EXIT = "exit" # Exit command
+HELP = "help" # Help command
 UPLOAD = "upload" # Upload command
 
 # @brief: Verifies that the file exists
@@ -67,6 +68,8 @@ def clientThread(client_socket, server):
 
 		if userInput[0].lower() == EXIT: # Exit command
 			return
+		elif userInput[0].lower() == HELP: # Help command
+			print(f"{backgroundColors.OKCYAN}Valid commands: 1. {EXIT}\n2. {UPLOAD} filenameHere\n3. {HELP}{Style.RESET_ALL}")
 		elif userInput[0].lower() == UPLOAD: # Upload command
 			if verify_filename(userInput[1]): # File exists
 				upload_file(userInput[1], client_socket, server) # Upload the file
@@ -84,7 +87,7 @@ def main():
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Create the UDP/Datagram socket
 	server = ('localhost', 7000) # The server to send the file to
 
-	print(f"{backgroundColors.OKCYAN}Valid commands: 1. {EXIT}\n2. {UPLOAD} filenameHere{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKCYAN}Valid commands: 1. {EXIT}\n2. {UPLOAD} filenameHere\n3. {HELP}{Style.RESET_ALL}")
 	client_thread = threading.Thread(target=clientThread, args=(client_socket, server)) # Create the client thread
 	client_thread.start() # Start the client thread
 
