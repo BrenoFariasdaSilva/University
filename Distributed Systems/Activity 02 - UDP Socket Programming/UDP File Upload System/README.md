@@ -2,12 +2,12 @@
 # UDP Socket Programming
 @author Breno Farias da Silva    
 @date 29/04/2023  
-@last update 29/04/2021  
+@last update 01/05/2021  
 @[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2002%20-%20UDP%20Socket%20Programming/UDP%20File%20Upload%20System)  
 Programming a UDP socket which is used into a client-server connection to upload files from the client to the server. The server will receive the first datagram which contains the file size, filename and the file checksum. After that, the server receives fragments of the file into batches of 1024 bytes and then reassembles them into a single file using the fragment position as a reference. After that, the server will calculate the file checksum and then verify if it is equal to the checksum received from the client.
 **Initial datagram**:
-| File Size (4 bytes) | Filename (988 byte) | Checksum (32 bytes) |
-|:-:|---|---|
+| File Size (4 bytes) | Filename Size (4 bytes) | Filename (988 byte) | Checksum (32 bytes) |
+|:-:|---|---|---|
 
 **File fragments datagram**:
 | File Fragment (1024 bytes)|
