@@ -69,7 +69,7 @@ def clientThread(client_socket, server):
 			return
 		elif userInput[0].lower() == UPLOAD: # Upload command
 			if verify_filename(userInput[1]): # File exists
-				upload_file(userInput[1]) # Upload the file
+				upload_file(userInput[1], client_socket, server) # Upload the file
 				print(f"{backgroundColors.OKGREEN}File \"{userInput[1]}\" sent successfully!{Style.RESET_ALL}") 
 			else: # File does not exist
 				print(f"{backgroundColors.FAIL}File \"{userInput[1]}\" does not exist!{Style.RESET_ALL}")
