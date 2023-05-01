@@ -28,8 +28,8 @@ UPLOAD = "upload" # Upload command
 # @return: True if the file exists, False otherwise
 def verify_filename(filename):
 	try:
-		file = open(filename, 'rb')
-		file.close()
+		file = open("./client_files/" + filename, 'rb') # Open the file in binary mode
+		file.close() # Close the file
 		return True
 	except:
 		return False
