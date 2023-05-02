@@ -18,7 +18,7 @@
 def increment(n):
     # Define a nested function "multiply" that returns the multiplication of "count" by "n"
     def multiply(count):
-        return count * n 
+        return count * multiplier
    # Define a nested function "calculate" that increments the variable "count" and returns its value multiplied by "n"
     def calculate():
         # Increment the variable "count" by 1
@@ -27,12 +27,12 @@ def increment(n):
         return result
     # 
     calculate.count = 0
+    # multiplier = n
     # return the function "calculate"
     return calculate
 
 # Create a variable "next" that receives the function "increment" with the parameter "2"
 next = increment(2)
-print(next.count)
 # Call the function "next" 4 times and print the result
 print(next())
 print(next())
