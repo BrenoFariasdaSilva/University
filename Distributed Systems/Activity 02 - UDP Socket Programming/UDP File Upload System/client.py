@@ -3,10 +3,10 @@
 # 1. The first datagram will be the file size (4 bytes), filename size (4 bytes), filename (984 bytes), and the file hash (32 bytes)
 # 2. The rest of the datagrams will be the file data (1024 bytes)
 
-import math
 import socket # For creating the UDP/Datagram socket
 import threading # For creating the client thread
 import hashlib # For getting the file hash (SHA256)
+import math # For math operations, like ceil that was used
 from colorama import Style # For coloring the terminal
 
 # Macros:
