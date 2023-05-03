@@ -4,9 +4,9 @@
 # 2. The rest of the datagrams will be the file data (1024 bytes)
 
 import socket # For creating the UDP/Datagram socket
-import threading # For creating the server thread
+import os # For manipulating the file system
 import hashlib # For getting the file hash (SHA256)
-import math
+import math # For math operations, like ceil that was used
 from colorama import Style # For coloring the terminal
 
 # Macros:
@@ -95,7 +95,7 @@ def serverThread(datagram, client, server_socket):
 	else:
 		print(f"{backgroundColors.FAIL}File is invalid{Style.RESET_ALL}")
 		server_socket.sendto(b"ERROR", client)
-		# TODO: Delete the file from the server
+		os.remove("./server_files/" + filename)
 
 # @brief: This the main function that will be run when the program is executed
 # This function creates the UDP/DGRAM socket and binds it to the host and port.
@@ -119,7 +119,6 @@ def main():
 	serverThread(datagram, client, server_socket) # Create the server thread
 		# server_thread = threading.Thread(target=serverThread, args=(datagram, client, server_socket)) # Create the server thread
 		# server_thread.start() # Start the server thread
-
 
 if __name__ == '__main__':
 	main()
