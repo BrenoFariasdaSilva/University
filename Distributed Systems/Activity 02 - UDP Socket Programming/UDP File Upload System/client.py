@@ -36,7 +36,8 @@ def waitForServerResponse(client_socket, filename):
 		print(f"{backgroundColors.OKGREEN}File uploaded successfully!{Style.RESET_ALL}")
 	elif datagram.decode() == "ERROR":
 		print(f"{backgroundColors.FAIL}File upload failed{Style.RESET_ALL}")
-		upload_file(filename, client_socket) # Re-upload the file
+		clientThread(client_socket)
+		# upload_file(filename, client_socket) # Re-upload the file
   
 # @brief: This function prints the file info from the first datagram
 # @param file_size: The file size
@@ -68,16 +69,14 @@ def verify_filename(filename):
 def upload_file(filename, client_socket):
 	file = open("./client_files/" + filename, 'rb') # Open the file in binary mode
 	file_data = file.read() # Read the file data
-	file_hash = hashlib.sha256(file_data).hexdigest() # Get the file hash
 	file.close() # Close the file
 
-	# file_hash = hashlib.sha1(file_data).hexdigest() # Get the file hash
-	print(f"{backgroundColors.OKGREEN}File hash: {file_hash}{Style.RESET_ALL}")
+	file_hash = hashlib.sha256(file_data).hexdigest() # Get the file hash
 
 	file_size = len(file_data) # Get the file size
 	filename_size = len(filename) # Get the filename size
  
-	printFirstDatagramData(file_size, filename_size, filename, file_hash)
+	# printFirstDatagramData(file_size, filename_size, filename, file_hash)
 
 	# Convert the file size, filename size, filename, and file hash to bytes
 	first_datagram = file_size.to_bytes(4, 'big') + filename_size.to_bytes(4, 'big') + bytes(filename, 'utf-8') + bytes(file_hash, 'utf-8')

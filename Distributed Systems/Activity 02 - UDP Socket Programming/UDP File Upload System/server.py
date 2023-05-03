@@ -25,18 +25,14 @@ PORT = 7000 # The server's port
 # @param filename: The name of the file to validate
 # @param file_hash: The file hash to validate
 # @return: True if the file is valid, False otherwise
-def validate_file(filename, file_hash, file_hash_calculated):
-	# file = open("./server_files/" + filename, 'rb') # Open the file in binary mode
-	# file_data = file.read() # Read the file data
-	# file.close() # Close the file
+def validate_file(filename, file_hash):
+	file = open("./server_files/" + filename, 'rb') # Open the file in binary mode
+	file_data = file.read() # Read the file data
+	file.close() # Close the file
 
-	# file_hash_calculated = hashlib.sha1(file_data).hexdigest() # Get the file hash
-	# print(f"Calculated File hash: {file_hash_calculated}")
-
-	if file_hash == file_hash_calculated: # Check if the file hash is correct
-		return True
-	else:
-		return False
+	file_hash_calculated = hashlib.sha256(file_data).hexdigest() # Get the file hash
+ 
+	return file_hash == file_hash_calculated # Check if the file hash is correct
 	
 # @brief: This function wwrites the file data to the file
 # @param filename: The name of the file to write to
@@ -63,10 +59,10 @@ def printFirstDatagramData(file_size, filename_size, filename, file_hash):
 # @param datagram: The datagram to get the data from
 # @return: The file size, filename size, filename, and file hash
 def getFirstDatagramData(datagram):
-	file_size = int.from_bytes(datagram[0:4], 'big')
-	filename_size = int.from_bytes(datagram[4:8], 'big')
-	filename = datagram[8:8+filename_size].decode('utf-8')
-	file_hash = datagram[8+filename_size:8+filename_size+32].decode('utf-8')
+	file_size = int.from_bytes(datagram[0 : 4], 'big')
+	filename_size = int.from_bytes(datagram[4 : 8], 'big')
+	filename = datagram[8 : 8 + filename_size].decode('utf-8')
+	file_hash = datagram[8 + filename_size : 8 + filename_size + 64].decode('utf-8')
 	return file_size, filename_size, filename, file_hash
 
 # @brief: This is the server thread that will handle the datagram
@@ -78,7 +74,7 @@ def serverThread(datagram, client, server_socket):
 	# Get the file size, filename size, filename, and file hash from the first datagram
 	file_size, filename_size, filename, file_hash = getFirstDatagramData(datagram)
 
-	printFirstDatagramData(file_size, filename_size, filename, file_hash)
+	# printFirstDatagramData(file_size, filename_size, filename, file_hash)
 
 	file_data = b'' # Initialize the file data
 	# calculate math ceil of file_size / DATAGRAMSIZE
@@ -88,15 +84,12 @@ def serverThread(datagram, client, server_socket):
 		if i == iterations - 1:
 			file_data += server_socket.recvfrom(file_size % DATAGRAMSIZE)[0]
 		else: # else get the remaining bytes
-			file_data += server_socket.recvfrom(DATAGRAMSIZE)[0] # Why there is the [0]?
-   
-	file_hash_calculated = hashlib.sha256(file_data).hexdigest() # Get the file hash
-	print(f"Calculated File hash: {file_hash_calculated}")
-	
+			file_data += server_socket.recvfrom(DATAGRAMSIZE)[0] 
+
 	print(f"{backgroundColors.OKGREEN}File data recieved{Style.RESET_ALL}")
 	write_file(filename, file_data) # Write the file data to the file
 
-	if validate_file(filename, file_hash, file_hash_calculated): # Check if the file is valid, send OK
+	if validate_file(filename, file_hash): # Check if the file is valid, send OK
 		print(f"{backgroundColors.OKGREEN}File is valid{Style.RESET_ALL}")
 		server_socket.sendto(b"OK", client)
 	else:
