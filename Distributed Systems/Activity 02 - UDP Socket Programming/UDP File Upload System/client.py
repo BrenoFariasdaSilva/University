@@ -59,6 +59,7 @@ def upload_file(filename, client_socket):
 	file.close() # Close the file
 
 	file_hash = hashlib.sha256(file_data).hexdigest() # Get the file hash
+	print(f"{backgroundColors.OKGREEN}File hash: {file_hash}{Style.RESET_ALL}")
 
 	file_size = len(file_data) # Get the file size
 	filename_size = len(filename) # Get the filename size

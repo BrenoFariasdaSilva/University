@@ -6,6 +6,7 @@
 import socket # For creating the UDP/Datagram socket
 import threading # For creating the server thread
 import hashlib # For getting the file hash (SHA256)
+import math
 from colorama import Style # For coloring the terminal
 
 # Macros:
@@ -30,6 +31,7 @@ def validate_file(filename, file_hash):
 	file.close() # Close the file
 
 	file_hash_calculated = hashlib.sha256(file_data).hexdigest() # Get the file hash
+	print(f"Calculated File hash: {file_hash_calculated}")
 
 	if file_hash == file_hash_calculated: # Check if the file hash is correct
 		return True
@@ -65,6 +67,7 @@ def getFirstDatagramData(datagram):
 	filename_size = int.from_bytes(datagram[4:8], 'big')
 	filename = datagram[8:8+filename_size].decode('utf-8')
 	file_hash = datagram[8+filename_size:8+filename_size+32].decode('utf-8')
+	print("File Hash: " + file_hash)
 	return file_size, filename_size, filename, file_hash
 
 # @brief: This is the server thread that will handle the datagram
@@ -79,11 +82,14 @@ def serverThread(datagram, client, server_socket):
 	# printFirstDatagram(file_size, filename_size, filename, file_hash)
 
 	file_data = b'' # Initialize the file data
-	while True:
-		for i in range(0, file_size, DATAGRAMSIZE):
-			datagram, client = server_socket.recvfrom(DATAGRAMSIZE)
-			file_data += datagram
-		break
+	# calculate math ceil of file_size / DATAGRAMSIZE
+	iterations = math.ceil(file_size / DATAGRAMSIZE)
+	for i in range(iterations):
+		# if is not the last iteration, get full datagram
+		if i != iterations - 1:
+			file_data += server_socket.recvfrom(DATAGRAMSIZE)[0]
+		else: # else get the remaining bytes
+			file_data += server_socket.recvfrom(file_size % DATAGRAMSIZE)[0]
 	
 	print(f"{backgroundColors.OKGREEN}File data recieved{Style.RESET_ALL}")
 	write_file(filename, file_data) # Write the file data to the file
