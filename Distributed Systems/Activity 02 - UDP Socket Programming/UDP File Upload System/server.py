@@ -25,13 +25,13 @@ PORT = 7000 # The server's port
 # @param filename: The name of the file to validate
 # @param file_hash: The file hash to validate
 # @return: True if the file is valid, False otherwise
-def validate_file(filename, file_hash):
-	file = open("./server_files/" + filename, 'rb') # Open the file in binary mode
-	file_data = file.read() # Read the file data
-	file.close() # Close the file
+def validate_file(filename, file_hash, file_hash_calculated):
+	# file = open("./server_files/" + filename, 'rb') # Open the file in binary mode
+	# file_data = file.read() # Read the file data
+	# file.close() # Close the file
 
-	file_hash_calculated = hashlib.sha256(file_data).hexdigest() # Get the file hash
-	print(f"Calculated File hash: {file_hash_calculated}")
+	# file_hash_calculated = hashlib.sha1(file_data).hexdigest() # Get the file hash
+	# print(f"Calculated File hash: {file_hash_calculated}")
 
 	if file_hash == file_hash_calculated: # Check if the file hash is correct
 		return True
@@ -86,15 +86,18 @@ def serverThread(datagram, client, server_socket):
 	iterations = math.ceil(file_size / DATAGRAMSIZE)
 	for i in range(iterations):
 		# if is not the last iteration, get full datagram
-		if i != iterations - 1:
-			file_data += server_socket.recvfrom(DATAGRAMSIZE)[0]
-		else: # else get the remaining bytes
+		if i == iterations - 1:
 			file_data += server_socket.recvfrom(file_size % DATAGRAMSIZE)[0]
+		else: # else get the remaining bytes
+			file_data += server_socket.recvfrom(DATAGRAMSIZE)[0] # Why there is the [0]?
+   
+	file_hash_calculated = hashlib.sha1(file_data).hexdigest() # Get the file hash
+	print(f"Calculated File hash: {file_hash_calculated}")
 	
 	print(f"{backgroundColors.OKGREEN}File data recieved{Style.RESET_ALL}")
 	write_file(filename, file_data) # Write the file data to the file
 
-	if validate_file(filename, file_hash): # Check if the file is valid, send OK
+	if validate_file(filename, file_hash, file_hash_calculated): # Check if the file is valid, send OK
 		print(f"{backgroundColors.OKGREEN}File is valid{Style.RESET_ALL}")
 		server_socket.sendto(b"OK", client)
 	else:

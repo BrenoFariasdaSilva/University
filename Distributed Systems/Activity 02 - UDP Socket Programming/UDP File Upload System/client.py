@@ -56,9 +56,10 @@ def verify_filename(filename):
 def upload_file(filename, client_socket):
 	file = open("./client_files/" + filename, 'rb') # Open the file in binary mode
 	file_data = file.read() # Read the file data
+	file_hash = hashlib.sha1(file_data).hexdigest() # Get the file hash
 	file.close() # Close the file
 
-	file_hash = hashlib.sha256(file_data).hexdigest() # Get the file hash
+	# file_hash = hashlib.sha1(file_data).hexdigest() # Get the file hash
 	print(f"{backgroundColors.OKGREEN}File hash: {file_hash}{Style.RESET_ALL}")
 
 	file_size = len(file_data) # Get the file size
@@ -69,8 +70,12 @@ def upload_file(filename, client_socket):
 	client_socket.sendto(first_datagram, SERVERADDRESS) # Send the first datagram
 
 	# Send the filedata datagrams
-	for i in range(math.ceil(file_size / DATAGRAMSIZE)): # Loop through the file data
-		client_socket.sendto(file_data[i * DATAGRAMSIZE : (i + 1) * DATAGRAMSIZE], SERVERADDRESS) # Send the file data
+	iterations = math.ceil(file_size / DATAGRAMSIZE)
+	for i in range(iterations): # Loop through the file data
+		if i == iterations - 1:
+			client_socket.sendto(file_data[(i * DATAGRAMSIZE) : (i * DATAGRAMSIZE) + (file_size % DATAGRAMSIZE)], SERVERADDRESS)
+		else:
+			client_socket.sendto(file_data[i * DATAGRAMSIZE : (i + 1) * DATAGRAMSIZE], SERVERADDRESS) # Send the file data
 
 	waitForServerResponse(client_socket, filename) # Wait for the server to send a datagram
 
