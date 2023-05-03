@@ -53,7 +53,7 @@ def write_file(filename, file_data):
 # @param filename: The filename
 # @param file_hash: The file hash
 # @return: None
-def printFirstDatagram(file_size, filename_size, filename, file_hash):
+def printFirstDatagramData(file_size, filename_size, filename, file_hash):
 	print(f"{backgroundColors.OKGREEN}File size: {file_size} bytes")
 	print(f"Filename size: {filename_size} bytes")
 	print(f"Filename: {filename}")
@@ -67,7 +67,6 @@ def getFirstDatagramData(datagram):
 	filename_size = int.from_bytes(datagram[4:8], 'big')
 	filename = datagram[8:8+filename_size].decode('utf-8')
 	file_hash = datagram[8+filename_size:8+filename_size+32].decode('utf-8')
-	print("File Hash: " + file_hash)
 	return file_size, filename_size, filename, file_hash
 
 # @brief: This is the server thread that will handle the datagram
@@ -79,7 +78,7 @@ def serverThread(datagram, client, server_socket):
 	# Get the file size, filename size, filename, and file hash from the first datagram
 	file_size, filename_size, filename, file_hash = getFirstDatagramData(datagram)
 
-	# printFirstDatagram(file_size, filename_size, filename, file_hash)
+	printFirstDatagramData(file_size, filename_size, filename, file_hash)
 
 	file_data = b'' # Initialize the file data
 	# calculate math ceil of file_size / DATAGRAMSIZE
@@ -91,7 +90,7 @@ def serverThread(datagram, client, server_socket):
 		else: # else get the remaining bytes
 			file_data += server_socket.recvfrom(DATAGRAMSIZE)[0] # Why there is the [0]?
    
-	file_hash_calculated = hashlib.sha1(file_data).hexdigest() # Get the file hash
+	file_hash_calculated = hashlib.sha256(file_data).hexdigest() # Get the file hash
 	print(f"Calculated File hash: {file_hash_calculated}")
 	
 	print(f"{backgroundColors.OKGREEN}File data recieved{Style.RESET_ALL}")

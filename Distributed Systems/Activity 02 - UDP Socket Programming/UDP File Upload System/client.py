@@ -37,6 +37,18 @@ def waitForServerResponse(client_socket, filename):
 	elif datagram.decode() == "ERROR":
 		print(f"{backgroundColors.FAIL}File upload failed{Style.RESET_ALL}")
 		upload_file(filename, client_socket) # Re-upload the file
+  
+# @brief: This function prints the file info from the first datagram
+# @param file_size: The file size
+# @param filename_size: The filename size
+# @param filename: The filename
+# @param file_hash: The file hash
+# @return: None
+def printFirstDatagramData(file_size, filename_size, filename, file_hash):
+	print(f"{backgroundColors.OKGREEN}File size: {file_size} bytes")
+	print(f"Filename size: {filename_size} bytes")
+	print(f"Filename: {filename}")
+	print(f"File hash: {file_hash}{Style.RESET_ALL}")
 
 # @brief: Verifies that the file exists
 # @param filename: The name of the file to verify
@@ -56,7 +68,7 @@ def verify_filename(filename):
 def upload_file(filename, client_socket):
 	file = open("./client_files/" + filename, 'rb') # Open the file in binary mode
 	file_data = file.read() # Read the file data
-	file_hash = hashlib.sha1(file_data).hexdigest() # Get the file hash
+	file_hash = hashlib.sha256(file_data).hexdigest() # Get the file hash
 	file.close() # Close the file
 
 	# file_hash = hashlib.sha1(file_data).hexdigest() # Get the file hash
@@ -64,6 +76,8 @@ def upload_file(filename, client_socket):
 
 	file_size = len(file_data) # Get the file size
 	filename_size = len(filename) # Get the filename size
+ 
+	printFirstDatagramData(file_size, filename_size, filename, file_hash)
 
 	# Convert the file size, filename size, filename, and file hash to bytes
 	first_datagram = file_size.to_bytes(4, 'big') + filename_size.to_bytes(4, 'big') + bytes(filename, 'utf-8') + bytes(file_hash, 'utf-8')
@@ -75,7 +89,7 @@ def upload_file(filename, client_socket):
 		if i == iterations - 1:
 			client_socket.sendto(file_data[(i * DATAGRAMSIZE) : (i * DATAGRAMSIZE) + (file_size % DATAGRAMSIZE)], SERVERADDRESS)
 		else:
-			client_socket.sendto(file_data[i * DATAGRAMSIZE : (i + 1) * DATAGRAMSIZE], SERVERADDRESS) # Send the file data
+			client_socket.sendto(file_data[(i * DATAGRAMSIZE) : (i + 1) * DATAGRAMSIZE], SERVERADDRESS) # Send the file data
 
 	waitForServerResponse(client_socket, filename) # Wait for the server to send a datagram
 
