@@ -33,15 +33,17 @@ After running the make command on both terminals, you will be able to communicat
 ## Example of usage
 * On the client terminal, type:  
     ```bash
-    
+    upload clientFolderFilenameHereWithExtension
+    # Example: upload clientFile.txt
+    # If you have any doubts, type: help
     ```
-* On the client terminal, type:  
-    ```bash
-    
-    ```
+    Now Wait for the server response, which can be:
+    - OK - File is valid
+    - ERROR - File is invalid  
+    If the file was sent successfully, you can check the server folder to see if the file was uploaded correctly.
 * On the client terminal, type:   
     ```bash
-    
+    exit
     ```
 
 ## Libraries
