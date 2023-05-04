@@ -77,6 +77,7 @@ def serverThread(datagram, client, server_socket):
 	# printFirstDatagramData(file_size, filename_size, filename, file_hash)
 
 	file_data = b'' # Initialize the file data
+	
 	# calculate math ceil of file_size / DATAGRAMSIZE
 	iterations = math.ceil(file_size / DATAGRAMSIZE)
 	for i in range(iterations):
