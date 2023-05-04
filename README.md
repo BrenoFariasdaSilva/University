@@ -1,5 +1,7 @@
 # University Exercises [![Build Status](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml/badge.svg)](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml)
 
+<img src="https://wakatime.com/badge/github/BrenoFariasdaSilva/University.svg">
+
 ## Languages:
 <img src="https://github.com/devicons/devicon/blob/master/icons/c/c-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/cplusplus/cplusplus-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original.svg"  width="3%" height="3%">
 
