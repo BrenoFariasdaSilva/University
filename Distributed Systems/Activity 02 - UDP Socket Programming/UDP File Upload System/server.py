@@ -62,7 +62,7 @@ def getFirstDatagramData(datagram):
 	file_size = int.from_bytes(datagram[0 : 4], 'big')
 	filename_size = int.from_bytes(datagram[4 : 8], 'big')
 	filename = datagram[8 : 8 + filename_size].decode('utf-8')
-	file_hash = datagram[8 + filename_size : 8 + filename_size + 64].decode('utf-8')
+	file_hash = datagram[8 + filename_size : 8 + filename_size + 32]
 	return file_size, filename_size, filename, file_hash
 
 # @brief: This is the server thread that will handle the datagram
@@ -74,7 +74,7 @@ def serverThread(datagram, client, server_socket):
 	# Get the file size, filename size, filename, and file hash from the first datagram
 	file_size, filename_size, filename, file_hash = getFirstDatagramData(datagram)
 
-	# printFirstDatagramData(file_size, filename_size, filename, file_hash)
+	printFirstDatagramData(file_size, filename_size, filename, file_hash)
 
 	file_data = b'' # Initialize the file data
  	# Search for 

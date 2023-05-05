@@ -75,17 +75,16 @@ def upload_file(filename, client_socket):
 	file_data = file.read() # Read the file data
 	file.close() # Close the file
 
-	file_hash = hashlib.sha256(file_data).hexdigest() # Get the file hash
+	file_hash = hashlib.sha256(file_data).digest() # Get the file hash
 
 	file_size = len(file_data) # Get the file size
 	filename_size = len(filename) # Get the filename size
  
-	# printFirstDatagramData(file_size, filename_size, filename, file_hash)
+	printFirstDatagramData(file_size, filename_size, filename, file_hash)
 
 	# Convert the file size, filename size, filename, and file hash to bytes
-	first_datagram = file_size.to_bytes(4, 'big') + filename_size.to_bytes(4, 'big') + bytes(filename, 'utf-8') + bytes(file_hash, 'utf-8')
+	first_datagram = file_size.to_bytes(4, 'big') + filename_size.to_bytes(4, 'big') + bytes(filename, 'utf-8') + file_hash
 	client_socket.sendto(first_datagram, SERVERADDRESS) # Send the first datagram
-	
 
 	# Send the filedata datagrams
 	iterations = math.ceil(file_size / DATAGRAMSIZE)
@@ -95,7 +94,6 @@ def upload_file(filename, client_socket):
 		else:
 			client_socket.sendto(file_data[(i * DATAGRAMSIZE) : (i + 1) * DATAGRAMSIZE], SERVERADDRESS) # Send the file data
 		print(i)
-		time.sleep(0.05)	
 
 	waitForServerResponse(client_socket, filename) # Wait for the server to send a datagram
 
