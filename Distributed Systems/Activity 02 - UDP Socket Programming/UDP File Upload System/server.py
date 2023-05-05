@@ -77,6 +77,7 @@ def serverThread(datagram, client, server_socket):
 	# printFirstDatagramData(file_size, filename_size, filename, file_hash)
 
 	file_data = b'' # Initialize the file data
+ 	# Search for 
 	
 	# calculate math ceil of file_size / DATAGRAMSIZE
 	iterations = math.ceil(file_size / DATAGRAMSIZE)
@@ -86,6 +87,7 @@ def serverThread(datagram, client, server_socket):
 			file_data += server_socket.recvfrom(file_size % DATAGRAMSIZE)[0]
 		else: # else get the remaining bytes
 			file_data += server_socket.recvfrom(DATAGRAMSIZE)[0] 
+		print(i)
 
 	print(f"{backgroundColors.OKGREEN}File data recieved{Style.RESET_ALL}")
 	write_file(filename, file_data) # Write the file data to the file

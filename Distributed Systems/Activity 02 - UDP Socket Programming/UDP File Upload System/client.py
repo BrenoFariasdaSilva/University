@@ -6,7 +6,8 @@
 import socket # For creating the UDP/Datagram socket
 import threading # For creating the client thread
 import hashlib # For getting the file hash (SHA256)
-import math # For math operations, like ceil that was used
+import math
+import time
 from colorama import Style # For coloring the terminal
 
 # Macros:
@@ -81,6 +82,7 @@ def upload_file(filename, client_socket):
 	# Convert the file size, filename size, filename, and file hash to bytes
 	first_datagram = file_size.to_bytes(4, 'big') + filename_size.to_bytes(4, 'big') + bytes(filename, 'utf-8') + bytes(file_hash, 'utf-8')
 	client_socket.sendto(first_datagram, SERVERADDRESS) # Send the first datagram
+	
 
 	# Send the filedata datagrams
 	iterations = math.ceil(file_size / DATAGRAMSIZE)
@@ -89,6 +91,8 @@ def upload_file(filename, client_socket):
 			client_socket.sendto(file_data[(i * DATAGRAMSIZE) : (i * DATAGRAMSIZE) + (file_size % DATAGRAMSIZE)], SERVERADDRESS)
 		else:
 			client_socket.sendto(file_data[(i * DATAGRAMSIZE) : (i + 1) * DATAGRAMSIZE], SERVERADDRESS) # Send the file data
+		print(i)
+		time.sleep(0.05)	
 
 	waitForServerResponse(client_socket, filename) # Wait for the server to send a datagram
 

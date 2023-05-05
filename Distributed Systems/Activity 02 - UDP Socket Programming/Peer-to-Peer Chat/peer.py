@@ -62,6 +62,7 @@ clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP socket
 # @logic: This function will read user input, validate it and call the functions to manage the threads
 def main():
     print(f"{backgroundColors.OKCYAN}Welcome to the P2P chat!{Style.RESET_ALL}")
+    
     while True:
         print(f"{backgroundColors.OKCYAN}Please enter your username:{Style.RESET_ALL}")
         username = input()
