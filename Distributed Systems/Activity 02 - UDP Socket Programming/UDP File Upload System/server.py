@@ -19,6 +19,7 @@ class backgroundColors: # Colors for the terminal
 # Constants:
 DATAGRAMSIZE = 1024 # The size of the data chunk to send in bytes
 HASHSIZE = 64 # The size of the file hash in bytes
+FRAGMENTNUMBER = 4 # The number of fragment received
 HOST = "localhost" # The server's IP address
 PORT = 7000 # The server's port
 
@@ -78,6 +79,7 @@ def serverThread(datagram, client, server_socket):
 	printFirstDatagramData(file_size, filename_size, filename, file_hash)
 
 	file_data = b'' # Initialize the file data
+	datagram = b'' # Initialize the datagram
  	# Search for 
 	
 	# calculate math ceil of file_size / DATAGRAMSIZE
@@ -85,10 +87,15 @@ def serverThread(datagram, client, server_socket):
 	for i in range(iterations):
 		# if is not the last iteration, get full datagram
 		if i == iterations - 1:
-			file_data += server_socket.recvfrom(file_size % DATAGRAMSIZE)[0]
+			datagram = server_socket.recvfrom(FRAGMENTNUMBER + (file_size % DATAGRAMSIZE))[0]
 		else: # else get the remaining bytes
-			file_data += server_socket.recvfrom(DATAGRAMSIZE)[0] 
-		print(i)
+			datagram = server_socket.recvfrom(FRAGMENTNUMBER + DATAGRAMSIZE)[0] 
+
+		print(f"iterator: {i}")
+		fragment_order = int.from_bytes(datagram[0 : FRAGMENTNUMBER], 'big') # Get the fragment order
+		print(f"fragment_order: {fragment_order}")
+		file_data += datagram[FRAGMENTNUMBER : len(datagram)] # Add the file data to the file data variable
+		server_socket.sendto(fragment_order.to_bytes(FRAGMENTNUMBER, 'big'), client) # Send the fragment order to the client	
 
 	print(f"{backgroundColors.OKGREEN}File data recieved{Style.RESET_ALL}")
 	write_file(filename, file_data) # Write the file data to the file

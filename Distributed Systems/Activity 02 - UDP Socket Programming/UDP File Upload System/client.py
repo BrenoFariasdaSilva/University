@@ -99,10 +99,19 @@ def upload_file(filename, client_socket):
 	iterations = math.ceil(file_size / DATAGRAMSIZE)
 	for i in range(iterations): # Loop through the file data
 		if i == iterations - 1:
-			client_socket.sendto(file_data[(i * DATAGRAMSIZE) : (i * DATAGRAMSIZE) + (file_size % DATAGRAMSIZE)], SERVERADDRESS)
+			client_socket.sendto(i.to_bytes(4, 'big') + file_data[(i * DATAGRAMSIZE) : (i * DATAGRAMSIZE) + (file_size % DATAGRAMSIZE)], SERVERADDRESS)
 		else:
-			client_socket.sendto(file_data[(i * DATAGRAMSIZE) : (i + 1) * DATAGRAMSIZE], SERVERADDRESS) # Send the file data
-		print(i)
+			client_socket.sendto(i.to_bytes(4, 'big') + file_data[(i * DATAGRAMSIZE) : (i + 1) * DATAGRAMSIZE], SERVERADDRESS) # Send the file data
+		print(f"iterator: {i}")
+  
+		while True:
+			ack_datagram = client_socket.recvfrom(DATAGRAMSIZE)[0]
+			print(f"ack_datagram: {ack_datagram.decode()}")
+			if ack_datagram.decode() == i:
+				break
+			else:
+				print(f"{backgroundColors.FAIL}Error in sending datagram {i}. Received {ack_datagram.decode()}!{Style.RESET_ALL}")
+
 
 	waitForServerResponse(client_socket, filename) # Wait for the server to send a datagram
 
