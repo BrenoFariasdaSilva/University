@@ -3,7 +3,6 @@
 # 1. The first datagram will be the file size (4 bytes), filename size (4 bytes), filename (984 bytes), and the file hash (32 bytes)
 # 2. The rest of the datagrams will be the file data (1024 bytes)
 
-# TODO: Fix encoding/decoding the file_hash to "utf-8" in the server and client
 # TODO: Adding ack_datagram confirmation
 
 import socket # For creating the UDP/Datagram socket

@@ -17,7 +17,8 @@ class backgroundColors: # Colors for the terminal
 	FAIL = "\033[91m" # Red
 
 # Constants:
-DATAGRAMSIZE = 1024 # The size of the data chunk to send
+DATAGRAMSIZE = 1024 # The size of the data chunk to send in bytes
+HASHSIZE = 64 # The size of the file hash in bytes
 HOST = "localhost" # The server's IP address
 PORT = 7000 # The server's port
 
@@ -62,7 +63,7 @@ def getFirstDatagramData(datagram):
 	file_size = int.from_bytes(datagram[0 : 4], 'big')
 	filename_size = int.from_bytes(datagram[4 : 8], 'big')
 	filename = datagram[8 : 8 + filename_size].decode('utf-8')
-	file_hash = datagram[8 + filename_size : 8 + filename_size + 64].decode('utf-8')
+	file_hash = datagram[8 + filename_size : 8 + filename_size + HASHSIZE].decode('utf-8')
 	return file_size, filename_size, filename, file_hash
 
 # @brief: This is the server thread that will handle the datagram
