@@ -62,7 +62,7 @@ def getFirstDatagramData(datagram):
 	file_size = int.from_bytes(datagram[0 : 4], 'big')
 	filename_size = int.from_bytes(datagram[4 : 8], 'big')
 	filename = datagram[8 : 8 + filename_size].decode('utf-8')
-	file_hash = datagram[8 + filename_size : 8 + filename_size + 32]
+	file_hash = datagram[8 + filename_size : 8 + filename_size + 64].decode('utf-8')
 	return file_size, filename_size, filename, file_hash
 
 # @brief: This is the server thread that will handle the datagram

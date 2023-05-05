@@ -9,8 +9,7 @@
 import socket # For creating the UDP/Datagram socket
 import threading # For creating the client thread
 import hashlib # For getting the file hash (SHA256)
-import math
-import time
+import math # For math operations, like ceil that was used
 from colorama import Style # For coloring the terminal
 
 # Macros:
@@ -42,6 +41,12 @@ def waitForServerResponse(client_socket, filename):
 		print(f"{backgroundColors.FAIL}File upload failed{Style.RESET_ALL}")
 		clientThread(client_socket)
 		# upload_file(filename, client_socket) # Re-upload the file
+  
+# @brief: This function verifies if the filename is less or equal to 956 bytes
+# @param: filename: The name of the file to verify
+# @return: True if the filename is less or equal to 956 bytes, False otherwise
+def verify_filename_length(filename):
+	return len(filename) <= 956
   
 # @brief: This function prints the file info from the first datagram
 # @param file_size: The file size
@@ -75,15 +80,20 @@ def upload_file(filename, client_socket):
 	file_data = file.read() # Read the file data
 	file.close() # Close the file
 
-	file_hash = hashlib.sha256(file_data).digest() # Get the file hash
+	file_hash = hashlib.sha256(file_data).hexdigest() # Get the file hash
 
 	file_size = len(file_data) # Get the file size
 	filename_size = len(filename) # Get the filename size
  
+ 	# filename must be less than 956 bytes
+	if not verify_filename_length(filename):
+		print(f"{backgroundColors.FAIL}Filename must be less than 956 bytes!{Style.RESET_ALL}")
+		return
+ 
 	printFirstDatagramData(file_size, filename_size, filename, file_hash)
 
 	# Convert the file size, filename size, filename, and file hash to bytes
-	first_datagram = file_size.to_bytes(4, 'big') + filename_size.to_bytes(4, 'big') + bytes(filename, 'utf-8') + file_hash
+	first_datagram = file_size.to_bytes(4, 'big') + filename_size.to_bytes(4, 'big') + bytes(filename, 'utf-8') + bytes(file_hash, 'utf-8')
 	client_socket.sendto(first_datagram, SERVERADDRESS) # Send the first datagram
 
 	# Send the filedata datagrams
