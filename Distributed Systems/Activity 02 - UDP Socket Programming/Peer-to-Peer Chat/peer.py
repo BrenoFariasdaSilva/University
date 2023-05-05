@@ -41,7 +41,7 @@ URL = 3 # URL
 ECHO = 4 # Echo
 
 # Regex for the URLs
-URL_REGEX = r"(^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%.\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%\+.~#?&\/=]*)$" 
+URL_REGEX = r"(http|https)://[a-zA-Z0-9\./]+" 
 # As i never used Regex, i simply copied this one from the internet:
 # https://uibakery.io/regex-library/url-regex-python
 
