@@ -21,6 +21,7 @@ class backgroundColors: # Colors for the terminal
 # Constants:
 SERVERADDRESS = ('localhost', 7000) # The server to send the file to
 DATAGRAMSIZE = 1024 # The size of the data chunk to send
+ACKDATAGRAMSIZE = 4 # The size of the ack datagram
 
 # Commands
 EXIT = "exit" # Exit command
@@ -89,7 +90,7 @@ def upload_file(filename, client_socket):
 		print(f"{backgroundColors.FAIL}Filename must be less than 956 bytes!{Style.RESET_ALL}")
 		return
  
-	printFirstDatagramData(file_size, filename_size, filename, file_hash)
+	# printFirstDatagramData(file_size, filename_size, filename, file_hash)
 
 	# Convert the file size, filename size, filename, and file hash to bytes
 	first_datagram = file_size.to_bytes(4, 'big') + filename_size.to_bytes(4, 'big') + bytes(filename, 'utf-8') + bytes(file_hash, 'utf-8')
@@ -98,20 +99,21 @@ def upload_file(filename, client_socket):
 	# Send the filedata datagrams
 	iterations = math.ceil(file_size / DATAGRAMSIZE)
 	for i in range(iterations): # Loop through the file data
+		sequence_number = i.to_bytes(ACKDATAGRAMSIZE, 'big') # Convert the sequence number to bytes
 		if i == iterations - 1:
-			client_socket.sendto(i.to_bytes(4, 'big') + file_data[(i * DATAGRAMSIZE) : (i * DATAGRAMSIZE) + (file_size % DATAGRAMSIZE)], SERVERADDRESS)
+			datagram = sequence_number + file_data[(i * DATAGRAMSIZE) : (i * DATAGRAMSIZE) + (file_size % DATAGRAMSIZE)]
 		else:
-			client_socket.sendto(i.to_bytes(4, 'big') + file_data[(i * DATAGRAMSIZE) : (i + 1) * DATAGRAMSIZE], SERVERADDRESS) # Send the file data
+			datagram = sequence_number + file_data[(i * DATAGRAMSIZE) : (i + 1) * DATAGRAMSIZE]
 		print(f"iterator: {i}")
   
+		client_socket.sendto(datagram, SERVERADDRESS) # Send the datagram
 		while True:
-			ack_datagram = client_socket.recvfrom(DATAGRAMSIZE)[0]
-			print(f"ack_datagram: {ack_datagram.decode()}")
+			ack_datagram = client_socket.recvfrom(ACKDATAGRAMSIZE)[0] # Wait for the server to send an ack datagram
+			print
 			if ack_datagram.decode() == i:
 				break
 			else:
 				print(f"{backgroundColors.FAIL}Error in sending datagram {i}. Received {ack_datagram.decode()}!{Style.RESET_ALL}")
-
 
 	waitForServerResponse(client_socket, filename) # Wait for the server to send a datagram
 
