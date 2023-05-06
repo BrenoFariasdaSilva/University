@@ -57,7 +57,7 @@ def verify_filename_length(filename):
 def printFirstDatagramData(file_size, filename_size, filename, file_hash):
 	print(f"{backgroundColors.OKGREEN}File size: {file_size} bytes")
 	print(f"Filename size: {filename_size} bytes")
-	print(f"Filename: {filename}")
+	print(f"Filename: {filename.encode('utf-8')}")
 	print(f"File hash: {file_hash}{Style.RESET_ALL}")
 
 # @brief: Verifies that the file exists
@@ -93,7 +93,7 @@ def upload_file(filename, client_socket):
 	# printFirstDatagramData(file_size, filename_size, filename, file_hash)
 
 	# Convert the file size, filename size, filename, and file hash to bytes
-	first_datagram = file_size.to_bytes(4, 'big') + filename_size.to_bytes(4, 'big') + bytes(filename, 'utf-8') + bytes(file_hash, 'utf-8')
+	first_datagram = file_size.to_bytes(4, 'big') + filename_size.to_bytes(4, 'big') + str.encode(filename, 'utf-8') + str.encode(file_hash, 'utf-8' )
 	client_socket.sendto(first_datagram, SERVERADDRESS) # Send the first datagram
 
 	# Send the filedata datagrams
@@ -104,13 +104,13 @@ def upload_file(filename, client_socket):
 			datagram = sequence_number + file_data[(i * DATAGRAMSIZE) : (i * DATAGRAMSIZE) + (file_size % DATAGRAMSIZE)]
 		else:
 			datagram = sequence_number + file_data[(i * DATAGRAMSIZE) : (i + 1) * DATAGRAMSIZE]
-		print(f"iterator: {i}")
+		# print(f"Sending: {int.from_bytes(datagram[:ACKDATAGRAMSIZE], 'big')}")
   
 		client_socket.sendto(datagram, SERVERADDRESS) # Send the datagram
 		while True:
 			ack_datagram = client_socket.recvfrom(ACKDATAGRAMSIZE)[0] # Wait for the server to send an ack datagram
-			print
-			if ack_datagram.decode() == i:
+			# print(f"Received: {int.from_bytes(ack_datagram, 'big')}")
+			if int.from_bytes(ack_datagram, 'big') == i: # If the sequence number is the same as the one sent,
 				break
 			else:
 				print(f"{backgroundColors.FAIL}Error in sending datagram {i}. Received {ack_datagram.decode()}!{Style.RESET_ALL}")

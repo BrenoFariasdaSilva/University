@@ -61,7 +61,7 @@ def printFirstDatagramData(file_size, filename_size, filename, file_hash):
 # @param datagram: The datagram to get the data from
 # @return: The file size, filename size, filename, and file hash
 def getFirstDatagramData(datagram):
-	file_size = int.from_bytes(datagram[0 : 4], 'big')
+	file_size:int = int.from_bytes(datagram[0 : 4], 'big')
 	filename_size = int.from_bytes(datagram[4 : 8], 'big')
 	filename = datagram[8 : 8 + filename_size].decode('utf-8')
 	file_hash = datagram[8 + filename_size : 8 + filename_size + HASHSIZE].decode('utf-8')
@@ -84,15 +84,16 @@ def serverThread(datagram, client, server_socket):
 	# calculate math ceil of file_size / DATAGRAMSIZE
 	iterations = math.ceil(file_size / DATAGRAMSIZE)
 	for i in range(iterations):
-		print(f"Iterator value: {i}")
 		# if is not the last iteration, get full datagram
 		if i == iterations - 1:
 			datagram = server_socket.recvfrom(ACKDATAGRAMSIZE + (file_size % DATAGRAMSIZE))[0]
 		else: # else get the remaining bytes
 			datagram = server_socket.recvfrom(ACKDATAGRAMSIZE + DATAGRAMSIZE)[0] 
 
+		# print(f"Recieved {int.from_bytes(datagram[:ACKDATAGRAMSIZE], 'big')}")
 		file_data += datagram[ACKDATAGRAMSIZE:]
 		server_socket.sendto(datagram[:ACKDATAGRAMSIZE], client)
+		# print(f"Sending ACK {int.from_bytes(datagram[:ACKDATAGRAMSIZE], 'big')}")
 
 	print(f"{backgroundColors.OKGREEN}File data recieved{Style.RESET_ALL}")
 	write_file(filename, file_data) # Write the file data to the file
