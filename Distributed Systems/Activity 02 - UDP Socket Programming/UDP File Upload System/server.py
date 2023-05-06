@@ -6,7 +6,7 @@
 import socket # For creating the UDP/Datagram socket
 import os # For manipulating the file system
 import hashlib # For getting the file hash (SHA256)
-import math # For math operations, like ceil that was used
+import math
 from colorama import Style # For coloring the terminal
 
 # Macros:
@@ -19,6 +19,8 @@ class backgroundColors: # Colors for the terminal
 # Constants:
 DATAGRAMSIZE = 1024 # The size of the data chunk to send in bytes
 HASHSIZE = 64 # The size of the file hash in bytes
+FILESIZE_OFFSET = 4 # The offset of the file size in the first datagram
+FILENAMESIZE_OFFSET = 8 # The offset of the filename size in the first datagram
 ACKDATAGRAMSIZE = 4 # The number of fragment received
 HOST = "localhost" # The server's IP address
 PORT = 7000 # The server's port
@@ -61,10 +63,12 @@ def printFirstDatagramData(file_size, filename_size, filename, file_hash):
 # @param datagram: The datagram to get the data from
 # @return: The file size, filename size, filename, and file hash
 def getFirstDatagramData(datagram):
-	file_size:int = int.from_bytes(datagram[0 : 4], 'big')
-	filename_size = int.from_bytes(datagram[4 : 8], 'big')
-	filename = datagram[8 : 8 + filename_size].decode('utf-8')
-	file_hash = datagram[8 + filename_size : 8 + filename_size + HASHSIZE].decode('utf-8')
+	file_size:int = int.from_bytes(datagram[0 : FILESIZE_OFFSET], 'big') 
+	# print(f"file_size: {file_size}")
+	filename_size:int = int.from_bytes(datagram[FILESIZE_OFFSET : FILENAMESIZE_OFFSET], 'big')
+	# print(f"filename_size: {filename_size}")
+	filename:str = datagram[FILENAMESIZE_OFFSET : FILENAMESIZE_OFFSET + filename_size].decode('utf-8')
+	file_hash = datagram[FILENAMESIZE_OFFSET + filename_size : FILENAMESIZE_OFFSET + filename_size + HASHSIZE].decode('utf-8')
 	return file_size, filename_size, filename, file_hash
 
 # @brief: This is the server thread that will handle the datagram
@@ -122,11 +126,10 @@ def main():
 		# The server is waiting for a datagram to be sent to it.
 		# When it receives a datagram, it stores the datagram in the variable datagram and the client's address in the variable client.
 		# The client's address is a tuple containing the client's IP address and port.
-	[datagram, client] = server_socket.recvfrom(DATAGRAMSIZE)
-	
+	[first_datagram, client] = server_socket.recvfrom(DATAGRAMSIZE)
+	serverThread(first_datagram, client, server_socket)
 	print(f"{backgroundColors.OKGREEN}Recieved connection from {client[0]}:{client[1]}{Style.RESET_ALL}")
-	serverThread(datagram, client, server_socket) # Create the server thread
-		# server_thread = threading.Thread(target=serverThread, args=(datagram, client, server_socket)) # Create the server thread
+		# server_thread = threading.Thread(target=serverThread, args=(first_datagram, client, server_socket)) # Create the server thread
 		# server_thread.start() # Start the server thread
 
 if __name__ == '__main__':

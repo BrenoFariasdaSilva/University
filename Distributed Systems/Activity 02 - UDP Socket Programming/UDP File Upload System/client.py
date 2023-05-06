@@ -94,6 +94,7 @@ def upload_file(filename, client_socket):
 
 	# Convert the file size, filename size, filename, and file hash to bytes
 	first_datagram = file_size.to_bytes(4, 'big') + filename_size.to_bytes(4, 'big') + str.encode(filename, 'utf-8') + str.encode(file_hash, 'utf-8' )
+	# print(f"Filename size: {int.from_bytes(file_size.to_bytes(4, 'big'), 'big')}")
 	client_socket.sendto(first_datagram, SERVERADDRESS) # Send the first datagram
 
 	# Send the filedata datagrams
