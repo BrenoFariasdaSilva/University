@@ -47,3 +47,7 @@ out/
 
 # dotfiles
 .env
+
+# log files
+*/logs/*.log
+
