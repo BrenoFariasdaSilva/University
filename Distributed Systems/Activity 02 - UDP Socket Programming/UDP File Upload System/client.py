@@ -19,9 +19,9 @@ class backgroundColors: # Colors for the terminal
 	FAIL = "\033[91m" # Red
 
 # Constants:
-SERVERADDRESS = ('localhost', 7000) # The server to send the file to
-DATAGRAMSIZE = 1024 # The size of the data chunk to send
-ACKDATAGRAMSIZE = 4 # The size of the ack datagram
+SERVER_ADDRESS = ('localhost', 7000) # The server to send the file to
+DATAGRAM_SIZE = 1024 # The size of the data chunk to send
+DATAGRAM_ORDER_SIZE = 4 # The size of the ack datagram
 
 # Commands
 EXIT = "exit" # Exit command
@@ -33,7 +33,7 @@ UPLOAD = "upload" # Upload command
 # @param filename: The name of the file to re-upload if the file upload failed
 # @return: The datagram received from the server
 def waitForServerResponse(client_socket, filename):
-	datagram, server = client_socket.recvfrom(DATAGRAMSIZE) # Wait for the server to send a datagram
+	datagram, server = client_socket.recvfrom(DATAGRAM_SIZE) # Wait for the server to send a datagram
 	
 	if datagram.decode() == "OK":
 		print(f"{backgroundColors.OKGREEN}File uploaded successfully!{Style.RESET_ALL}")
@@ -95,21 +95,21 @@ def upload_file(filename, client_socket):
 	# Convert the file size, filename size, filename, and file hash to bytes
 	first_datagram = file_size.to_bytes(4, 'big') + filename_size.to_bytes(4, 'big') + str.encode(filename, 'utf-8') + str.encode(file_hash, 'utf-8' )
 	# print(f"Filename size: {int.from_bytes(file_size.to_bytes(4, 'big'), 'big')}")
-	client_socket.sendto(first_datagram, SERVERADDRESS) # Send the first datagram
+	client_socket.sendto(first_datagram, SERVER_ADDRESS) # Send the first datagram
 
 	# Send the filedata datagrams
-	iterations = math.ceil(file_size / DATAGRAMSIZE)
+	iterations = math.ceil(file_size / DATAGRAM_SIZE)
 	for i in range(iterations): # Loop through the file data
-		sequence_number = i.to_bytes(ACKDATAGRAMSIZE, 'big') # Convert the sequence number to bytes
+		datagram_number = i.to_bytes(DATAGRAM_ORDER_SIZE, 'big') # Convert the sequence number to bytes
 		if i == iterations - 1:
-			datagram = sequence_number + file_data[(i * DATAGRAMSIZE) : (i * DATAGRAMSIZE) + (file_size % DATAGRAMSIZE)]
+			file_data_datagram = datagram_number + file_data[(i * DATAGRAM_SIZE) : (i * DATAGRAM_SIZE) + (file_size % DATAGRAM_SIZE)]
 		else:
-			datagram = sequence_number + file_data[(i * DATAGRAMSIZE) : (i + 1) * DATAGRAMSIZE]
+			file_data_datagram = datagram_number + file_data[(i * DATAGRAM_SIZE) : (i + 1) * DATAGRAM_SIZE]
 		# print(f"Sending: {int.from_bytes(datagram[:ACKDATAGRAMSIZE], 'big')}")
   
-		client_socket.sendto(datagram, SERVERADDRESS) # Send the datagram
+		client_socket.sendto(file_data_datagram, SERVER_ADDRESS) # Send the datagram
 		while True:
-			ack_datagram = client_socket.recvfrom(ACKDATAGRAMSIZE)[0] # Wait for the server to send an ack datagram
+			ack_datagram = client_socket.recvfrom(DATAGRAM_ORDER_SIZE)[0] # Wait for the server to send an ack datagram
 			# print(f"Received: {int.from_bytes(ack_datagram, 'big')}")
 			if int.from_bytes(ack_datagram, 'big') == i: # If the sequence number is the same as the one sent,
 				break

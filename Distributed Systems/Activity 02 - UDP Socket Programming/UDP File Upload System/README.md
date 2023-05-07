@@ -10,12 +10,8 @@ Programming a UDP socket which is used into a client-server connection to upload
 |:-:|---|---|---|
 
 **File Fragments Datagram**:
-| File Fragment (1024 bytes)|
-|--:|
-
-**Fragment ACK Datagram Response**:
-| Message (4 Byte) |
-|--:|
+| Datagram Number (4 Byte) | File Fragment (1024 bytes)|
+|--:|---|
 
 ## How to run
 In order to run this project, you need to open at least two terminals inside this folder, one for client e another for the server.
