@@ -126,7 +126,7 @@ def serverThread(first_datagram, client, server_socket):
 	
 	# calculate math ceil of file_size / DATAGRAMSIZE
 	iterations = math.ceil(file_size / DATAGRAM_SIZE)
-	for i in tqdm(range(iterations), desc="File Data Upload Progress", unit="iteration", ncols=100): # Loop through the file data
+	for i in tqdm(range(iterations), desc="File Data Upload Progress", unit="iteration", ncols=100, bar_format="{desc}: {percentage:3.0f}%|{bar}|  elapsed time: {elapsed}"): # Loop through the file data
 		# if is not the last iteration, get full datagram
 		if i == iterations - 1:
 			file_datagram = server_socket.recvfrom(DATAGRAM_ORDER_SIZE + (file_size % DATAGRAM_SIZE))[0]

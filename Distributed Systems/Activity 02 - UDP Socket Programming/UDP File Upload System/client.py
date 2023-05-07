@@ -132,7 +132,7 @@ def upload_file(filename, client_socket):
 
 	# Send the filedata datagrams
 	iterations = math.ceil(file_size / DATAGRAM_SIZE)
-	for i in tqdm(range(iterations), desc="File Data Upload Progress", unit="iteration", ncols=100): # Loop through the file data
+	for i in tqdm(range(iterations), desc="File Data Upload Progress", unit="iteration", ncols=100, bar_format="{desc}: {percentage:3.0f}%|{bar}|  elapsed time: {elapsed}"): # Loop through the file data
 		datagram_number = i.to_bytes(DATAGRAM_ORDER_SIZE, 'big') # Convert the sequence number to bytes
 		if i == iterations - 1:
 			file_data_datagram = datagram_number + file_data[(i * DATAGRAM_SIZE) : (i * DATAGRAM_SIZE) + (file_size % DATAGRAM_SIZE)]

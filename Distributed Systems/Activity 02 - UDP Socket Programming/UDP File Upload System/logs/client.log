@@ -1,0 +1,27 @@
+2023-05-07 19:05:55,469 - client_logger - INFO - Starting client...
+2023-05-07 19:05:55,470 - client_logger - INFO - Type your command here: 
+2023-05-07 19:05:58,204 - client_logger - INFO - ['upload', 'test.pdf']
+2023-05-07 19:05:58,204 - client_logger - INFO - File size: 64050 bytes
+2023-05-07 19:05:58,204 - client_logger - INFO - Filename size: 8 bytes
+2023-05-07 19:05:58,204 - client_logger - INFO - Filename: b'test.pdf'
+2023-05-07 19:05:58,205 - client_logger - INFO - File hash: f67d9085ba2c1ce3373c69317ae128390eeebfbfe373de7fb7c924f1800421c3
+2023-05-07 19:08:17,805 - client_logger - INFO - Starting client...
+2023-05-07 19:08:17,805 - client_logger - INFO - Type your command here: 
+2023-05-07 19:08:19,843 - client_logger - INFO - ['upload', 'test.pdf']
+2023-05-07 19:08:19,844 - client_logger - INFO - File size: 64050 bytes
+2023-05-07 19:08:19,844 - client_logger - INFO - Filename size: 8 bytes
+2023-05-07 19:08:19,844 - client_logger - INFO - Filename: b'test.pdf'
+2023-05-07 19:08:19,844 - client_logger - INFO - File hash: f67d9085ba2c1ce3373c69317ae128390eeebfbfe373de7fb7c924f1800421c3
+2023-05-07 19:08:19,893 - client_logger - INFO - File uploaded successfully!
+2023-05-07 19:08:19,893 - client_logger - INFO - 
+2023-05-07 19:08:19,893 - client_logger - INFO - Type your command here: 
+2023-05-07 19:08:47,963 - client_logger - INFO - Starting client...
+2023-05-07 19:08:47,963 - client_logger - INFO - Type your command here: 
+2023-05-07 19:08:49,940 - client_logger - INFO - ['upload', 'test.pdf']
+2023-05-07 19:08:49,940 - client_logger - INFO - File size: 64050 bytes
+2023-05-07 19:08:49,940 - client_logger - INFO - Filename size: 8 bytes
+2023-05-07 19:08:49,940 - client_logger - INFO - Filename: b'test.pdf'
+2023-05-07 19:08:49,940 - client_logger - INFO - File hash: f67d9085ba2c1ce3373c69317ae128390eeebfbfe373de7fb7c924f1800421c3
+2023-05-07 19:08:50,021 - client_logger - INFO - File uploaded successfully!
+2023-05-07 19:08:50,021 - client_logger - INFO - 
+2023-05-07 19:08:50,021 - client_logger - INFO - Type your command here: 
