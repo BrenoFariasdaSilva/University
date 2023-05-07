@@ -2,7 +2,7 @@
 # UDP Socket Programming
 @author Breno Farias da Silva    
 @date 29/04/2023  
-@last update 01/05/2021  
+@last update 07/05/2021  
 @[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2002%20-%20UDP%20Socket%20Programming/UDP%20File%20Upload%20System)  
 Programming a UDP socket which is used into a client-server connection to upload files from the client to the server. The server will receive the first datagram which contains the file size, filename and the file checksum. After that, the server receives fragments of the file into batches of 1024 bytes and then reassembles them into a single file using the fragment position as a reference. After that, the server will calculate the file checksum and then verify if it is equal to the checksum received from the client.
 **Initial Datagram**:
@@ -13,11 +13,18 @@ Programming a UDP socket which is used into a client-server connection to upload
 | Datagram Number (4 Byte) | File Fragment (1024 bytes)|
 |--:|---|
 
+## Install dependencies
+The dependency inside the makefile command are required to run this project, due to make the progress bar work properly.
+```bash
+make setup
+```
+
 ## How to run
 In order to run this project, you need to open at least two terminals inside this folder, one for client e another for the server.
 But, before that, make sure you have makefile installed on your machine.
 ```bash
 sudo apt install make -y
+make setup
 ```
 * On the first terminal, type:  
     ```bash

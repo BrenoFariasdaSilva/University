@@ -4,5 +4,8 @@ client:
 server:
 	clear; python3 server.py
 
+setup:
+	pip install tqdm
+
 remove:
 	rm *.pyc
