@@ -7,7 +7,8 @@ import socket # For creating the UDP/Datagram socket
 import threading # For creating the client thread
 import hashlib # For getting the file hash (SHA256)
 import math # For math operations, like ceil that was used
-import logging # For logging the server actions
+import logging
+import time # For logging the server actions
 from tqdm import tqdm # For showing the progress bar
 from colorama import Style # For coloring the terminal
 
@@ -149,6 +150,9 @@ def upload_file(filename, client_socket):
 				print(f"{backgroundColors.FAIL}Error in sending datagram {i}. Received {ack_datagram.decode()}!{Style.RESET_ALL}")
 				logger.error(f"Error in sending datagram {i}. Received {ack_datagram.decode()}!")
 
+		# Uncomment the following line to slow down the upload so you can see the progress bar move if it is going too fast
+		# time.sleep(0.1)
+
 	waitForServerResponse(client_socket, filename) # Wait for the server to send a datagram
 
 # @brief: Uploads the file to the server
@@ -156,7 +160,7 @@ def upload_file(filename, client_socket):
 # @return: None
 def clientThread(client_socket):
 	while True:
-		print(f"{backgroundColors.OKGREEN}Type your command here: {Style.RESET_ALL}", end=" ")
+		print(f"{backgroundColors.OKGREEN}Type your command here: {Style.RESET_ALL}", end="")
 		logger.info("Type your command here: ")
 		userInput = input().split(" ") # Split the input by spaces
 		logger.info(userInput)

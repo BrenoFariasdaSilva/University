@@ -88,6 +88,13 @@ def logFirstDatagramData(file_size, filename_size, filename, file_hash):
 	logger.info(f"Filename: {filename}")
 	logger.info(f"File hash: {file_hash}")
 
+# @brief: This function verifies if there is a file with the same name in the server, if so, it deletes it
+# @param filename: The filename to check
+# @return: None
+def verifyRepeatedFilename(filename):
+	if os.path.exists("./server_files/" + filename):
+		os.remove("./server_files/" + filename)
+
 # @brief: This function returns the file size, filename size, filename, and file hash from the first datagram
 # @param datagram: The datagram to get the data from
 # @return: The file size, filename size, filename, and file hash
@@ -108,6 +115,7 @@ def getFirstDatagramData(datagram):
 def serverThread(first_datagram, client, server_socket):
 	# Get the file size, filename size, filename, and file hash from the first datagram
 	file_size, filename_size, filename, file_hash = getFirstDatagramData(first_datagram)
+	verifyRepeatedFilename(filename)
 
 	# printFirstDatagramData(file_size, filename_size, filename, file_hash)
 	logFirstDatagramData(file_size, filename_size, filename, file_hash)
