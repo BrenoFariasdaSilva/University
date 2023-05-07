@@ -4,6 +4,7 @@
 # 2. The rest of the datagrams will be the checksum (bytes) and the file data (1024 bytes)
 
 import socket # For creating the UDP/Datagram socket
+import threading # For creating the client thread
 import os # For manipulating the file system
 import hashlib # For getting the file hash (SHA256)
 import math # For math operations, like ceil that was used
@@ -32,7 +33,7 @@ logger = logging.getLogger("server_logger") # Create a logger
 logger.setLevel(logging.DEBUG) # Set the logger level to DEBUG
 
 # Create a file handler
-file_handler = logging.FileHandler("server.log") # Create a file handler
+file_handler = logging.FileHandler("logs/server.log") # Create a file handler
 file_handler.setLevel(logging.DEBUG) # Set the file handler level to DEBUG
 
 # Create a formatter
@@ -184,5 +185,6 @@ def main():
 	server_socket.bind((HOST, PORT)) # Bind the socket to the host and port
 
 	waitForFirstDatagram(server_socket) # Wait for the first datagram to be sent to the server
+
 if __name__ == '__main__':
 	main()

@@ -7,7 +7,7 @@ import socket # For creating the UDP/Datagram socket
 import threading # For creating the client thread
 import hashlib # For getting the file hash (SHA256)
 import math # For math operations, like ceil that was used
-import logging
+import logging # For logging the server actions
 import time # For logging the server actions
 from tqdm import tqdm # For showing the progress bar
 from colorama import Style # For coloring the terminal
@@ -35,7 +35,7 @@ logger = logging.getLogger("client_logger") # Create a logger
 logger.setLevel(logging.DEBUG) # Set the logger level to DEBUG
 
 # Create a file handler
-file_handler = logging.FileHandler("client.log") # Create a file handler
+file_handler = logging.FileHandler("logs/client.log") # Create a file handler
 file_handler.setLevel(logging.DEBUG) # Set the file handler level to DEBUG
 
 # Create a formatter
@@ -184,6 +184,7 @@ def clientThread(client_socket):
 # @return: None
 def printHelpCommands():
 	print(f"{backgroundColors.OKCYAN}Valid commands:\n1. {EXIT}\n2. {UPLOAD} filenameHere\n3. {HELP}{Style.RESET_ALL}")
+	print(f"{backgroundColors.WARNING}Note: {UPLOAD} command only works with files in the client_files folder!{Style.RESET_ALL}")
 
 # @brief: Main function that runs the client program
 # @param: None
