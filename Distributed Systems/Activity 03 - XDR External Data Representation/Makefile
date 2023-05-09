@@ -5,7 +5,7 @@ server:
 	clear; python3 server.py
 
 protobuf:
-	protoc -I=. --python_out=. ./protobufs/*.proto
+	protoc --python_out=. movies.proto
 
 setup:
 	pip install pymongo

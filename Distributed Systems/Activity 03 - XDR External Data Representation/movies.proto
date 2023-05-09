@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+message clientRequest {
+	string cmd = 1;
+}
+
+message Movie {
+	string id = 1;
+	string plot = 2;
+	repeated string genres = 3;
+	int32 runtime = 4;
+	string rated = 5;
+	repeated string cast = 6;
+	string poster = 7;
+	string title = 8;
+	string fullplot = 9;
+	int32 year = 10;
+	string type = 11;
+	repeated string writers = 12;
+	repeated string countries = 13;
+	repeated string languages = 14;
+	repeated string directors = 15;
+}
+
+message MoviesList {
+    repeated Movie movies = 1;
+}
