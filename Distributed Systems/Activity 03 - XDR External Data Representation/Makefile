@@ -8,8 +8,9 @@ protobuf:
 	protoc --python_out=. movies.proto
 
 setup:
-	pip install pymongo
+	sudo apt install -y protobuf-compiler -y
 	pip install protobuf
+	pip install pymongo
 
 remove:
 	rm *.pyc
