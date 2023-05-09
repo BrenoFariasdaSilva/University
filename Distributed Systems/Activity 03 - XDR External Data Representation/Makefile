@@ -5,6 +5,7 @@ server:
 	clear; python3 server.py
 
 protoc:
+	# This generates the movies_pb2.py file
 	protoc --python_out=. movies.proto
 
 setup:
