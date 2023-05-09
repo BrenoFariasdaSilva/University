@@ -38,3 +38,7 @@ In order to run this project, you need to open at least two terminals inside thi
 
     ```
 ## Libraries
+
+## Useful links
+* [XDR - External Data Representation Documentation](https://tools.ietf.org/html/rfc4506)
+* [Python Protobuffers](https://blog.gitnux.com/code/python-protobuf/)
