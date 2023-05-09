@@ -15,9 +15,10 @@ Which for a datagram of 322 bytes (1 + 1 + 64 + 1 + 255).
 
 ## How to run
 In order to run this project, you need to open at least two terminals inside this folder, one for each peer you wanna have.
-But, before that, make sure you have makefile installed on your machine.
+But, before that, make sure you have makefile installed on your machine and install the project dependencies.
 ```bash
 sudo apt install make -y
+make setup
 ```
 * On the first terminal, type:  
     ```bash

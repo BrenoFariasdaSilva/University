@@ -19,7 +19,7 @@ Programming a UDP socket which is used into a client-server connection to upload
 |--:|---|
 
 ## Install dependencies
-The dependency inside the makefile command are required to run this project, due to make the progress bar work properly. But, before that, make sure you have makefile installed on your machine.
+The dependency inside the makefile command are required to run this project, due to make the progress bar work properly. But, before that, make sure you have makefile installed on your machine and install the project dependencies.
 ```bash
 sudo apt install make -y
 make setup

@@ -3,9 +3,8 @@ all:
 
 tcp-server:
 	clear; python3 peer.py
-	# Preciso rodar ele em uma porta diferente? python3 peer.py -p 8000
 
-requirements:
+setup:
 	pip install -r requirements.txt
 
 remove:
