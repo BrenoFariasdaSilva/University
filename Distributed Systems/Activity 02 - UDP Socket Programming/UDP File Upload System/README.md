@@ -19,23 +19,19 @@ Programming a UDP socket which is used into a client-server connection to upload
 |--:|---|
 
 ## Install dependencies
-The dependency inside the makefile command are required to run this project, due to make the progress bar work properly.
-```bash
-make setup
-```
-
-## How to run
-In order to run this project, you need to open at least two terminals inside this folder, one for client e another for the server.
-But, before that, make sure you have makefile installed on your machine.
+The dependency inside the makefile command are required to run this project, due to make the progress bar work properly. But, before that, make sure you have makefile installed on your machine.
 ```bash
 sudo apt install make -y
 make setup
 ```
-* On the first terminal, type:  
-    ```bash
+
+## How to run
+In order to run this project, you need to open at least two terminals inside this folder, one for client e another for the server.  
+- On the first terminal, type:  
+    ```bash  
     make server
-    ```
-* On the second terminal, type:  
+    ```  
+- On the second terminal, type:  
     ```bash 
     make client
     ```
