@@ -9,17 +9,17 @@ message Movie {
 	string plot = 2;
 	repeated string genres = 3;
 	int32 runtime = 4;
-	string rated = 5;
-	repeated string cast = 6;
-	string poster = 7;
-	string title = 8;
-	string fullplot = 9;
-	int32 year = 10;
-	string type = 11;
-	repeated string writers = 12;
-	repeated string countries = 13;
-	repeated string languages = 14;
-	repeated string directors = 15;
+	repeated string cast = 5;
+	string num_mflix_comments = 6;
+	string title = 7;
+	string fullplot = 8;
+	repeated string countries = 9;
+	string released = 10;
+	repeated string directors = 11;
+	string rated = 12;
+	string lastupdated = 13;
+	int32 year = 14;
+	string type = 15;
 }
 
 message MoviesList {

@@ -4,7 +4,7 @@ client:
 server:
 	clear; python3 server.py
 
-protobuf:
+protoc:
 	protoc --python_out=. movies.proto
 
 setup:
