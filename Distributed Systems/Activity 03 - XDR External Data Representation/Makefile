@@ -1,7 +1,4 @@
-client:
-	clear; python3 client.py
-
-server:
+make:
 	clear; python3 server.py
 
 protoc:
