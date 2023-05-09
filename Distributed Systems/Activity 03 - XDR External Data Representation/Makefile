@@ -9,6 +9,7 @@ protobuf:
 
 setup:
 	pip install pymongo
+	pip install protobuf
 
 remove:
 	rm *.pyc
