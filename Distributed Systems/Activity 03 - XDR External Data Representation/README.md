@@ -16,12 +16,13 @@ make setup
 ```
 
 ## How to run
-In order to run this project, you need to open at least two terminals inside this folder, one for client e another for the server.
-* On the first terminal, type:  
+In order to run this project, you need to open at least two terminals inside this folder, one inside the client directory e another inside the server directory.
+#### ***Important note:*** The order of which terminal you open first is important, so make sure you follow the order below.
+* On the server terminal, type:  
     ```bash
-    
+    make 
     ```
-* On the second terminal, type:  
+* On the client terminal, type:  
     ```bash 
     
     ```
