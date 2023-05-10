@@ -1,7 +1,8 @@
 syntax = "proto3";
 
 message clientRequest {
-	string cmd = 1;
+	string operation = 1;
+	string parameter = 2;
 }
 
 message Movie {

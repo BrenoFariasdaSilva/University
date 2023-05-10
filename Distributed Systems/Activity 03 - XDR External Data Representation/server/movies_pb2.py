@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0cmovies.proto\"\x1c\n\rclientRequest\x12\x0b\n\x03\x63md\x18\x01 \x01(\t\"\x85\x02\n\x05Movie\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04plot\x18\x02 \x01(\t\x12\x0e\n\x06genres\x18\x03 \x03(\t\x12\x0f\n\x07runtime\x18\x04 \x01(\x05\x12\x0c\n\x04\x63\x61st\x18\x05 \x03(\t\x12\x1a\n\x12num_mflix_comments\x18\x06 \x01(\t\x12\r\n\x05title\x18\x07 \x01(\t\x12\x10\n\x08\x66ullplot\x18\x08 \x01(\t\x12\x11\n\tcountries\x18\t \x03(\t\x12\x10\n\x08released\x18\n \x01(\t\x12\x11\n\tdirectors\x18\x0b \x03(\t\x12\r\n\x05rated\x18\x0c \x01(\t\x12\x13\n\x0blastupdated\x18\r \x01(\t\x12\x0c\n\x04year\x18\x0e \x01(\x05\x12\x0c\n\x04type\x18\x0f \x01(\t\"$\n\nMoviesList\x12\x16\n\x06movies\x18\x01 \x03(\x0b\x32\x06.Movieb\x06proto3'
+  serialized_pb=b'\n\x0cmovies.proto\"5\n\rclientRequest\x12\x11\n\toperation\x18\x01 \x01(\t\x12\x11\n\tparameter\x18\x02 \x01(\t\"\x85\x02\n\x05Movie\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04plot\x18\x02 \x01(\t\x12\x0e\n\x06genres\x18\x03 \x03(\t\x12\x0f\n\x07runtime\x18\x04 \x01(\x05\x12\x0c\n\x04\x63\x61st\x18\x05 \x03(\t\x12\x1a\n\x12num_mflix_comments\x18\x06 \x01(\t\x12\r\n\x05title\x18\x07 \x01(\t\x12\x10\n\x08\x66ullplot\x18\x08 \x01(\t\x12\x11\n\tcountries\x18\t \x03(\t\x12\x10\n\x08released\x18\n \x01(\t\x12\x11\n\tdirectors\x18\x0b \x03(\t\x12\r\n\x05rated\x18\x0c \x01(\t\x12\x13\n\x0blastupdated\x18\r \x01(\t\x12\x0c\n\x04year\x18\x0e \x01(\x05\x12\x0c\n\x04type\x18\x0f \x01(\t\"$\n\nMoviesList\x12\x16\n\x06movies\x18\x01 \x03(\x0b\x32\x06.Movieb\x06proto3'
 )
 
 
@@ -34,8 +34,15 @@ _CLIENTREQUEST = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='cmd', full_name='clientRequest.cmd', index=0,
+      name='operation', full_name='clientRequest.operation', index=0,
       number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='parameter', full_name='clientRequest.parameter', index=1,
+      number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -53,7 +60,7 @@ _CLIENTREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=16,
-  serialized_end=44,
+  serialized_end=69,
 )
 
 
@@ -182,8 +189,8 @@ _MOVIE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=47,
-  serialized_end=308,
+  serialized_start=72,
+  serialized_end=333,
 )
 
 
@@ -214,8 +221,8 @@ _MOVIESLIST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=310,
-  serialized_end=346,
+  serialized_start=335,
+  serialized_end=371,
 )
 
 _MOVIESLIST.fields_by_name['movies'].message_type = _MOVIE
