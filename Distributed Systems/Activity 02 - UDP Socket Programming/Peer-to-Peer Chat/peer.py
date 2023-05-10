@@ -67,7 +67,6 @@ def main():
         else:
             print(f"{backgroundColors.FAIL}Invalid username. Please try again.{Style.RESET_ALL}")
 
-
 # This function validates the username
 # @param username: The username to validate
 # @return: True if the username is valid, False otherwise

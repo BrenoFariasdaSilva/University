@@ -14,8 +14,8 @@ As it is a UDP connection, a well-known header is needed to be implemented in or
 | Message Type (1 byte) | Nick Size (1 byte) | Nick (1-64 bytes) |
 |:-:|---|---|
 
-| Message Size (1 byte) | Message Content (0-255 bytes) | | |
-|--:|---|---|---|  
+| Message Size (1 byte) | Message Content (0-255 bytes) |
+|--:|---|
 
 Which for a datagram of 322 bytes (1 + 1 + 64 + 1 + 255).
 
