@@ -1,9 +1,9 @@
-
 # UDP Socket Programming
 @author Breno Farias da Silva    
 @date 29/04/2023  
 @last update 07/05/2021  
-@[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2002%20-%20UDP%20Socket%20Programming/UDP%20File%20Upload%20System)  
+@[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2002%20-%20UDP%20Socket%20Programming/UDP%20File%20Upload%20System)   
+@**ToDo**: Implement timeout in **client.py** at line 150 for the client not to be stuck infinty waiting in case some datagram fails.   
 Programming a UDP socket which is used into a client-server connection to upload files from the client to the server. The server will receive the first datagram which contains the file size, filename size, filename and the file checksum. After that, the server receives fragments of the file into batches of 1028 bytes which contains the datagram_number and the file data. After all file data datagrams were sent, the server will reassemble them into a single file inside the `/server_files`. Subsequently, the server will calculate the file checksum and then verify if it is equal to the checksum received from the client in the first datagram. If the checksums are equal, the server will send an OK message to the client, otherwise, it will send an ERROR message.   
 
 ### ***Quick notes:***  

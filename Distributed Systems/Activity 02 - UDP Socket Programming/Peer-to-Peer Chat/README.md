@@ -3,6 +3,12 @@
 @date 24/04/2023  
 @last update 28/04/2021  
 @[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2002%20-%20UDP%20Socket%20Programming/Peer-to-Peer%20Chat)  
+@**ToDo**: Get port number randomly in order to have multiple users.   
+**@Aditional**: Optional TCP server for holding the peers list, like nickname and IP address.  
+**@Aditional**: After closing the program, the TCP should remove the peer from the list.  
+**@Aditional**: Every 2 seconds, the TCP should send a message to the peers to check if there is any modification in the list or the peers can also send a message to the TCP to check if there is any modification in the list.  
+**@Aditional**: Make emoticons work using icons.  
+@**QuickNote**: Everything that is with ## is related to the Optional TCP server.  
 Programming a UDP socket peer-to-peer (P2P) connection to send messages between it's peers.  
 As it is a UDP connection, a well-known header is needed to be implemented in order to make the communication possible.  
 | Message Type (1 byte) | Nick Size (1 byte) | Nick (1-64 bytes) |

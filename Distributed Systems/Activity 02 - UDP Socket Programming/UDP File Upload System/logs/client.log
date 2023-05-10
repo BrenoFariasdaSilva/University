@@ -25,3 +25,18 @@
 2023-05-07 19:08:50,021 - client_logger - INFO - File uploaded successfully!
 2023-05-07 19:08:50,021 - client_logger - INFO - 
 2023-05-07 19:08:50,021 - client_logger - INFO - Type your command here: 
+2023-05-10 15:32:38,214 - client_logger - INFO - Starting client...
+2023-05-10 15:32:38,314 - client_logger - INFO - Type your command here: 
+2023-05-10 15:35:53,124 - client_logger - INFO - ['upload', 'sd.pdf']
+2023-05-10 15:35:53,131 - client_logger - INFO - File size: 917969 bytes
+2023-05-10 15:35:53,131 - client_logger - INFO - Filename size: 6 bytes
+2023-05-10 15:35:53,131 - client_logger - INFO - Filename: b'sd.pdf'
+2023-05-10 15:35:53,131 - client_logger - INFO - File hash: 4cab800a01acc65fbd08a3a0fc1d015b6dde5f86ce32b0f49b5e92c8a69b70d5
+2023-05-10 15:35:53,378 - client_logger - INFO - File uploaded successfully!
+2023-05-10 15:35:53,379 - client_logger - INFO - 
+2023-05-10 15:35:53,379 - client_logger - INFO - Type your command here: 
+2023-05-10 15:39:40,536 - client_logger - INFO - ['upload', 'arquivo.pdf']
+2023-05-10 15:39:40,714 - client_logger - INFO - File size: 168590587 bytes
+2023-05-10 15:39:40,714 - client_logger - INFO - Filename size: 11 bytes
+2023-05-10 15:39:40,714 - client_logger - INFO - Filename: b'arquivo.pdf'
+2023-05-10 15:39:40,714 - client_logger - INFO - File hash: d25291e8b660b89d048f6c1528b776efb63e8335334480362ad5debc23b77e79

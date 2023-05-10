@@ -1,10 +1,4 @@
 # This file handles the peer operations
-# @Note: Everything that is with ## is related to the Optional TCP server
-# TODO: Optional TCP server for holding the peers list, like nickname and IP address
-# TODO: After closing the program, the TCP should remove the peer from the list
-# TODO: Every 2 seconds, the TCP should send a message to the peers to check if there is
-# any modification in the list or the peers can also send a message to the TCP to check if there is any modification in the list
-# TODO: Make emoticons work using icons
 
 import socket # Library for using sockets
 import threading # Library for using threads 
