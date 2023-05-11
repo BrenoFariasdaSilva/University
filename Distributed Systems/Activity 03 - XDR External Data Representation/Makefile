@@ -11,7 +11,7 @@ protoc:
 setup:
 	sudo apt install -y protobuf-compiler -y
 	pip install protobuf
-	python -m pip install pymongo
+	pip install pymongo
 
 remove:
 	rm *.pyc
