@@ -23,8 +23,36 @@ GET_CATEGORY_MOVIES = 6 # The get category movies command
 # @return: None
 def create_movie(movie):
 	print(f"Creating movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
-	
 
+# @brief: This function gets a movie
+# @param movie: The movie protocol buffer
+# @return: None
+def get_movie(movie):
+	print(f"Getting movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
+
+# @brief: This function updates a movie
+# @param movie: The movie protocol buffer
+# @return: None
+def update_movie(movie):
+	print(f"Updating movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
+
+# @brief: This function deletes a movie
+# @param movie: The movie protocol buffer
+# @return: None
+def delete_movie(movie):
+	print(f"Deleting movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
+
+# @brief: This function gets an actor's movies
+# @param movie: The movie protocol buffer
+# @return: None
+def get_actor_movies(movie):
+	print(f"Getting actor {backgroundColors.OKGREEN}{movie.actor}{Style.RESET_ALL}'s movies")
+
+# @brief: This function gets a category's movies
+# @param movie: The movie protocol buffer
+# @return: None
+def get_category_movies(movie):
+	print(f"Getting category {backgroundColors.OKGREEN}{movie.category}{Style.RESET_ALL}'s movies")
 
 # @brief: This function handles the client input
 # @param data: The data the client sent to handled
