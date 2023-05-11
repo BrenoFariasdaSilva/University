@@ -18,6 +18,14 @@ DELETE_MOVIE = 4 # The delete movie command
 GET_ACTOR_MOVIES = 5 # The get actor movies command
 GET_CATEGORY_MOVIES = 6 # The get category movies command
 
+# @brief: This function creates a movie
+# @param movie: The movie protocol buffer
+# @return: None
+def create_movie(movie):
+	print(f"Creating movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
+	
+
+
 # @brief: This function handles the client input
 # @param data: The data the client sent to handled
 # @param client_socket: The client socket object

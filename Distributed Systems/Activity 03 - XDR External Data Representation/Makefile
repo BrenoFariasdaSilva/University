@@ -1,8 +1,8 @@
 make:
-	clear; python3 server.py
+	clear; python3 server/server.py
 
 database:
-	clear; python3 database.py
+	clear; python3 server/database.py
 
 protoc:
 	# This generates the movies_pb2.py file

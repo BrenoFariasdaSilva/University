@@ -16,15 +16,16 @@ make setup
 ```
 
 ## How to run
-In order to run this project, you need to open at least two terminals inside this folder, one inside the client directory e another inside the server directory.
-#### ***Important note:*** The order of which terminal you open first is important, so make sure you follow the order below.
+In order to run this project, you need to open two terminals.
+#### ***Important notes:*** The order of which terminal you open first is important, so make sure you follow the order below.  
+Also, as i'm using MongoDB, you can install [MongoDB Compass](https://www.mongodb.com/try/download/compass) to see the database in a more friendly way.
 * On the server terminal, type:  
     ```bash
-    make 
+    make server
     ```
 * On the client terminal, type:  
     ```bash 
-    
+    make client
     ```
 ## How to use
 
