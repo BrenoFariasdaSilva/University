@@ -13,6 +13,7 @@ setup:
 	pip install protobuf
 	pip install pymongo
 	pip install python-dotenv
+	pip install colorama
 
 remove:
 	rm *.pyc

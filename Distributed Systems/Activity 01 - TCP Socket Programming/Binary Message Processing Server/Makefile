@@ -4,5 +4,8 @@ run-server:
 run-client:
 	clear; python3 client.py
 
+setup:
+	pip install colorama
+
 remove:
 	rm *.pyc

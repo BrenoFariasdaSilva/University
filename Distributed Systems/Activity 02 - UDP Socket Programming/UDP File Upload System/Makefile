@@ -6,6 +6,7 @@ server:
 
 setup:
 	pip install tqdm
+	pip install colorama
 
 remove:
 	rm *.pyc
