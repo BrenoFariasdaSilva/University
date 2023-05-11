@@ -1,8 +1,12 @@
 syntax = "proto3";
 
-message clientRequest {
+message clientCRUDRequest {
 	string operation = 1;
-	string parameter = 2;
+	Movie movies = 2;
+}
+
+message MoviesList {
+   repeated Movie movies = 1;
 }
 
 message Movie {
@@ -21,8 +25,4 @@ message Movie {
 	string lastupdated = 13;
 	int32 year = 14;
 	string type = 15;
-}
-
-message MoviesList {
-    repeated Movie movies = 1;
 }
