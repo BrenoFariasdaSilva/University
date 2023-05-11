@@ -12,6 +12,7 @@ setup:
 	sudo apt install -y protobuf-compiler -y
 	pip install protobuf
 	pip install pymongo
+	pip install python-dotenv
 
 remove:
 	rm *.pyc
