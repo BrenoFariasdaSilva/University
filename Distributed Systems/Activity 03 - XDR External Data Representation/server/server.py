@@ -11,7 +11,36 @@ class backgroundColors: # Colors for the terminal
 	FAIL = "\033[91m" # Red
 
 SERVERADDRESS = ["localhost", 7000] # The server's address. The first element is the IP address, the second is the port.
-PACKAGESIZE = 1024 # The size of the data chunk to send in bytes
+CREATE_MOVIE = 1 # The create movie command
+GET_MOVIE = 2 # The get movie command
+UPDATE_MOVIE = 3 # The update movie command
+DELETE_MOVIE = 4 # The delete movie command
+GET_ACTOR_MOVIES = 5 # The get actor movies command
+GET_CATEGORY_MOVIES = 6 # The get category movies command
+
+# @brief: This function handles the client input
+# @param data: The data the client sent to handled
+# @param client_socket: The client socket object
+# @param client_address: The client address
+# @return: None
+def handle_client_input(data, client_socket, client_address):
+	data.ParseFromString(data) # Parse the data
+
+	match data.operation:
+		case CREATE_MOVIE.__str__():
+			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent create movie command")
+		case GET_MOVIE.__str__:
+			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get movie command")
+		case UPDATE_MOVIE.__str__():
+			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent update movie command")
+		case DELETE_MOVIE.__str__():
+			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent delete movie command")
+		case GET_ACTOR_MOVIES.__str__:
+			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get actor movies command")
+		case GET_CATEGORY_MOVIES.__str__:
+			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get category movies command")
+		case _:
+			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent unknown command")
 
 # @brief: This function handles the client input
 # @param client_socket: The client socket
@@ -21,10 +50,11 @@ def client_input(client_socket, client_address):
 	while True:
 		try:
 			# Receive the data from the client
-			data = client_socket.recv(PACKAGESIZE)
+			data = client_socket.recv()
 			if not data:
+				print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent empty data")
 				break
-			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent: {data.decode()}")
+			handle_client_input(data, client_socket, client_address) # Handle the client input
 			client_socket.sendall(data)
 		except ConnectionResetError:
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} disconnected")
