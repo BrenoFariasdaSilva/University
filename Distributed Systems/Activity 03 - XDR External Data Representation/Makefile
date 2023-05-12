@@ -6,7 +6,7 @@ database:
 
 protoc:
 	# This generates the movies_pb2.py file
-	protoc --python_out=. movies.proto
+	protoc --python_out=. server/movies.proto
 
 setup:
 	sudo apt install -y protobuf-compiler -y

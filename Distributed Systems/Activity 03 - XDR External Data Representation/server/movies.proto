@@ -5,6 +5,11 @@ message clientCRUDRequest {
 	Movie movies = 2;
 }
 
+message clientListRequest {
+	string operation = 1;
+	string argument = 2;
+}
+
 message MoviesList {
    repeated Movie movies = 1;
 }
