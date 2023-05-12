@@ -10,6 +10,10 @@ message clientListRequest {
 	string argument = 2;
 }
 
+message serverReponseCode {
+	string code = 1;
+}
+
 message MoviesList {
    repeated Movie movies = 1;
 }

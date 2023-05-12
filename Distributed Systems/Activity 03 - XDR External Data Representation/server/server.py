@@ -20,39 +20,46 @@ GET_CATEGORY_MOVIES = 6 # The get category movies command
 
 # @brief: This function creates a movie
 # @param movie: The movie protocol buffer
-# @return: None
+# @return: Status code
 def create_movie(movie):
 	print(f"Creating movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
 
 # @brief: This function gets a movie
 # @param movie: The movie protocol buffer
-# @return: None
+# @return: Status code
 def get_movie(movie):
 	print(f"Getting movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
 
 # @brief: This function updates a movie
 # @param movie: The movie protocol buffer
-# @return: None
+# @return: Status code
 def update_movie(movie):
 	print(f"Updating movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
 
 # @brief: This function deletes a movie
 # @param movie: The movie protocol buffer
-# @return: None
+# @return: Status code
 def delete_movie(movie):
 	print(f"Deleting movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
 
 # @brief: This function gets an actor's movies
 # @param movie: The movie protocol buffer
-# @return: None
+# @return: Movies List
 def get_actor_movies(movie):
 	print(f"Getting actor {backgroundColors.OKGREEN}{movie.actor}{Style.RESET_ALL}'s movies")
 
 # @brief: This function gets a category's movies
 # @param movie: The movie protocol buffer
-# @return: None
+# @return: Movies List
 def get_category_movies(movie):
 	print(f"Getting category {backgroundColors.OKGREEN}{movie.category}{Style.RESET_ALL}'s movies")
+
+# @brief: This function send the response to the client
+# @param client_socket: The client socket object
+# @param response: The response code
+# @return: None
+def send_response(client_socket, response):
+	client_socket.sendall(response) # Send the response to the client
 
 # @brief: This function handles the client input
 # @param data: The data the client sent to handled
@@ -65,6 +72,8 @@ def handle_client_input(data, client_socket, client_address):
 	match data.operation:
 		case CREATE_MOVIE.__str__():
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent create movie command")
+			response = create_movie(data.movie) # Create the movie
+			# send the response code to the client
 		case GET_MOVIE.__str__:
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get movie command")
 		case UPDATE_MOVIE.__str__():
@@ -77,6 +86,8 @@ def handle_client_input(data, client_socket, client_address):
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get category movies command")
 		case _:
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent unknown command")
+	send_response(client_socket, response)
+
 
 # @brief: This function handles the client input
 # @param client_socket: The client socket
