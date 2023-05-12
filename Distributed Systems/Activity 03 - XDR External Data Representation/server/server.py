@@ -11,6 +11,7 @@ class backgroundColors: # Colors for the terminal
 	FAIL = "\033[91m" # Red
 
 SERVERADDRESS = ["localhost", 7000] # The server's address. The first element is the IP address, the second is the port.
+CLIENT_REQUEST_SIZE = 1 # The client request size is 1 byte
 CREATE_MOVIE = 1 # The create movie command
 GET_MOVIE = 2 # The get movie command
 UPDATE_MOVIE = 3 # The update movie command
@@ -19,40 +20,45 @@ GET_ACTOR_MOVIES = 5 # The get actor movies command
 GET_CATEGORY_MOVIES = 6 # The get category movies command
 
 # @brief: This function creates a movie
-# @param movie: The movie protocol buffer
+
+# @brief: This function creates a movie
+# @param crud_request: The crud request protocol buffer
 # @return: Status code
-def create_movie(movie):
-	print(f"Creating movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
+def create_movie(crud_request):
+	print(f"Creating movie {backgroundColors.OKGREEN}{crud_request.movie.name}{Style.RESET_ALL}")
+	# Get the crud_request, access it's movie attribute which contains a object of the Movie type.
+
+
 
 # @brief: This function gets a movie
-# @param movie: The movie protocol buffer
+# @param crud_request: The crud request protocol buffer
 # @return: Status code
-def get_movie(movie):
-	print(f"Getting movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
+def get_movie(crud_request):
+	print(f"Getting movie {backgroundColors.OKGREEN}{crud_request.movie.name}{Style.RESET_ALL}")
 
 # @brief: This function updates a movie
-# @param movie: The movie protocol buffer
+# @param crud_request: The crud request protocol buffer
 # @return: Status code
-def update_movie(movie):
-	print(f"Updating movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
+def update_movie(crud_request):
+	print(f"Updating movie {backgroundColors.OKGREEN}{crud_request.movie.name}{Style.RESET_ALL}")
 
 # @brief: This function deletes a movie
-# @param movie: The movie protocol buffer
+# @param crud_request: The crud request protocol buffer
 # @return: Status code
-def delete_movie(movie):
-	print(f"Deleting movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
+def delete_movie(crud_request):
+	print(f"Deleting movie {backgroundColors.OKGREEN}{crud_request.movie.name}{Style.RESET_ALL}")
 
 # @brief: This function gets an actor's movies
-# @param movie: The movie protocol buffer
+# @param client_list_request: The client list request protocol buffer
 # @return: Movies List
-def get_actor_movies(movie):
-	print(f"Getting actor {backgroundColors.OKGREEN}{movie.actor}{Style.RESET_ALL}'s movies")
+def get_actor_movies(client_list_request):
+	print(f"Getting actor {backgroundColors.OKGREEN}{client_list_request.argument}{Style.RESET_ALL}'s movies")
 
 # @brief: This function gets a category's movies
 # @param movie: The movie protocol buffer
 # @return: Movies List
-def get_category_movies(movie):
-	print(f"Getting category {backgroundColors.OKGREEN}{movie.category}{Style.RESET_ALL}'s movies")
+def get_category_movies(client_list_request):
+	print(f"Getting category {backgroundColors.OKGREEN}{client_list_request.argument}{Style.RESET_ALL}'s movies")
 
 # @brief: This function send the response to the client
 # @param client_socket: The client socket object
@@ -67,27 +73,27 @@ def send_response(client_socket, response):
 # @param client_address: The client address
 # @return: None
 def handle_client_input(data, client_socket, client_address):
-	data.ParseFromString(data) # Parse the data
+	client_data = movies_pb2.clientRequest() # Create a client request object.
+	client_data.ParseFromString(data) # Parse the data
 
 	match data.operation:
-		case CREATE_MOVIE.__str__():
+		case CREATE_MOVIE.__str__(): # If the operation is create movie: 1
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent create movie command")
 			response = create_movie(data.movie) # Create the movie
 			# send the response code to the client
-		case GET_MOVIE.__str__:
+		case GET_MOVIE.__str__: # If the operation is get movie: 2
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get movie command")
-		case UPDATE_MOVIE.__str__():
+		case UPDATE_MOVIE.__str__(): # If the operation is update movie: 3
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent update movie command")
-		case DELETE_MOVIE.__str__():
+		case DELETE_MOVIE.__str__(): # If the operation is delete movie: 4
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent delete movie command")
-		case GET_ACTOR_MOVIES.__str__:
+		case GET_ACTOR_MOVIES.__str__: # If the operation is get actor movies: 5
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get actor movies command")
-		case GET_CATEGORY_MOVIES.__str__:
+		case GET_CATEGORY_MOVIES.__str__: # If the operation is get category movies: 6
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get category movies command")
-		case _:
+		case _: # If the operation is unknown
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent unknown command")
 	send_response(client_socket, response)
-
 
 # @brief: This function handles the client input
 # @param client_socket: The client socket
@@ -97,7 +103,7 @@ def client_input(client_socket, client_address):
 	while True:
 		try:
 			# Receive the data from the client
-			data = client_socket.recv()
+			data = client_socket.recv(CLIENT_REQUEST_SIZE)
 			if not data:
 				print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent empty data")
 				break
