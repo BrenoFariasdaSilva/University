@@ -3,13 +3,15 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from dotenv import load_dotenv
 
-# @brief: This is the main function of the server
-# @param: None
-# @return: None
+class database:
+	def __init__(self):
+		uri = f"mongodb+srv://{os.getenv('USERNAME')}:{os.getenv('PASSWORD')}@{os.getenv('DATABASE_URL')}"
+		self.client = MongoClient(uri, server_api=ServerApi('1'))
+		self.database = self.client["movies"]
+		self.collection = self.database["movies"]
 def main():
 	load_dotenv()
 
-	uri = f"mongodb+srv://{os.getenv('USERNAME')}:{os.getenv('PASSWORD')}@{os.getenv('DATABASE_URL')}"
 
 	# Create a new client and connect to the server
 	client = MongoClient(uri, server_api=ServerApi('1'))

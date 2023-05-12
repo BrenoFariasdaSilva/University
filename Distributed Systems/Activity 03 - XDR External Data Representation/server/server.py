@@ -22,11 +22,15 @@ GET_CATEGORY_MOVIES = 6 # The get category movies command
 # @brief: This function creates a movie
 
 # @brief: This function creates a movie
-# @param crud_request: The crud request protocol buffer
+# @param movie: movie protocol buffer
 # @return: Status code
-def create_movie(crud_request):
-	print(f"Creating movie {backgroundColors.OKGREEN}{crud_request.movie.name}{Style.RESET_ALL}")
+def create_movie(movie):
+	print(f"Creating movie {backgroundColors.OKGREEN}{movie.name}{Style.RESET_ALL}")
 	# Get the crud_request, access it's movie attribute which contains a object of the Movie type.
+	# Access the movie's attributes and print them.
+	# Return the status code
+	# movie_object = 
+
 
 
 
@@ -100,6 +104,7 @@ def handle_client_input(data, client_socket, client_address):
 # @param client_address: The client address
 # @return: None
 def client_input(client_socket, client_address):
+	# database_connection = 
 	while True:
 		try:
 			# Receive the data from the client
