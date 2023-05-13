@@ -5,7 +5,6 @@ database:
 	clear; python3 server/database.py
 
 protoc:
-	# This generates the movies_pb2.py file
 	protoc --python_out=. server/movies.proto
 
 setup:

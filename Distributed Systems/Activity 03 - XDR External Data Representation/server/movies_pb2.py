@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13server/movies.proto\">\n\x11\x63lientCRUDRequest\x12\x11\n\toperation\x18\x01 \x01(\t\x12\x16\n\x06movies\x18\x02 \x01(\x0b\x32\x06.Movie\"8\n\x11\x63lientListRequest\x12\x11\n\toperation\x18\x01 \x01(\t\x12\x10\n\x08\x61rgument\x18\x02 \x01(\t\"!\n\x11serverReponseCode\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\"$\n\nMoviesList\x12\x16\n\x06movies\x18\x01 \x03(\x0b\x32\x06.Movie\"\x85\x02\n\x05Movie\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04plot\x18\x02 \x01(\t\x12\x0e\n\x06genres\x18\x03 \x03(\t\x12\x0f\n\x07runtime\x18\x04 \x01(\x05\x12\x0c\n\x04\x63\x61st\x18\x05 \x03(\t\x12\x1a\n\x12num_mflix_comments\x18\x06 \x01(\t\x12\r\n\x05title\x18\x07 \x01(\t\x12\x10\n\x08\x66ullplot\x18\x08 \x01(\t\x12\x11\n\tcountries\x18\t \x03(\t\x12\x10\n\x08released\x18\n \x01(\t\x12\x11\n\tdirectors\x18\x0b \x03(\t\x12\r\n\x05rated\x18\x0c \x01(\t\x12\x13\n\x0blastupdated\x18\r \x01(\t\x12\x0c\n\x04year\x18\x0e \x01(\x05\x12\x0c\n\x04type\x18\x0f \x01(\tb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13server/movies.proto\"\"\n\rClientRequest\x12\x11\n\toperation\x18\x01 \x01(\t\"(\n\x11GetMovieOperation\x12\x13\n\x0bmovie_title\x18\x01 \x01(\t\"+\n\x14\x44\x65leteMovieOperation\x12\x13\n\x0bmovie_title\x18\x01 \x01(\t\"\"\n\x0eServerResponse\x12\x10\n\x08response\x18\x01 \x01(\t\"%\n\x13\x43lientListOperation\x12\x0e\n\x06\x66ilter\x18\x01 \x01(\t\"&\n\x0cServerListBy\x12\x16\n\x06movies\x18\x01 \x03(\x0b\x32\x06.Movie\"\x85\x02\n\x05Movie\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04plot\x18\x02 \x01(\t\x12\x0e\n\x06genres\x18\x03 \x03(\t\x12\x0f\n\x07runtime\x18\x04 \x01(\x05\x12\x0c\n\x04\x63\x61st\x18\x05 \x03(\t\x12\x1a\n\x12num_mflix_comments\x18\x06 \x01(\t\x12\r\n\x05title\x18\x07 \x01(\t\x12\x10\n\x08\x66ullplot\x18\x08 \x01(\t\x12\x11\n\tcountries\x18\t \x03(\t\x12\x10\n\x08released\x18\n \x01(\t\x12\x11\n\tdirectors\x18\x0b \x03(\t\x12\r\n\x05rated\x18\x0c \x01(\t\x12\x13\n\x0blastupdated\x18\r \x01(\t\x12\x0c\n\x04year\x18\x0e \x01(\x05\x12\x0c\n\x04type\x18\x0f \x01(\tb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -21,14 +21,18 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'server.movies_pb2', _global
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _globals['_CLIENTCRUDREQUEST']._serialized_start=23
-  _globals['_CLIENTCRUDREQUEST']._serialized_end=85
-  _globals['_CLIENTLISTREQUEST']._serialized_start=87
-  _globals['_CLIENTLISTREQUEST']._serialized_end=143
-  _globals['_SERVERREPONSECODE']._serialized_start=145
-  _globals['_SERVERREPONSECODE']._serialized_end=178
-  _globals['_MOVIESLIST']._serialized_start=180
-  _globals['_MOVIESLIST']._serialized_end=216
-  _globals['_MOVIE']._serialized_start=219
-  _globals['_MOVIE']._serialized_end=480
+  _globals['_CLIENTREQUEST']._serialized_start=23
+  _globals['_CLIENTREQUEST']._serialized_end=57
+  _globals['_GETMOVIEOPERATION']._serialized_start=59
+  _globals['_GETMOVIEOPERATION']._serialized_end=99
+  _globals['_DELETEMOVIEOPERATION']._serialized_start=101
+  _globals['_DELETEMOVIEOPERATION']._serialized_end=144
+  _globals['_SERVERRESPONSE']._serialized_start=146
+  _globals['_SERVERRESPONSE']._serialized_end=180
+  _globals['_CLIENTLISTOPERATION']._serialized_start=182
+  _globals['_CLIENTLISTOPERATION']._serialized_end=219
+  _globals['_SERVERLISTBY']._serialized_start=221
+  _globals['_SERVERLISTBY']._serialized_end=259
+  _globals['_MOVIE']._serialized_start=262
+  _globals['_MOVIE']._serialized_end=523
 # @@protoc_insertion_point(module_scope)

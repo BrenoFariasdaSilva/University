@@ -1,22 +1,26 @@
 syntax = "proto3";
 
-message clientRequest {
+message ClientRequest {
 	string operation = 1;
 }
 
-message clientCRUDRequest {
-	Movie movies = 1;
+message GetMovieOperation {
+	string movie_title = 1;
 }
 
-message serverResponse {
+message DeleteMovieOperation {
+	string movie_title = 1;
+}
+
+message ServerResponse {
 	string response = 1;
 }
 
-message clientListBy {
-   string listBy = 1;
+message ClientListOperation {
+   string filter = 1;
 }
 
-message serverListBy {
+message ServerListBy {
 	repeated Movie movies = 1;
 }
 
