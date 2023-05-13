@@ -144,9 +144,14 @@ def get_category_movies(client_socket, database):
 	list_movies_object = parse_list_object(movie_category) # Create a list by object
 
 	print(f"Getting category {backgroundColors.OKGREEN}{list_movies_object.filter}{Style.RESET_ALL}'s movies")
-	movies_list = database.listByCategory(list_movies_object.filter)
-	if movies_list is None:
+	movies = database.listByCategory(list_movies_object.filter)
+	if movies is None:
 		return FAILURE
+	movies_list = ""
+	for movie in movies:
+		print(f"{backgroundColors.OKGREEN}{movie.title}{Style.RESET_ALL}")
+		# append the movie marshalled to the movies list
+		movies_list += movie.SerializeToString()
 	return movies_list
 
 # @brief: This function send the response to the client
