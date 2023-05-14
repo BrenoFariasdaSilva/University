@@ -139,7 +139,7 @@ def get_actor_movies(client_socket, database):
 # @param database: The database object
 # @return: Movies List
 def get_category_movies(client_socket, database):
-	movie_category = get_client_packet(client_socket) # Get the movie category
+	movie_category = get_client_packet(client_socket) # Get the movie category5
 
 	list_movies_object = parse_list_object(movie_category) # Create a list by object
 
@@ -171,7 +171,7 @@ def handle_client_input(client_socket, client_address, database, client_request)
 	client_data = movies_pb2.clientRequest() # Create a client request object.
 	client_data.ParseFromString(client_request) # Parse the data
 
-	match client_request.operation:
+	match client_data.operation:
 		case CREATE_MOVIE.__str__(): # If the operation is create movie: 1
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent create movie command")
 			response = create_movie(client_socket, database) # Create the movie

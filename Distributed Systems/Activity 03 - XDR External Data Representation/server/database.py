@@ -23,7 +23,8 @@ class MongoDatabase:
 		return self.collection.find_one({"title": movie_title})
 	
 	def updateMovie(self, old_movie_object, new_movie_object):
-		return self.collection.update_one(old_movie_object, new_movie_object)
+		self.deleteMovie(old_movie_object["title"])
+		return self.createMovie(new_movie_object)
 
 	def deleteMovie(self, movie_title):
 		return self.collection.delete_one({"title": movie_title})

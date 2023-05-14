@@ -1,4 +1,5 @@
 make:
+	# Don't forget to check your .env file!
 	clear; python3 server/server.py
 
 database:
