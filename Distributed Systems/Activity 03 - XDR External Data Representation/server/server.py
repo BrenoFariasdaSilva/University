@@ -65,7 +65,7 @@ def get_client_packet(client_socket):
 # @param client_socket: The client socket object
 # @param database: The database object
 # @return: Status code
-def create_movie(client_socket, database):
+def createMovie(client_socket, database):
 	movie_string = get_client_packet(client_socket) # Get the movie object
 	movie_object = parse_movie_object(movie_string) # Create a movie object
 	print(f"Creating movie {backgroundColors.OKGREEN}{movie_object.name}{Style.RESET_ALL}")
@@ -78,12 +78,12 @@ def create_movie(client_socket, database):
 # @param client_socket: The client socket object
 # @param database: The database object
 # @return: Status code or movie object
-def get_movie(client_socket, database):
+def geMovie(client_socket, database):
 	movie_title = get_client_packet(client_socket) # Get the movie object
-	get_movie = parse_movie_object(movie_title) # Create a movie object
+	get_movie_object = parse_movie_object(movie_title) # Create a movie object
 
-	print(f"Getting movie {backgroundColors.OKGREEN}{get_movie.movie_title}{Style.RESET_ALL}")
-	response_object = database.getMovieByTitle(get_movie.movie_title)
+	print(f"Getting movie {backgroundColors.OKGREEN}{get_movie_object.movie_title}{Style.RESET_ALL}")
+	response_object = database.getMovieByTitle(get_movie_object.movie_title)
 	if response_object is None:
 		return FAILURE
 	return response_object
@@ -92,7 +92,7 @@ def get_movie(client_socket, database):
 # @param client_socket: The client socket object
 # @param database: The database object
 # @return: Status code or movie object
-def update_movie(client_socket, database):
+def updateMovie(client_socket, database):
 	old_movie_string = get_client_packet(client_socket) # Get the movie object
 	old_movie_object = parse_movie_object(old_movie_string) # Create a movie object
 
@@ -109,7 +109,7 @@ def update_movie(client_socket, database):
 # @param client_socket: The client socket object
 # @param database: The database object
 # @return: Status code
-def delete_movie(client_socket, database):
+def deleteMovie(client_socket, database):
 	movie_title = get_client_packet(client_socket) # Get the movie object
 	delete_object = parse_delete_object(movie_title) # Create a delete object
 
@@ -123,7 +123,7 @@ def delete_movie(client_socket, database):
 # @param client_socket: The client socket object
 # @param database: The database object
 # @return: Movies List
-def get_actor_movies(client_socket, database):
+def getMoviesByActor(client_socket, database):
 	actor_name_string = get_client_packet(client_socket) # Get the actor name
 
 	list_movies_object = parse_list_object(actor_name_string) # Create a list by object
@@ -138,7 +138,7 @@ def get_actor_movies(client_socket, database):
 # @param client_socket: The client socket object
 # @param database: The database object
 # @return: Movies List
-def get_category_movies(client_socket, database):
+def getMoviesByCategory(client_socket, database):
 	movie_category = get_client_packet(client_socket) # Get the movie category5
 
 	list_movies_object = parse_list_object(movie_category) # Create a list by object
@@ -159,7 +159,11 @@ def get_category_movies(client_socket, database):
 # @param response: The response code
 # @return: None
 def send_response(client_socket, response):
-	client_socket.sendall(response) # Send the response to the client
+	# Serialize the response to the protocol buffer
+	response_object = movies_pb2.serverResponse()
+	response_object.response = response
+	# Send the response to the client
+	client_socket.send(response_object.SerializeToString())
 
 # @brief: This function handles the client input
 # @param client_socket: The client socket object
@@ -174,23 +178,23 @@ def handle_client_input(client_socket, client_address, database, client_request)
 	match client_data.operation:
 		case CREATE_MOVIE.__str__(): # If the operation is create movie: 1
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent create movie command")
-			response = create_movie(client_socket, database) # Create the movie
+			response = createMovie(client_socket, database) # Create the movie
 			# send the response code to the client
 		case GET_MOVIE.__str__: # If the operation is get movie: 2
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get movie command")
-			response = get_movie(client_socket, database) # Get the movie
+			response = geMovie(client_socket, database) # Get the movie
 		case UPDATE_MOVIE.__str__(): # If the operation is update movie: 3
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent update movie command")
-			response = update_movie(client_socket, database) # Update the movie
+			response = updateMovie(client_socket, database) # Update the movie
 		case DELETE_MOVIE.__str__(): # If the operation is delete movie: 4
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent delete movie command")
-			response = delete_movie(client_socket, database) # Delete the movie
+			response = deleteMovie(client_socket, database) # Delete the movie
 		case GET_ACTOR_BY_MOVIES.__str__: # If the operation is get actor movies: 5
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get actor movies command")
-			response = get_actor_movies(client_socket, database) # Get the actor movies
+			response = getMoviesByActor(client_socket, database) # Get the actor movies
 		case GET_CATEGORY_BY_MOVIES.__str__: # If the operation is get category movies: 6
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get category movies command")
-			response = get_category_movies(client_socket, database) # Get the category movies
+			response = getMoviesByCategory(client_socket, database) # Get the category movies
 		case _: # If the operation is unknown
 			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent unknown command")
 	send_response(client_socket, response)
