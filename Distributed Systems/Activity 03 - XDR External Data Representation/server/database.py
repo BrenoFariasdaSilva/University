@@ -12,6 +12,9 @@ class MongoDatabase:
 		self.database = self.client["movies"]
 		self.collection = self.database["movies"]
 
+	def testConnection(self):
+		return self.client.server_info()
+
 	def createMovie(self, movie):
 		movie = json.loads(movie)
 		reponse_document = self.collection.insert_one(movie)
