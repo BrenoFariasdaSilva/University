@@ -51,6 +51,54 @@ public final class Movies {
       return new ClientRequest();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ClientRequest(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              operation_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Movies.internal_static_ClientRequest_descriptor;
@@ -65,8 +113,7 @@ public final class Movies {
     }
 
     public static final int OPERATION_FIELD_NUMBER = 1;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object operation_ = "";
+    private volatile java.lang.Object operation_;
     /**
      * <code>string operation = 1;</code>
      * @return The operation.
@@ -117,10 +164,10 @@ public final class Movies {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(operation_)) {
+      if (!getOperationBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, operation_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
     @java.lang.Override
@@ -129,10 +176,10 @@ public final class Movies {
       if (size != -1) return size;
 
       size = 0;
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(operation_)) {
+      if (!getOperationBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, operation_);
       }
-      size += getUnknownFields().getSerializedSize();
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -149,7 +196,7 @@ public final class Movies {
 
       if (!getOperation()
           .equals(other.getOperation())) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
@@ -162,7 +209,7 @@ public final class Movies {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + OPERATION_FIELD_NUMBER;
       hash = (53 * hash) + getOperation().hashCode();
-      hash = (29 * hash) + getUnknownFields().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -211,13 +258,11 @@ public final class Movies {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static Movies.ClientRequest parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static Movies.ClientRequest parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -281,19 +326,24 @@ public final class Movies {
 
       // Construct using Movies.ClientRequest.newBuilder()
       private Builder() {
-
+        maybeForceBuilderInitialization();
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        bitField0_ = 0;
         operation_ = "";
+
         return this;
       }
 
@@ -320,18 +370,43 @@ public final class Movies {
       @java.lang.Override
       public Movies.ClientRequest buildPartial() {
         Movies.ClientRequest result = new Movies.ClientRequest(this);
-        if (bitField0_ != 0) { buildPartial0(result); }
+        result.operation_ = operation_;
         onBuilt();
         return result;
       }
 
-      private void buildPartial0(Movies.ClientRequest result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.operation_ = operation_;
-        }
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
       }
-
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof Movies.ClientRequest) {
@@ -346,10 +421,9 @@ public final class Movies {
         if (other == Movies.ClientRequest.getDefaultInstance()) return this;
         if (!other.getOperation().isEmpty()) {
           operation_ = other.operation_;
-          bitField0_ |= 0x00000001;
           onChanged();
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -364,38 +438,19 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
+        Movies.ClientRequest parsedMessage = null;
         try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                operation_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 10
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (Movies.ClientRequest) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          onChanged();
-        } // finally
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
         return this;
       }
-      private int bitField0_;
 
       private java.lang.Object operation_ = "";
       /**
@@ -438,9 +493,11 @@ public final class Movies {
        */
       public Builder setOperation(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         operation_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -449,8 +506,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearOperation() {
+        
         operation_ = getDefaultInstance().getOperation();
-        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -461,10 +518,12 @@ public final class Movies {
        */
       public Builder setOperationBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         operation_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -501,18 +560,7 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
+        return new ClientRequest(input, extensionRegistry);
       }
     };
 
@@ -571,6 +619,54 @@ public final class Movies {
       return new GetMovieOperation();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private GetMovieOperation(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              movieTitle_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Movies.internal_static_GetMovieOperation_descriptor;
@@ -585,8 +681,7 @@ public final class Movies {
     }
 
     public static final int MOVIE_TITLE_FIELD_NUMBER = 1;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object movieTitle_ = "";
+    private volatile java.lang.Object movieTitle_;
     /**
      * <code>string movie_title = 1;</code>
      * @return The movieTitle.
@@ -637,10 +732,10 @@ public final class Movies {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(movieTitle_)) {
+      if (!getMovieTitleBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, movieTitle_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
     @java.lang.Override
@@ -649,10 +744,10 @@ public final class Movies {
       if (size != -1) return size;
 
       size = 0;
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(movieTitle_)) {
+      if (!getMovieTitleBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, movieTitle_);
       }
-      size += getUnknownFields().getSerializedSize();
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -669,7 +764,7 @@ public final class Movies {
 
       if (!getMovieTitle()
           .equals(other.getMovieTitle())) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
@@ -682,7 +777,7 @@ public final class Movies {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + MOVIE_TITLE_FIELD_NUMBER;
       hash = (53 * hash) + getMovieTitle().hashCode();
-      hash = (29 * hash) + getUnknownFields().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -731,13 +826,11 @@ public final class Movies {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static Movies.GetMovieOperation parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static Movies.GetMovieOperation parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -801,19 +894,24 @@ public final class Movies {
 
       // Construct using Movies.GetMovieOperation.newBuilder()
       private Builder() {
-
+        maybeForceBuilderInitialization();
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        bitField0_ = 0;
         movieTitle_ = "";
+
         return this;
       }
 
@@ -840,18 +938,43 @@ public final class Movies {
       @java.lang.Override
       public Movies.GetMovieOperation buildPartial() {
         Movies.GetMovieOperation result = new Movies.GetMovieOperation(this);
-        if (bitField0_ != 0) { buildPartial0(result); }
+        result.movieTitle_ = movieTitle_;
         onBuilt();
         return result;
       }
 
-      private void buildPartial0(Movies.GetMovieOperation result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.movieTitle_ = movieTitle_;
-        }
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
       }
-
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof Movies.GetMovieOperation) {
@@ -866,10 +989,9 @@ public final class Movies {
         if (other == Movies.GetMovieOperation.getDefaultInstance()) return this;
         if (!other.getMovieTitle().isEmpty()) {
           movieTitle_ = other.movieTitle_;
-          bitField0_ |= 0x00000001;
           onChanged();
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -884,38 +1006,19 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
+        Movies.GetMovieOperation parsedMessage = null;
         try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                movieTitle_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 10
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (Movies.GetMovieOperation) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          onChanged();
-        } // finally
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
         return this;
       }
-      private int bitField0_;
 
       private java.lang.Object movieTitle_ = "";
       /**
@@ -958,9 +1061,11 @@ public final class Movies {
        */
       public Builder setMovieTitle(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         movieTitle_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -969,8 +1074,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearMovieTitle() {
+        
         movieTitle_ = getDefaultInstance().getMovieTitle();
-        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -981,10 +1086,12 @@ public final class Movies {
        */
       public Builder setMovieTitleBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         movieTitle_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1021,18 +1128,7 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
+        return new GetMovieOperation(input, extensionRegistry);
       }
     };
 
@@ -1091,6 +1187,54 @@ public final class Movies {
       return new DeleteMovieOperation();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private DeleteMovieOperation(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              movieTitle_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Movies.internal_static_DeleteMovieOperation_descriptor;
@@ -1105,8 +1249,7 @@ public final class Movies {
     }
 
     public static final int MOVIE_TITLE_FIELD_NUMBER = 1;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object movieTitle_ = "";
+    private volatile java.lang.Object movieTitle_;
     /**
      * <code>string movie_title = 1;</code>
      * @return The movieTitle.
@@ -1157,10 +1300,10 @@ public final class Movies {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(movieTitle_)) {
+      if (!getMovieTitleBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, movieTitle_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
     @java.lang.Override
@@ -1169,10 +1312,10 @@ public final class Movies {
       if (size != -1) return size;
 
       size = 0;
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(movieTitle_)) {
+      if (!getMovieTitleBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, movieTitle_);
       }
-      size += getUnknownFields().getSerializedSize();
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -1189,7 +1332,7 @@ public final class Movies {
 
       if (!getMovieTitle()
           .equals(other.getMovieTitle())) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
@@ -1202,7 +1345,7 @@ public final class Movies {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + MOVIE_TITLE_FIELD_NUMBER;
       hash = (53 * hash) + getMovieTitle().hashCode();
-      hash = (29 * hash) + getUnknownFields().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -1251,13 +1394,11 @@ public final class Movies {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static Movies.DeleteMovieOperation parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static Movies.DeleteMovieOperation parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1321,19 +1462,24 @@ public final class Movies {
 
       // Construct using Movies.DeleteMovieOperation.newBuilder()
       private Builder() {
-
+        maybeForceBuilderInitialization();
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        bitField0_ = 0;
         movieTitle_ = "";
+
         return this;
       }
 
@@ -1360,18 +1506,43 @@ public final class Movies {
       @java.lang.Override
       public Movies.DeleteMovieOperation buildPartial() {
         Movies.DeleteMovieOperation result = new Movies.DeleteMovieOperation(this);
-        if (bitField0_ != 0) { buildPartial0(result); }
+        result.movieTitle_ = movieTitle_;
         onBuilt();
         return result;
       }
 
-      private void buildPartial0(Movies.DeleteMovieOperation result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.movieTitle_ = movieTitle_;
-        }
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
       }
-
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof Movies.DeleteMovieOperation) {
@@ -1386,10 +1557,9 @@ public final class Movies {
         if (other == Movies.DeleteMovieOperation.getDefaultInstance()) return this;
         if (!other.getMovieTitle().isEmpty()) {
           movieTitle_ = other.movieTitle_;
-          bitField0_ |= 0x00000001;
           onChanged();
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -1404,38 +1574,19 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
+        Movies.DeleteMovieOperation parsedMessage = null;
         try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                movieTitle_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 10
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (Movies.DeleteMovieOperation) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          onChanged();
-        } // finally
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
         return this;
       }
-      private int bitField0_;
 
       private java.lang.Object movieTitle_ = "";
       /**
@@ -1478,9 +1629,11 @@ public final class Movies {
        */
       public Builder setMovieTitle(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         movieTitle_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1489,8 +1642,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearMovieTitle() {
+        
         movieTitle_ = getDefaultInstance().getMovieTitle();
-        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -1501,10 +1654,12 @@ public final class Movies {
        */
       public Builder setMovieTitleBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         movieTitle_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -1541,18 +1696,7 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
+        return new DeleteMovieOperation(input, extensionRegistry);
       }
     };
 
@@ -1611,6 +1755,54 @@ public final class Movies {
       return new ServerResponse();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ServerResponse(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              response_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Movies.internal_static_ServerResponse_descriptor;
@@ -1625,8 +1817,7 @@ public final class Movies {
     }
 
     public static final int RESPONSE_FIELD_NUMBER = 1;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object response_ = "";
+    private volatile java.lang.Object response_;
     /**
      * <code>string response = 1;</code>
      * @return The response.
@@ -1677,10 +1868,10 @@ public final class Movies {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(response_)) {
+      if (!getResponseBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, response_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
     @java.lang.Override
@@ -1689,10 +1880,10 @@ public final class Movies {
       if (size != -1) return size;
 
       size = 0;
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(response_)) {
+      if (!getResponseBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, response_);
       }
-      size += getUnknownFields().getSerializedSize();
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -1709,7 +1900,7 @@ public final class Movies {
 
       if (!getResponse()
           .equals(other.getResponse())) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
@@ -1722,7 +1913,7 @@ public final class Movies {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + RESPONSE_FIELD_NUMBER;
       hash = (53 * hash) + getResponse().hashCode();
-      hash = (29 * hash) + getUnknownFields().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -1771,13 +1962,11 @@ public final class Movies {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static Movies.ServerResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static Movies.ServerResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1841,19 +2030,24 @@ public final class Movies {
 
       // Construct using Movies.ServerResponse.newBuilder()
       private Builder() {
-
+        maybeForceBuilderInitialization();
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        bitField0_ = 0;
         response_ = "";
+
         return this;
       }
 
@@ -1880,18 +2074,43 @@ public final class Movies {
       @java.lang.Override
       public Movies.ServerResponse buildPartial() {
         Movies.ServerResponse result = new Movies.ServerResponse(this);
-        if (bitField0_ != 0) { buildPartial0(result); }
+        result.response_ = response_;
         onBuilt();
         return result;
       }
 
-      private void buildPartial0(Movies.ServerResponse result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.response_ = response_;
-        }
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
       }
-
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof Movies.ServerResponse) {
@@ -1906,10 +2125,9 @@ public final class Movies {
         if (other == Movies.ServerResponse.getDefaultInstance()) return this;
         if (!other.getResponse().isEmpty()) {
           response_ = other.response_;
-          bitField0_ |= 0x00000001;
           onChanged();
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -1924,38 +2142,19 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
+        Movies.ServerResponse parsedMessage = null;
         try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                response_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 10
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (Movies.ServerResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          onChanged();
-        } // finally
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
         return this;
       }
-      private int bitField0_;
 
       private java.lang.Object response_ = "";
       /**
@@ -1998,9 +2197,11 @@ public final class Movies {
        */
       public Builder setResponse(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         response_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -2009,8 +2210,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearResponse() {
+        
         response_ = getDefaultInstance().getResponse();
-        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -2021,10 +2222,12 @@ public final class Movies {
        */
       public Builder setResponseBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         response_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -2061,18 +2264,7 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
+        return new ServerResponse(input, extensionRegistry);
       }
     };
 
@@ -2131,6 +2323,54 @@ public final class Movies {
       return new ClientListOperation();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ClientListOperation(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              filter_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Movies.internal_static_ClientListOperation_descriptor;
@@ -2145,8 +2385,7 @@ public final class Movies {
     }
 
     public static final int FILTER_FIELD_NUMBER = 1;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object filter_ = "";
+    private volatile java.lang.Object filter_;
     /**
      * <code>string filter = 1;</code>
      * @return The filter.
@@ -2197,10 +2436,10 @@ public final class Movies {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(filter_)) {
+      if (!getFilterBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, filter_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
     @java.lang.Override
@@ -2209,10 +2448,10 @@ public final class Movies {
       if (size != -1) return size;
 
       size = 0;
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(filter_)) {
+      if (!getFilterBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, filter_);
       }
-      size += getUnknownFields().getSerializedSize();
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -2229,7 +2468,7 @@ public final class Movies {
 
       if (!getFilter()
           .equals(other.getFilter())) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
@@ -2242,7 +2481,7 @@ public final class Movies {
       hash = (19 * hash) + getDescriptor().hashCode();
       hash = (37 * hash) + FILTER_FIELD_NUMBER;
       hash = (53 * hash) + getFilter().hashCode();
-      hash = (29 * hash) + getUnknownFields().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -2291,13 +2530,11 @@ public final class Movies {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static Movies.ClientListOperation parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static Movies.ClientListOperation parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2361,19 +2598,24 @@ public final class Movies {
 
       // Construct using Movies.ClientListOperation.newBuilder()
       private Builder() {
-
+        maybeForceBuilderInitialization();
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        bitField0_ = 0;
         filter_ = "";
+
         return this;
       }
 
@@ -2400,18 +2642,43 @@ public final class Movies {
       @java.lang.Override
       public Movies.ClientListOperation buildPartial() {
         Movies.ClientListOperation result = new Movies.ClientListOperation(this);
-        if (bitField0_ != 0) { buildPartial0(result); }
+        result.filter_ = filter_;
         onBuilt();
         return result;
       }
 
-      private void buildPartial0(Movies.ClientListOperation result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.filter_ = filter_;
-        }
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
       }
-
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof Movies.ClientListOperation) {
@@ -2426,10 +2693,9 @@ public final class Movies {
         if (other == Movies.ClientListOperation.getDefaultInstance()) return this;
         if (!other.getFilter().isEmpty()) {
           filter_ = other.filter_;
-          bitField0_ |= 0x00000001;
           onChanged();
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -2444,38 +2710,19 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
+        Movies.ClientListOperation parsedMessage = null;
         try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                filter_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 10
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (Movies.ClientListOperation) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          onChanged();
-        } // finally
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
         return this;
       }
-      private int bitField0_;
 
       private java.lang.Object filter_ = "";
       /**
@@ -2518,9 +2765,11 @@ public final class Movies {
        */
       public Builder setFilter(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         filter_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -2529,8 +2778,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearFilter() {
+        
         filter_ = getDefaultInstance().getFilter();
-        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -2541,10 +2790,12 @@ public final class Movies {
        */
       public Builder setFilterBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         filter_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -2581,18 +2832,7 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
+        return new ClientListOperation(input, extensionRegistry);
       }
     };
 
@@ -2663,6 +2903,61 @@ public final class Movies {
       return new ServerListBy();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ServerListBy(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                movies_ = new java.util.ArrayList<Movies.Movie>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              movies_.add(
+                  input.readMessage(Movies.Movie.parser(), extensionRegistry));
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+          movies_ = java.util.Collections.unmodifiableList(movies_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Movies.internal_static_ServerListBy_descriptor;
@@ -2677,7 +2972,6 @@ public final class Movies {
     }
 
     public static final int MOVIES_FIELD_NUMBER = 1;
-    @SuppressWarnings("serial")
     private java.util.List<Movies.Movie> movies_;
     /**
      * <code>repeated .Movie movies = 1;</code>
@@ -2734,7 +3028,7 @@ public final class Movies {
       for (int i = 0; i < movies_.size(); i++) {
         output.writeMessage(1, movies_.get(i));
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
     @java.lang.Override
@@ -2747,7 +3041,7 @@ public final class Movies {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, movies_.get(i));
       }
-      size += getUnknownFields().getSerializedSize();
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -2764,7 +3058,7 @@ public final class Movies {
 
       if (!getMoviesList()
           .equals(other.getMoviesList())) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
@@ -2779,7 +3073,7 @@ public final class Movies {
         hash = (37 * hash) + MOVIES_FIELD_NUMBER;
         hash = (53 * hash) + getMoviesList().hashCode();
       }
-      hash = (29 * hash) + getUnknownFields().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -2828,13 +3122,11 @@ public final class Movies {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static Movies.ServerListBy parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static Movies.ServerListBy parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2898,25 +3190,29 @@ public final class Movies {
 
       // Construct using Movies.ServerListBy.newBuilder()
       private Builder() {
-
+        maybeForceBuilderInitialization();
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getMoviesFieldBuilder();
+        }
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        bitField0_ = 0;
         if (moviesBuilder_ == null) {
           movies_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
-          movies_ = null;
           moviesBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
 
@@ -2943,13 +3239,7 @@ public final class Movies {
       @java.lang.Override
       public Movies.ServerListBy buildPartial() {
         Movies.ServerListBy result = new Movies.ServerListBy(this);
-        buildPartialRepeatedFields(result);
-        if (bitField0_ != 0) { buildPartial0(result); }
-        onBuilt();
-        return result;
-      }
-
-      private void buildPartialRepeatedFields(Movies.ServerListBy result) {
+        int from_bitField0_ = bitField0_;
         if (moviesBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0)) {
             movies_ = java.util.Collections.unmodifiableList(movies_);
@@ -2959,12 +3249,42 @@ public final class Movies {
         } else {
           result.movies_ = moviesBuilder_.build();
         }
+        onBuilt();
+        return result;
       }
 
-      private void buildPartial0(Movies.ServerListBy result) {
-        int from_bitField0_ = bitField0_;
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
       }
-
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof Movies.ServerListBy) {
@@ -3003,7 +3323,7 @@ public final class Movies {
             }
           }
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -3018,43 +3338,17 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
+        Movies.ServerListBy parsedMessage = null;
         try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                Movies.Movie m =
-                    input.readMessage(
-                        Movies.Movie.parser(),
-                        extensionRegistry);
-                if (moviesBuilder_ == null) {
-                  ensureMoviesIsMutable();
-                  movies_.add(m);
-                } else {
-                  moviesBuilder_.addMessage(m);
-                }
-                break;
-              } // case 10
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (Movies.ServerListBy) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          onChanged();
-        } // finally
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
         return this;
       }
       private int bitField0_;
@@ -3331,18 +3625,7 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
+        return new ServerListBy(input, extensionRegistry);
       }
     };
 
@@ -3391,29 +3674,16 @@ public final class Movies {
         getPlotBytes();
 
     /**
-     * <code>repeated string genres = 3;</code>
-     * @return A list containing the genres.
+     * <code>string genre = 3;</code>
+     * @return The genre.
      */
-    java.util.List<java.lang.String>
-        getGenresList();
+    java.lang.String getGenre();
     /**
-     * <code>repeated string genres = 3;</code>
-     * @return The count of genres.
-     */
-    int getGenresCount();
-    /**
-     * <code>repeated string genres = 3;</code>
-     * @param index The index of the element to return.
-     * @return The genres at the given index.
-     */
-    java.lang.String getGenres(int index);
-    /**
-     * <code>repeated string genres = 3;</code>
-     * @param index The index of the value to return.
-     * @return The bytes of the genres at the given index.
+     * <code>string genre = 3;</code>
+     * @return The bytes for genre.
      */
     com.google.protobuf.ByteString
-        getGenresBytes(int index);
+        getGenreBytes();
 
     /**
      * <code>int32 runtime = 4;</code>
@@ -3601,18 +3871,14 @@ public final class Movies {
     private Movie() {
       id_ = "";
       plot_ = "";
-      genres_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-      cast_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      genre_ = "";
+      cast_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       numMflixComments_ = "";
       title_ = "";
       fullplot_ = "";
-      countries_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      countries_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       released_ = "";
-      directors_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      directors_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       rated_ = "";
       lastupdated_ = "";
       type_ = "";
@@ -3625,6 +3891,155 @@ public final class Movies {
       return new Movie();
     }
 
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Movie(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              id_ = s;
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              plot_ = s;
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              genre_ = s;
+              break;
+            }
+            case 32: {
+
+              runtime_ = input.readInt32();
+              break;
+            }
+            case 42: {
+              java.lang.String s = input.readStringRequireUtf8();
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                cast_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              cast_.add(s);
+              break;
+            }
+            case 50: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              numMflixComments_ = s;
+              break;
+            }
+            case 58: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              title_ = s;
+              break;
+            }
+            case 66: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              fullplot_ = s;
+              break;
+            }
+            case 74: {
+              java.lang.String s = input.readStringRequireUtf8();
+              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
+                countries_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              countries_.add(s);
+              break;
+            }
+            case 82: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              released_ = s;
+              break;
+            }
+            case 90: {
+              java.lang.String s = input.readStringRequireUtf8();
+              if (!((mutable_bitField0_ & 0x00000004) != 0)) {
+                directors_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              directors_.add(s);
+              break;
+            }
+            case 98: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              rated_ = s;
+              break;
+            }
+            case 106: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              lastupdated_ = s;
+              break;
+            }
+            case 112: {
+
+              year_ = input.readInt32();
+              break;
+            }
+            case 122: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              type_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+          cast_ = cast_.getUnmodifiableView();
+        }
+        if (((mutable_bitField0_ & 0x00000002) != 0)) {
+          countries_ = countries_.getUnmodifiableView();
+        }
+        if (((mutable_bitField0_ & 0x00000004) != 0)) {
+          directors_ = directors_.getUnmodifiableView();
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return Movies.internal_static_Movie_descriptor;
@@ -3639,8 +4054,7 @@ public final class Movies {
     }
 
     public static final int ID_FIELD_NUMBER = 1;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object id_ = "";
+    private volatile java.lang.Object id_;
     /**
      * <code>string id = 1;</code>
      * @return The id.
@@ -3678,8 +4092,7 @@ public final class Movies {
     }
 
     public static final int PLOT_FIELD_NUMBER = 2;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object plot_ = "";
+    private volatile java.lang.Object plot_;
     /**
      * <code>string plot = 2;</code>
      * @return The plot.
@@ -3716,45 +4129,46 @@ public final class Movies {
       }
     }
 
-    public static final int GENRES_FIELD_NUMBER = 3;
-    @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList genres_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    public static final int GENRE_FIELD_NUMBER = 3;
+    private volatile java.lang.Object genre_;
     /**
-     * <code>repeated string genres = 3;</code>
-     * @return A list containing the genres.
+     * <code>string genre = 3;</code>
+     * @return The genre.
      */
-    public com.google.protobuf.ProtocolStringList
-        getGenresList() {
-      return genres_;
+    @java.lang.Override
+    public java.lang.String getGenre() {
+      java.lang.Object ref = genre_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        genre_ = s;
+        return s;
+      }
     }
     /**
-     * <code>repeated string genres = 3;</code>
-     * @return The count of genres.
+     * <code>string genre = 3;</code>
+     * @return The bytes for genre.
      */
-    public int getGenresCount() {
-      return genres_.size();
-    }
-    /**
-     * <code>repeated string genres = 3;</code>
-     * @param index The index of the element to return.
-     * @return The genres at the given index.
-     */
-    public java.lang.String getGenres(int index) {
-      return genres_.get(index);
-    }
-    /**
-     * <code>repeated string genres = 3;</code>
-     * @param index The index of the value to return.
-     * @return The bytes of the genres at the given index.
-     */
+    @java.lang.Override
     public com.google.protobuf.ByteString
-        getGenresBytes(int index) {
-      return genres_.getByteString(index);
+        getGenreBytes() {
+      java.lang.Object ref = genre_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        genre_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int RUNTIME_FIELD_NUMBER = 4;
-    private int runtime_ = 0;
+    private int runtime_;
     /**
      * <code>int32 runtime = 4;</code>
      * @return The runtime.
@@ -3765,9 +4179,7 @@ public final class Movies {
     }
 
     public static final int CAST_FIELD_NUMBER = 5;
-    @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList cast_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList cast_;
     /**
      * <code>repeated string cast = 5;</code>
      * @return A list containing the cast.
@@ -3802,8 +4214,7 @@ public final class Movies {
     }
 
     public static final int NUM_MFLIX_COMMENTS_FIELD_NUMBER = 6;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object numMflixComments_ = "";
+    private volatile java.lang.Object numMflixComments_;
     /**
      * <code>string num_mflix_comments = 6;</code>
      * @return The numMflixComments.
@@ -3841,8 +4252,7 @@ public final class Movies {
     }
 
     public static final int TITLE_FIELD_NUMBER = 7;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object title_ = "";
+    private volatile java.lang.Object title_;
     /**
      * <code>string title = 7;</code>
      * @return The title.
@@ -3880,8 +4290,7 @@ public final class Movies {
     }
 
     public static final int FULLPLOT_FIELD_NUMBER = 8;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object fullplot_ = "";
+    private volatile java.lang.Object fullplot_;
     /**
      * <code>string fullplot = 8;</code>
      * @return The fullplot.
@@ -3919,9 +4328,7 @@ public final class Movies {
     }
 
     public static final int COUNTRIES_FIELD_NUMBER = 9;
-    @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList countries_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList countries_;
     /**
      * <code>repeated string countries = 9;</code>
      * @return A list containing the countries.
@@ -3956,8 +4363,7 @@ public final class Movies {
     }
 
     public static final int RELEASED_FIELD_NUMBER = 10;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object released_ = "";
+    private volatile java.lang.Object released_;
     /**
      * <code>string released = 10;</code>
      * @return The released.
@@ -3995,9 +4401,7 @@ public final class Movies {
     }
 
     public static final int DIRECTORS_FIELD_NUMBER = 11;
-    @SuppressWarnings("serial")
-    private com.google.protobuf.LazyStringArrayList directors_ =
-        com.google.protobuf.LazyStringArrayList.emptyList();
+    private com.google.protobuf.LazyStringList directors_;
     /**
      * <code>repeated string directors = 11;</code>
      * @return A list containing the directors.
@@ -4032,8 +4436,7 @@ public final class Movies {
     }
 
     public static final int RATED_FIELD_NUMBER = 12;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object rated_ = "";
+    private volatile java.lang.Object rated_;
     /**
      * <code>string rated = 12;</code>
      * @return The rated.
@@ -4071,8 +4474,7 @@ public final class Movies {
     }
 
     public static final int LASTUPDATED_FIELD_NUMBER = 13;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object lastupdated_ = "";
+    private volatile java.lang.Object lastupdated_;
     /**
      * <code>string lastupdated = 13;</code>
      * @return The lastupdated.
@@ -4110,7 +4512,7 @@ public final class Movies {
     }
 
     public static final int YEAR_FIELD_NUMBER = 14;
-    private int year_ = 0;
+    private int year_;
     /**
      * <code>int32 year = 14;</code>
      * @return The year.
@@ -4121,8 +4523,7 @@ public final class Movies {
     }
 
     public static final int TYPE_FIELD_NUMBER = 15;
-    @SuppressWarnings("serial")
-    private volatile java.lang.Object type_ = "";
+    private volatile java.lang.Object type_;
     /**
      * <code>string type = 15;</code>
      * @return The type.
@@ -4173,14 +4574,14 @@ public final class Movies {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(id_)) {
+      if (!getIdBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 1, id_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(plot_)) {
+      if (!getPlotBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, plot_);
       }
-      for (int i = 0; i < genres_.size(); i++) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, genres_.getRaw(i));
+      if (!getGenreBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, genre_);
       }
       if (runtime_ != 0) {
         output.writeInt32(4, runtime_);
@@ -4188,37 +4589,37 @@ public final class Movies {
       for (int i = 0; i < cast_.size(); i++) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, cast_.getRaw(i));
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(numMflixComments_)) {
+      if (!getNumMflixCommentsBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 6, numMflixComments_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(title_)) {
+      if (!getTitleBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 7, title_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(fullplot_)) {
+      if (!getFullplotBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 8, fullplot_);
       }
       for (int i = 0; i < countries_.size(); i++) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 9, countries_.getRaw(i));
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(released_)) {
+      if (!getReleasedBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 10, released_);
       }
       for (int i = 0; i < directors_.size(); i++) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 11, directors_.getRaw(i));
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(rated_)) {
+      if (!getRatedBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 12, rated_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lastupdated_)) {
+      if (!getLastupdatedBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 13, lastupdated_);
       }
       if (year_ != 0) {
         output.writeInt32(14, year_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
+      if (!getTypeBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 15, type_);
       }
-      getUnknownFields().writeTo(output);
+      unknownFields.writeTo(output);
     }
 
     @java.lang.Override
@@ -4227,19 +4628,14 @@ public final class Movies {
       if (size != -1) return size;
 
       size = 0;
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(id_)) {
+      if (!getIdBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, id_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(plot_)) {
+      if (!getPlotBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, plot_);
       }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < genres_.size(); i++) {
-          dataSize += computeStringSizeNoTag(genres_.getRaw(i));
-        }
-        size += dataSize;
-        size += 1 * getGenresList().size();
+      if (!getGenreBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, genre_);
       }
       if (runtime_ != 0) {
         size += com.google.protobuf.CodedOutputStream
@@ -4253,13 +4649,13 @@ public final class Movies {
         size += dataSize;
         size += 1 * getCastList().size();
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(numMflixComments_)) {
+      if (!getNumMflixCommentsBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, numMflixComments_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(title_)) {
+      if (!getTitleBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, title_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(fullplot_)) {
+      if (!getFullplotBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(8, fullplot_);
       }
       {
@@ -4270,7 +4666,7 @@ public final class Movies {
         size += dataSize;
         size += 1 * getCountriesList().size();
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(released_)) {
+      if (!getReleasedBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(10, released_);
       }
       {
@@ -4281,20 +4677,20 @@ public final class Movies {
         size += dataSize;
         size += 1 * getDirectorsList().size();
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(rated_)) {
+      if (!getRatedBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, rated_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(lastupdated_)) {
+      if (!getLastupdatedBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(13, lastupdated_);
       }
       if (year_ != 0) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(14, year_);
       }
-      if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(type_)) {
+      if (!getTypeBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(15, type_);
       }
-      size += getUnknownFields().getSerializedSize();
+      size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -4313,8 +4709,8 @@ public final class Movies {
           .equals(other.getId())) return false;
       if (!getPlot()
           .equals(other.getPlot())) return false;
-      if (!getGenresList()
-          .equals(other.getGenresList())) return false;
+      if (!getGenre()
+          .equals(other.getGenre())) return false;
       if (getRuntime()
           != other.getRuntime()) return false;
       if (!getCastList()
@@ -4339,7 +4735,7 @@ public final class Movies {
           != other.getYear()) return false;
       if (!getType()
           .equals(other.getType())) return false;
-      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
 
@@ -4354,10 +4750,8 @@ public final class Movies {
       hash = (53 * hash) + getId().hashCode();
       hash = (37 * hash) + PLOT_FIELD_NUMBER;
       hash = (53 * hash) + getPlot().hashCode();
-      if (getGenresCount() > 0) {
-        hash = (37 * hash) + GENRES_FIELD_NUMBER;
-        hash = (53 * hash) + getGenresList().hashCode();
-      }
+      hash = (37 * hash) + GENRE_FIELD_NUMBER;
+      hash = (53 * hash) + getGenre().hashCode();
       hash = (37 * hash) + RUNTIME_FIELD_NUMBER;
       hash = (53 * hash) + getRuntime();
       if (getCastCount() > 0) {
@@ -4388,7 +4782,7 @@ public final class Movies {
       hash = (53 * hash) + getYear();
       hash = (37 * hash) + TYPE_FIELD_NUMBER;
       hash = (53 * hash) + getType().hashCode();
-      hash = (29 * hash) + getUnknownFields().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -4437,13 +4831,11 @@ public final class Movies {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-
     public static Movies.Movie parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-
     public static Movies.Movie parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -4507,37 +4899,52 @@ public final class Movies {
 
       // Construct using Movies.Movie.newBuilder()
       private Builder() {
-
+        maybeForceBuilderInitialization();
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        bitField0_ = 0;
         id_ = "";
+
         plot_ = "";
-        genres_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+
+        genre_ = "";
+
         runtime_ = 0;
-        cast_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+
+        cast_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
         numMflixComments_ = "";
+
         title_ = "";
+
         fullplot_ = "";
-        countries_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+
+        countries_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
         released_ = "";
-        directors_ =
-            com.google.protobuf.LazyStringArrayList.emptyList();
+
+        directors_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000004);
         rated_ = "";
+
         lastupdated_ = "";
+
         year_ = 0;
+
         type_ = "";
+
         return this;
       }
 
@@ -4564,64 +4971,70 @@ public final class Movies {
       @java.lang.Override
       public Movies.Movie buildPartial() {
         Movies.Movie result = new Movies.Movie(this);
-        if (bitField0_ != 0) { buildPartial0(result); }
+        int from_bitField0_ = bitField0_;
+        result.id_ = id_;
+        result.plot_ = plot_;
+        result.genre_ = genre_;
+        result.runtime_ = runtime_;
+        if (((bitField0_ & 0x00000001) != 0)) {
+          cast_ = cast_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.cast_ = cast_;
+        result.numMflixComments_ = numMflixComments_;
+        result.title_ = title_;
+        result.fullplot_ = fullplot_;
+        if (((bitField0_ & 0x00000002) != 0)) {
+          countries_ = countries_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.countries_ = countries_;
+        result.released_ = released_;
+        if (((bitField0_ & 0x00000004) != 0)) {
+          directors_ = directors_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000004);
+        }
+        result.directors_ = directors_;
+        result.rated_ = rated_;
+        result.lastupdated_ = lastupdated_;
+        result.year_ = year_;
+        result.type_ = type_;
         onBuilt();
         return result;
       }
 
-      private void buildPartial0(Movies.Movie result) {
-        int from_bitField0_ = bitField0_;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          result.id_ = id_;
-        }
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          result.plot_ = plot_;
-        }
-        if (((from_bitField0_ & 0x00000004) != 0)) {
-          genres_.makeImmutable();
-          result.genres_ = genres_;
-        }
-        if (((from_bitField0_ & 0x00000008) != 0)) {
-          result.runtime_ = runtime_;
-        }
-        if (((from_bitField0_ & 0x00000010) != 0)) {
-          cast_.makeImmutable();
-          result.cast_ = cast_;
-        }
-        if (((from_bitField0_ & 0x00000020) != 0)) {
-          result.numMflixComments_ = numMflixComments_;
-        }
-        if (((from_bitField0_ & 0x00000040) != 0)) {
-          result.title_ = title_;
-        }
-        if (((from_bitField0_ & 0x00000080) != 0)) {
-          result.fullplot_ = fullplot_;
-        }
-        if (((from_bitField0_ & 0x00000100) != 0)) {
-          countries_.makeImmutable();
-          result.countries_ = countries_;
-        }
-        if (((from_bitField0_ & 0x00000200) != 0)) {
-          result.released_ = released_;
-        }
-        if (((from_bitField0_ & 0x00000400) != 0)) {
-          directors_.makeImmutable();
-          result.directors_ = directors_;
-        }
-        if (((from_bitField0_ & 0x00000800) != 0)) {
-          result.rated_ = rated_;
-        }
-        if (((from_bitField0_ & 0x00001000) != 0)) {
-          result.lastupdated_ = lastupdated_;
-        }
-        if (((from_bitField0_ & 0x00002000) != 0)) {
-          result.year_ = year_;
-        }
-        if (((from_bitField0_ & 0x00004000) != 0)) {
-          result.type_ = type_;
-        }
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
       }
-
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
       @java.lang.Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof Movies.Movie) {
@@ -4636,22 +5049,14 @@ public final class Movies {
         if (other == Movies.Movie.getDefaultInstance()) return this;
         if (!other.getId().isEmpty()) {
           id_ = other.id_;
-          bitField0_ |= 0x00000001;
           onChanged();
         }
         if (!other.getPlot().isEmpty()) {
           plot_ = other.plot_;
-          bitField0_ |= 0x00000002;
           onChanged();
         }
-        if (!other.genres_.isEmpty()) {
-          if (genres_.isEmpty()) {
-            genres_ = other.genres_;
-            bitField0_ |= 0x00000004;
-          } else {
-            ensureGenresIsMutable();
-            genres_.addAll(other.genres_);
-          }
+        if (!other.getGenre().isEmpty()) {
+          genre_ = other.genre_;
           onChanged();
         }
         if (other.getRuntime() != 0) {
@@ -4660,7 +5065,7 @@ public final class Movies {
         if (!other.cast_.isEmpty()) {
           if (cast_.isEmpty()) {
             cast_ = other.cast_;
-            bitField0_ |= 0x00000010;
+            bitField0_ = (bitField0_ & ~0x00000001);
           } else {
             ensureCastIsMutable();
             cast_.addAll(other.cast_);
@@ -4669,23 +5074,20 @@ public final class Movies {
         }
         if (!other.getNumMflixComments().isEmpty()) {
           numMflixComments_ = other.numMflixComments_;
-          bitField0_ |= 0x00000020;
           onChanged();
         }
         if (!other.getTitle().isEmpty()) {
           title_ = other.title_;
-          bitField0_ |= 0x00000040;
           onChanged();
         }
         if (!other.getFullplot().isEmpty()) {
           fullplot_ = other.fullplot_;
-          bitField0_ |= 0x00000080;
           onChanged();
         }
         if (!other.countries_.isEmpty()) {
           if (countries_.isEmpty()) {
             countries_ = other.countries_;
-            bitField0_ |= 0x00000100;
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
             ensureCountriesIsMutable();
             countries_.addAll(other.countries_);
@@ -4694,13 +5096,12 @@ public final class Movies {
         }
         if (!other.getReleased().isEmpty()) {
           released_ = other.released_;
-          bitField0_ |= 0x00000200;
           onChanged();
         }
         if (!other.directors_.isEmpty()) {
           if (directors_.isEmpty()) {
             directors_ = other.directors_;
-            bitField0_ |= 0x00000400;
+            bitField0_ = (bitField0_ & ~0x00000004);
           } else {
             ensureDirectorsIsMutable();
             directors_.addAll(other.directors_);
@@ -4709,12 +5110,10 @@ public final class Movies {
         }
         if (!other.getRated().isEmpty()) {
           rated_ = other.rated_;
-          bitField0_ |= 0x00000800;
           onChanged();
         }
         if (!other.getLastupdated().isEmpty()) {
           lastupdated_ = other.lastupdated_;
-          bitField0_ |= 0x00001000;
           onChanged();
         }
         if (other.getYear() != 0) {
@@ -4722,10 +5121,9 @@ public final class Movies {
         }
         if (!other.getType().isEmpty()) {
           type_ = other.type_;
-          bitField0_ |= 0x00004000;
           onChanged();
         }
-        this.mergeUnknownFields(other.getUnknownFields());
+        this.mergeUnknownFields(other.unknownFields);
         onChanged();
         return this;
       }
@@ -4740,109 +5138,17 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
+        Movies.Movie parsedMessage = null;
         try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                id_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000001;
-                break;
-              } // case 10
-              case 18: {
-                plot_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000002;
-                break;
-              } // case 18
-              case 26: {
-                java.lang.String s = input.readStringRequireUtf8();
-                ensureGenresIsMutable();
-                genres_.add(s);
-                break;
-              } // case 26
-              case 32: {
-                runtime_ = input.readInt32();
-                bitField0_ |= 0x00000008;
-                break;
-              } // case 32
-              case 42: {
-                java.lang.String s = input.readStringRequireUtf8();
-                ensureCastIsMutable();
-                cast_.add(s);
-                break;
-              } // case 42
-              case 50: {
-                numMflixComments_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000020;
-                break;
-              } // case 50
-              case 58: {
-                title_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000040;
-                break;
-              } // case 58
-              case 66: {
-                fullplot_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000080;
-                break;
-              } // case 66
-              case 74: {
-                java.lang.String s = input.readStringRequireUtf8();
-                ensureCountriesIsMutable();
-                countries_.add(s);
-                break;
-              } // case 74
-              case 82: {
-                released_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000200;
-                break;
-              } // case 82
-              case 90: {
-                java.lang.String s = input.readStringRequireUtf8();
-                ensureDirectorsIsMutable();
-                directors_.add(s);
-                break;
-              } // case 90
-              case 98: {
-                rated_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00000800;
-                break;
-              } // case 98
-              case 106: {
-                lastupdated_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00001000;
-                break;
-              } // case 106
-              case 112: {
-                year_ = input.readInt32();
-                bitField0_ |= 0x00002000;
-                break;
-              } // case 112
-              case 122: {
-                type_ = input.readStringRequireUtf8();
-                bitField0_ |= 0x00004000;
-                break;
-              } // case 122
-              default: {
-                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                  done = true; // was an endgroup tag
-                }
-                break;
-              } // default:
-            } // switch (tag)
-          } // while (!done)
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (Movies.Movie) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          onChanged();
-        } // finally
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
         return this;
       }
       private int bitField0_;
@@ -4888,9 +5194,11 @@ public final class Movies {
        */
       public Builder setId(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         id_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -4899,8 +5207,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearId() {
+        
         id_ = getDefaultInstance().getId();
-        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -4911,10 +5219,12 @@ public final class Movies {
        */
       public Builder setIdBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         id_ = value;
-        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -4960,9 +5270,11 @@ public final class Movies {
        */
       public Builder setPlot(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         plot_ = value;
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -4971,8 +5283,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearPlot() {
+        
         plot_ = getDefaultInstance().getPlot();
-        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -4983,121 +5295,88 @@ public final class Movies {
        */
       public Builder setPlotBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         plot_ = value;
-        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
 
-      private com.google.protobuf.LazyStringArrayList genres_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-      private void ensureGenresIsMutable() {
-        if (!genres_.isModifiable()) {
-          genres_ = new com.google.protobuf.LazyStringArrayList(genres_);
+      private java.lang.Object genre_ = "";
+      /**
+       * <code>string genre = 3;</code>
+       * @return The genre.
+       */
+      public java.lang.String getGenre() {
+        java.lang.Object ref = genre_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          genre_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
         }
-        bitField0_ |= 0x00000004;
       }
       /**
-       * <code>repeated string genres = 3;</code>
-       * @return A list containing the genres.
-       */
-      public com.google.protobuf.ProtocolStringList
-          getGenresList() {
-        genres_.makeImmutable();
-        return genres_;
-      }
-      /**
-       * <code>repeated string genres = 3;</code>
-       * @return The count of genres.
-       */
-      public int getGenresCount() {
-        return genres_.size();
-      }
-      /**
-       * <code>repeated string genres = 3;</code>
-       * @param index The index of the element to return.
-       * @return The genres at the given index.
-       */
-      public java.lang.String getGenres(int index) {
-        return genres_.get(index);
-      }
-      /**
-       * <code>repeated string genres = 3;</code>
-       * @param index The index of the value to return.
-       * @return The bytes of the genres at the given index.
+       * <code>string genre = 3;</code>
+       * @return The bytes for genre.
        */
       public com.google.protobuf.ByteString
-          getGenresBytes(int index) {
-        return genres_.getByteString(index);
+          getGenreBytes() {
+        java.lang.Object ref = genre_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          genre_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
       }
       /**
-       * <code>repeated string genres = 3;</code>
-       * @param index The index to set the value at.
-       * @param value The genres to set.
+       * <code>string genre = 3;</code>
+       * @param value The genre to set.
        * @return This builder for chaining.
        */
-      public Builder setGenres(
-          int index, java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
-        ensureGenresIsMutable();
-        genres_.set(index, value);
-        bitField0_ |= 0x00000004;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string genres = 3;</code>
-       * @param value The genres to add.
-       * @return This builder for chaining.
-       */
-      public Builder addGenres(
+      public Builder setGenre(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
-        ensureGenresIsMutable();
-        genres_.add(value);
-        bitField0_ |= 0x00000004;
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        genre_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>repeated string genres = 3;</code>
-       * @param values The genres to add.
+       * <code>string genre = 3;</code>
        * @return This builder for chaining.
        */
-      public Builder addAllGenres(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureGenresIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, genres_);
-        bitField0_ |= 0x00000004;
+      public Builder clearGenre() {
+        
+        genre_ = getDefaultInstance().getGenre();
         onChanged();
         return this;
       }
       /**
-       * <code>repeated string genres = 3;</code>
+       * <code>string genre = 3;</code>
+       * @param value The bytes for genre to set.
        * @return This builder for chaining.
        */
-      public Builder clearGenres() {
-        genres_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string genres = 3;</code>
-       * @param value The bytes of the genres to add.
-       * @return This builder for chaining.
-       */
-      public Builder addGenresBytes(
+      public Builder setGenreBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
-        ensureGenresIsMutable();
-        genres_.add(value);
-        bitField0_ |= 0x00000004;
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        genre_ = value;
         onChanged();
         return this;
       }
@@ -5117,9 +5396,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder setRuntime(int value) {
-
+        
         runtime_ = value;
-        bitField0_ |= 0x00000008;
         onChanged();
         return this;
       }
@@ -5128,19 +5406,18 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearRuntime() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        
         runtime_ = 0;
         onChanged();
         return this;
       }
 
-      private com.google.protobuf.LazyStringArrayList cast_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList cast_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureCastIsMutable() {
-        if (!cast_.isModifiable()) {
+        if (!((bitField0_ & 0x00000001) != 0)) {
           cast_ = new com.google.protobuf.LazyStringArrayList(cast_);
-        }
-        bitField0_ |= 0x00000010;
+          bitField0_ |= 0x00000001;
+         }
       }
       /**
        * <code>repeated string cast = 5;</code>
@@ -5148,8 +5425,7 @@ public final class Movies {
        */
       public com.google.protobuf.ProtocolStringList
           getCastList() {
-        cast_.makeImmutable();
-        return cast_;
+        return cast_.getUnmodifiableView();
       }
       /**
        * <code>repeated string cast = 5;</code>
@@ -5183,10 +5459,11 @@ public final class Movies {
        */
       public Builder setCast(
           int index, java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
-        ensureCastIsMutable();
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureCastIsMutable();
         cast_.set(index, value);
-        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -5197,10 +5474,11 @@ public final class Movies {
        */
       public Builder addCast(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
-        ensureCastIsMutable();
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureCastIsMutable();
         cast_.add(value);
-        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -5214,7 +5492,6 @@ public final class Movies {
         ensureCastIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, cast_);
-        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -5223,9 +5500,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearCast() {
-        cast_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000010);;
+        cast_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -5236,11 +5512,12 @@ public final class Movies {
        */
       public Builder addCastBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
         ensureCastIsMutable();
         cast_.add(value);
-        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -5286,9 +5563,11 @@ public final class Movies {
        */
       public Builder setNumMflixComments(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         numMflixComments_ = value;
-        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -5297,8 +5576,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearNumMflixComments() {
+        
         numMflixComments_ = getDefaultInstance().getNumMflixComments();
-        bitField0_ = (bitField0_ & ~0x00000020);
         onChanged();
         return this;
       }
@@ -5309,10 +5588,12 @@ public final class Movies {
        */
       public Builder setNumMflixCommentsBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         numMflixComments_ = value;
-        bitField0_ |= 0x00000020;
         onChanged();
         return this;
       }
@@ -5358,9 +5639,11 @@ public final class Movies {
        */
       public Builder setTitle(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         title_ = value;
-        bitField0_ |= 0x00000040;
         onChanged();
         return this;
       }
@@ -5369,8 +5652,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearTitle() {
+        
         title_ = getDefaultInstance().getTitle();
-        bitField0_ = (bitField0_ & ~0x00000040);
         onChanged();
         return this;
       }
@@ -5381,10 +5664,12 @@ public final class Movies {
        */
       public Builder setTitleBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         title_ = value;
-        bitField0_ |= 0x00000040;
         onChanged();
         return this;
       }
@@ -5430,9 +5715,11 @@ public final class Movies {
        */
       public Builder setFullplot(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         fullplot_ = value;
-        bitField0_ |= 0x00000080;
         onChanged();
         return this;
       }
@@ -5441,8 +5728,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearFullplot() {
+        
         fullplot_ = getDefaultInstance().getFullplot();
-        bitField0_ = (bitField0_ & ~0x00000080);
         onChanged();
         return this;
       }
@@ -5453,21 +5740,22 @@ public final class Movies {
        */
       public Builder setFullplotBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         fullplot_ = value;
-        bitField0_ |= 0x00000080;
         onChanged();
         return this;
       }
 
-      private com.google.protobuf.LazyStringArrayList countries_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList countries_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureCountriesIsMutable() {
-        if (!countries_.isModifiable()) {
+        if (!((bitField0_ & 0x00000002) != 0)) {
           countries_ = new com.google.protobuf.LazyStringArrayList(countries_);
-        }
-        bitField0_ |= 0x00000100;
+          bitField0_ |= 0x00000002;
+         }
       }
       /**
        * <code>repeated string countries = 9;</code>
@@ -5475,8 +5763,7 @@ public final class Movies {
        */
       public com.google.protobuf.ProtocolStringList
           getCountriesList() {
-        countries_.makeImmutable();
-        return countries_;
+        return countries_.getUnmodifiableView();
       }
       /**
        * <code>repeated string countries = 9;</code>
@@ -5510,10 +5797,11 @@ public final class Movies {
        */
       public Builder setCountries(
           int index, java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
-        ensureCountriesIsMutable();
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureCountriesIsMutable();
         countries_.set(index, value);
-        bitField0_ |= 0x00000100;
         onChanged();
         return this;
       }
@@ -5524,10 +5812,11 @@ public final class Movies {
        */
       public Builder addCountries(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
-        ensureCountriesIsMutable();
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureCountriesIsMutable();
         countries_.add(value);
-        bitField0_ |= 0x00000100;
         onChanged();
         return this;
       }
@@ -5541,7 +5830,6 @@ public final class Movies {
         ensureCountriesIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, countries_);
-        bitField0_ |= 0x00000100;
         onChanged();
         return this;
       }
@@ -5550,9 +5838,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearCountries() {
-        countries_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000100);;
+        countries_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -5563,11 +5850,12 @@ public final class Movies {
        */
       public Builder addCountriesBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
         ensureCountriesIsMutable();
         countries_.add(value);
-        bitField0_ |= 0x00000100;
         onChanged();
         return this;
       }
@@ -5613,9 +5901,11 @@ public final class Movies {
        */
       public Builder setReleased(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         released_ = value;
-        bitField0_ |= 0x00000200;
         onChanged();
         return this;
       }
@@ -5624,8 +5914,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearReleased() {
+        
         released_ = getDefaultInstance().getReleased();
-        bitField0_ = (bitField0_ & ~0x00000200);
         onChanged();
         return this;
       }
@@ -5636,21 +5926,22 @@ public final class Movies {
        */
       public Builder setReleasedBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         released_ = value;
-        bitField0_ |= 0x00000200;
         onChanged();
         return this;
       }
 
-      private com.google.protobuf.LazyStringArrayList directors_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
+      private com.google.protobuf.LazyStringList directors_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureDirectorsIsMutable() {
-        if (!directors_.isModifiable()) {
+        if (!((bitField0_ & 0x00000004) != 0)) {
           directors_ = new com.google.protobuf.LazyStringArrayList(directors_);
-        }
-        bitField0_ |= 0x00000400;
+          bitField0_ |= 0x00000004;
+         }
       }
       /**
        * <code>repeated string directors = 11;</code>
@@ -5658,8 +5949,7 @@ public final class Movies {
        */
       public com.google.protobuf.ProtocolStringList
           getDirectorsList() {
-        directors_.makeImmutable();
-        return directors_;
+        return directors_.getUnmodifiableView();
       }
       /**
        * <code>repeated string directors = 11;</code>
@@ -5693,10 +5983,11 @@ public final class Movies {
        */
       public Builder setDirectors(
           int index, java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
-        ensureDirectorsIsMutable();
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureDirectorsIsMutable();
         directors_.set(index, value);
-        bitField0_ |= 0x00000400;
         onChanged();
         return this;
       }
@@ -5707,10 +5998,11 @@ public final class Movies {
        */
       public Builder addDirectors(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
-        ensureDirectorsIsMutable();
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureDirectorsIsMutable();
         directors_.add(value);
-        bitField0_ |= 0x00000400;
         onChanged();
         return this;
       }
@@ -5724,7 +6016,6 @@ public final class Movies {
         ensureDirectorsIsMutable();
         com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, directors_);
-        bitField0_ |= 0x00000400;
         onChanged();
         return this;
       }
@@ -5733,9 +6024,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearDirectors() {
-        directors_ =
-          com.google.protobuf.LazyStringArrayList.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000400);;
+        directors_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
@@ -5746,11 +6036,12 @@ public final class Movies {
        */
       public Builder addDirectorsBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
         ensureDirectorsIsMutable();
         directors_.add(value);
-        bitField0_ |= 0x00000400;
         onChanged();
         return this;
       }
@@ -5796,9 +6087,11 @@ public final class Movies {
        */
       public Builder setRated(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         rated_ = value;
-        bitField0_ |= 0x00000800;
         onChanged();
         return this;
       }
@@ -5807,8 +6100,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearRated() {
+        
         rated_ = getDefaultInstance().getRated();
-        bitField0_ = (bitField0_ & ~0x00000800);
         onChanged();
         return this;
       }
@@ -5819,10 +6112,12 @@ public final class Movies {
        */
       public Builder setRatedBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         rated_ = value;
-        bitField0_ |= 0x00000800;
         onChanged();
         return this;
       }
@@ -5868,9 +6163,11 @@ public final class Movies {
        */
       public Builder setLastupdated(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         lastupdated_ = value;
-        bitField0_ |= 0x00001000;
         onChanged();
         return this;
       }
@@ -5879,8 +6176,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearLastupdated() {
+        
         lastupdated_ = getDefaultInstance().getLastupdated();
-        bitField0_ = (bitField0_ & ~0x00001000);
         onChanged();
         return this;
       }
@@ -5891,10 +6188,12 @@ public final class Movies {
        */
       public Builder setLastupdatedBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         lastupdated_ = value;
-        bitField0_ |= 0x00001000;
         onChanged();
         return this;
       }
@@ -5914,9 +6213,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder setYear(int value) {
-
+        
         year_ = value;
-        bitField0_ |= 0x00002000;
         onChanged();
         return this;
       }
@@ -5925,7 +6223,7 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearYear() {
-        bitField0_ = (bitField0_ & ~0x00002000);
+        
         year_ = 0;
         onChanged();
         return this;
@@ -5972,9 +6270,11 @@ public final class Movies {
        */
       public Builder setType(
           java.lang.String value) {
-        if (value == null) { throw new NullPointerException(); }
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
         type_ = value;
-        bitField0_ |= 0x00004000;
         onChanged();
         return this;
       }
@@ -5983,8 +6283,8 @@ public final class Movies {
        * @return This builder for chaining.
        */
       public Builder clearType() {
+        
         type_ = getDefaultInstance().getType();
-        bitField0_ = (bitField0_ & ~0x00004000);
         onChanged();
         return this;
       }
@@ -5995,10 +6295,12 @@ public final class Movies {
        */
       public Builder setTypeBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) { throw new NullPointerException(); }
-        checkByteStringIsUtf8(value);
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
         type_ = value;
-        bitField0_ |= 0x00004000;
         onChanged();
         return this;
       }
@@ -6035,18 +6337,7 @@ public final class Movies {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        Builder builder = newBuilder();
-        try {
-          builder.mergeFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(builder.buildPartial());
-        } catch (com.google.protobuf.UninitializedMessageException e) {
-          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(e)
-              .setUnfinishedMessage(builder.buildPartial());
-        }
-        return builder.buildPartial();
+        return new Movie(input, extensionRegistry);
       }
     };
 
@@ -6116,14 +6407,14 @@ public final class Movies {
       "movie_title\030\001 \001(\t\"\"\n\016ServerResponse\022\020\n\010r" +
       "esponse\030\001 \001(\t\"%\n\023ClientListOperation\022\016\n\006" +
       "filter\030\001 \001(\t\"&\n\014ServerListBy\022\026\n\006movies\030\001" +
-      " \003(\0132\006.Movie\"\205\002\n\005Movie\022\n\n\002id\030\001 \001(\t\022\014\n\004pl" +
-      "ot\030\002 \001(\t\022\016\n\006genres\030\003 \003(\t\022\017\n\007runtime\030\004 \001(" +
-      "\005\022\014\n\004cast\030\005 \003(\t\022\032\n\022num_mflix_comments\030\006 " +
-      "\001(\t\022\r\n\005title\030\007 \001(\t\022\020\n\010fullplot\030\010 \001(\t\022\021\n\t" +
-      "countries\030\t \003(\t\022\020\n\010released\030\n \001(\t\022\021\n\tdir" +
-      "ectors\030\013 \003(\t\022\r\n\005rated\030\014 \001(\t\022\023\n\013lastupdat" +
-      "ed\030\r \001(\t\022\014\n\004year\030\016 \001(\005\022\014\n\004type\030\017 \001(\tb\006pr" +
-      "oto3"
+      " \003(\0132\006.Movie\"\204\002\n\005Movie\022\n\n\002id\030\001 \001(\t\022\014\n\004pl" +
+      "ot\030\002 \001(\t\022\r\n\005genre\030\003 \001(\t\022\017\n\007runtime\030\004 \001(\005" +
+      "\022\014\n\004cast\030\005 \003(\t\022\032\n\022num_mflix_comments\030\006 \001" +
+      "(\t\022\r\n\005title\030\007 \001(\t\022\020\n\010fullplot\030\010 \001(\t\022\021\n\tc" +
+      "ountries\030\t \003(\t\022\020\n\010released\030\n \001(\t\022\021\n\tdire" +
+      "ctors\030\013 \003(\t\022\r\n\005rated\030\014 \001(\t\022\023\n\013lastupdate" +
+      "d\030\r \001(\t\022\014\n\004year\030\016 \001(\005\022\014\n\004type\030\017 \001(\tb\006pro" +
+      "to3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -6170,7 +6461,7 @@ public final class Movies {
     internal_static_Movie_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Movie_descriptor,
-        new java.lang.String[] { "Id", "Plot", "Genres", "Runtime", "Cast", "NumMflixComments", "Title", "Fullplot", "Countries", "Released", "Directors", "Rated", "Lastupdated", "Year", "Type", });
+        new java.lang.String[] { "Id", "Plot", "Genre", "Runtime", "Cast", "NumMflixComments", "Title", "Fullplot", "Countries", "Released", "Directors", "Rated", "Lastupdated", "Year", "Type", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

@@ -1,7 +1,7 @@
 import java.net.*;
 import java.io.*;
 import java.util.Scanner;
-import protocolbuffers.Movies;
+import Movies;
 
 /***
  *  XDR - eXternal Data Representation Activity
@@ -93,7 +93,11 @@ public class Client {
         }
     }
 
-    // Message to show the user how to use the program
+    /*
+     @brief: This function shows the user how to use the program
+     @param: None
+     @return: None
+     */
     public static void showHelp() {
         System.out.println(ANSI_GREEN + "CREATE: Create a new movie" + ANSI_RESET);
         System.out.println(ANSI_GREEN + "GET: Get a movie by title" + ANSI_RESET);
@@ -102,6 +106,91 @@ public class Client {
         System.out.println(ANSI_GREEN + "LISTACTORS: List all movies by an actor" + ANSI_RESET);
         System.out.println(ANSI_GREEN + "LISTCATEGORY: List all movies by a category" + ANSI_RESET);
         System.out.println(ANSI_GREEN + "EXIT: Exit the program" + ANSI_RESET);
+    }
+
+    /*
+    @brief: This function asks for the user input to fill a movie object
+    @param: None
+    @return: A movie object
+    */
+    public static Movies.Movie createMovie() {
+        Scanner reader = new Scanner(System.in); // Read the user input
+
+        // Create the variables to handle the user input: id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
+        String id = "";
+        String plot = "";
+        String genre = "";
+        Integer runtime = -1;
+        String cast = "";
+        String num_mflix_comments = "";
+        String title = "";  
+        String fullplot = "";
+        String countries = "";
+        String released = "";
+        String directors = "";
+        String rated = "";  
+        String lastupdated = "";
+        Integer year = -1;
+        String type = "";
+
+        int cast_number = -1;
+
+        // Ask for the user input: id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
+        System.out.println(ANSI_GREEN + "Type the id of the movie: " + ANSI_RESET);
+        id = reader.nextLine(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the plot of the movie: " + ANSI_RESET);
+        plot = reader.nextLine(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the genre of the movie: " + ANSI_RESET);
+        genre = reader.nextLine(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the runtime of the movie: " + ANSI_RESET);
+        runtime = reader.nextInt(); // Read the user input
+        System.out.print(ANSI_GREEN + "Type the number of casts in the movie");
+        for (int i = 0; i < cast_number; i++) {
+            System.out.print(ANSI_GREEN + "Type the cast of the movie: " + ANSI_RESET);
+            cast = reader.nextLine(); // Read the user input
+        }
+        System.out.println(ANSI_GREEN + "Type the cast of the movie: " + ANSI_RESET);
+        cast = reader.nextLine(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the num_mflix_comments of the movie: " + ANSI_RESET);
+        num_mflix_comments = reader.nextLine(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the title of the movie: " + ANSI_RESET);
+        title = reader.nextLine(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the fullplot of the movie: " + ANSI_RESET);
+        fullplot = reader.nextLine(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the countries of the movie: " + ANSI_RESET);
+        countries = reader.nextLine(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the released of the movie: " + ANSI_RESET);
+        released = reader.nextLine(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the directors of the movie: " + ANSI_RESET);
+        directors = reader.nextLine(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the rated of the movie: " + ANSI_RESET);
+        rated = reader.nextLine(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the lastupdated of the movie: " + ANSI_RESET);
+        lastupdated = reader.nextLine(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the year of the movie: " + ANSI_RESET);
+        year = reader.nextInt(); // Read the user input
+        System.out.println(ANSI_GREEN + "Type the type of the movie: " + ANSI_RESET);
+        type = reader.nextLine(); // Read the user input
+
+        // Create a movie protobuf object
+        Movies.Movie movie = Movies.Movie.newBuilder()
+                .setId(id)
+                .setPlot(plot)
+                .setGenre(genre)
+                .setRuntime(runtime)
+                .setCast(cast,cast_number)
+                .setNumMflixComments(num_mflix_comments)
+                .setTitle(title)
+                .setFullplot(fullplot)
+                .setCountries(countries)
+                .setReleased(released)
+                .setDirectors(directors)
+                .setRated(rated)
+                .setLastupdated(lastupdated)
+                .setYear(year)
+                .setType(type)
+                .build();
+        return movie;
     }
 
     /*

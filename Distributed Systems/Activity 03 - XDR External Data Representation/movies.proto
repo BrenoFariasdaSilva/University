@@ -27,7 +27,7 @@ message ServerListBy {
 message Movie {
 	string id = 1;
 	string plot = 2;
-	repeated string genres = 3;
+	string genre = 3;
 	int32 runtime = 4;
 	repeated string cast = 5;
 	string num_mflix_comments = 6;
