@@ -1,7 +1,7 @@
 import socket # For creating the TCP/STREAM socket
 import threading # For creating the client thread
-import movies_pb2 # For the movie protocol buffer
-from database import MongoDatabase # For the database
+from ..database.database import MongoDatabase # For the database
+from ..protocolbuffers.movies_pb2 import movies_pb2 # For the protocol buffers
 from colorama import Style # For coloring the terminal
 
 # Constants:
