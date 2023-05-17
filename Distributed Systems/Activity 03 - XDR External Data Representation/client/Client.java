@@ -64,12 +64,9 @@ public class Client {
                 if (parts[0].equals("CREATE")){
                     System.out.println(ANSI_GREEN + "Creating a new movie..." + ANSI_RESET);
                     // Create a movie protobuf object
-                    Movies.Movie movie = Movies.Movie.newBuilder()
-                            .setTitle(parts[1])
-                            .setCategory(parts[2])
-                            .setYear(Integer.parseInt(parts[3]))
-                            .setActors(parts[4])
-                            .build();
+                    Movies.Movie movie = createMovie();
+                    // Send the movie to the server
+                    movie.writeDelimitedTo(out);
                 } else if (parts[0].equals("GET")) {
                     System.out.println(ANSI_GREEN + "Getting a movie..." + ANSI_RESET);
                 } else if (parts[0].equals("UPDATE")) {
