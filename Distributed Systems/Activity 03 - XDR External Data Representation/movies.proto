@@ -1,7 +1,19 @@
 syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "org.example.client.structs";
+
+enum Operations {
+	Zero = 0;
+	Create = 1;
+	Read = 2;
+	Update = 3;
+	Delete = 4;
+	ListByActors = 5;
+	ListByDirectors = 6;
+}
 
 message ClientRequest {
-	string operation = 1;
+	Operations operation = 1;
 }
 
 message GetMovieOperation {
@@ -30,7 +42,7 @@ message Movie {
 	string genre = 3;
 	int32 runtime = 4;
 	repeated string cast = 5;
-	string num_mflix_comments = 6;
+	int32 num_mflix_comments = 6;
 	string title = 7;
 	string fullplot = 8;
 	repeated string countries = 9;

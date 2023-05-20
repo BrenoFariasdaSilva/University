@@ -1,0 +1,258 @@
+package org.example.client;
+import org.example.client.structs.ClientRequest;
+import org.example.client.structs.Movie;
+import org.example.client.structs.Operations;
+
+import java.net.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+/*
+ * XDR - External Data Representation Activity
+ * @author Breno Farias da Silva
+ * @subject Distributed Systems
+ * @date 15/05/2023
+ * @lastUpdate 15/05/2023
+ * This file is the client side of the application.
+ * This file creates a TCP socket in order to communicate with the server.
+ * It's responsible for sending messages to the server.
+ * It also receives messages from the server.
+ * It also validates user input, so the server don't get loaded with invalid inputs
+ */
+
+public class Client {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+
+    public static void main(String[] args) {
+        Scanner reader = new Scanner(System.in); // Read the user input
+
+        // Address and port of the server
+        int serverPort = 7001; // Later put it inside a env variable
+        InetAddress serverAddr = null; // Create an instance of InetAddress
+        try {
+            serverAddr = InetAddress.getByName("localhost"); // Get the IP address of the server, which is localhost = 127.0.0.1
+        } catch (UnknownHostException e) {
+            System.out.println(ANSI_GREEN + "Unknown host: (String)" + ANSI_CYAN + e.getMessage() + ANSI_RESET);
+            return;
+        }
+
+        try (var clientSocket = new Socket(serverAddr, serverPort)) { // Var inferes the type of the variable, which can only be used with local variables
+            // Create the read and write objects for the socket
+            DataInputStream in = new DataInputStream(clientSocket.getInputStream());
+            DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+
+            // Create the variables to handle the user input
+            String user_input = "";
+
+            // Show the user how to use the program
+            showHelp();
+            while (true) {
+                System.out.println(ANSI_GREEN + "Type a message: (String)" + ANSI_RESET);
+                user_input = reader.nextLine(); // Read the user input
+
+                // Convert the first word of the user input to uppercase
+                user_input = stringToUpperCase(user_input);
+
+                if (user_input.equals("EXIT")) {
+                    System.out.println(ANSI_GREEN + "Closing the connection..." + ANSI_RESET);
+                    clientSocket.close();
+                    break;
+                }
+
+                // Split the user input into an array of strings
+                String[] parts = user_input.split(" ");
+
+                // Validate the user input for CREATE, GET, UPDATE, DELETE...
+                switch (parts[0]) {
+                    case "CREATE" -> {
+                        System.out.println(ANSI_GREEN + "Creating a new movie..." + ANSI_RESET);
+                        ClientRequest request = ClientRequest.newBuilder()//.
+                                .setOperation(Operations.Create)
+                                .build();
+
+                        byte[] serializedRequest = request.toByteArray();
+                        System.out.println(ANSI_GREEN + "Serialized request length: " + ANSI_CYAN + serializedRequest.length + ANSI_RESET);
+//                        out.writeInt(serializedRequest.length);
+                        request.writeTo(out);
+                        out.flush();
+//                        System.out.println(ANSI_GREEN + "request: " + ANSI_CYAN + request.toString() + ANSI_RESET);
+//                        out.write(serializedRequest);
+
+                        Movie movie = createMovie();
+                        System.out.println(movie);
+                        byte[] serializedMovie = movie.toByteArray();
+                        // print the length of the serialized movie
+                        System.out.println(ANSI_GREEN + "Serialized movie length: " + ANSI_CYAN + serializedMovie.length + ANSI_RESET);
+                        // print the type of the length of the serialized movie
+                        System.out.println(ANSI_GREEN + "Serialized movie length type: " + ANSI_CYAN + serializedMovie.length + ANSI_RESET);
+                        System.out.println(ANSI_GREEN + "Serialized movie: " + ANSI_CYAN + Arrays.toString(serializedMovie) + ANSI_RESET);
+//                        out.writeInt(serializedMovie.length);
+//                        out.flush();
+//                        out.write(serializedMovie);
+                        out.flush();
+                        movie.writeTo(out);
+                        out.flush();
+                    }
+                    case "GET" -> System.out.println(ANSI_GREEN + "Getting a movie..." + ANSI_RESET);
+                    case "UPDATE" -> System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
+                    case "DELETE" -> System.out.println(ANSI_GREEN + "Deleting a movie..." + ANSI_RESET);
+                    case "LISTBYACTORS" ->
+                            System.out.println(ANSI_GREEN + "Listing all movies by an actor..." + ANSI_RESET);
+                    case "LISTBYCATEGORY" ->
+                            System.out.println(ANSI_GREEN + "Listing all movies by a category..." + ANSI_RESET);
+                    case "HELP" -> showHelp();
+                    default -> {
+                        System.out.println(ANSI_GREEN + "Invalid command. Try again." + ANSI_RESET);
+                        continue;
+                    }
+                }
+
+            }
+        } catch (EOFException eofe){
+            System.out.println(ANSI_GREEN + "EOF:" + ANSI_CYAN + eofe.getMessage() + ANSI_RESET);
+        } catch (IOException ioe){
+            System.out.println(ANSI_CYAN + "IO:" + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
+        }
+    }
+
+    /*
+     @brief: This function shows the user how to use the program
+     @param: None
+     @return: None
+     */
+    public static void showHelp() {
+        System.out.println(ANSI_GREEN + "CREATE: Create a new movie" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "GET: Get a movie by title" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "UPDATE: Update a movie" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "DELETE: Delete a movie by title" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "LISTACTORS: List all movies by an actor" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "LISTCATEGORY: List all movies by a category" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "EXIT: Exit the program" + ANSI_RESET);
+    }
+
+    /*
+    @brief: This function asks for the user input to fill a movie object
+    @param: None
+    @return: A movie object
+    */
+    public static Movie createMovie() {
+        Scanner reader = new Scanner(System.in); // Read the user input
+
+        // Initialize the variables id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
+        String id = "id";
+        String plot = "plot";
+        String genre = "genre";
+        int runtime = 1;
+        List<String> cast = new ArrayList<>();
+        cast.add("cast1");
+        int num_mflix_comments = 1;
+        String title = "title";
+        String fullplot = "fullplot";
+        List<String> countries = new ArrayList<>();
+        countries.add("country1");
+        String released = "released";
+        List<String> directors = new ArrayList<>();
+        directors.add("director1");
+        String rated = "rated";
+        String lastupdated = "lastupdated";
+        int year = 2023;
+        String type = "type";
+
+        // Ask for the user input: id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
+//        System.out.println(ANSI_GREEN + "Type the id of the movie: (String)" + ANSI_RESET);
+//        String id = reader.nextLine(); // Read the user input
+//        System.out.println(ANSI_GREEN + "Type the plot of the movie: (String)" + ANSI_RESET);
+//        String plot = reader.nextLine(); // Read the user input
+//        System.out.println(ANSI_GREEN + "Type the genre of the movie: (String)" + ANSI_RESET);
+//        String genre = reader.nextLine(); // Read the user input
+//        System.out.println(ANSI_GREEN + "Type the runtime of the movie: (int)" + ANSI_RESET);
+//        int runtime = reader.nextInt(); // Read the user input
+//        System.out.println(ANSI_GREEN + "Type the number of casts in the movie: (int)" + ANSI_RESET);
+//        int cast_number = reader.nextInt(); // Read the user input
+//        // Create a list of casts
+//        List<String> cast = new ArrayList<String>(cast_number);
+//        reader.nextLine();
+//        for (int i = 0; i < cast_number; i++) {
+//            System.out.println(ANSI_GREEN + "Type the cast of the movie: (String)" + ANSI_RESET);
+//            cast.add(reader.nextLine()); // Read the user input
+//        }
+//        System.out.println(ANSI_GREEN + "Type the num_mflix_comments of the movie: (int)" + ANSI_RESET);
+//        int num_mflix_comments = reader.nextInt(); // Read the user input
+//        reader.nextLine();
+//        System.out.println(ANSI_GREEN + "Type the title of the movie: (String)" + ANSI_RESET);
+//        String title = reader.nextLine(); // Read the user input
+//        System.out.println(ANSI_GREEN + "Type the fullplot of the movie: (String)" + ANSI_RESET);
+//        String fullplot = reader.nextLine(); // Read the user input
+//        System.out.println(ANSI_GREEN + "Type the number of countries of the movie: (int)" + ANSI_RESET);
+//        int countries_number = reader.nextInt(); // Read the user input
+//        reader.nextLine();
+//        List<String> countries = new ArrayList<String>(countries_number);
+//        for (int i = 0; i < countries_number; i++) {
+//            System.out.println(ANSI_GREEN + "Type the countries of the movie: (String)" + ANSI_RESET);
+//            countries.add(reader.nextLine()); // Read the user input
+//        }
+//        System.out.println(ANSI_GREEN + "Type the released of the movie: (String)" + ANSI_RESET);
+//        String released = reader.nextLine(); // Read the user input
+//        System.out.println(ANSI_GREEN + "Type the number of directors of the movie: (int)" + ANSI_RESET);
+//        int directors_number = reader.nextInt(); // Read the user input
+//        reader.nextLine();
+//        List<String> directors = new ArrayList<String>(directors_number);
+//        for (int i = 0; i < directors_number; i++) {
+//            System.out.println(ANSI_GREEN + "Type the directors of the movie: (String)" + ANSI_RESET);
+//            directors.add(reader.nextLine()); // Read the user input
+//        }
+//        System.out.println(ANSI_GREEN + "Type the rated of the movie: (String)" + ANSI_RESET);
+//        String rated = reader.nextLine(); // Read the user input
+//        System.out.println(ANSI_GREEN + "Type the last updated of the movie: (String)" + ANSI_RESET);
+//        String lastupdated = reader.nextLine(); // Read the user input
+//        System.out.println(ANSI_GREEN + "Type the year of the movie: (int)" + ANSI_RESET);
+//        int year = reader.nextInt(); // Read the user input
+//        reader.nextLine();
+//        System.out.println(ANSI_GREEN + "Type the type of the movie: (String)" + ANSI_RESET);
+//        String type = reader.nextLine(); // Read the user input
+
+        // Create a movie protobuf object
+        return Movie.newBuilder()
+                .setId(id) // String
+                .setPlot(plot) // String
+                .setGenre(genre) // String
+                .setRuntime(runtime) // int
+                .addAllCast(cast) // String
+                .setNumMflixComments(num_mflix_comments) // int
+                .setTitle(title) // String
+                .setFullplot(fullplot) // String
+                .addAllCountries(countries) // String
+                .setReleased(released) // String
+                .addAllDirectors(directors) // String
+                .setRated(rated) // String
+                .setLastupdated(lastupdated) // String
+                .setYear(year) // int
+                .setType(type) // String
+                .build(); // Build the movie protobuf object
+    }
+
+    /*
+    @brief: This function takes a string and returns it with the first word in uppercase
+    @param: s - The string to be converted
+    @return: The string with the first word in uppercase
+    */
+    public static String stringToUpperCase(String s) {
+        if (s.contains(" ")) {
+            String[] parts = s.split(" ");
+            String firstWord = parts[0];
+            StringBuilder restOfTheSentence = new StringBuilder();
+            for (int i = 1; i < parts.length; i++) {
+                restOfTheSentence.append(parts[i]).append(" ");
+            }
+            return firstWord.toUpperCase() + " " + restOfTheSentence;
+        } else {
+            return s.toUpperCase();
+        }
+    }
+}
