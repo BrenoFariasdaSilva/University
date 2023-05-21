@@ -5,7 +5,6 @@ import org.example.client.structs.Operations;
 
 import java.net.*;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +50,7 @@ public class Client {
             String user_input = "";
 
             // Show the user how to use the program
-            showHelp();
+            // showHelp();
             while (true) {
                 System.out.println(ANSI_GREEN + "Type a message: (String)" + ANSI_RESET);
                 user_input = reader.nextLine(); // Read the user input
@@ -70,35 +69,7 @@ public class Client {
 
                 // Validate the user input for CREATE, GET, UPDATE, DELETE...
                 switch (parts[0]) {
-                    case "CREATE" -> {
-                        System.out.println(ANSI_GREEN + "Creating a new movie..." + ANSI_RESET);
-                        ClientRequest request = ClientRequest.newBuilder()//.
-                                .setOperation(Operations.Create)
-                                .build();
-
-                        byte[] serializedRequest = request.toByteArray();
-                        System.out.println(ANSI_GREEN + "Serialized request length: " + ANSI_CYAN + serializedRequest.length + ANSI_RESET);
-//                        out.writeInt(serializedRequest.length);
-                        request.writeTo(out);
-                        out.flush();
-//                        System.out.println(ANSI_GREEN + "request: " + ANSI_CYAN + request.toString() + ANSI_RESET);
-//                        out.write(serializedRequest);
-
-                        Movie movie = createMovie();
-                        System.out.println(movie);
-                        byte[] serializedMovie = movie.toByteArray();
-                        // print the length of the serialized movie
-                        System.out.println(ANSI_GREEN + "Serialized movie length: " + ANSI_CYAN + serializedMovie.length + ANSI_RESET);
-                        // print the type of the length of the serialized movie
-                        System.out.println(ANSI_GREEN + "Serialized movie length type: " + ANSI_CYAN + serializedMovie.length + ANSI_RESET);
-                        System.out.println(ANSI_GREEN + "Serialized movie: " + ANSI_CYAN + Arrays.toString(serializedMovie) + ANSI_RESET);
-//                        out.writeInt(serializedMovie.length);
-//                        out.flush();
-//                        out.write(serializedMovie);
-                        out.flush();
-                        movie.writeTo(out);
-                        out.flush();
-                    }
+                    case "CREATE" -> createMovie(out);
                     case "GET" -> System.out.println(ANSI_GREEN + "Getting a movie..." + ANSI_RESET);
                     case "UPDATE" -> System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
                     case "DELETE" -> System.out.println(ANSI_GREEN + "Deleting a movie..." + ANSI_RESET);
@@ -112,13 +83,44 @@ public class Client {
                         continue;
                     }
                 }
-
             }
         } catch (EOFException eofe){
             System.out.println(ANSI_GREEN + "EOF:" + ANSI_CYAN + eofe.getMessage() + ANSI_RESET);
         } catch (IOException ioe){
             System.out.println(ANSI_CYAN + "IO:" + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
         }
+    }
+
+    private static void createMovie(DataOutputStream out) throws IOException {
+        System.out.println(ANSI_GREEN + "Creating a new movie..." + ANSI_RESET);
+
+        // Create a new ClientRequest object for specifying the operation the server will execute
+        ClientRequest request = ClientRequest.newBuilder()//.
+                .setOperation(Operations.Create)
+                .build();
+        // Serialize the request
+        byte[] serializedRequest = request.toByteArray();
+
+        // Send the serialized request to the server
+        sendPacket(out, serializedRequest);
+
+        // Create a new Movie object and fill it with the user input
+        Movie movie = userFillMovieObject();
+        // System.out.println(movie);
+        // Serialize the movie object
+        byte[] serializedMovie = movie.toByteArray();
+
+        // Send the serialized movie to the server
+        sendPacket(out, serializedMovie);
+    }
+
+    // create a method for sending packets to the server
+    private static void sendPacket(DataOutputStream out, byte[] serializedPacket) throws IOException {
+        out.writeInt(serializedPacket.length);
+        System.out.println(ANSI_GREEN + "Serialized packet length: " + ANSI_CYAN + serializedPacket.length + ANSI_RESET);
+        out.write(serializedPacket);
+        System.out.println(ANSI_GREEN + "Serialized packet: " + ANSI_CYAN + serializedPacket + ANSI_RESET);
+        out.flush();
     }
 
     /*
@@ -141,9 +143,7 @@ public class Client {
     @param: None
     @return: A movie object
     */
-    public static Movie createMovie() {
-        Scanner reader = new Scanner(System.in); // Read the user input
-
+    public static Movie userFillMovieObject() {
         // Initialize the variables id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
         String id = "id";
         String plot = "plot";
@@ -163,6 +163,8 @@ public class Client {
         String lastupdated = "lastupdated";
         int year = 2023;
         String type = "type";
+
+//        Scanner reader = new Scanner(System.in); // Read the user input
 
         // Ask for the user input: id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
 //        System.out.println(ANSI_GREEN + "Type the id of the movie: (String)" + ANSI_RESET);

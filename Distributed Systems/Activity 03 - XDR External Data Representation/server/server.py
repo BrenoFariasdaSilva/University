@@ -6,14 +6,14 @@ from google.protobuf.json_format import MessageToDict # For converting the proto
 import google.protobuf.internal.decoder as decoder
 from colorama import Style # For coloring the terminal
 
-# Constants:
+# Background colors:
 class backgroundColors: # Colors for the terminal
 	OKCYAN = "\033[96m" # Cyan
 	OKGREEN = "\033[92m" # Green
 	WARNING = "\033[93m" # Yellow
 	FAIL = "\033[91m" # Red
 
-## Server:
+# Server:
 SERVERADDRESS = ["localhost", 7001] # The server's address. The first element is the IP address, the second is the port.
 
 ## Client:
@@ -40,44 +40,39 @@ def parse_delete_object(delete_object):
 	return delete
 
 # @brief: This function parses a movie object from string
-# @param movie_object: The movie object
+# @param serialized_movie: The movie object
 # @return: The movie object parsed
-def parse_movie_object(movie_object):
-	movie = movies_pb2.Movie() # Create a movie object
-	print(f"Movie object: {backgroundColors.OKCYAN}{movie_object}{Style.RESET_ALL}")
-	movie.ParseFromString(movie_object) # Parse the movie object
-	print(f"Movie: {backgroundColors.OKCYAN}{movie}{Style.RESET_ALL}")
-	return movie
+def deserialize_movie_object(serialized_movie):
+	deserialized_movie = movies_pb2.Movie() # Create a movie object
+	deserialized_movie.ParseFromString(serialized_movie) # Parse the movie object
+	return deserialized_movie
 
 # @brief: This function get a packet from the client
 # @param client_socket: The client socket object
 # @return: The packet
 def get_client_packet(client_socket):
-	# packet_size = int.from_bytes(client_socket.recv(CLIENT_REQUEST_SIZE), "big") # Get the packet size
-	# print(f"Packet size: {backgroundColors.OKCYAN}{packet_size}{Style.RESET_ALL}")
-	random = client_socket.recv(2048) # Get the packet
-	print(f"Random: {backgroundColors.OKCYAN}{random}{Style.RESET_ALL}")
-	# (size, position) = decoder._DecodeVarint32(random, 0)
-	# print(f"Packet: {backgroundColors.OKCYAN}{packet}{Style.RESET_ALL}")
-	# print(f"random: {backgroundColors.OKCYAN}{random[position:position+size]}{Style.RESET_ALL}")
-	return movies_pb2.Movie().ParseFromString(random) # Return the packet
+	packet_size = int.from_bytes(client_socket.recv(CLIENT_REQUEST_SIZE), "big") # Get the packet size
+	print(f"{backgroundColors.OKGREEN} Parsed Packet size: {backgroundColors.OKCYAN}{packet_size}{Style.RESET_ALL}")
+	serialized_movie = client_socket.recv(packet_size) # Get the packet
+	print(f"{backgroundColors.OKGREEN} Parsed Packet: {backgroundColors.OKCYAN}{serialized_movie}{Style.RESET_ALL}")
+	return serialized_movie
 
 # @brief: This function creates a movie
 # @param client_socket: The client socket object
 # @param database: The database object
 # @return: Status code
 def createMovie(client_socket, database: MongoDatabase):
-	movie = get_client_packet(client_socket) # Get the movie object
-	print(f"Movie: {backgroundColors.OKCYAN}{movie}{Style.RESET_ALL}")
-	# movie = movies_pb2.Movie() # Create a movie object
-	# movie_json = MessageToDict(movie_bytes, preserving_proto_field_name=True)
-	print(f"Movie string: {backgroundColors.OKCYAN}{movie_json}{Style.RESET_ALL}")
-	# movie_object = parse_movie_object(movie_bytes) # Create a movie object
-	# print(f"Creating movie {backgroundColors.OKGREEN}{movie_bytes}{Style.RESET_ALL}")
+	serialized_movie = get_client_packet(client_socket) # Get the movie object
+	print(f"{backgroundColors.OKGREEN} Movie: {backgroundColors.OKCYAN}{serialized_movie}{Style.RESET_ALL}")
+	deserialized_movie = deserialize_movie_object(serialized_movie) # Create a movie object
+	print(f"{backgroundColors.OKGREEN} deserialized_movie.title: {backgroundColors.OKCYAN}{deserialized_movie.title}{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN} deserialized_movie.year: {backgroundColors.OKCYAN}{deserialized_movie.year}{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN} deserialized_movie.actors: {backgroundColors.OKCYAN}{deserialized_movie.cast}{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN} deserialized_movie.plot: {backgroundColors.OKCYAN}{deserialized_movie.plot}{Style.RESET_ALL}")
 
-	if database.createMovie(movie_json) is None:
-		return FAILURE
-	return SUCCESS
+	# if database.createMovie(movie_json) is None:
+	# 	return FAILURE
+	# return SUCCESS
 
 # @brief: This function gets a movie
 # @param client_socket: The client socket object
@@ -148,13 +143,13 @@ def getMoviesByCategory(client_socket, database):
 
 	list_movies_object = parse_list_object(movie_category) # Create a list by object
 
-	print(f"Getting category {backgroundColors.OKGREEN}{list_movies_object.filter}{Style.RESET_ALL}'s movies")
+	print(f"{backgroundColors.OKGREEN} Getting category {backgroundColors.OKCYAN}{list_movies_object.filter}{Style.RESET_ALL}'s movies")
 	movies = database.listByCategory(list_movies_object.filter)
 	if movies is None:
 		return FAILURE
 	movies_list = ""
 	for movie in movies:
-		print(f"{backgroundColors.OKGREEN}{movie.title}{Style.RESET_ALL}")
+		print(f"{backgroundColors.OKGREEN} Movie title: {backgroundColors.OKCYAN}{movie.title}{Style.RESET_ALL}")
 		# append the movie marshalled to the movies list
 		movies_list += movie.SerializeToString()
 	return movies_list
@@ -177,34 +172,33 @@ def send_response(client_socket, response):
 # @param client_request: The client request protocol buffer containing the operation value
 # @return: None
 def handle_client_input(client_socket, client_address, database, client_request):
-	client_data = movies_pb2.ClientRequest() # Create a client request object.
-	print(f"Client request: {backgroundColors.OKGREEN}{client_request}{Style.RESET_ALL}")
-	client_data.ParseFromString(client_request) # Parse the data
+	parsed_client_request = movies_pb2.ClientRequest() # Create a client request object.
+	print(f"{backgroundColors.OKGREEN} Client request: {backgroundColors.OKCYAN}{client_request}{Style.RESET_ALL}")
+	parsed_client_request.ParseFromString(client_request) # Parse the data
+	print(f"{backgroundColors.OKGREEN}  Parsed Client Request Operation: {backgroundColors.OKCYAN}{parsed_client_request.operation}{Style.RESET_ALL}")
 
-	print(f"OPERATIONS {backgroundColors.OKCYAN} {movies_pb2.Operations.Create}")
-
-	match client_data.operation:
+	match parsed_client_request.operation:
 		case movies_pb2.Operations.Create: # If the operation is create movie: 1
-			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent create movie command")
+			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]} {backgroundColors.OKGREEN}sent create movie command{Style.RESET_ALL}")
 			response = createMovie(client_socket, database) # Create the movie
-			# send the response code to the client
+			# TODO: send the response code to the client
 		case movies_pb2.Operations.Get: # If the operation is get movie: 2
-			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get movie command")
+			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get movie command")
 			response = getMovie(client_socket, database) # Get the movie
 		case movies_pb2.Operations.Update: # If the operation is update movie: 3
-			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent update movie command")
+			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent update movie command")
 			response = updateMovie(client_socket, database) # Update the movie
 		case movies_pb2.Operations.Delete: # If the operation is delete movie: 4
-			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent delete movie command")
+			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent delete movie command")
 			response = deleteMovie(client_socket, database) # Delete the movie
 		case movies_pb2.Operations.ListByActors: # If the operation is get actor movies: 5
-			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get actor movies command")
+			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get actor movies command")
 			response = getMoviesByActor(client_socket, database) # Get the actor movies
 		case movies_pb2.Operations.ListByCategory: # If the operation is get category movies: 6
-			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get category movies command")
+			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get category movies command")
 			response = getMoviesByCategory(client_socket, database) # Get the category movies
 		case _: # If the operation is unknown
-			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent unknown command")
+			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent unknown command")
 	send_response(client_socket, response)
 
 # @brief: This function handles the client input
@@ -216,29 +210,30 @@ def client_input(client_socket, client_address):
 	while True:
 		try:
 			next_package_size = client_socket.recv(CLIENT_REQUEST_SIZE) # Receive the next_package_size from the client
-			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent {backgroundColors.OKGREEN}{next_package_size}{Style.RESET_ALL} bytes")
-		
+			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent next_package_size: {backgroundColors.OKCYAN}{next_package_size}{backgroundColors.OKGREEN} bytes{Style.RESET_ALL}")
 			next_package_size = int.from_bytes(next_package_size, byteorder="big")
+			print(f"{backgroundColors.OKGREEN}  Parsed Client next_package_size: {backgroundColors.OKCYAN}{next_package_size}{backgroundColors.OKGREEN} bytes{Style.RESET_ALL}")
 			client_request = client_socket.recv(next_package_size) # Receive the operation from the client
 			if not client_request: # If the data is empty
-				print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent empty data")
+				print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.FAIL} sent empty data{Style.RESET_ALL} ")
 				break
 			handle_client_input(client_socket, client_address, database_connection, client_request) # Handle the client input
 		except ConnectionResetError:
-			print(f"Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} disconnected")
+			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.FAIL} disconnected{Style.RESET_ALL}")
 			break
 
 # @brief: This is the main function of the server
 # @param: None
 # @return: None
 def main():
+	print(f"{backgroundColors.OKGREEN}Server started{Style.RESET_ALL}")
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Create a TCP/STREAM socket
 	server_socket.bind((SERVERADDRESS[0], SERVERADDRESS[1])) # Bind the socket to the server address
 	server_socket.listen() # Listen for connections
  
 	while True:
 		client_socket, client_address = server_socket.accept() # Accept the client connection
-		print(f"Client connected with address {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL}")
+		print(f"{backgroundColors.OKGREEN}Client connected with address {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL}")
 		client_thread = threading.Thread(target=client_input, args=(client_socket, client_address)) # Create a thread for the client
 		client_thread.start() # Start the client thread
 
