@@ -20,20 +20,23 @@ class MongoDatabase:
 		self.database = self.client["movies"]
 		self.collection = self.database["movies"]
 		database_name = os.getenv("DATABASE_URL")[:os.getenv("DATABASE_URL").find(".")]
-		print(f"{backgroundColors.OKGREEN}Client Connected to {backgroundColors.OKCYAN}{database_name}{backgroundColors.OKGREEN} server with username: {backgroundColors.OKCYAN}{os.getenv('USERNAME')}{Style.RESET_ALL}")
+		print(f"{backgroundColors.OKGREEN}Client Connected to {backgroundColors.OKCYAN}{database_name}{backgroundColors.OKGREEN} server using {backgroundColors.OKCYAN}{os.getenv('USERNAME')} {backgroundColors.OKGREEN}user{Style.RESET_ALL}")
 
 	def connectionInfo(self):
 		return self.client.server_info()
 
 	def createMovie(self, movie):
 		movie = json.loads(movie)
+		if movie.get('id'):
+			movie.pop('id')
 		print(f"Creating movie: {movie}")
 		reponse_document = self.collection.insert_one(movie)
-		print(f"Movie created with id: {reponse_document.inserted_id}")
-		print(f"Movie acknowledged: {reponse_document.acknowledged}")
-		if reponse_document.acknowledged: # If the movie was created
-			return reponse_document.inserted_id # Return the movie id
-		return None
+		return reponse_document
+		# print(f"Movie created with id: {reponse_document.inserted_id}")
+		# print(f"Movie acknowledged: {reponse_document.acknowledged}")
+		# if reponse_document.acknowledged: # If the movie was created
+		# 	return reponse_document.inserted_id # Return the movie id
+		# return None
 	
 	def getMovieByTitle(self, movie_title):
 		return self.collection.find_one({"title": movie_title})

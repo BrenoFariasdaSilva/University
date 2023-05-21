@@ -52,9 +52,9 @@ def deserialize_movie_object(serialized_movie):
 # @return: The packet
 def get_client_packet(client_socket):
 	packet_size = int.from_bytes(client_socket.recv(CLIENT_REQUEST_SIZE), "big") # Get the packet size
-	print(f"{backgroundColors.OKGREEN} Parsed Packet size: {backgroundColors.OKCYAN}{packet_size}{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN}  Parsed Packet size: {backgroundColors.OKCYAN}{packet_size}{Style.RESET_ALL}")
 	serialized_movie = client_socket.recv(packet_size) # Get the packet
-	print(f"{backgroundColors.OKGREEN} Parsed Packet: {backgroundColors.OKCYAN}{serialized_movie}{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN}  Bytes Packet: {backgroundColors.OKCYAN}{serialized_movie}{Style.RESET_ALL}")
 	return serialized_movie
 
 # @brief: This function creates a movie
@@ -63,13 +63,14 @@ def get_client_packet(client_socket):
 # @return: Status code
 def createMovie(client_socket, database: MongoDatabase):
 	serialized_movie = get_client_packet(client_socket) # Get the movie object
-	print(f"{backgroundColors.OKGREEN} Movie: {backgroundColors.OKCYAN}{serialized_movie}{Style.RESET_ALL}")
 	deserialized_movie = deserialize_movie_object(serialized_movie) # Create a movie object
-	print(f"{backgroundColors.OKGREEN} deserialized_movie.title: {backgroundColors.OKCYAN}{deserialized_movie.title}{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN}  deserialized_movie.title: {backgroundColors.OKCYAN}{deserialized_movie.title}{Style.RESET_ALL}")
 
-	if database.createMovie(MessageToJson(deserialized_movie)) == FAILURE:
-		return FAILURE
-	return SUCCESS
+	# if database.createMovie(MessageToJson(deserialized_movie)) == FAILURE:
+	# 	return FAILURE
+	# return SUCCESS
+	result = database.createMovie(MessageToJson(deserialized_movie))
+	print(f"Result: {result}")
 
 # @brief: This function gets a movie
 # @param client_socket: The client socket object
@@ -204,6 +205,7 @@ def handle_client_input(client_socket, client_address, database, client_request)
 # @return: None
 def client_input(client_socket, client_address):
 	database_connection = MongoDatabase() # Get a database connection object
+	print(f"database info: {database_connection.connectionInfo}")
 	while True:
 		try:
 			next_package_size = client_socket.recv(CLIENT_REQUEST_SIZE) # Receive the next_package_size from the client
