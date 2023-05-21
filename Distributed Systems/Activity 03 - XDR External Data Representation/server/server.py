@@ -2,7 +2,7 @@ import socket # For creating the TCP/STREAM socket
 import threading # For creating the client thread
 from database.database import MongoDatabase # For the database
 import structs.movies_pb2 as movies_pb2 # For the protocol buffers
-from google.protobuf.json_format import MessageToDict # For converting the protocol buffer to a dictionary
+from google.protobuf.json_format import MessageToJson# For converting the protocol buffer to a dictionary
 import google.protobuf.internal.decoder as decoder
 from colorama import Style # For coloring the terminal
 
@@ -66,13 +66,10 @@ def createMovie(client_socket, database: MongoDatabase):
 	print(f"{backgroundColors.OKGREEN} Movie: {backgroundColors.OKCYAN}{serialized_movie}{Style.RESET_ALL}")
 	deserialized_movie = deserialize_movie_object(serialized_movie) # Create a movie object
 	print(f"{backgroundColors.OKGREEN} deserialized_movie.title: {backgroundColors.OKCYAN}{deserialized_movie.title}{Style.RESET_ALL}")
-	print(f"{backgroundColors.OKGREEN} deserialized_movie.year: {backgroundColors.OKCYAN}{deserialized_movie.year}{Style.RESET_ALL}")
-	print(f"{backgroundColors.OKGREEN} deserialized_movie.actors: {backgroundColors.OKCYAN}{deserialized_movie.cast}{Style.RESET_ALL}")
-	print(f"{backgroundColors.OKGREEN} deserialized_movie.plot: {backgroundColors.OKCYAN}{deserialized_movie.plot}{Style.RESET_ALL}")
 
-	# if database.createMovie(movie_json) is None:
-	# 	return FAILURE
-	# return SUCCESS
+	if database.createMovie(MessageToJson(deserialized_movie)) == FAILURE:
+		return FAILURE
+	return SUCCESS
 
 # @brief: This function gets a movie
 # @param client_socket: The client socket object
