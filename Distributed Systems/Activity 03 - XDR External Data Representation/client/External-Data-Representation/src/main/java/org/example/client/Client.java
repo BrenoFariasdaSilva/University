@@ -25,6 +25,7 @@ public class Client {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_RED = "\u001B[31m";
     public static final String CREATE = "CREATE";
     public static final String GET = "GET";
     public static final String UPDATE = "UPDATE";
@@ -80,12 +81,15 @@ public class Client {
                 switch (parts[0]) {
                     case CREATE -> {
                         createMovie(out);
-                        validateResponseCode(Objects.requireNonNull(responsePacket(in)), CREATE);
+                        validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), CREATE);
                     }
                     case GET -> {
                         getMovie(out);
-                        if (validateResponseCode(Objects.requireNonNull(responsePacket(in)), GET)) {
+                        if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), GET)) {
                             Movie movie = receiveMovie(in);
+                            System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_CYAN + movie + ANSI_RESET);
+                        } else {
+                            System.out.println(ANSI_GREEN + "Movie not found." + ANSI_RESET);
                         }
                     }
                     case UPDATE -> System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
@@ -121,13 +125,8 @@ public class Client {
             // Read the movie bytes from the socket
             in.readFully(movieBytes);
 
-            // Deserialize the movie bytes into a Movie object
-            Movie movie = Movie.parseFrom(movieBytes);
-
-            // Print the movie
-            System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_CYAN + movie + ANSI_RESET);
-
-            return movie;
+            // Deserialize the movie bytes into a Movie object and return it
+            return Movie.parseFrom(movieBytes);
         } catch (IOException e) {
             System.out.println(ANSI_GREEN + "IO:" + ANSI_CYAN + e.getMessage() + ANSI_RESET);
         }
@@ -185,13 +184,14 @@ public class Client {
         Movie movie = userFillMovieObject();
         // System.out.println(movie);
         // Serialize the movie object
+        assert movie != null;
         byte[] serializedMovie = movie.toByteArray();
 
         // Send the serialized movie to the server
         sendPacket(out, serializedMovie);
     }
 
-    private static ResponseCode responsePacket(DataInputStream in) throws IOException {
+    private static ResponseCode responseCodePacket(DataInputStream in) throws IOException {
         // Wait for the server response packet, which will be two packets. The first one is the length of the second one
         try {
             System.out.println(ANSI_GREEN + "Waiting for the response packet..." + ANSI_RESET);
@@ -252,99 +252,108 @@ public class Client {
     @return: A movie object
     */
     public static Movie userFillMovieObject() {
-        // Initialize the variables id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
-        String id = "id";
-        String plot = "plot";
-        String genre = "genre";
-        int runtime = 1;
-        List<String> cast = new ArrayList<>();
-        cast.add("cast1");
-        int num_mflix_comments = 1;
-        String title = "title";
-        String fullplot = "fullplot";
-        List<String> countries = new ArrayList<>();
-        countries.add("country1");
-        String released = "released";
-        List<String> directors = new ArrayList<>();
-        directors.add("director1");
-        String rated = "rated";
-        String lastupdated = "lastupdated";
-        int year = 2023;
-        String type = "type";
+        Scanner reader = new Scanner(System.in); // Read the user input
+        boolean empty_fields = true;
+        while (empty_fields) {
+            // Ask for the user input: id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
+            System.out.println(ANSI_GREEN + "Type the id of the movie: (String)" + ANSI_RESET);
+            String id = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the plot of the movie: (String)" + ANSI_RESET);
+            String plot = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the genre of the movie: (String)" + ANSI_RESET);
+            String genre = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the runtime of the movie: (int)" + ANSI_RESET);
+            int runtime = reader.nextInt(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the number of casts in the movie: (int)" + ANSI_RESET);
+            int cast_number = reader.nextInt(); // Read the user input
+            // Create a list of casts
+            List<String> cast = new ArrayList<String>(cast_number);
+            reader.nextLine();
+            for (int i = 0; i < cast_number; i++) {
+                System.out.println(ANSI_GREEN + "Type the cast of the movie: (String)" + ANSI_RESET);
+                cast.add(reader.nextLine()); // Read the user input
+            }
+            System.out.println(ANSI_GREEN + "Type the num_mflix_comments of the movie: (int)" + ANSI_RESET);
+            int num_mflix_comments = reader.nextInt(); // Read the user input
+            reader.nextLine();
+            System.out.println(ANSI_GREEN + "Type the title of the movie: (String)" + ANSI_RESET);
+            String title = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the fullplot of the movie: (String)" + ANSI_RESET);
+            String fullplot = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the number of countries of the movie: (int)" + ANSI_RESET);
+            int countries_number = reader.nextInt(); // Read the user input
+            reader.nextLine();
+            List<String> countries = new ArrayList<String>(countries_number);
+            for (int i = 0; i < countries_number; i++) {
+                System.out.println(ANSI_GREEN + "Type the countries of the movie: (String)" + ANSI_RESET);
+                countries.add(reader.nextLine()); // Read the user input
+            }
+            System.out.println(ANSI_GREEN + "Type the released of the movie: (String)" + ANSI_RESET);
+            String released = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the number of directors of the movie: (int)" + ANSI_RESET);
+            int directors_number = reader.nextInt(); // Read the user input
+            reader.nextLine();
+            List<String> directors = new ArrayList<String>(directors_number);
+            for (int i = 0; i < directors_number; i++) {
+                System.out.println(ANSI_GREEN + "Type the directors of the movie: (String)" + ANSI_RESET);
+                directors.add(reader.nextLine()); // Read the user input
+            }
+            System.out.println(ANSI_GREEN + "Type the rated of the movie: (String)" + ANSI_RESET);
+            String rated = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the last updated of the movie: (String)" + ANSI_RESET);
+            String lastupdated = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the year of the movie: (int)" + ANSI_RESET);
+            int year = reader.nextInt(); // Read the user input
+            reader.nextLine();
+            System.out.println(ANSI_GREEN + "Type the type of the movie: (String)" + ANSI_RESET);
+            String type = reader.nextLine(); // Read the user input
 
-//        Scanner reader = new Scanner(System.in); // Read the user input
+            // Initialize the variables id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
+            // String id = "id";
+            // String plot = "plot";
+            // String genre = "genre";
+            // int runtime = 1;
+            // List<String> cast = new ArrayList<>();
+            // cast.add("cast1");
+            // int num_mflix_comments = 1;
+            // String title = "title";
+            // String fullplot = "fullplot";
+            // List<String> countries = new ArrayList<>();
+            // countries.add("country1");
+            // String released = "released";
+            // List<String> directors = new ArrayList<>();
+            // directors.add("director1");
+            // String rated = "rated";
+            // String lastupdated = "lastupdated";
+            // int year = 2023;
+            // String type = "type";
 
-        // Ask for the user input: id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
-//        System.out.println(ANSI_GREEN + "Type the id of the movie: (String)" + ANSI_RESET);
-//        String id = reader.nextLine(); // Read the user input
-//        System.out.println(ANSI_GREEN + "Type the plot of the movie: (String)" + ANSI_RESET);
-//        String plot = reader.nextLine(); // Read the user input
-//        System.out.println(ANSI_GREEN + "Type the genre of the movie: (String)" + ANSI_RESET);
-//        String genre = reader.nextLine(); // Read the user input
-//        System.out.println(ANSI_GREEN + "Type the runtime of the movie: (int)" + ANSI_RESET);
-//        int runtime = reader.nextInt(); // Read the user input
-//        System.out.println(ANSI_GREEN + "Type the number of casts in the movie: (int)" + ANSI_RESET);
-//        int cast_number = reader.nextInt(); // Read the user input
-//        // Create a list of casts
-//        List<String> cast = new ArrayList<String>(cast_number);
-//        reader.nextLine();
-//        for (int i = 0; i < cast_number; i++) {
-//            System.out.println(ANSI_GREEN + "Type the cast of the movie: (String)" + ANSI_RESET);
-//            cast.add(reader.nextLine()); // Read the user input
-//        }
-//        System.out.println(ANSI_GREEN + "Type the num_mflix_comments of the movie: (int)" + ANSI_RESET);
-//        int num_mflix_comments = reader.nextInt(); // Read the user input
-//        reader.nextLine();
-//        System.out.println(ANSI_GREEN + "Type the title of the movie: (String)" + ANSI_RESET);
-//        String title = reader.nextLine(); // Read the user input
-//        System.out.println(ANSI_GREEN + "Type the fullplot of the movie: (String)" + ANSI_RESET);
-//        String fullplot = reader.nextLine(); // Read the user input
-//        System.out.println(ANSI_GREEN + "Type the number of countries of the movie: (int)" + ANSI_RESET);
-//        int countries_number = reader.nextInt(); // Read the user input
-//        reader.nextLine();
-//        List<String> countries = new ArrayList<String>(countries_number);
-//        for (int i = 0; i < countries_number; i++) {
-//            System.out.println(ANSI_GREEN + "Type the countries of the movie: (String)" + ANSI_RESET);
-//            countries.add(reader.nextLine()); // Read the user input
-//        }
-//        System.out.println(ANSI_GREEN + "Type the released of the movie: (String)" + ANSI_RESET);
-//        String released = reader.nextLine(); // Read the user input
-//        System.out.println(ANSI_GREEN + "Type the number of directors of the movie: (int)" + ANSI_RESET);
-//        int directors_number = reader.nextInt(); // Read the user input
-//        reader.nextLine();
-//        List<String> directors = new ArrayList<String>(directors_number);
-//        for (int i = 0; i < directors_number; i++) {
-//            System.out.println(ANSI_GREEN + "Type the directors of the movie: (String)" + ANSI_RESET);
-//            directors.add(reader.nextLine()); // Read the user input
-//        }
-//        System.out.println(ANSI_GREEN + "Type the rated of the movie: (String)" + ANSI_RESET);
-//        String rated = reader.nextLine(); // Read the user input
-//        System.out.println(ANSI_GREEN + "Type the last updated of the movie: (String)" + ANSI_RESET);
-//        String lastupdated = reader.nextLine(); // Read the user input
-//        System.out.println(ANSI_GREEN + "Type the year of the movie: (int)" + ANSI_RESET);
-//        int year = reader.nextInt(); // Read the user input
-//        reader.nextLine();
-//        System.out.println(ANSI_GREEN + "Type the type of the movie: (String)" + ANSI_RESET);
-//        String type = reader.nextLine(); // Read the user input
-
-        // Create a movie protobuf object
-        return Movie.newBuilder()
-                .setId(id) // String
-                .setPlot(plot) // String
-                .setGenre(genre) // String
-                .setRuntime(runtime) // int
-                .addAllCast(cast) // String
-                .setNumMflixComments(num_mflix_comments) // int
-                .setTitle(title) // String
-                .setFullplot(fullplot) // String
-                .addAllCountries(countries) // String
-                .setReleased(released) // String
-                .addAllDirectors(directors) // String
-                .setRated(rated) // String
-                .setLastupdated(lastupdated) // String
-                .setYear(year) // int
-                .setType(type) // String
-                .build(); // Build the movie protobuf object
+            // verify if there is no empty field
+            if (id.equals("") || plot.equals("") || genre.equals("") || runtime == 0 || cast.size() == 0 || num_mflix_comments == 0 || title.equals("") || fullplot.equals("") || countries.size() == 0 || released.equals("") || directors.size() == 0 || rated.equals("") || lastupdated.equals("") || year == 0 || type.equals("")) {
+                System.out.println(ANSI_RED + "Error: One or more fields are empty" + ANSI_RESET);
+            } else {
+                empty_fields = false;
+                // Create a movie protobuf object
+                return Movie.newBuilder()
+                        .setId(id) // String
+                        .setPlot(plot) // String
+                        .setGenre(genre) // String
+                        .setRuntime(runtime) // int
+                        .addAllCast(cast) // String
+                        .setNumMflixComments(num_mflix_comments) // int
+                        .setTitle(title) // String
+                        .setFullplot(fullplot) // String
+                        .addAllCountries(countries) // String
+                        .setReleased(released) // String
+                        .addAllDirectors(directors) // String
+                        .setRated(rated) // String
+                        .setLastupdated(lastupdated) // String
+                        .setYear(year) // int
+                        .setType(type) // String
+                        .build(); // Build the movie protobuf object
+            }
+        }
+        return null;
     }
 
     /*
