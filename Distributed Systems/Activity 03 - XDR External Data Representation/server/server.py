@@ -114,7 +114,7 @@ def getMovie(client_socket, database):
 	serialized_get_movie = get_client_packet(client_socket) # Get the movie object
 	deserialized_get_movie = parse_get_movie_object(serialized_get_movie) # Create a movie object
 
-	print(f"{backgroundColors.OKGREEN}Getting movie {backgroundColors.OKCYAN}{deserialized_get_movie.movie_title}{backgroundColors.OKGREEN} from database{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN}	Getting movie {backgroundColors.OKCYAN}{deserialized_get_movie.movie_title}{backgroundColors.OKGREEN} from database{Style.RESET_ALL}")
 	movie_document = database.getMovieByTitle(deserialized_get_movie.movie_title)
 
 	if movie_document is None:
@@ -198,12 +198,12 @@ def send_response_code(client_socket, response):
 	# Serialize the response to the protocol buffer
 	response_object = movies_pb2.ResponseCode()
 	response_object.response = str(response)
-	print(f"{backgroundColors.OKGREEN} Sending Response: {backgroundColors.OKCYAN}{response_object.response}{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN}	Sending Response: {backgroundColors.OKCYAN}{response_object.response}{Style.RESET_ALL}")
 	# Send the response length to the client
 	client_socket.send(len(response_object.SerializeToString()).to_bytes(4, byteorder='big'))
 	# Send the response to the client
 	client_socket.send(response_object.SerializeToString())
-	print(f"{backgroundColors.OKGREEN} Response sent{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN}	Response sent successfully{Style.RESET_ALL}")
 
 # @brief: This function sends the movies list to the client by sending the length of the list and then the list
 # @param client_socket: The client socket object
@@ -263,6 +263,7 @@ def client_input(client_socket, client_address):
 	database_connection = MongoDatabase() # Get a database connection object
 	while True:
 		try:
+			print(f"{backgroundColors.OKGREEN}Waiting for client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} message{Style.RESET_ALL}")
 			next_package_size = client_socket.recv(CLIENT_REQUEST_SIZE) # Receive the next_package_size from the client
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent next_package_size: {backgroundColors.OKCYAN}{next_package_size}{backgroundColors.OKGREEN} bytes{Style.RESET_ALL}")
 			next_package_size = int.from_bytes(next_package_size, byteorder="big")
@@ -272,6 +273,7 @@ def client_input(client_socket, client_address):
 				print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.FAIL} sent empty data{Style.RESET_ALL} ")
 				break
 			handle_client_input(client_socket, client_address, database_connection, client_request) # Handle the client input
+			print("")
 		except ConnectionResetError:
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.FAIL} disconnected{Style.RESET_ALL}")
 			break
