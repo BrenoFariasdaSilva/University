@@ -1,8 +1,5 @@
 package org.example.client;
-import org.example.client.structs.ClientRequest;
-import org.example.client.structs.Movie;
-import org.example.client.structs.Operations;
-import org.example.client.structs.ResponseCode;
+import org.example.client.structs.*;
 
 import java.net.*;
 import java.io.*;
@@ -85,7 +82,10 @@ public class Client {
                         createMovie(out);
                         validateResponseCode(Objects.requireNonNull(responsePacket(in)), CREATE);
                     }
-                    case GET -> System.out.println(ANSI_GREEN + "Getting a movie..." + ANSI_RESET);
+                    case GET -> {
+                        getMovie(out);
+                        validateResponseCode(Objects.requireNonNull(responsePacket(in)), GET);
+                    }
                     case UPDATE -> System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
                     case DELETE -> System.out.println(ANSI_GREEN + "Deleting a movie..." + ANSI_RESET);
                     case LISTBYACTORS ->
@@ -104,6 +104,40 @@ public class Client {
         } catch (IOException ioe){
             System.out.println(ANSI_CYAN + "IO:" + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
         }
+    }
+
+    private static void getMovie(DataOutputStream out) throws IOException {
+        System.out.println(ANSI_GREEN + "Getting a movie..." + ANSI_RESET);
+
+        // Create a new ClientRequest object for specifying the operation the server will execute
+        ClientRequest request = ClientRequest.newBuilder()//.
+                .setOperation(Operations.Read)
+                .build();
+        // Serialize the request
+        byte[] serializedRequest = request.toByteArray();
+
+        // Send the serialized request to the server
+        sendPacket(out, serializedRequest);
+
+        // Create a new Movie object and fill it with the user input
+        GetMovieOperation get_movie = userFillGetMovieObject();
+        System.out.println(ANSI_GREEN + "Movie title: " + ANSI_CYAN + get_movie.getMovieTitle() + ANSI_RESET);
+        // Serialize the movie object
+        byte[] serializedMovie = get_movie.toByteArray();
+
+        // Send the serialized movie to the server
+        sendPacket(out, serializedMovie);
+    }
+
+    private static GetMovieOperation userFillGetMovieObject() {
+        Scanner reader = new Scanner(System.in); // Read the user input
+
+        System.out.println(ANSI_GREEN + "Type the movie title: (String)" + ANSI_RESET);
+        String title = reader.nextLine(); // Read the user input
+
+        return GetMovieOperation.newBuilder()
+                .setMovieTitle(title)
+                .build();
     }
 
     private static void createMovie(DataOutputStream out) throws IOException {

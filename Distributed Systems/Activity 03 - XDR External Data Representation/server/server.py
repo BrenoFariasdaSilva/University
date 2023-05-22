@@ -85,7 +85,11 @@ def getMovie(client_socket, database):
 	deserialized_get_movie = parse_get_movie_object(serialized_get_movie) # Create a movie object
 
 	print(f"{backgroundColors.OKGREEN}  Getting movie {backgroundColors.OKCYAN}{deserialized_get_movie.movie_title}{Style.RESET_ALL}")
-	response_object = database.getMovie(deserialized_get_movie.movie_title)
+	response_object = database.getMovieByTitle(deserialized_get_movie.movie_title)
+	# Convert the response object to a dictionary
+	response_object = MessageToJson(response_object)
+	print(f"{backgroundColors.OKGREEN}  response_object: {backgroundColors.OKCYAN}{response_object}{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN}  response_object.title: {backgroundColors.OKCYAN}{response_object.title}{Style.RESET_ALL}")
 	if response_object is None:
 		return FAILURE
 	return response_object
@@ -174,16 +178,15 @@ def send_response_code(client_socket, response):
 
 # @brief: This function sends the movies list to the client by sending the length of the list and then the list
 # @param client_socket: The client socket object
-# @param movies_list: The movies list
+# @param movies: The movie object
 # @return: None
-def send_movies_list(client_socket, movies_list):
-	print(f"{backgroundColors.OKGREEN}  Trying to Send Movies List: {backgroundColors.OKCYAN}{movies_list}{Style.RESET_ALL}")
-	# Send the movies list length to the client
-	client_socket.send(len(movies_list).to_bytes(4, byteorder='big'))
-	# Send the each movie to the client
-	for movie in movies_list:
-		client_socket.send(movie)
-	print(f"{backgroundColors.OKGREEN}  Movies List sent{Style.RESET_ALL}")
+def send_movie(client_socket, movie):
+	print(f"{backgroundColors.OKGREEN}  Trying to Send Movie: {backgroundColors.OKCYAN}{movie}{Style.RESET_ALL}")
+	# Send the movie length to the client
+	client_socket.send(len(movie).to_bytes(4, byteorder='big'))
+	# Send the movie to the client
+	client_socket.send(movie.SerializeToString())
+	print(f"{backgroundColors.OKGREEN}  Movie sent{Style.RESET_ALL}")
 
 # @brief: This function handles the client input
 # @param client_socket: The client socket object
@@ -202,10 +205,10 @@ def handle_client_input(client_socket, client_address, database, client_request)
 			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]} {backgroundColors.OKGREEN}sent create movie command{Style.RESET_ALL}")
 			response_code = createMovie(client_socket, database) # Create the movie
 			send_response_code(client_socket, response_code) # Send the response to the client
-		case movies_pb2.Operations.Get: # If the operation is get movie: 2
+		case movies_pb2.Operations.Read: # If the operation is get movie: 2
 			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get movie command")
 			response_movie = getMovie(client_socket, database) # Get the movie
-			send_movies_list(client_socket, response_movie) # Send the response to the client
+			send_movie(client_socket, response_movie) # Send the response to the client
 		case movies_pb2.Operations.Update: # If the operation is update movie: 3
 			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent update movie command")
 			response = updateMovie(client_socket, database) # Update the movie
