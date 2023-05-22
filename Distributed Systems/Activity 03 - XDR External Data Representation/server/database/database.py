@@ -12,6 +12,10 @@ class backgroundColors: # Colors for the terminal
 	WARNING = "\033[93m" # Yellow
 	FAIL = "\033[91m" # Red
 
+# Status messages:
+SUCCESS = 1
+FAILURE = 0
+
 class MongoDatabase:
 	def __init__(self):
 		load_dotenv()
@@ -29,14 +33,11 @@ class MongoDatabase:
 		movie = json.loads(movie)
 		if movie.get('id'):
 			movie.pop('id')
-		print(f"Creating movie: {movie}")
+		print(f"{backgroundColors.OKGREEN}Creating movie {backgroundColors.OKCYAN}{movie}{Style.RESET_ALL}")
 		reponse_document = self.collection.insert_one(movie)
-		return reponse_document
-		# print(f"Movie created with id: {reponse_document.inserted_id}")
-		# print(f"Movie acknowledged: {reponse_document.acknowledged}")
-		# if reponse_document.acknowledged: # If the movie was created
-		# 	return reponse_document.inserted_id # Return the movie id
-		# return None
+		if reponse_document.acknowledged: # If the movie was created
+			return SUCCESS
+		return None
 	
 	def getMovieByTitle(self, movie_title):
 		return self.collection.find_one({"title": movie_title})
