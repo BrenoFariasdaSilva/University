@@ -39,10 +39,18 @@ def parse_delete_object(delete_object):
 	delete.ParseFromString(delete_object) # Parse the delete object
 	return delete
 
+# @brief: This function parses a GetMovieOperation object from string
+# @param get_movie_object: The GetMovieOperation object
+# @return: The GetMovieOperation object parsed
+def parse_get_movie_object(get_movie_object):
+	get_movie = movies_pb2.GetMovieOperation() # Create a GetMovieOperation object
+	get_movie.ParseFromString(get_movie_object) # Parse the GetMovieOperation object
+	return get_movie
+
 # @brief: This function parses a movie object from string
 # @param serialized_movie: The movie object
 # @return: The movie object parsed
-def deserialize_movie_object(serialized_movie):
+def parse_movie_object(serialized_movie):
 	deserialized_movie = movies_pb2.Movie() # Create a movie object
 	deserialized_movie.ParseFromString(serialized_movie) # Parse the movie object
 	return deserialized_movie
@@ -53,9 +61,9 @@ def deserialize_movie_object(serialized_movie):
 def get_client_packet(client_socket):
 	packet_size = int.from_bytes(client_socket.recv(CLIENT_REQUEST_SIZE), "big") # Get the packet size
 	print(f"{backgroundColors.OKGREEN}  Parsed Packet size: {backgroundColors.OKCYAN}{packet_size}{Style.RESET_ALL}")
-	serialized_movie = client_socket.recv(packet_size) # Get the packet
-	print(f"{backgroundColors.OKGREEN}  Bytes Packet: {backgroundColors.OKCYAN}{serialized_movie}{Style.RESET_ALL}")
-	return serialized_movie
+	serialized_packet = client_socket.recv(packet_size) # Get the packet
+	print(f"{backgroundColors.OKGREEN}  Bytes Packet: {backgroundColors.OKCYAN}{serialized_packet}{Style.RESET_ALL}")
+	return serialized_packet
 
 # @brief: This function creates a movie
 # @param client_socket: The client socket object
@@ -63,7 +71,7 @@ def get_client_packet(client_socket):
 # @return: Status code
 def createMovie(client_socket, database: MongoDatabase):
 	serialized_movie = get_client_packet(client_socket) # Get the movie object
-	deserialized_movie = deserialize_movie_object(serialized_movie) # Create a movie object
+	deserialized_movie = parse_movie_object(serialized_movie) # Create a movie object
 	print(f"{backgroundColors.OKGREEN}  deserialized_movie.title: {backgroundColors.OKCYAN}{deserialized_movie.title}{Style.RESET_ALL}")
 
 	return database.createMovie(MessageToJson(deserialized_movie))
@@ -73,11 +81,11 @@ def createMovie(client_socket, database: MongoDatabase):
 # @param database: The database object
 # @return: Status code or movie object
 def getMovie(client_socket, database):
-	movie_title = get_client_packet(client_socket) # Get the movie object
-	get_movie_object = parse_movie_object(movie_title) # Create a movie object
+	serialized_get_movie = get_client_packet(client_socket) # Get the movie object
+	deserialized_get_movie = parse_get_movie_object(serialized_get_movie) # Create a movie object
 
-	print(f"Getting movie {backgroundColors.OKGREEN}{get_movie_object.movie_title}{Style.RESET_ALL}")
-	response_object = database.getMovieByTitle(get_movie_object.movie_title)
+	print(f"{backgroundColors.OKGREEN}  Getting movie {backgroundColors.OKCYAN}{deserialized_get_movie.movie_title}{Style.RESET_ALL}")
+	response_object = database.getMovie(deserialized_get_movie.movie_title)
 	if response_object is None:
 		return FAILURE
 	return response_object
@@ -152,7 +160,7 @@ def getMoviesByCategory(client_socket, database):
 # @param client_socket: The client socket object
 # @param response: The response code
 # @return: None
-def send_response(client_socket, response):
+def send_response_code(client_socket, response):
 	print(f"{backgroundColors.OKGREEN}  Trying to Send Response: {backgroundColors.OKCYAN}{response}{Style.RESET_ALL}")
 	# Serialize the response to the protocol buffer
 	response_object = movies_pb2.ResponseCode()
@@ -163,6 +171,19 @@ def send_response(client_socket, response):
 	# Send the response to the client
 	client_socket.send(response_object.SerializeToString())
 	print(f"{backgroundColors.OKGREEN}  Response sent{Style.RESET_ALL}")
+
+# @brief: This function sends the movies list to the client by sending the length of the list and then the list
+# @param client_socket: The client socket object
+# @param movies_list: The movies list
+# @return: None
+def send_movies_list(client_socket, movies_list):
+	print(f"{backgroundColors.OKGREEN}  Trying to Send Movies List: {backgroundColors.OKCYAN}{movies_list}{Style.RESET_ALL}")
+	# Send the movies list length to the client
+	client_socket.send(len(movies_list).to_bytes(4, byteorder='big'))
+	# Send the each movie to the client
+	for movie in movies_list:
+		client_socket.send(movie)
+	print(f"{backgroundColors.OKGREEN}  Movies List sent{Style.RESET_ALL}")
 
 # @brief: This function handles the client input
 # @param client_socket: The client socket object
@@ -179,10 +200,12 @@ def handle_client_input(client_socket, client_address, database, client_request)
 	match parsed_client_request.operation:
 		case movies_pb2.Operations.Create: # If the operation is create movie: 1
 			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]} {backgroundColors.OKGREEN}sent create movie command{Style.RESET_ALL}")
-			response = createMovie(client_socket, database) # Create the movie
+			response_code = createMovie(client_socket, database) # Create the movie
+			send_response_code(client_socket, response_code) # Send the response to the client
 		case movies_pb2.Operations.Get: # If the operation is get movie: 2
 			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent get movie command")
-			response = getMovie(client_socket, database) # Get the movie
+			response_movie = getMovie(client_socket, database) # Get the movie
+			send_movies_list(client_socket, response_movie) # Send the response to the client
 		case movies_pb2.Operations.Update: # If the operation is update movie: 3
 			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent update movie command")
 			response = updateMovie(client_socket, database) # Update the movie
@@ -197,7 +220,7 @@ def handle_client_input(client_socket, client_address, database, client_request)
 			response = getMoviesByCategory(client_socket, database) # Get the category movies
 		case _: # If the operation is unknown
 			print(f"{backgroundColors.OKGREEN} Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL} sent unknown command")
-	send_response(client_socket, response)
+	send_response_code(client_socket, response)
 
 # @brief: This function handles the client input
 # @param client_socket: The client socket
