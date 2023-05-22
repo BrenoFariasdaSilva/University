@@ -4,18 +4,18 @@
 package org.example.client.structs;
 
 /**
- * Protobuf type {@code ServerResponse}
+ * Protobuf type {@code ResponseCode}
  */
-public final class ServerResponse extends
+public final class ResponseCode extends
     com.google.protobuf.GeneratedMessageV3 implements
-    // @@protoc_insertion_point(message_implements:ServerResponse)
-    ServerResponseOrBuilder {
+    // @@protoc_insertion_point(message_implements:ResponseCode)
+    ResponseCodeOrBuilder {
 private static final long serialVersionUID = 0L;
-  // Use ServerResponse.newBuilder() to construct.
-  private ServerResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+  // Use ResponseCode.newBuilder() to construct.
+  private ResponseCode(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
     super(builder);
   }
-  private ServerResponse() {
+  private ResponseCode() {
     response_ = "";
   }
 
@@ -23,20 +23,20 @@ private static final long serialVersionUID = 0L;
   @SuppressWarnings({"unused"})
   protected java.lang.Object newInstance(
       UnusedPrivateParameter unused) {
-    return new ServerResponse();
+    return new ResponseCode();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
       getDescriptor() {
-    return org.example.client.structs.Movies.internal_static_ServerResponse_descriptor;
+    return org.example.client.structs.Movies.internal_static_ResponseCode_descriptor;
   }
 
   @java.lang.Override
   protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internalGetFieldAccessorTable() {
-    return org.example.client.structs.Movies.internal_static_ServerResponse_fieldAccessorTable
+    return org.example.client.structs.Movies.internal_static_ResponseCode_fieldAccessorTable
         .ensureFieldAccessorsInitialized(
-            org.example.client.structs.ServerResponse.class, org.example.client.structs.ServerResponse.Builder.class);
+            org.example.client.structs.ResponseCode.class, org.example.client.structs.ResponseCode.Builder.class);
   }
 
   public static final int RESPONSE_FIELD_NUMBER = 1;
@@ -117,10 +117,10 @@ private static final long serialVersionUID = 0L;
     if (obj == this) {
      return true;
     }
-    if (!(obj instanceof org.example.client.structs.ServerResponse)) {
+    if (!(obj instanceof org.example.client.structs.ResponseCode)) {
       return super.equals(obj);
     }
-    org.example.client.structs.ServerResponse other = (org.example.client.structs.ServerResponse) obj;
+    org.example.client.structs.ResponseCode other = (org.example.client.structs.ResponseCode) obj;
 
     if (!getResponse()
         .equals(other.getResponse())) return false;
@@ -142,44 +142,44 @@ private static final long serialVersionUID = 0L;
     return hash;
   }
 
-  public static org.example.client.structs.ServerResponse parseFrom(
+  public static org.example.client.structs.ResponseCode parseFrom(
       java.nio.ByteBuffer data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.example.client.structs.ServerResponse parseFrom(
+  public static org.example.client.structs.ResponseCode parseFrom(
       java.nio.ByteBuffer data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.example.client.structs.ServerResponse parseFrom(
+  public static org.example.client.structs.ResponseCode parseFrom(
       com.google.protobuf.ByteString data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.example.client.structs.ServerResponse parseFrom(
+  public static org.example.client.structs.ResponseCode parseFrom(
       com.google.protobuf.ByteString data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.example.client.structs.ServerResponse parseFrom(byte[] data)
+  public static org.example.client.structs.ResponseCode parseFrom(byte[] data)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data);
   }
-  public static org.example.client.structs.ServerResponse parseFrom(
+  public static org.example.client.structs.ResponseCode parseFrom(
       byte[] data,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws com.google.protobuf.InvalidProtocolBufferException {
     return PARSER.parseFrom(data, extensionRegistry);
   }
-  public static org.example.client.structs.ServerResponse parseFrom(java.io.InputStream input)
+  public static org.example.client.structs.ResponseCode parseFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.example.client.structs.ServerResponse parseFrom(
+  public static org.example.client.structs.ResponseCode parseFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -187,26 +187,26 @@ private static final long serialVersionUID = 0L;
         .parseWithIOException(PARSER, input, extensionRegistry);
   }
 
-  public static org.example.client.structs.ServerResponse parseDelimitedFrom(java.io.InputStream input)
+  public static org.example.client.structs.ResponseCode parseDelimitedFrom(java.io.InputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input);
   }
 
-  public static org.example.client.structs.ServerResponse parseDelimitedFrom(
+  public static org.example.client.structs.ResponseCode parseDelimitedFrom(
       java.io.InputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
   }
-  public static org.example.client.structs.ServerResponse parseFrom(
+  public static org.example.client.structs.ResponseCode parseFrom(
       com.google.protobuf.CodedInputStream input)
       throws java.io.IOException {
     return com.google.protobuf.GeneratedMessageV3
         .parseWithIOException(PARSER, input);
   }
-  public static org.example.client.structs.ServerResponse parseFrom(
+  public static org.example.client.structs.ResponseCode parseFrom(
       com.google.protobuf.CodedInputStream input,
       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
       throws java.io.IOException {
@@ -219,7 +219,7 @@ private static final long serialVersionUID = 0L;
   public static Builder newBuilder() {
     return DEFAULT_INSTANCE.toBuilder();
   }
-  public static Builder newBuilder(org.example.client.structs.ServerResponse prototype) {
+  public static Builder newBuilder(org.example.client.structs.ResponseCode prototype) {
     return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
   }
   @java.lang.Override
@@ -235,26 +235,26 @@ private static final long serialVersionUID = 0L;
     return builder;
   }
   /**
-   * Protobuf type {@code ServerResponse}
+   * Protobuf type {@code ResponseCode}
    */
   public static final class Builder extends
       com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:ServerResponse)
-      org.example.client.structs.ServerResponseOrBuilder {
+      // @@protoc_insertion_point(builder_implements:ResponseCode)
+      org.example.client.structs.ResponseCodeOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return org.example.client.structs.Movies.internal_static_ServerResponse_descriptor;
+      return org.example.client.structs.Movies.internal_static_ResponseCode_descriptor;
     }
 
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return org.example.client.structs.Movies.internal_static_ServerResponse_fieldAccessorTable
+      return org.example.client.structs.Movies.internal_static_ResponseCode_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              org.example.client.structs.ServerResponse.class, org.example.client.structs.ServerResponse.Builder.class);
+              org.example.client.structs.ResponseCode.class, org.example.client.structs.ResponseCode.Builder.class);
     }
 
-    // Construct using org.example.client.structs.ServerResponse.newBuilder()
+    // Construct using org.example.client.structs.ResponseCode.newBuilder()
     private Builder() {
 
     }
@@ -275,17 +275,17 @@ private static final long serialVersionUID = 0L;
     @java.lang.Override
     public com.google.protobuf.Descriptors.Descriptor
         getDescriptorForType() {
-      return org.example.client.structs.Movies.internal_static_ServerResponse_descriptor;
+      return org.example.client.structs.Movies.internal_static_ResponseCode_descriptor;
     }
 
     @java.lang.Override
-    public org.example.client.structs.ServerResponse getDefaultInstanceForType() {
-      return org.example.client.structs.ServerResponse.getDefaultInstance();
+    public org.example.client.structs.ResponseCode getDefaultInstanceForType() {
+      return org.example.client.structs.ResponseCode.getDefaultInstance();
     }
 
     @java.lang.Override
-    public org.example.client.structs.ServerResponse build() {
-      org.example.client.structs.ServerResponse result = buildPartial();
+    public org.example.client.structs.ResponseCode build() {
+      org.example.client.structs.ResponseCode result = buildPartial();
       if (!result.isInitialized()) {
         throw newUninitializedMessageException(result);
       }
@@ -293,14 +293,14 @@ private static final long serialVersionUID = 0L;
     }
 
     @java.lang.Override
-    public org.example.client.structs.ServerResponse buildPartial() {
-      org.example.client.structs.ServerResponse result = new org.example.client.structs.ServerResponse(this);
+    public org.example.client.structs.ResponseCode buildPartial() {
+      org.example.client.structs.ResponseCode result = new org.example.client.structs.ResponseCode(this);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
     }
 
-    private void buildPartial0(org.example.client.structs.ServerResponse result) {
+    private void buildPartial0(org.example.client.structs.ResponseCode result) {
       int from_bitField0_ = bitField0_;
       if (((from_bitField0_ & 0x00000001) != 0)) {
         result.response_ = response_;
@@ -309,16 +309,16 @@ private static final long serialVersionUID = 0L;
 
     @java.lang.Override
     public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof org.example.client.structs.ServerResponse) {
-        return mergeFrom((org.example.client.structs.ServerResponse)other);
+      if (other instanceof org.example.client.structs.ResponseCode) {
+        return mergeFrom((org.example.client.structs.ResponseCode)other);
       } else {
         super.mergeFrom(other);
         return this;
       }
     }
 
-    public Builder mergeFrom(org.example.client.structs.ServerResponse other) {
-      if (other == org.example.client.structs.ServerResponse.getDefaultInstance()) return this;
+    public Builder mergeFrom(org.example.client.structs.ResponseCode other) {
+      if (other == org.example.client.structs.ResponseCode.getDefaultInstance()) return this;
       if (!other.getResponse().isEmpty()) {
         response_ = other.response_;
         bitField0_ |= 0x00000001;
@@ -456,23 +456,23 @@ private static final long serialVersionUID = 0L;
     }
 
 
-    // @@protoc_insertion_point(builder_scope:ServerResponse)
+    // @@protoc_insertion_point(builder_scope:ResponseCode)
   }
 
-  // @@protoc_insertion_point(class_scope:ServerResponse)
-  private static final org.example.client.structs.ServerResponse DEFAULT_INSTANCE;
+  // @@protoc_insertion_point(class_scope:ResponseCode)
+  private static final org.example.client.structs.ResponseCode DEFAULT_INSTANCE;
   static {
-    DEFAULT_INSTANCE = new org.example.client.structs.ServerResponse();
+    DEFAULT_INSTANCE = new org.example.client.structs.ResponseCode();
   }
 
-  public static org.example.client.structs.ServerResponse getDefaultInstance() {
+  public static org.example.client.structs.ResponseCode getDefaultInstance() {
     return DEFAULT_INSTANCE;
   }
 
-  private static final com.google.protobuf.Parser<ServerResponse>
-      PARSER = new com.google.protobuf.AbstractParser<ServerResponse>() {
+  private static final com.google.protobuf.Parser<ResponseCode>
+      PARSER = new com.google.protobuf.AbstractParser<ResponseCode>() {
     @java.lang.Override
-    public ServerResponse parsePartialFrom(
+    public ResponseCode parsePartialFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -491,17 +491,17 @@ private static final long serialVersionUID = 0L;
     }
   };
 
-  public static com.google.protobuf.Parser<ServerResponse> parser() {
+  public static com.google.protobuf.Parser<ResponseCode> parser() {
     return PARSER;
   }
 
   @java.lang.Override
-  public com.google.protobuf.Parser<ServerResponse> getParserForType() {
+  public com.google.protobuf.Parser<ResponseCode> getParserForType() {
     return PARSER;
   }
 
   @java.lang.Override
-  public org.example.client.structs.ServerResponse getDefaultInstanceForType() {
+  public org.example.client.structs.ResponseCode getDefaultInstanceForType() {
     return DEFAULT_INSTANCE;
   }
 

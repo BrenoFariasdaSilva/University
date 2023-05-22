@@ -153,13 +153,16 @@ def getMoviesByCategory(client_socket, database):
 # @param response: The response code
 # @return: None
 def send_response(client_socket, response):
+	print(f"{backgroundColors.OKGREEN}  Trying to Send Response: {backgroundColors.OKCYAN}{response}{Style.RESET_ALL}")
 	# Serialize the response to the protocol buffer
-	response_object = movies_pb2.ServerResponse()
-	response_object.response = response
+	response_object = movies_pb2.ResponseCode()
+	response_object.response = str(response)
+	print(f"{backgroundColors.OKGREEN}  Sending Response: {backgroundColors.OKCYAN}{response_object.response}{Style.RESET_ALL}")
 	# Send the response length to the client
 	client_socket.send(len(response_object.SerializeToString()).to_bytes(4, byteorder='big'))
 	# Send the response to the client
 	client_socket.send(response_object.SerializeToString())
+	print(f"{backgroundColors.OKGREEN}  Response sent{Style.RESET_ALL}")
 
 # @brief: This function handles the client input
 # @param client_socket: The client socket object

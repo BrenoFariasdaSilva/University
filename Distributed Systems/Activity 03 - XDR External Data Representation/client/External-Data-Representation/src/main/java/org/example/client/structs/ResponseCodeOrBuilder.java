@@ -3,8 +3,8 @@
 
 package org.example.client.structs;
 
-public interface ServerResponseOrBuilder extends
-    // @@protoc_insertion_point(interface_extends:ServerResponse)
+public interface ResponseCodeOrBuilder extends
+    // @@protoc_insertion_point(interface_extends:ResponseCode)
     com.google.protobuf.MessageOrBuilder {
 
   /**

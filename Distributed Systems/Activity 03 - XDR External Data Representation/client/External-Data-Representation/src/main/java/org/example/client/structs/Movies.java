@@ -30,10 +30,10 @@ public final class Movies {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_DeleteMovieOperation_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_ServerResponse_descriptor;
+    internal_static_ResponseCode_descriptor;
   static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_ServerResponse_fieldAccessorTable;
+      internal_static_ResponseCode_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ClientListOperation_descriptor;
   static final 
@@ -61,20 +61,20 @@ public final class Movies {
       "\n\014movies.proto\"/\n\rClientRequest\022\036\n\topera" +
       "tion\030\001 \001(\0162\013.Operations\"(\n\021GetMovieOpera" +
       "tion\022\023\n\013movie_title\030\001 \001(\t\"+\n\024DeleteMovie" +
-      "Operation\022\023\n\013movie_title\030\001 \001(\t\"\"\n\016Server" +
-      "Response\022\020\n\010response\030\001 \001(\t\"%\n\023ClientList" +
-      "Operation\022\016\n\006filter\030\001 \001(\t\"&\n\014ServerListB" +
-      "y\022\026\n\006movies\030\001 \003(\0132\006.Movie\"\204\002\n\005Movie\022\n\n\002i" +
-      "d\030\001 \001(\t\022\014\n\004plot\030\002 \001(\t\022\r\n\005genre\030\003 \001(\t\022\017\n\007" +
-      "runtime\030\004 \001(\005\022\014\n\004cast\030\005 \003(\t\022\032\n\022num_mflix" +
-      "_comments\030\006 \001(\005\022\r\n\005title\030\007 \001(\t\022\020\n\010fullpl" +
-      "ot\030\010 \001(\t\022\021\n\tcountries\030\t \003(\t\022\020\n\010released\030" +
-      "\n \001(\t\022\021\n\tdirectors\030\013 \003(\t\022\r\n\005rated\030\014 \001(\t\022" +
-      "\023\n\013lastupdated\030\r \001(\t\022\014\n\004year\030\016 \001(\005\022\014\n\004ty" +
-      "pe\030\017 \001(\t*k\n\nOperations\022\010\n\004Zero\020\000\022\n\n\006Crea" +
-      "te\020\001\022\010\n\004Read\020\002\022\n\n\006Update\020\003\022\n\n\006Delete\020\004\022\020" +
-      "\n\014ListByActors\020\005\022\023\n\017ListByDirectors\020\006B\036\n" +
-      "\032org.example.client.structsP\001b\006proto3"
+      "Operation\022\023\n\013movie_title\030\001 \001(\t\" \n\014Respon" +
+      "seCode\022\020\n\010response\030\001 \001(\t\"%\n\023ClientListOp" +
+      "eration\022\016\n\006filter\030\001 \001(\t\"&\n\014ServerListBy\022" +
+      "\026\n\006movies\030\001 \003(\0132\006.Movie\"\204\002\n\005Movie\022\n\n\002id\030" +
+      "\001 \001(\t\022\014\n\004plot\030\002 \001(\t\022\r\n\005genre\030\003 \001(\t\022\017\n\007ru" +
+      "ntime\030\004 \001(\005\022\014\n\004cast\030\005 \003(\t\022\032\n\022num_mflix_c" +
+      "omments\030\006 \001(\005\022\r\n\005title\030\007 \001(\t\022\020\n\010fullplot" +
+      "\030\010 \001(\t\022\021\n\tcountries\030\t \003(\t\022\020\n\010released\030\n " +
+      "\001(\t\022\021\n\tdirectors\030\013 \003(\t\022\r\n\005rated\030\014 \001(\t\022\023\n" +
+      "\013lastupdated\030\r \001(\t\022\014\n\004year\030\016 \001(\005\022\014\n\004type" +
+      "\030\017 \001(\t*k\n\nOperations\022\010\n\004Zero\020\000\022\n\n\006Create" +
+      "\020\001\022\010\n\004Read\020\002\022\n\n\006Update\020\003\022\n\n\006Delete\020\004\022\020\n\014" +
+      "ListByActors\020\005\022\023\n\017ListByDirectors\020\006B\036\n\032o" +
+      "rg.example.client.structsP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -98,11 +98,11 @@ public final class Movies {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_DeleteMovieOperation_descriptor,
         new java.lang.String[] { "MovieTitle", });
-    internal_static_ServerResponse_descriptor =
+    internal_static_ResponseCode_descriptor =
       getDescriptor().getMessageTypes().get(3);
-    internal_static_ServerResponse_fieldAccessorTable = new
+    internal_static_ResponseCode_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_ServerResponse_descriptor,
+        internal_static_ResponseCode_descriptor,
         new java.lang.String[] { "Response", });
     internal_static_ClientListOperation_descriptor =
       getDescriptor().getMessageTypes().get(4);

@@ -2,12 +2,13 @@ package org.example.client;
 import org.example.client.structs.ClientRequest;
 import org.example.client.structs.Movie;
 import org.example.client.structs.Operations;
+import org.example.client.structs.ResponseCode;
 
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 /*
@@ -27,7 +28,18 @@ public class Client {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_CYAN = "\u001B[36m";
-
+    public static final String CREATE = "CREATE";
+    public static final String GET = "GET";
+    public static final String UPDATE = "UPDATE";
+    public static final String DELETE = "DELETE";
+    public static final String LISTBYACTORS = "LISTBYACTORS";
+    public static final String LISTBYCATEGORY = "LISTBYCATEGORY";
+    public static final String HELP = "HELP";
+    public static final String EXIT = "EXIT";
+    public static final String SUCCESS = "SUCCESS";
+    public static final String FAILURE = "FAILURE";
+    public static final String SUCCESS_CODE = "1";
+    public static final String FAILURE_CODE = "0";
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in); // Read the user input
 
@@ -58,7 +70,7 @@ public class Client {
                 // Convert the first word of the user input to uppercase
                 user_input = stringToUpperCase(user_input);
 
-                if (user_input.equals("EXIT")) {
+                if (user_input.equals(EXIT)) {
                     System.out.println(ANSI_GREEN + "Closing the connection..." + ANSI_RESET);
                     clientSocket.close();
                     break;
@@ -69,15 +81,18 @@ public class Client {
 
                 // Validate the user input for CREATE, GET, UPDATE, DELETE...
                 switch (parts[0]) {
-                    case "CREATE" -> createMovie(out);
-                    case "GET" -> System.out.println(ANSI_GREEN + "Getting a movie..." + ANSI_RESET);
-                    case "UPDATE" -> System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
-                    case "DELETE" -> System.out.println(ANSI_GREEN + "Deleting a movie..." + ANSI_RESET);
-                    case "LISTBYACTORS" ->
+                    case CREATE -> {
+                        createMovie(out);
+                        validateResponseCode(Objects.requireNonNull(responsePacket(in)), CREATE);
+                    }
+                    case GET -> System.out.println(ANSI_GREEN + "Getting a movie..." + ANSI_RESET);
+                    case UPDATE -> System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
+                    case DELETE -> System.out.println(ANSI_GREEN + "Deleting a movie..." + ANSI_RESET);
+                    case LISTBYACTORS ->
                             System.out.println(ANSI_GREEN + "Listing all movies by an actor..." + ANSI_RESET);
-                    case "LISTBYCATEGORY" ->
+                    case LISTBYCATEGORY ->
                             System.out.println(ANSI_GREEN + "Listing all movies by a category..." + ANSI_RESET);
-                    case "HELP" -> showHelp();
+                    case HELP -> showHelp();
                     default -> {
                         System.out.println(ANSI_GREEN + "Invalid command. Try again." + ANSI_RESET);
                         continue;
@@ -112,6 +127,36 @@ public class Client {
 
         // Send the serialized movie to the server
         sendPacket(out, serializedMovie);
+    }
+
+    private static ResponseCode responsePacket(DataInputStream in) throws IOException {
+        // Wait for the server response packet, which will be two packets. The first one is the length of the second one
+        try {
+            System.out.println(ANSI_GREEN + "Waiting for the response packet..." + ANSI_RESET);
+            int length = in.readInt();
+            System.out.println(ANSI_GREEN + "Length of the response packet: " + ANSI_CYAN + length + ANSI_RESET);
+            byte[] serializedResponse = new byte[length];
+            in.readFully(serializedResponse, 0, length);
+            System.out.println(ANSI_GREEN + "Serialized response: " + ANSI_CYAN + serializedResponse + ANSI_RESET);
+
+            // Deserialize the response
+            ResponseCode deserializedResponse = ResponseCode.parseFrom(serializedResponse);
+            System.out.println(ANSI_GREEN + "Response: " + ANSI_CYAN + deserializedResponse.getResponse() + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "Response code sent!" + ANSI_RESET);
+            return deserializedResponse;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Create a method that validates the response code. If is 1, then the operation was successful, otherwise it failed
+    private static void validateResponseCode(ResponseCode responseCode, String operation) {
+        if (responseCode.getResponse().equals(SUCCESS_CODE)) {
+            System.out.println(ANSI_GREEN + "Operation " + ANSI_CYAN + operation + " " + ANSI_GREEN + SUCCESS + "!" + ANSI_RESET);
+        } else {
+            System.out.println(ANSI_GREEN + "Operation " + ANSI_CYAN + operation + " " + ANSI_GREEN + FAILURE + "!" + ANSI_RESET);
+        }
     }
 
     // create a method for sending packets to the server
