@@ -84,7 +84,9 @@ public class Client {
                     }
                     case GET -> {
                         getMovie(out);
-                        validateResponseCode(Objects.requireNonNull(responsePacket(in)), GET);
+                        if (validateResponseCode(Objects.requireNonNull(responsePacket(in)), GET)) {
+                            Movie movie = receiveMovie(in);
+                        }
                     }
                     case UPDATE -> System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
                     case DELETE -> System.out.println(ANSI_GREEN + "Deleting a movie..." + ANSI_RESET);
@@ -104,6 +106,32 @@ public class Client {
         } catch (IOException ioe){
             System.out.println(ANSI_CYAN + "IO:" + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
         }
+    }
+
+    private static Movie receiveMovie(DataInputStream in) {
+        System.out.println(ANSI_GREEN + "Receiving a movie..." + ANSI_RESET);
+        try {
+            // Get the size of the movie
+            int movieSize = in.readInt();
+            System.out.println(ANSI_GREEN + "Movie size: " + ANSI_CYAN + movieSize + ANSI_RESET);
+
+            // Create a byte array with the size of the movie
+            byte[] movieBytes = new byte[movieSize];
+
+            // Read the movie bytes from the socket
+            in.readFully(movieBytes);
+
+            // Deserialize the movie bytes into a Movie object
+            Movie movie = Movie.parseFrom(movieBytes);
+
+            // Print the movie
+            System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_CYAN + movie + ANSI_RESET);
+
+            return movie;
+        } catch (IOException e) {
+            System.out.println(ANSI_GREEN + "IO:" + ANSI_CYAN + e.getMessage() + ANSI_RESET);
+        }
+        return null;
     }
 
     private static void getMovie(DataOutputStream out) throws IOException {
@@ -185,12 +213,13 @@ public class Client {
     }
 
     // Create a method that validates the response code. If is 1, then the operation was successful, otherwise it failed
-    private static void validateResponseCode(ResponseCode responseCode, String operation) {
+    private static boolean validateResponseCode(ResponseCode responseCode, String operation) {
         if (responseCode.getResponse().equals(SUCCESS_CODE)) {
             System.out.println(ANSI_GREEN + "Operation " + ANSI_CYAN + operation + " " + ANSI_GREEN + SUCCESS + "!" + ANSI_RESET);
-        } else {
-            System.out.println(ANSI_GREEN + "Operation " + ANSI_CYAN + operation + " " + ANSI_GREEN + FAILURE + "!" + ANSI_RESET);
+            return true;
         }
+        System.out.println(ANSI_GREEN + "Operation " + ANSI_CYAN + operation + " " + ANSI_GREEN + FAILURE + "!" + ANSI_RESET);
+        return false;
     }
 
     // create a method for sending packets to the server
