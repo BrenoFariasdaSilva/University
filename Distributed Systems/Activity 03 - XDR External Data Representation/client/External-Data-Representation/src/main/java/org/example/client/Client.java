@@ -333,7 +333,7 @@ public class Client {
                 System.out.println(ANSI_RED + "Error: One or more fields are empty" + ANSI_RESET);
             } else {
                 empty_fields = false;
-                // Create a movie protobuf object
+                // Create a movie protobuf object and return it
                 return Movie.newBuilder()
                         .setId(id) // String
                         .setPlot(plot) // String
