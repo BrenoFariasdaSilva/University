@@ -43,11 +43,14 @@ class MongoDatabase:
 		return self.collection.find_one({"title": movie_title})
 	
 	def updateMovie(self, old_movie_object, new_movie_object):
-		self.deleteMovie(old_movie_object["title"])
+		self.delete_one({"title": old_movie_object["title"]})
 		return self.createMovie(new_movie_object)
 
 	def deleteMovie(self, movie_title):
-		return self.collection.delete_one({"title": movie_title})
+		reponse_document = self.collection.delete_one({"title": movie_title})
+		if reponse_document.acknowledged: # If the movie was deleted
+			return reponse_document.deleted_count
+		return None
 	
 	def listByActors(self, actor_name):
 		return self.collection.find({"actors": actor_name})

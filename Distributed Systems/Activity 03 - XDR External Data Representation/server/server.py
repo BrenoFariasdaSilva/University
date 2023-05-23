@@ -146,14 +146,14 @@ def updateMovie(client_socket, database):
 # @param database: The database object
 # @return: Status code
 def deleteMovie(client_socket, database):
-	movie_title = get_client_packet(client_socket) # Get the movie object
-	delete_object = parse_delete_object(movie_title) # Create a delete object
+	serialized_delete_movie = get_client_packet(client_socket) # Get the movie object
+	deserialized_delete_movie = parse_delete_object(serialized_delete_movie) # Create a delete object
 
-	print(f"{backgroundColors.OKGREEN} Deleting movie {backgroundColors.OKCYAN}{delete_object.movie_title}{Style.RESET_ALL}")
-	response_object = database.deleteMovie(delete_object.movie_title)
+	print(f"{backgroundColors.OKGREEN} Deleting movie {backgroundColors.OKCYAN}{deserialized_delete_movie.movie_title}{Style.RESET_ALL}")
+	response_object = database.deleteMovie(deserialized_delete_movie.movie_title)
 	if response_object is None:
 		return FAILURE
-	return SUCCESS
+	return response_object
 
 # @brief: This function gets the movies made by an actor
 # @param client_socket: The client socket object
@@ -245,7 +245,9 @@ def handle_client_input(client_socket, client_address, database, client_request)
 			response = updateMovie(client_socket, database) # Update the movie
 		case movies_pb2.Operations.Delete: # If the operation is delete movie: 4
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent delete movie command{Style.RESET_ALL}")
-			response = deleteMovie(client_socket, database) # Delete the movie
+			response_code = deleteMovie(client_socket, database) # Delete the movie
+			send_response_code(client_socket, response_code) # Send the response to the client
+
 		case movies_pb2.Operations.ListByActors: # If the operation is get actor movies: 5
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent get actor movies command{Style.RESET_ALL}")
 			response = getMoviesByActor(client_socket, database) # Get the actor movies
