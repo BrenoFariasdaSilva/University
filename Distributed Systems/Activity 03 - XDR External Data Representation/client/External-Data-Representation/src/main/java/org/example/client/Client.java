@@ -93,7 +93,10 @@ public class Client {
                         }
                     }
                     case UPDATE -> System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
-                    case DELETE -> System.out.println(ANSI_GREEN + "Deleting a movie..." + ANSI_RESET);
+                    case DELETE -> {
+                        deleteMovie(out);
+                        validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), DELETE);
+                    }
                     case LISTBYACTORS ->
                             System.out.println(ANSI_GREEN + "Listing all movies by an actor..." + ANSI_RESET);
                     case LISTBYCATEGORY ->
@@ -110,6 +113,29 @@ public class Client {
         } catch (IOException ioe){
             System.out.println(ANSI_CYAN + "IO:" + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
         }
+    }
+
+    private static void deleteMovie(DataOutputStream out) throws IOException {
+        System.out.println(ANSI_GREEN + "Deleting a movie..." + ANSI_RESET);
+
+        // Create a new ClientRequest object for specifying the operation the server will execute
+        ClientRequest request = ClientRequest.newBuilder()//.
+                .setOperation(Operations.Delete)
+                .build();
+        // Serialize the request
+        byte[] serializedRequest = request.toByteArray();
+
+        // Send the serialized request to the server
+        sendPacket(out, serializedRequest);
+
+        // Create a new Movie object and fill it with the user input
+        DeleteMovieOperation delete_movie = userFillDeleteMovieObject();
+        System.out.println(ANSI_GREEN + "Movie title: " + ANSI_CYAN + delete_movie.getMovieTitle() + ANSI_RESET);
+        // Serialize the movie object
+        byte[] serializedMovie = delete_movie.toByteArray();
+
+        // Send the serialized movie to the server
+        sendPacket(out, serializedMovie);
     }
 
     private static Movie receiveMovie(DataInputStream in) {
@@ -163,6 +189,17 @@ public class Client {
         String title = reader.nextLine(); // Read the user input
 
         return GetMovieOperation.newBuilder()
+                .setMovieTitle(title)
+                .build();
+    }
+
+    private static DeleteMovieOperation userFillDeleteMovieObject() {
+        Scanner reader = new Scanner(System.in); // Read the user input
+
+        System.out.println(ANSI_GREEN + "Type the movie title: (String)" + ANSI_RESET);
+        String title = reader.nextLine(); // Read the user input
+
+        return DeleteMovieOperation.newBuilder()
                 .setMovieTitle(title)
                 .build();
     }
