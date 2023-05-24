@@ -1,9 +1,9 @@
 server:
-	clear;
-	python3 server/server.py
+	clear; python3 server/server.py
 
 client:
-	clear; javac client/Client.java; java client
+	clear
+	javac client/Client.java; java client
 
 database:
 	clear; python3 server/database.py

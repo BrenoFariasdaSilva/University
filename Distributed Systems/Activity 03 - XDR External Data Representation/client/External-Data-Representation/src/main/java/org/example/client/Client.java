@@ -97,10 +97,18 @@ public class Client {
                         deleteMovie(out);
                         validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), DELETE);
                     }
-                    case LISTBYACTORS ->
-                            System.out.println(ANSI_GREEN + "Listing all movies by an actor..." + ANSI_RESET);
-                    case LISTBYCATEGORY ->
-                            System.out.println(ANSI_GREEN + "Listing all movies by a category..." + ANSI_RESET);
+                    case LISTBYACTORS -> {
+                        listMoviesByActors(out);
+                        if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), LISTBYACTORS)) {
+                            Movie movies_list = receiveMovie(in);
+                            System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_CYAN + movies_list + ANSI_RESET);
+                        } else {
+                            System.out.println(ANSI_GREEN + "Movie not found." + ANSI_RESET);
+                        }
+                    }
+                    case LISTBYCATEGORY -> {
+                        System.out.println(ANSI_GREEN + "Listing all movies by a category..." + ANSI_RESET);
+                    }
                     case HELP -> showHelp();
                     default -> {
                         System.out.println(ANSI_GREEN + "Invalid command. Try again." + ANSI_RESET);
@@ -113,6 +121,29 @@ public class Client {
         } catch (IOException ioe){
             System.out.println(ANSI_CYAN + "IO:" + ANSI_CYAN + ioe.getMessage() + ANSI_RESET);
         }
+    }
+
+    public static void listMoviesByActors(DataOutputStream out) throws IOException {
+        System.out.println(ANSI_GREEN + "Listing all movies by an actor..." + ANSI_RESET);
+
+        // Create a new ClientRequest object for specifying the operation the server will execute
+        ClientRequest request = ClientRequest.newBuilder()//.
+                .setOperation(Operations.ListByActors)
+                .build();
+
+        // Serialize the request
+        byte[] serializedRequest = request.toByteArray();
+        // Send the serialized request to the server
+        sendPacket(out, serializedRequest);
+
+        // Create a new ClientListOperation object and fill it with the user input
+        ClientListOperation list_movies_by_actor = userFillListMoviesByActorsObject();
+
+        // Serialize the movie object
+        byte[] serializedMovie = list_movies_by_actor.toByteArray();
+
+        // Send the serialized movie to the server
+        sendPacket(out, serializedMovie);
     }
 
     private static void deleteMovie(DataOutputStream out) throws IOException {
@@ -180,6 +211,17 @@ public class Client {
 
         // Send the serialized movie to the server
         sendPacket(out, serializedMovie);
+    }
+
+    private static ClientListOperation userFillListByObject() {
+        Scanner reader = new Scanner(System.in); // Read the user input
+
+        System.out.println(ANSI_GREEN + "Type the actor name: (String)" + ANSI_RESET);
+        String actor = reader.nextLine(); // Read the user input
+
+        return ClientListOperation.newBuilder()
+                .setFilter(actor)
+                .build();
     }
 
     private static GetMovieOperation userFillGetMovieObject() {

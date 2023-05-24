@@ -248,7 +248,7 @@ def handle_client_input(client_socket, client_address, database, client_request)
 			send_response_code(client_socket, response_code) # Send the response to the client
 		case movies_pb2.Operations.ListByActors: # If the operation is get actor movies: 5
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent get actor movies command{Style.RESET_ALL}")
-			movies_list = getMoviesByActor(client_socket, database) # Get the actor movies
+			movies_list = getMoviesByActor(client_socket, database) # Get the movies of some specific actor
 			if not movies_list is None:
 				send_response_code(client_socket, SUCCESS) # Send the response to the client
 				send_movie(client_socket, movies_list) # Send the response to the client
