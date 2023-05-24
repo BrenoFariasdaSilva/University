@@ -164,10 +164,12 @@ def getMoviesByActor(client_socket, database):
 
 	list_movies_object = parse_list_object(actor_name_string) # Create a list by object
 
-	print(f"{backgroundColors.OKGREEN} Getting actor {backgroundColors.OKCYAN}{list_movies_object.filter}{Style.RESET_ALL}'s movies")
-	movies_list = database.listByActors(list_movies_object.filter)
-	if movies_list is None:
-		return FAILURE
+	print(f"{backgroundColors.OKGREEN} Getting movies from {backgroundColors.OKCYAN}{list_movies_object.filter}{backgroundColors.OKGREEN}actor{Style.RESET_ALL}")
+	movies_list_document = database.listByActors(list_movies_object.filter)
+	for movie in movies_list_document:
+		print(f"{backgroundColors.OKGREEN} Movie title: {backgroundColors.OKCYAN}{movie.title}{Style.RESET_ALL}")
+		# append the movie marshalled to the movies list
+		movies_list += movie.SerializeToString()
 	return movies_list
 
 # @brief: This function gets a category's movies
@@ -179,12 +181,9 @@ def getMoviesByCategory(client_socket, database):
 
 	list_movies_object = parse_list_object(movie_category) # Create a list by object
 
-	print(f"{backgroundColors.OKGREEN} Getting category {backgroundColors.OKCYAN}{list_movies_object.filter}{Style.RESET_ALL}'s movies")
-	movies = database.listByCategory(list_movies_object.filter)
-	if movies is None:
-		return FAILURE
-	movies_list = ""
-	for movie in movies:
+	print(f"{backgroundColors.OKGREEN} Getting movies from {backgroundColors.OKCYAN}{list_movies_object.filter}{backgroundColors.OKGREEN}category{Style.RESET_ALL}")
+	movies_list_document = database.listByCategory(list_movies_object.filter)
+	for movie in movies_list_document:
 		print(f"{backgroundColors.OKGREEN} Movie title: {backgroundColors.OKCYAN}{movie.title}{Style.RESET_ALL}")
 		# append the movie marshalled to the movies list
 		movies_list += movie.SerializeToString()
@@ -247,13 +246,18 @@ def handle_client_input(client_socket, client_address, database, client_request)
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent delete movie command{Style.RESET_ALL}")
 			response_code = deleteMovie(client_socket, database) # Delete the movie
 			send_response_code(client_socket, response_code) # Send the response to the client
-
 		case movies_pb2.Operations.ListByActors: # If the operation is get actor movies: 5
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent get actor movies command{Style.RESET_ALL}")
-			response = getMoviesByActor(client_socket, database) # Get the actor movies
+			movies_list = getMoviesByActor(client_socket, database) # Get the actor movies
+			if not movies_list is None:
+				send_response_code(client_socket, SUCCESS) # Send the response to the client
+				send_movie(client_socket, movies_list) # Send the response to the client
 		case movies_pb2.Operations.ListByCategory: # If the operation is get category movies: 6
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent get category movies command{Style.RESET_ALL}")
-			response = getMoviesByCategory(client_socket, database) # Get the category movies
+			movies_list = getMoviesByCategory(client_socket, database) # Get the category movies
+			if not movies_list is None:
+				send_response_code(client_socket, SUCCESS) # Send the response to the client
+				send_movie(client_socket, movies_list) # Send the response to the client
 		case _: # If the operation is unknown
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent unknown command{Style.RESET_ALL}")
 
