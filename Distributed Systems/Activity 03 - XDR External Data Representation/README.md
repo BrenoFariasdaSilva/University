@@ -4,7 +4,9 @@
 @date: 07/05/2023  
 @last update: 24/05/2021  
 @[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2003%20-%20XDR%20External%20Data%20Representation)  
-
+@TODO: Implement update method.
+@TODO: Update README.md.
+@TODO: Test multilpe clients and multiple values in a field.  
 
 ### ***Quick notes:***   
 
