@@ -25,6 +25,7 @@ class MongoDatabase:
 		self.collection = self.database["movies"]
 		database_name = os.getenv("DATABASE_URL")[:os.getenv("DATABASE_URL").find(".")]
 		print(f"{backgroundColors.OKGREEN}Client Connected to {backgroundColors.OKCYAN}{database_name}{backgroundColors.OKGREEN} server using {backgroundColors.OKCYAN}{os.getenv('USERNAME')} {backgroundColors.OKGREEN}user{Style.RESET_ALL}")
+		print("")
 
 	def connectionInfo(self):
 		return self.client.server_info()
@@ -52,7 +53,7 @@ class MongoDatabase:
 			return reponse_document.deleted_count
 		return None
 	
-	def listByActors(self, actor_name):
+	def listByActor(self, actor_name):
 		return self.collection.find({"actors": actor_name})
 	
 	def listByCategory(self, category):

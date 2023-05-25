@@ -165,8 +165,8 @@ def getMoviesByActor(client_socket, database):
 	list_movies_object = parse_list_object(actor_name_string) # Create a list by object
 
 	print(f"{backgroundColors.OKGREEN} Getting movies from {backgroundColors.OKCYAN}{list_movies_object.filter}{backgroundColors.OKGREEN} actor{Style.RESET_ALL}")
-	movies_list_document = database.listByActors(list_movies_object.filter)
-	movies_list = movies_pb2.ListBy()
+	movies_list_document = database.listByActor(list_movies_object.filter)
+	movies_list = movies_pb2.ServerListBy()
 	for movie in movies_list_document:
 		print(f"{backgroundColors.OKGREEN} Movie title: {backgroundColors.OKCYAN}{movie.title}{Style.RESET_ALL}")
 		# append the movie marshalled to the movies list
@@ -184,7 +184,7 @@ def getMoviesByCategory(client_socket, database):
 
 	print(f"{backgroundColors.OKGREEN} Getting movies from {backgroundColors.OKCYAN}{list_movies_object.filter}{backgroundColors.OKGREEN} category{Style.RESET_ALL}")
 	movies_list_document = database.listByCategory(list_movies_object.filter)
-	movies_list = movies_pb2.ListBy()
+	movies_list = movies_pb2.ServerListBy()
 	for movie in movies_list_document:
 		print(f"{backgroundColors.OKGREEN} Movie title: {backgroundColors.OKCYAN}{movie.title}{Style.RESET_ALL}")
 		# append the movie marshalled to the movies list
@@ -248,7 +248,7 @@ def handle_client_input(client_socket, client_address, database, client_request)
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent delete movie command{Style.RESET_ALL}")
 			response_code = deleteMovie(client_socket, database) # Delete the movie
 			send_response_code(client_socket, response_code) # Send the response to the client
-		case movies_pb2.Operations.ListByActors: # If the operation is get actor movies: 5
+		case movies_pb2.Operations.ListByActor: # If the operation is get actor movies: 5
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent get actor movies command{Style.RESET_ALL}")
 			movies_list = getMoviesByActor(client_socket, database) # Get the movies of some specific actor
 			if not movies_list is None:

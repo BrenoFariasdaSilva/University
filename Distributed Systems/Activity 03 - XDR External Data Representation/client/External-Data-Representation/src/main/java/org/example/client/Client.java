@@ -30,7 +30,7 @@ public class Client {
     public static final String GET = "GET";
     public static final String UPDATE = "UPDATE";
     public static final String DELETE = "DELETE";
-    public static final String LISTBYACTORS = "LISTBYACTORS";
+    public static final String LISTBYACTOR = "LISTBYACTOR";
     public static final String LISTBYCATEGORY = "LISTBYCATEGORY";
     public static final String HELP = "HELP";
     public static final String EXIT = "EXIT";
@@ -75,7 +75,7 @@ public class Client {
                 // Split the user input into an array of strings
                 String[] parts = user_input.split(" ");
 
-                // Validate the user input for CREATE, GET, UPDATE, DELETE, LISTBYACTORS, LISTBYCATEGORY, HELP and Unknown commands.
+                // Validate the user input for CREATE, GET, UPDATE, DELETE, LISTBYACTOR, LISTBYCATEGORY, HELP and Unknown commands.
                 validateUserOperation(in, out, parts);
             }
         } catch (EOFException eofe){
@@ -86,7 +86,7 @@ public class Client {
     }
 
     // End of main method
-    // CRUD OPERATIONS: CREATE, READ (GET), UPDATE, DELETE, LISTBYACTORS, LISTBYCATEGORY
+    // CRUD OPERATIONS: CREATE, READ (GET), UPDATE, DELETE, LISTBYACTOR, LISTBYCATEGORY
     private static void createMovie(DataOutputStream out) throws IOException {
         System.out.println(ANSI_GREEN + "Creating a new movie..." + ANSI_RESET);
 
@@ -165,12 +165,12 @@ public class Client {
         createMovieObject(out);
     }
 
-    public static void listMoviesByActors(DataOutputStream out) throws IOException {
+    public static void listMoviesByActor(DataOutputStream out) throws IOException {
         System.out.println(ANSI_GREEN + "Listing all movies of a certain actor..." + ANSI_RESET);
 
         // Create a new ClientRequest object for specifying the operation the server will execute
         ClientRequest request = ClientRequest.newBuilder()//.
-                .setOperation(Operations.ListByActors) // Set the operation to LISTBYACTORS
+                .setOperation(Operations.ListByActor) // Set the operation to LISTBYACTOR
                 .build(); // Build the object
 
         // Serialize the request
@@ -524,9 +524,9 @@ public class Client {
                 deleteMovie(out);
                 validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), DELETE);
             }
-            case LISTBYACTORS -> {
-                listMoviesByActors(out);
-                if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), LISTBYACTORS)) {
+            case LISTBYACTOR -> {
+                listMoviesByActor(out);
+                if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), LISTBYACTOR)) {
                     ListBy movies_list = receiveMoviesList(in);
                     System.out.println(ANSI_GREEN + "Movie(s): \n" + ANSI_CYAN + movies_list + ANSI_RESET);
                 } else {
@@ -556,13 +556,13 @@ public class Client {
      @return: None
      */
     public static void showHelp() {
-        System.out.println(ANSI_GREEN + "CREATE: Create a new movie" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + "GET: Get a movie by title" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + "UPDATE: Update a movie " + ANSI_RED + "(New ID must be the same as old ID!)" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + "DELETE: Delete a movie by title" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + "LISTBYACTORS: List all movies by an actor" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + "LISTBYCATEGORY: List all movies by a category" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + "EXIT: Exit the program" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + CREATE + ": Create a new movie" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + GET + ": Get a movie by title" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + UPDATE + ": Update a movie " + ANSI_RED + "(New ID must be the same as old ID!)" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + DELETE + ": Delete a movie by title" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + LISTBYACTOR + ": List all movies by an actor" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + LISTBYCATEGORY + ": List all movies by a category" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + EXIT + ": Exit the program" + ANSI_RESET);
     }
     // End of auxiliary methods
 }

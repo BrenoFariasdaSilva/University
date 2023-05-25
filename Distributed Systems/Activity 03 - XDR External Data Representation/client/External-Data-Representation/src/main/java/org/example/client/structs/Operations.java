@@ -29,9 +29,9 @@ public enum Operations
    */
   Delete(4),
   /**
-   * <code>ListByActors = 5;</code>
+   * <code>ListByActor = 5;</code>
    */
-  ListByActors(5),
+  ListByActor(5),
   /**
    * <code>ListByCategory = 6;</code>
    */
@@ -60,9 +60,9 @@ public enum Operations
    */
   public static final int Delete_VALUE = 4;
   /**
-   * <code>ListByActors = 5;</code>
+   * <code>ListByActor = 5;</code>
    */
-  public static final int ListByActors_VALUE = 5;
+  public static final int ListByActor_VALUE = 5;
   /**
    * <code>ListByCategory = 6;</code>
    */
@@ -98,7 +98,7 @@ public enum Operations
       case 2: return Read;
       case 3: return Update;
       case 4: return Delete;
-      case 5: return ListByActors;
+      case 5: return ListByActor;
       case 6: return ListByCategory;
       default: return null;
     }

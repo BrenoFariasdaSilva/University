@@ -8,7 +8,7 @@ enum Operations {
 	Read = 2;
 	Update = 3;
 	Delete = 4;
-	ListByActors = 5;
+	ListByActor = 5;
 	ListByCategory = 6;
 }
 
