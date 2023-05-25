@@ -146,7 +146,7 @@ public class Client {
      * @param out The DataOutputStream object to send the serialized movie object to the server.
      * @return void
      */
-    public static void updateMovie(DataOutputStream out) throws IOException {
+    public static void updateMovie(DataInputStream in, DataOutputStream out) throws IOException {
         System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
         // Create a new ClientRequest object for specifying the operation the server will execute
         ClientRequest request = ClientRequest.newBuilder()//.
@@ -167,13 +167,17 @@ public class Client {
         // Send the serialized movie to the server
         sendPacket(out, serializedGetMovie);
 
-        // Create a new Movie object and fill it with the user input
-        Movie new_movie = userFillCreateMovieObject(true);
-        // Serialize the movie object
-        byte[] serializedMovie = new_movie.toByteArray();
+        if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), GET)) {
+            Movie old_movie = receiveMovie(in);
 
-        // Send the serialized movie to the server
-        sendPacket(out, serializedMovie);
+            // Create a new Movie object and fill it with the user input
+            Movie new_movie = userFillUpdateMovieObject(old_movie);
+            // Serialize the movie object
+            byte[] serializedMovie = new_movie.toByteArray();
+
+            // Send the serialized movie to the server
+            sendPacket(out, serializedMovie);
+        }
     }
 
     /*
@@ -492,6 +496,101 @@ public class Client {
     }
 
     /*
+    * @brief This function is used to fill the Movie object with user input
+    * @param Movie old_movie
+    * return UpdateMovieOperation object
+    */
+    private static Movie userFillUpdateMovieObject (Movie old_movie) {
+        Scanner reader = new Scanner(System.in); // Read the user input
+
+        System.out.println(ANSI_GREEN + "Type the movie plot:" + ANSI_RED + " (String)" + ANSI_RESET);
+        String plot = reader.nextLine(); // Read the user input
+        if (plot.equals("")) plot = old_movie.getTitle();
+        System.out.println(ANSI_GREEN + "Type the movie genre:" + ANSI_RED + " (String)" + ANSI_RESET);
+        String genre = reader.nextLine(); // Read the user input
+        if (genre.equals("")) genre = old_movie.getGenre();
+        System.out.println(ANSI_GREEN + "Type the movie runtime:" + ANSI_RED + " (int)" + ANSI_RESET);
+        int runtime = reader.nextInt(); // Read the user input
+        reader.nextLine();
+        if (runtime == 0) runtime = old_movie.getRuntime();
+        System.out.println(ANSI_GREEN + "Type the movie cast:" + ANSI_RED + " (List<String>)" + ANSI_RESET);
+        List<String> cast = new ArrayList<>();
+        String cast_input = reader.nextLine(); // Read the user input
+        if (cast_input.equals("")) cast = old_movie.getCastList();
+        else {
+            String[] cast_array = cast_input.split(",");
+            for (String actor : cast_array) {
+                cast.add(actor);
+            }
+        }
+        System.out.println(ANSI_GREEN + "Type the movie num_mflix_comments:" + ANSI_RED + " (int)" + ANSI_RESET);
+        int num_mflix_comments = reader.nextInt(); // Read the user input
+        reader.nextLine();
+        if (num_mflix_comments == 0) num_mflix_comments = old_movie.getNumMflixComments();
+        System.out.println(ANSI_GREEN + "Type the movie title:" + ANSI_RED + " (String)" + ANSI_RESET);
+        String title = reader.nextLine(); // Read the user input
+        if (title.equals("")) title = old_movie.getTitle();
+        System.out.println(ANSI_GREEN + "Type the movie fullplot:" + ANSI_RED + " (String)" + ANSI_RESET);
+        String fullplot = reader.nextLine(); // Read the user input
+        if (fullplot.equals("")) fullplot = old_movie.getFullplot();
+        System.out.println(ANSI_GREEN + "Type the movie countries:" + ANSI_RED + " (List<String>)" + ANSI_RESET);
+        List<String> countries = new ArrayList<>();
+        String countries_input = reader.nextLine(); // Read the user input
+        if (countries_input.equals("")) countries = old_movie.getCountriesList();
+        else {
+            String[] countries_array = countries_input.split(",");
+            for (String country : countries_array) {
+                countries.add(country);
+            }
+        }
+        System.out.println(ANSI_GREEN + "Type the movie released:" + ANSI_RED + " (String)" + ANSI_RESET);
+        String released = reader.nextLine(); // Read the user input
+        if (released.equals("")) released = old_movie.getReleased();
+        System.out.println(ANSI_GREEN + "Type the movie directors:" + ANSI_RED + " (List<String>)" + ANSI_RESET);
+        List<String> directors = new ArrayList<>();
+        String directors_input = reader.nextLine(); // Read the user input
+        if (directors_input.equals("")) directors = old_movie.getDirectorsList();
+        else {
+            String[] directors_array = directors_input.split(",");
+            for (String director : directors_array) {
+                directors.add(director);
+            }
+        }
+        System.out.println(ANSI_GREEN + "Type the movie rated:" + ANSI_RED + " (String)" + ANSI_RESET);
+        String rated = reader.nextLine(); // Read the user input
+        if (rated.equals("")) rated = old_movie.getRated();
+        System.out.println(ANSI_GREEN + "Type the movie lastupdated:" + ANSI_RED + " (String)" + ANSI_RESET);
+        String lastupdated = reader.nextLine(); // Read the user input
+        if (lastupdated.equals("")) lastupdated = old_movie.getLastupdated();
+        System.out.println(ANSI_GREEN + "Type the movie year:" + ANSI_RED + " (int)" + ANSI_RESET);
+        int year = reader.nextInt(); // Read the user input
+        reader.nextLine();
+        if (year == 0) year = old_movie.getYear();
+        System.out.println(ANSI_GREEN + "Type the movie type:" + ANSI_RED + " (String)" + ANSI_RESET);
+        String type = reader.nextLine(); // Read the user input
+        if (type.equals("")) type = old_movie.getType();
+
+        // Create a movie protobuf object and return it
+        return Movie.newBuilder()
+                .setId(old_movie.getId()) // String
+                .setPlot(old_movie.getPlot()) // String
+                .setGenre(old_movie.getGenre()) // String
+                .setRuntime(old_movie.getRuntime()) // int
+                .addAllCast(old_movie.getCastList()) // String
+                .setNumMflixComments(old_movie.getNumMflixComments()) // int
+                .setTitle(title) // String
+                .setFullplot(old_movie.getFullplot()) // String
+                .addAllCountries(old_movie.getCountriesList()) // String
+                .setReleased(old_movie.getReleased()) // String
+                .addAllDirectors(old_movie.getDirectorsList()) // String
+                .setRated(old_movie.getRated()) // String
+                .setLastupdated(old_movie.getLastupdated()) // String
+                .setYear(old_movie.getYear()) // int
+                .setType(old_movie.getType()) // String
+                .build(); // Build the movie protobuf object
+    }
+
+    /*
     * @brief This function is used to fill the DeleteMovieOperation object with user input
     * @param None
     * @return DeleteMovieOperation object
@@ -629,7 +728,7 @@ public class Client {
                 }
             }
             case UPDATE -> {
-                updateMovie(out);
+                updateMovie(in, out);
                 validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), UPDATE);
             }
             case DELETE -> {
