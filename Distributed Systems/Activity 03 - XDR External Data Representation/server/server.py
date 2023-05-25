@@ -14,7 +14,7 @@ class backgroundColors: # Colors for the terminal
 	FAIL = "\033[91m" # Red
 
 # Server:
-SERVERADDRESS = ["localhost", 7000] # The server's address. The first element is the IP address, the second is the port.
+SERVERADDRESS = ["localhost", 7070] # The server's address. The first element is the IP address, the second is the port.
 
 # Client:
 CLIENT_REQUEST_SIZE = 4 # The client request size is 4 byte
@@ -55,6 +55,32 @@ def convert_document_to_protocol_buffer(document):
 	movie.year = document["year"] if document["year"] else EMPTY_INT_FIELD # Set the year
 	movie.type = document["type"] if document["type"] else EMPTY_STRING_FIELD # Set the type
 	return movie # Return the movie object
+
+# @brief: This function updates a movie object fields
+# @param updated_movie_object: The new movie object
+# @param old_movie_object: The old movie object
+# @return: The updated movie object
+def updateMovieObjectFields(updated_movie_object, old_movie_object):
+	# updated_movie_object.id = old_movie_object.id
+	updated_movie_object.plot = old_movie_object.plot if updated_movie_object.plot else old_movie_object.plot
+	updated_movie_object.genre = old_movie_object.genre if updated_movie_object.genre else old_movie_object.genre
+	updated_movie_object.runtime = old_movie_object.runtime if updated_movie_object.runtime else old_movie_object.runtime
+	if not updated_movie_object.cast:
+		updated_movie_object.cast.extend(old_movie_object.cast) # Set the cast
+	updated_movie_object.num_mflix_comments = old_movie_object.num_mflix_comments if updated_movie_object.num_mflix_comments else old_movie_object.num_mflix_comments
+	updated_movie_object.title = old_movie_object.title if updated_movie_object.title else old_movie_object.title
+	updated_movie_object.fullplot = old_movie_object.fullplot if updated_movie_object.fullplot else old_movie_object.fullplot
+	if not updated_movie_object.countries:
+		updated_movie_object.countries.extend(old_movie_object.countries)
+	updated_movie_object.released = old_movie_object.released if updated_movie_object.released else old_movie_object.released
+	if not updated_movie_object.directors:
+		updated_movie_object.directors.extend(old_movie_object.directors)
+	updated_movie_object.rated = old_movie_object.rated if updated_movie_object.rated else old_movie_object.rated
+	updated_movie_object.lastupdated = old_movie_object.lastupdated if updated_movie_object.lastupdated else old_movie_object.lastupdated
+	updated_movie_object.year = old_movie_object.year if updated_movie_object.year else old_movie_object.year
+	updated_movie_object.type = old_movie_object.type if updated_movie_object.type else old_movie_object.type
+
+	return updated_movie_object
 
 # @brief: This function erases all of the movies inside the database
 # @param database: The database object
@@ -137,18 +163,34 @@ def getMovie(client_socket, database):
 # @param client_socket: The client socket object
 # @param database: The database object
 # @return: Status code or movie object
-def updateMovie(client_socket, database):
-	old_movie_string = get_client_packet(client_socket) # Get the movie object
-	old_movie_object = parse_movie_object(old_movie_string) # Create a movie object
+def updateMovie(client_socket, database: MongoDatabase):
+	old_movie_object = get_client_packet(client_socket) # Get the movie object
+	old_movie_object = parse_movie_object(old_movie_object) # Create a movie object
 
 	new_movie_string = get_client_packet(client_socket) # Get the movie object
 	new_movie_object = parse_movie_object(new_movie_string) # Create a movie object
 
-	print(f"{backgroundColors.OKGREEN} Updating movie {backgroundColors.OKCYAN}{old_movie_object.title}{Style.RESET_ALL}")
-	response_object = database.updateMovie(old_movie_object, new_movie_object)
-	if response_object is None:
+	old_movie_document = database.getMovieByTitle(old_movie_object.title)
+
+	if old_movie_document is None:
+		print(f"{backgroundColors.FAIL}	Failed to get movie {backgroundColors.OKCYAN}{new_movie_object.id}{backgroundColors.FAIL} from database{Style.RESET_ALL}")
 		return FAILURE
-	return response_object
+	
+	# now delete the old movie from the database
+	response_object = database.deleteMovie(old_movie_object)
+
+	if response_object is None:
+		print(f"{backgroundColors.FAIL}	Failed to delete movie {backgroundColors.OKCYAN}{old_movie_object.title}{backgroundColors.FAIL} from database{Style.RESET_ALL}")
+		return FAILURE
+
+	# Convert the movie object to a string
+	old_movie_object = convert_document_to_protocol_buffer(old_movie_document)
+
+	# Update the old movie object with the new movie object where new_movie_object fields are not empty
+	new_movie_object = updateMovieObjectFields(new_movie_object, old_movie_object)
+
+	# now add the new movie object and return the status code
+	return database.createMovie(MessageToJson(new_movie_object))
 
 # @brief: This function deletes a movie
 # @param client_socket: The client socket object
@@ -256,6 +298,7 @@ def handle_client_input(client_socket, client_address, database, client_request)
 		case movies_pb2.Operations.Update: # If the operation is update movie: 3
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent update movie command{Style.RESET_ALL}")
 			response = updateMovie(client_socket, database) # Update the movie
+			send_response_code(client_socket, response) # Send the response to the client
 		case movies_pb2.Operations.Delete: # If the operation is delete movie: 4
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent delete movie command{Style.RESET_ALL}")
 			response_code = deleteMovie(client_socket, database) # Delete the movie

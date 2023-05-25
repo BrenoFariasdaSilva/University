@@ -54,6 +54,12 @@ class MongoDatabase:
 	def getMovieByTitle(self, movie_title):
 		return self.collection.find_one({"title": movie_title})
 	
+	# @brief: This method gets a movie in the database by its id
+	# @param movie_id: The id of the movie
+	# @return: The movie object if the movie was found, None if not
+	def getMovieById(self, movie_id):
+		return self.collection.find_one({"id": movie_id})
+	
 	# @brief: This method updates a movie in the database
 	# @param old_movie_object: The old movie object
 	# @param new_movie_object: The new movie object

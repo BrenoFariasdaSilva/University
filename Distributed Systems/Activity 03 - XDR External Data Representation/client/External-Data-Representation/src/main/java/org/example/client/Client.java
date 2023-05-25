@@ -44,7 +44,7 @@ public class Client {
         Scanner reader = new Scanner(System.in); // Read the user input
 
         // Address and port of the server
-        int serverPort = 7000; // Later put it inside a env variable
+        int serverPort = 7070; // Later put it inside a env variable
         InetAddress serverAddr = null; // Create an instance of InetAddress
         try {
             serverAddr = InetAddress.getByName("localhost"); // Get the IP address of the server, which is localhost = 127.0.0.1
@@ -134,6 +134,7 @@ public class Client {
         // Create a new Movie object and fill it with the user input
         GetMovieOperation get_movie = userFillGetMovieObject();
         // Serialize the movie object
+        assert get_movie != null;
         byte[] serializedMovie = get_movie.toByteArray();
 
         // Send the serialized movie to the server
@@ -170,11 +171,11 @@ public class Client {
     /*
     * @brief This method updates a movie object according to the user input  and sends it to the server.
     * @param out The DataOutputStream object to send the serialized movie object to the server.
+    * @param old_movie The movie object to be updated.
     * @return void
      */
-    public static void updateMovie (DataOutputStream out) throws IOException {
+    public static void updateMovie(DataOutputStream out, Movie old_movie) throws IOException {
         System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
-
         // Create a new ClientRequest object for specifying the operation the server will execute
         ClientRequest request = ClientRequest.newBuilder()//.
                 .setOperation(Operations.Update) // Set the operation to UPDATE
@@ -185,8 +186,17 @@ public class Client {
         // Send the serialized request to the server
         sendPacket(out, serializedRequest);
 
+        // Send the movie id to the server
+        byte[] serializedOldMovie = old_movie.toByteArray();
+        sendPacket(out, serializedOldMovie);
+
         // Create a new Movie object and fill it with the user input
-        createMovieObject(out);
+        Movie new_movie = userFillCreateMovieObject(true);
+        // Serialize the movie object
+        byte[] serializedMovie = new_movie.toByteArray();
+
+        // Send the serialized movie to the server
+        sendPacket(out, serializedMovie);
     }
 
     /*
@@ -310,7 +320,7 @@ public class Client {
      */
     private static void createMovieObject(DataOutputStream out) throws IOException {
         // Create a new Movie object and fill it with the user input
-        Movie movie = userFillCreateMovieObject();
+        Movie movie = userFillCreateMovieObject(false);
         // System.out.println(movie);
         // Serialize the movie object
         assert movie != null;
@@ -340,14 +350,13 @@ public class Client {
     // Start of user fill objects methods: userFillCreateMovieObject, userFillGetMovieObject, userFillDeleteMovieObject, userFillListByObject
 
     /*
-    @brief: This function asks the user to fill the fields of a movie object and returns it.
+    @brief: This function asks the user to fill the fields with a movie object and returns it.
     @param: None
     @return: A movie object
     */
-    public static Movie userFillCreateMovieObject() {
+    public static Movie userFillCreateMovieObject(boolean allow_empty_fields) {
         Scanner reader = new Scanner(System.in); // Read the user input
-        boolean empty_fields = true;
-        while (empty_fields) {
+        while (allow_empty_fields) {
             // Ask for the user input: id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
 //            System.out.println(ANSI_GREEN + "Type the id of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
 //            String id = reader.nextLine(); // Read the user input
@@ -369,8 +378,8 @@ public class Client {
 //            System.out.println(ANSI_GREEN + "Type the num_mflix_comments of the movie: (int)" + ANSI_RESET);
 //            int num_mflix_comments = reader.nextInt(); // Read the user input
 //            reader.nextLine();
-//            System.out.println(ANSI_GREEN + "Type the title of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-//            String title = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the title of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String title = reader.nextLine(); // Read the user input
 //            System.out.println(ANSI_GREEN + "Type the fullplot of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
 //            String fullplot = reader.nextLine(); // Read the user input
 //            System.out.println(ANSI_GREEN + "Type the number of countries of the movie: (int)" + ANSI_RESET);
@@ -409,7 +418,7 @@ public class Client {
              List<String> cast = new ArrayList<>();
              cast.add("actor1");
              int num_mflix_comments = 1;
-             String title = "title";
+//             String title = "title";
              String fullplot = "fullplot";
              List<String> countries = new ArrayList<>();
              countries.add("country1");
@@ -421,29 +430,36 @@ public class Client {
              int year = 2023;
              String type = "type";
 
-            // verify if there is no empty field
-            if (id.equals("") || plot.equals("") || genre.equals("") || runtime == 0 || cast.size() == 0 || num_mflix_comments == 0 || title.equals("") || fullplot.equals("") || countries.size() == 0 || released.equals("") || directors.size() == 0 || rated.equals("") || lastupdated.equals("") || year == 0 || type.equals("")) {
-                System.out.println(ANSI_RED + "Error: One or more fields are empty" + ANSI_RESET);
-            } else {
-                // Create a movie protobuf object and return it
-                return Movie.newBuilder()
-                        .setId(id) // String
-                        .setPlot(plot) // String
-                        .setGenre(genre) // String
-                        .setRuntime(runtime) // int
-                        .addAllCast(cast) // String
-                        .setNumMflixComments(num_mflix_comments) // int
-                        .setTitle(title) // String
-                        .setFullplot(fullplot) // String
-                        .addAllCountries(countries) // String
-                        .setReleased(released) // String
-                        .addAllDirectors(directors) // String
-                        .setRated(rated) // String
-                        .setLastupdated(lastupdated) // String
-                        .setYear(year) // int
-                        .setType(type) // String
-                        .build(); // Build the movie protobuf object
-            }
+             if (!allow_empty_fields) {
+                 if (id.equals("") || plot.equals("") || genre.equals("") || runtime == 0 || cast.size() == 0 || num_mflix_comments == 0 || title.equals("") || fullplot.equals("") || countries.size() == 0 || released.equals("") || directors.size() == 0 || rated.equals("") || lastupdated.equals("") || year == 0 || type.equals("")) {
+                     System.out.println(ANSI_RED + "Error: You cannot have empty fields in a movie creation" + ANSI_RESET);
+                     continue; // This will skip the rest of the code in the for loop and go to the next iteration
+                 }
+             }
+             if (id.equals("")) {
+                 System.out.println(ANSI_RED + "Error: ID cannot be empty in a Update operation" + ANSI_RESET);
+             } else if (plot.equals("") && genre.equals("") && runtime == 0 && cast.size() == 0 && num_mflix_comments == 0 && title.equals("") && fullplot.equals("") && countries.size() == 0 && released.equals("") && directors.size() == 0 && rated.equals("") && lastupdated.equals("") && year == 0 && type.equals("")) {
+                 System.out.println(ANSI_RED + "Error: At least one field besides the ID must be filled in a Update operation" + ANSI_RESET);
+             } else {
+                 // Create a movie protobuf object and return it
+                 return Movie.newBuilder()
+                         .setId(id) // String
+                         .setPlot(plot) // String
+                         .setGenre(genre) // String
+                         .setRuntime(runtime) // int
+                         .addAllCast(cast) // String
+                         .setNumMflixComments(num_mflix_comments) // int
+                         .setTitle(title) // String
+                         .setFullplot(fullplot) // String
+                         .addAllCountries(countries) // String
+                         .setReleased(released) // String
+                         .addAllDirectors(directors) // String
+                         .setRated(rated) // String
+                         .setLastupdated(lastupdated) // String
+                         .setYear(year) // int
+                         .setType(type) // String
+                         .build(); // Build the movie protobuf object
+             }
         }
         return null;
     }
@@ -610,8 +626,17 @@ public class Client {
                 }
             }
             case UPDATE -> {
-                updateMovie(out);
-                validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), UPDATE);
+                getMovie(out);
+                Movie old_movie = null;
+                if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), GET)) {
+                    old_movie = receiveMovie(in);
+                    System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_CYAN + old_movie + ANSI_RESET);
+                    assert old_movie != null;
+                    updateMovie(out, old_movie);
+                    validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), UPDATE);
+                } else {
+                    System.out.println(ANSI_GREEN + "Movie not found." + ANSI_RESET);
+                }
             }
             case DELETE -> {
                 deleteMovie(out);
