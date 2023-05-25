@@ -164,20 +164,23 @@ def getMovie(client_socket, database):
 # @param database: The database object
 # @return: Status code or movie object
 def updateMovie(client_socket, database: MongoDatabase):
-	old_movie_object = get_client_packet(client_socket) # Get the movie object
-	old_movie_object = parse_movie_object(old_movie_object) # Create a movie object
+	get_movie_string = get_client_packet(client_socket) # Get the movie object
+	get_movie_object = parse_get_movie_object(get_movie_string) # Create a movie object
 
 	new_movie_string = get_client_packet(client_socket) # Get the movie object
 	new_movie_object = parse_movie_object(new_movie_string) # Create a movie object
 
-	old_movie_document = database.getMovieByTitle(old_movie_object.title)
+	print(f"{backgroundColors.OKGREEN}	get_movie_string.title {backgroundColors.OKCYAN}{get_movie_string.title}{backgroundColors.OKGREEN} from database{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN}	get_movie_object.title {backgroundColors.OKCYAN}{get_movie_object.title}{backgroundColors.OKGREEN} from database{Style.RESET_ALL}")
+
+	old_movie_document = database.getMovieByTitle(get_movie_object.title)
 
 	if old_movie_document is None:
 		print(f"{backgroundColors.FAIL}	Failed to get movie {backgroundColors.OKCYAN}{new_movie_object.id}{backgroundColors.FAIL} from database{Style.RESET_ALL}")
 		return FAILURE
 	
 	# now delete the old movie from the database
-	response_object = database.deleteMovie(old_movie_object)
+	response_object = database.deleteMovie(old_movie_object.title)
 
 	if response_object is None:
 		print(f"{backgroundColors.FAIL}	Failed to delete movie {backgroundColors.OKCYAN}{old_movie_object.title}{backgroundColors.FAIL} from database{Style.RESET_ALL}")
@@ -297,8 +300,8 @@ def handle_client_input(client_socket, client_address, database, client_request)
 				send_movie(client_socket, response_movie) # Send the response to the client
 		case movies_pb2.Operations.Update: # If the operation is update movie: 3
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent update movie command{Style.RESET_ALL}")
-			response = updateMovie(client_socket, database) # Update the movie
-			send_response_code(client_socket, response) # Send the response to the client
+			response_code = updateMovie(client_socket, database) # Update the movie
+			send_response_code(client_socket, response_code) # Send the response to the client
 		case movies_pb2.Operations.Delete: # If the operation is delete movie: 4
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent delete movie command{Style.RESET_ALL}")
 			response_code = deleteMovie(client_socket, database) # Delete the movie

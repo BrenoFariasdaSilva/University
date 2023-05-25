@@ -142,6 +142,41 @@ public class Client {
     }
 
     /*
+     * @brief This method updates a movie object according to the user input  and sends it to the server.
+     * @param out The DataOutputStream object to send the serialized movie object to the server.
+     * @return void
+     */
+    public static void updateMovie(DataOutputStream out) throws IOException {
+        System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
+        // Create a new ClientRequest object for specifying the operation the server will execute
+        ClientRequest request = ClientRequest.newBuilder()//.
+                .setOperation(Operations.Update) // Set the operation to UPDATE
+                .build(); // Build the object
+        // Serialize the request
+        byte[] serializedRequest = request.toByteArray();
+
+        // Send the serialized request to the server
+        sendPacket(out, serializedRequest);
+
+        // Create a new Movie object and fill it with the user input
+        GetMovieOperation get_movie = userFillGetMovieObject();
+        // Serialize the movie object
+        assert get_movie != null;
+        byte[] serializedGetMovie = get_movie.toByteArray();
+
+        // Send the serialized movie to the server
+        sendPacket(out, serializedGetMovie);
+
+        // Create a new Movie object and fill it with the user input
+        Movie new_movie = userFillCreateMovieObject(true);
+        // Serialize the movie object
+        byte[] serializedMovie = new_movie.toByteArray();
+
+        // Send the serialized movie to the server
+        sendPacket(out, serializedMovie);
+    }
+
+    /*
     * @brief This method deletes a movie object according to the user input of the movie title and sends it to the server.
     * @param out The DataOutputStream object to send the serialized movie object to the server.
     * @return void
@@ -163,37 +198,6 @@ public class Client {
         DeleteMovieOperation delete_movie = userFillDeleteMovieObject();
         // Serialize the movie object
         byte[] serializedMovie = delete_movie.toByteArray();
-
-        // Send the serialized movie to the server
-        sendPacket(out, serializedMovie);
-    }
-
-    /*
-    * @brief This method updates a movie object according to the user input  and sends it to the server.
-    * @param out The DataOutputStream object to send the serialized movie object to the server.
-    * @param old_movie The movie object to be updated.
-    * @return void
-     */
-    public static void updateMovie(DataOutputStream out, Movie old_movie) throws IOException {
-        System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
-        // Create a new ClientRequest object for specifying the operation the server will execute
-        ClientRequest request = ClientRequest.newBuilder()//.
-                .setOperation(Operations.Update) // Set the operation to UPDATE
-                .build(); // Build the object
-        // Serialize the request
-        byte[] serializedRequest = request.toByteArray();
-
-        // Send the serialized request to the server
-        sendPacket(out, serializedRequest);
-
-        // Send the movie id to the server
-        byte[] serializedOldMovie = old_movie.toByteArray();
-        sendPacket(out, serializedOldMovie);
-
-        // Create a new Movie object and fill it with the user input
-        Movie new_movie = userFillCreateMovieObject(true);
-        // Serialize the movie object
-        byte[] serializedMovie = new_movie.toByteArray();
 
         // Send the serialized movie to the server
         sendPacket(out, serializedMovie);
@@ -626,17 +630,8 @@ public class Client {
                 }
             }
             case UPDATE -> {
-                getMovie(out);
-                Movie old_movie = null;
-                if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), GET)) {
-                    old_movie = receiveMovie(in);
-                    System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_CYAN + old_movie + ANSI_RESET);
-                    assert old_movie != null;
-                    updateMovie(out, old_movie);
-                    validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), UPDATE);
-                } else {
-                    System.out.println(ANSI_GREEN + "Movie not found." + ANSI_RESET);
-                }
+                updateMovie(out);
+                validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), UPDATE);
             }
             case DELETE -> {
                 deleteMovie(out);
