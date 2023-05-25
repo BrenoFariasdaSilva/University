@@ -170,20 +170,23 @@ def updateMovie(client_socket, database: MongoDatabase):
 	new_movie_string = get_client_packet(client_socket) # Get the movie object
 	new_movie_object = parse_movie_object(new_movie_string) # Create a movie object
 
-	print(f"{backgroundColors.OKGREEN}	get_movie_string.title {backgroundColors.OKCYAN}{get_movie_string.title}{backgroundColors.OKGREEN} from database{Style.RESET_ALL}")
-	print(f"{backgroundColors.OKGREEN}	get_movie_object.title {backgroundColors.OKCYAN}{get_movie_object.title}{backgroundColors.OKGREEN} from database{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN}	get_movie_object.movie_title {backgroundColors.OKCYAN}{get_movie_object.movie_title}{backgroundColors.OKGREEN} from database{Style.RESET_ALL}")
 
-	old_movie_document = database.getMovieByTitle(get_movie_object.title)
+	old_movie_document = database.getMovieByTitle(get_movie_object.movie_title)
+
+	print(f"{backgroundColors.OKGREEN}	old_movie_document['title'] {backgroundColors.OKCYAN}{old_movie_document['title']}{backgroundColors.OKGREEN} from database{Style.RESET_ALL}")
 
 	if old_movie_document is None:
-		print(f"{backgroundColors.FAIL}	Failed to get movie {backgroundColors.OKCYAN}{new_movie_object.id}{backgroundColors.FAIL} from database{Style.RESET_ALL}")
+		print(f"{backgroundColors.FAIL}	Failed to get movie with id {backgroundColors.OKCYAN}{new_movie_object.id}{backgroundColors.FAIL} from database{Style.RESET_ALL}")
 		return FAILURE
 	
 	# now delete the old movie from the database
-	response_object = database.deleteMovie(old_movie_object.title)
+	response_object = database.deleteMovie(old_movie_document["title"])
+
+	print(f"{backgroundColors.OKGREEN}	Response object: {backgroundColors.OKCYAN}{response_object}{Style.RESET_ALL}")
 
 	if response_object is None:
-		print(f"{backgroundColors.FAIL}	Failed to delete movie {backgroundColors.OKCYAN}{old_movie_object.title}{backgroundColors.FAIL} from database{Style.RESET_ALL}")
+		print(f"{backgroundColors.FAIL}	Failed to delete movie {backgroundColors.OKCYAN}{get_movie_object.title}{backgroundColors.FAIL} from database{Style.RESET_ALL}")
 		return FAILURE
 
 	# Convert the movie object to a string
@@ -191,6 +194,8 @@ def updateMovie(client_socket, database: MongoDatabase):
 
 	# Update the old movie object with the new movie object where new_movie_object fields are not empty
 	new_movie_object = updateMovieObjectFields(new_movie_object, old_movie_object)
+
+	print(f"{backgroundColors.OKGREEN}	Updated movie name {backgroundColors.OKCYAN}{new_movie_object.title}{backgroundColors.OKGREEN} in database{Style.RESET_ALL}")
 
 	# now add the new movie object and return the status code
 	return database.createMovie(MessageToJson(new_movie_object))
