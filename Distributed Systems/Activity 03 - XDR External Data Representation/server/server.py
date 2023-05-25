@@ -176,9 +176,7 @@ def updateMovie(client_socket, database: MongoDatabase):
 	new_movie_object = parse_movie_object(new_movie_string) # Create a movie object
 
 	# now delete the old movie from the database
-	response_delete_object = database.deleteMovie(old_movie_document["title"])
-
-	print(f"{backgroundColors.OKGREEN}	Response object: {backgroundColors.OKCYAN}{response_delete_object}{Style.RESET_ALL}")
+	response_delete_object = database.deleteMovie(old_movie_document.title)
 
 	if response_delete_object is None:
 		print(f"{backgroundColors.FAIL}	Failed to delete movie {backgroundColors.OKCYAN}{old_movie_document['title']}{backgroundColors.FAIL} from database{Style.RESET_ALL}")
