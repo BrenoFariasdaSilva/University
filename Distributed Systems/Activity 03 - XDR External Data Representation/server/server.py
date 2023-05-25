@@ -28,6 +28,9 @@ EMPTY_STRING_FIELD = "Undefined" # The empty field
 EMPTY_INT_FIELD = -1 # The empty field
 EMPTY_LIST_FIELD = [] # The empty field
 
+# Erase Key:
+ERASE_MOVIES = True # If the movies should be erased
+
 # @brief: This function converts the document to a protocol buffer
 # @param document: The document
 # @return: The protocol buffer
@@ -52,6 +55,12 @@ def convert_document_to_protocol_buffer(document):
 	movie.year = document["year"] if document["year"] else EMPTY_INT_FIELD # Set the year
 	movie.type = document["type"] if document["type"] else EMPTY_STRING_FIELD # Set the type
 	return movie # Return the movie object
+
+# @brief: This function erases all of the movies inside the database
+# @param database: The database object
+# @return: Status code
+def eraseAllMovies(database: MongoDatabase):
+	return database.eraseAllMovies()
 
 # @brief: This function parses a list object from string
 # @param list_object: The list object
@@ -149,6 +158,9 @@ def deleteMovie(client_socket, database):
 	serialized_delete_movie = get_client_packet(client_socket) # Get the movie object
 	deserialized_delete_movie = parse_delete_object(serialized_delete_movie) # Create a delete object
 
+	if (ERASE_MOVIES):
+		return database.eraseAllMovies()
+
 	print(f"{backgroundColors.OKGREEN} Deleting movie {backgroundColors.OKCYAN}{deserialized_delete_movie.movie_title}{Style.RESET_ALL}")
 	response_object = database.deleteMovie(deserialized_delete_movie.movie_title)
 	if response_object is None:
@@ -168,27 +180,27 @@ def getMoviesByActor(client_socket, database):
 	movies_list_document = database.listByActor(list_movies_object.filter)
 	movies_list = movies_pb2.ServerListBy()
 	for movie in movies_list_document:
-		print(f"{backgroundColors.OKGREEN} Movie title: {backgroundColors.OKCYAN}{movie.title}{Style.RESET_ALL}")
 		# append the movie marshalled to the movies list
-		movies_list += movie.SerializeToString()
+		movies_list.movies.append(convert_document_to_protocol_buffer(movie))
+
+	print(f"{backgroundColors.OKGREEN} Movies list Count: {backgroundColors.OKCYAN}{len(movies_list.movies)}{Style.RESET_ALL}")
 	return movies_list
 
 # @brief: This function gets a category's movies
 # @param client_socket: The client socket object
 # @param database: The database object
 # @return: Movies List
-def getMoviesByCategory(client_socket, database):
+def getMoviesByGenre(client_socket, database):
 	category_name_string = get_client_packet(client_socket) # Get the actor name
 
 	list_movies_object = parse_list_object(category_name_string) # Create a list by object
 
 	print(f"{backgroundColors.OKGREEN} Getting movies from {backgroundColors.OKCYAN}{list_movies_object.filter}{backgroundColors.OKGREEN} category{Style.RESET_ALL}")
-	movies_list_document = database.listByCategory(list_movies_object.filter)
+	movies_list_document = database.listByGenre(list_movies_object.filter)
 	movies_list = movies_pb2.ServerListBy()
 	for movie in movies_list_document:
-		print(f"{backgroundColors.OKGREEN} Movie title: {backgroundColors.OKCYAN}{movie.title}{Style.RESET_ALL}")
 		# append the movie marshalled to the movies list
-		movies_list += movie.SerializeToString()
+		movies_list.movies.append(convert_document_to_protocol_buffer(movie))
 	return movies_list
 
 # @brief: This function send the response to the client
@@ -254,9 +266,9 @@ def handle_client_input(client_socket, client_address, database, client_request)
 			if not movies_list is None:
 				send_response_code(client_socket, SUCCESS) # Send the response to the client
 				send_movie(client_socket, movies_list) # Send the response to the client
-		case movies_pb2.Operations.ListByCategory: # If the operation is get category movies: 6
+		case movies_pb2.Operations.ListByGenre: # If the operation is get category movies: 6
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent get category movies command{Style.RESET_ALL}")
-			movies_list = getMoviesByCategory(client_socket, database) # Get the category movies
+			movies_list = getMoviesByGenre(client_socket, database) # Get the category movies
 			if not movies_list is None:
 				send_response_code(client_socket, SUCCESS) # Send the response to the client
 				send_movie(client_socket, movies_list) # Send the response to the client

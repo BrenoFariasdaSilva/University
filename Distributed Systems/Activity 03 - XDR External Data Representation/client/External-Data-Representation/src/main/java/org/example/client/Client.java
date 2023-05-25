@@ -31,7 +31,7 @@ public class Client {
     public static final String UPDATE = "UPDATE";
     public static final String DELETE = "DELETE";
     public static final String LISTBYACTOR = "LISTBYACTOR";
-    public static final String LISTBYCATEGORY = "LISTBYCATEGORY";
+    public static final String LISTBYGENRE = "LISTBYGENRE";
     public static final String HELP = "HELP";
     public static final String EXIT = "EXIT";
     public static final String SUCCESS = "SUCCESS";
@@ -187,7 +187,7 @@ public class Client {
 
         // Create a new ClientRequest object for specifying the request type
         ClientRequest request = ClientRequest.newBuilder()
-                .setOperation(Operations.ListByCategory) // Set the operation to LISTBYCATEGORY
+                .setOperation(Operations.ListByGenre) // Set the operation to LISTBYCATEGORY
                 .build(); // Build the object
 
         // Serialize the request
@@ -289,77 +289,77 @@ public class Client {
         boolean empty_fields = true;
         while (empty_fields) {
             // Ask for the user input: id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
-            System.out.println(ANSI_GREEN + "Type the id of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-            String id = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the plot of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-            String plot = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the genre of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-            String genre = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the runtime of the movie: (int)" + ANSI_RESET);
-            int runtime = reader.nextInt(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the number of casts in the movie: (int)" + ANSI_RESET);
-            int cast_number = reader.nextInt(); // Read the user input
-            // Create a list of casts
-            List<String> cast = new ArrayList<String>(cast_number);
-            reader.nextLine();
-            for (int i = 0; i < cast_number; i++) {
-                System.out.println(ANSI_GREEN + "Type the cast of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-                cast.add(reader.nextLine()); // Read the user input
-            }
-            System.out.println(ANSI_GREEN + "Type the num_mflix_comments of the movie: (int)" + ANSI_RESET);
-            int num_mflix_comments = reader.nextInt(); // Read the user input
-            reader.nextLine();
-            System.out.println(ANSI_GREEN + "Type the title of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-            String title = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the fullplot of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-            String fullplot = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the number of countries of the movie: (int)" + ANSI_RESET);
-            int countries_number = reader.nextInt(); // Read the user input
-            reader.nextLine();
-            List<String> countries = new ArrayList<String>(countries_number);
-            for (int i = 0; i < countries_number; i++) {
-                System.out.println(ANSI_GREEN + "Type the countries of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-                countries.add(reader.nextLine()); // Read the user input
-            }
-            System.out.println(ANSI_GREEN + "Type the released of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-            String released = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the number of directors of the movie: (int)" + ANSI_RESET);
-            int directors_number = reader.nextInt(); // Read the user input
-            reader.nextLine();
-            List<String> directors = new ArrayList<String>(directors_number);
-            for (int i = 0; i < directors_number; i++) {
-                System.out.println(ANSI_GREEN + "Type the directors of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-                directors.add(reader.nextLine()); // Read the user input
-            }
-            System.out.println(ANSI_GREEN + "Type the rated of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-            String rated = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the last updated of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-            String lastupdated = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the year of the movie: (int)" + ANSI_RESET);
-            int year = reader.nextInt(); // Read the user input
-            reader.nextLine();
-            System.out.println(ANSI_GREEN + "Type the type of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
-            String type = reader.nextLine(); // Read the user input
+//            System.out.println(ANSI_GREEN + "Type the id of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//            String id = reader.nextLine(); // Read the user input
+//            System.out.println(ANSI_GREEN + "Type the plot of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//            String plot = reader.nextLine(); // Read the user input
+//            System.out.println(ANSI_GREEN + "Type the genre of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//            String genre = reader.nextLine(); // Read the user input
+//            System.out.println(ANSI_GREEN + "Type the runtime of the movie: (int)" + ANSI_RESET);
+//            int runtime = reader.nextInt(); // Read the user input
+//            System.out.println(ANSI_GREEN + "Type the number of casts in the movie: (int)" + ANSI_RESET);
+//            int cast_number = reader.nextInt(); // Read the user input
+//            // Create a list of casts
+//            List<String> cast = new ArrayList<String>(cast_number);
+//            reader.nextLine();
+//            for (int i = 0; i < cast_number; i++) {
+//                System.out.println(ANSI_GREEN + "Type the cast of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//                cast.add(reader.nextLine()); // Read the user input
+//            }
+//            System.out.println(ANSI_GREEN + "Type the num_mflix_comments of the movie: (int)" + ANSI_RESET);
+//            int num_mflix_comments = reader.nextInt(); // Read the user input
+//            reader.nextLine();
+//            System.out.println(ANSI_GREEN + "Type the title of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//            String title = reader.nextLine(); // Read the user input
+//            System.out.println(ANSI_GREEN + "Type the fullplot of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//            String fullplot = reader.nextLine(); // Read the user input
+//            System.out.println(ANSI_GREEN + "Type the number of countries of the movie: (int)" + ANSI_RESET);
+//            int countries_number = reader.nextInt(); // Read the user input
+//            reader.nextLine();
+//            List<String> countries = new ArrayList<String>(countries_number);
+//            for (int i = 0; i < countries_number; i++) {
+//                System.out.println(ANSI_GREEN + "Type the countries of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//                countries.add(reader.nextLine()); // Read the user input
+//            }
+//            System.out.println(ANSI_GREEN + "Type the released of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//            String released = reader.nextLine(); // Read the user input
+//            System.out.println(ANSI_GREEN + "Type the number of directors of the movie: (int)" + ANSI_RESET);
+//            int directors_number = reader.nextInt(); // Read the user input
+//            reader.nextLine();
+//            List<String> directors = new ArrayList<String>(directors_number);
+//            for (int i = 0; i < directors_number; i++) {
+//                System.out.println(ANSI_GREEN + "Type the directors of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//                directors.add(reader.nextLine()); // Read the user input
+//            }
+//            System.out.println(ANSI_GREEN + "Type the rated of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//            String rated = reader.nextLine(); // Read the user input
+//            System.out.println(ANSI_GREEN + "Type the last updated of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//            String lastupdated = reader.nextLine(); // Read the user input
+//            System.out.println(ANSI_GREEN + "Type the year of the movie: (int)" + ANSI_RESET);
+//            int year = reader.nextInt(); // Read the user input
+//            reader.nextLine();
+//            System.out.println(ANSI_GREEN + "Type the type of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//            String type = reader.nextLine(); // Read the user input
 
             // Initialize the variables id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
-            // String id = "id";
-            // String plot = "plot";
-            // String genre = "genre";
-            // int runtime = 1;
-            // List<String> cast = new ArrayList<>();
-            // cast.add("cast1");
-            // int num_mflix_comments = 1;
-            // String title = "title";
-            // String fullplot = "fullplot";
-            // List<String> countries = new ArrayList<>();
-            // countries.add("country1");
-            // String released = "released";
-            // List<String> directors = new ArrayList<>();
-            // directors.add("director1");
-            // String rated = "rated";
-            // String lastupdated = "lastupdated";
-            // int year = 2023;
-            // String type = "type";
+             String id = "id";
+             String plot = "plot";
+             String genre = "genre";
+             int runtime = 1;
+             List<String> cast = new ArrayList<>();
+             cast.add("actor1");
+             int num_mflix_comments = 1;
+             String title = "title";
+             String fullplot = "fullplot";
+             List<String> countries = new ArrayList<>();
+             countries.add("country1");
+             String released = "released";
+             List<String> directors = new ArrayList<>();
+             directors.add("director1");
+             String rated = "rated";
+             String lastupdated = "lastupdated";
+             int year = 2023;
+             String type = "type";
 
             // verify if there is no empty field
             if (id.equals("") || plot.equals("") || genre.equals("") || runtime == 0 || cast.size() == 0 || num_mflix_comments == 0 || title.equals("") || fullplot.equals("") || countries.size() == 0 || released.equals("") || directors.size() == 0 || rated.equals("") || lastupdated.equals("") || year == 0 || type.equals("")) {
@@ -533,9 +533,9 @@ public class Client {
                     System.out.println(ANSI_GREEN + "Movie not found." + ANSI_RESET);
                 }
             }
-            case LISTBYCATEGORY -> {
+            case LISTBYGENRE -> {
                 listMoviesByCategory(out);
-                if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), LISTBYCATEGORY)) {
+                if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), LISTBYGENRE)) {
                     ListBy movies_list = receiveMoviesList(in);
                     System.out.println(ANSI_GREEN + "Movie(s): \n" + ANSI_CYAN + movies_list + ANSI_RESET);
                 } else {
@@ -561,7 +561,7 @@ public class Client {
         System.out.println(ANSI_GREEN + UPDATE + ": Update a movie " + ANSI_RED + "(New ID must be the same as old ID!)" + ANSI_RESET);
         System.out.println(ANSI_GREEN + DELETE + ": Delete a movie by title" + ANSI_RESET);
         System.out.println(ANSI_GREEN + LISTBYACTOR + ": List all movies by an actor" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + LISTBYCATEGORY + ": List all movies by a category" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + LISTBYGENRE + ": List all movies by a genre" + ANSI_RESET);
         System.out.println(ANSI_GREEN + EXIT + ": Exit the program" + ANSI_RESET);
     }
     // End of auxiliary methods

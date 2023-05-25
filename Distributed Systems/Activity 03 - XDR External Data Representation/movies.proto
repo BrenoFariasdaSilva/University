@@ -9,7 +9,7 @@ enum Operations {
 	Update = 3;
 	Delete = 4;
 	ListByActor = 5;
-	ListByCategory = 6;
+	ListByGenre = 6;
 }
 
 message ClientRequest {

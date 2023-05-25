@@ -71,10 +71,10 @@ public final class Movies {
       "\030\010 \001(\t\022\021\n\tcountries\030\t \003(\t\022\020\n\010released\030\n " +
       "\001(\t\022\021\n\tdirectors\030\013 \003(\t\022\r\n\005rated\030\014 \001(\t\022\023\n" +
       "\013lastupdated\030\r \001(\t\022\014\n\004year\030\016 \001(\005\022\014\n\004type" +
-      "\030\017 \001(\t*i\n\nOperations\022\010\n\004Zero\020\000\022\n\n\006Create" +
+      "\030\017 \001(\t*f\n\nOperations\022\010\n\004Zero\020\000\022\n\n\006Create" +
       "\020\001\022\010\n\004Read\020\002\022\n\n\006Update\020\003\022\n\n\006Delete\020\004\022\017\n\013" +
-      "ListByActor\020\005\022\022\n\016ListByCategory\020\006B\036\n\032org" +
-      ".example.client.structsP\001b\006proto3"
+      "ListByActor\020\005\022\017\n\013ListByGenre\020\006B\036\n\032org.ex" +
+      "ample.client.structsP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

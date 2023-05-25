@@ -54,10 +54,14 @@ class MongoDatabase:
 		return None
 	
 	def listByActor(self, actor_name):
-		return self.collection.find({"actors": actor_name})
+		return list(self.collection.find({"cast": actor_name}))
 	
-	def listByCategory(self, category):
-		return self.collection.find({"category": category})
+	def listByGenre(self, genre):
+		return list(self.collection.find({"genres": genre}))
+	
+	def eraseAllMovies(self):
+		response_document = self.collection.delete_many({})
+		return response_document.deleted_count
 	
 if __name__ == "__main__":
 	database = MongoDatabase()
