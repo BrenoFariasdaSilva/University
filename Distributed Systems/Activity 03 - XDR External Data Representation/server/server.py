@@ -2,8 +2,8 @@ import socket # For creating the TCP/STREAM socket
 import threading # For creating the client thread
 from database.database import MongoDatabase # For the database
 import structs.movies_pb2 as movies_pb2 # For the protocol buffers
-from google.protobuf.json_format import MessageToJson# For converting the protocol buffer to a dictionary
-import google.protobuf.internal.decoder as decoder
+from google.protobuf.json_format import MessageToJson # For converting the protocol buffer to a dictionary
+import google.protobuf.internal.decoder as decoder # For decoding the protocol buffer
 from colorama import Style # For coloring the terminal
 
 # Background colors:
@@ -16,10 +16,10 @@ class backgroundColors: # Colors for the terminal
 # Server:
 SERVERADDRESS = ["localhost", 7000] # The server's address. The first element is the IP address, the second is the port.
 
-## Client:
+# Client:
 CLIENT_REQUEST_SIZE = 4 # The client request size is 4 byte
 
-## Response codes:
+# Response codes:
 SUCCESS = 1 # The success response code
 FAILURE = 0 # The failure response code
 
@@ -29,11 +29,11 @@ EMPTY_INT_FIELD = -1 # The empty field
 EMPTY_LIST_FIELD = [] # The empty field
 
 # Erase Key:
-ERASE_MOVIES = True # If the movies should be erased
+ERASE_MOVIES = False # If the movies should be erased
 
 # @brief: This function converts the document to a protocol buffer
-# @param document: The document
-# @return: The protocol buffer
+# @param document: The movie document
+# @return: The movie protocol buffer
 def convert_document_to_protocol_buffer(document):
 	movie = movies_pb2.Movie() # Create a movie object
 	movie.id = str(document["_id"]) # Set the id
@@ -158,14 +158,14 @@ def deleteMovie(client_socket, database):
 	serialized_delete_movie = get_client_packet(client_socket) # Get the movie object
 	deserialized_delete_movie = parse_delete_object(serialized_delete_movie) # Create a delete object
 
-	if (ERASE_MOVIES):
-		return database.eraseAllMovies()
+	if (ERASE_MOVIES): # If the erase movies flag is set, erase all movies
+		return eraseAllMovies() # Erase all movies and return the deleted movies count
 
 	print(f"{backgroundColors.OKGREEN} Deleting movie {backgroundColors.OKCYAN}{deserialized_delete_movie.movie_title}{Style.RESET_ALL}")
 	response_object = database.deleteMovie(deserialized_delete_movie.movie_title)
-	if response_object is None:
+	if response_object is None: # If the response object is None, return FAILURE
 		return FAILURE
-	return response_object
+	return response_object 
 
 # @brief: This function gets the movies made by an actor
 # @param client_socket: The client socket object
@@ -177,14 +177,14 @@ def getMoviesByActor(client_socket, database):
 	list_movies_object = parse_list_object(actor_name_string) # Create a list by object
 
 	print(f"{backgroundColors.OKGREEN} Getting movies from {backgroundColors.OKCYAN}{list_movies_object.filter}{backgroundColors.OKGREEN} actor{Style.RESET_ALL}")
-	movies_list_document = database.listByActor(list_movies_object.filter)
-	movies_list = movies_pb2.ServerListBy()
-	for movie in movies_list_document:
+	movies_list_document = database.listByActor(list_movies_object.filter) # Get the movies list from the database
+	movies_list = movies_pb2.ServerListBy() # Create a movies list object
+	for movie in movies_list_document: # For each movie in the movies list
 		# append the movie marshalled to the movies list
 		movies_list.movies.append(convert_document_to_protocol_buffer(movie))
 
 	print(f"{backgroundColors.OKGREEN} Movies list Count: {backgroundColors.OKCYAN}{len(movies_list.movies)}{Style.RESET_ALL}")
-	return movies_list
+	return movies_list # Return the movies list
 
 # @brief: This function gets a category's movies
 # @param client_socket: The client socket object
@@ -196,12 +196,12 @@ def getMoviesByGenre(client_socket, database):
 	list_movies_object = parse_list_object(category_name_string) # Create a list by object
 
 	print(f"{backgroundColors.OKGREEN} Getting movies from {backgroundColors.OKCYAN}{list_movies_object.filter}{backgroundColors.OKGREEN} category{Style.RESET_ALL}")
-	movies_list_document = database.listByGenre(list_movies_object.filter)
-	movies_list = movies_pb2.ServerListBy()
-	for movie in movies_list_document:
+	movies_list_document = database.listByGenre(list_movies_object.filter) # Get the movies list from the database
+	movies_list = movies_pb2.ServerListBy() # Create a movies list object
+	for movie in movies_list_document: # For each movie in the movies list
 		# append the movie marshalled to the movies list
 		movies_list.movies.append(convert_document_to_protocol_buffer(movie))
-	return movies_list
+	return movies_list # Return the movies list
 
 # @brief: This function send the response to the client
 # @param client_socket: The client socket object
@@ -209,8 +209,8 @@ def getMoviesByGenre(client_socket, database):
 # @return: None
 def send_response_code(client_socket, response):
 	# Serialize the response to the protocol buffer
-	response_object = movies_pb2.ResponseCode()
-	response_object.response = str(response)
+	response_object = movies_pb2.ResponseCode() # Create a response object
+	response_object.response = str(response) # Set the response code
 	print(f"{backgroundColors.OKGREEN}	Sending Response: {backgroundColors.OKCYAN}{response_object.response}{Style.RESET_ALL}")
 	# Send the response length to the client
 	client_socket.send(len(response_object.SerializeToString()).to_bytes(4, byteorder='big'))
