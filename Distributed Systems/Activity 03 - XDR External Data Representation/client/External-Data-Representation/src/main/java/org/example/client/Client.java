@@ -21,6 +21,9 @@ import java.util.Scanner;
  * It also validates user input, so the server don't get loaded with invalid inputs
  */
 
+/**
+ * This class is the client side of the application.
+ * */
 public class Client {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
@@ -75,7 +78,7 @@ public class Client {
                 // Split the user input into an array of strings
                 String[] parts = user_input.split(" ");
 
-                // Validate the user input for CREATE, GET, UPDATE, DELETE, LISTBYACTOR, LISTBYCATEGORY, HELP and Unknown commands.
+                // Validate the user input for CREATE, GET, UPDATE, DELETE, LISTBYACTOR, LISTBYGENRE, HELP and Unknown commands.
                 validateUserOperation(in, out, parts);
             }
         } catch (EOFException eofe){
@@ -86,7 +89,13 @@ public class Client {
     }
 
     // End of main method
-    // CRUD OPERATIONS: CREATE, READ (GET), UPDATE, DELETE, LISTBYACTOR, LISTBYCATEGORY
+    // CRUD OPERATIONS: CREATE, READ (GET), UPDATE, DELETE, LISTBYACTOR, LISTBYGENRE
+
+    /*
+    * @brief This method creates a new movie object, fills it with the user input and sends it to the server.
+    * @param out The DataOutputStream object to send the serialized movie object to the server.
+    * @return void
+    */
     private static void createMovie(DataOutputStream out) throws IOException {
         System.out.println(ANSI_GREEN + "Creating a new movie..." + ANSI_RESET);
 
@@ -104,6 +113,11 @@ public class Client {
         createMovieObject(out);
     }
 
+    /*
+    * @brief This method gets a movie object according to the user input of the movie title and sends it to the server.
+    * @param out The DataOutputStream object to send the serialized movie object to the server.
+    * @return void
+     */
     private static void getMovie(DataOutputStream out) throws IOException {
         System.out.println(ANSI_GREEN + "Getting a movie..." + ANSI_RESET);
 
@@ -126,6 +140,11 @@ public class Client {
         sendPacket(out, serializedMovie);
     }
 
+    /*
+    * @brief This method deletes a movie object according to the user input of the movie title and sends it to the server.
+    * @param out The DataOutputStream object to send the serialized movie object to the server.
+    * @return void
+     */
     private static void deleteMovie(DataOutputStream out) throws IOException {
         System.out.println(ANSI_GREEN + "Deleting a movie..." + ANSI_RESET);
 
@@ -148,6 +167,11 @@ public class Client {
         sendPacket(out, serializedMovie);
     }
 
+    /*
+    * @brief This method updates a movie object according to the user input  and sends it to the server.
+    * @param out The DataOutputStream object to send the serialized movie object to the server.
+    * @return void
+     */
     public static void updateMovie (DataOutputStream out) throws IOException {
         System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
 
@@ -165,6 +189,11 @@ public class Client {
         createMovieObject(out);
     }
 
+    /*
+    * @brief This method lists all movies of a certain actor according to the user input and sends it to the server.
+    * @param out The DataOutputStream object to send the serialized movie object to the server.
+    * @return void
+     */
     public static void listMoviesByActor(DataOutputStream out) throws IOException {
         System.out.println(ANSI_GREEN + "Listing all movies of a certain actor..." + ANSI_RESET);
 
@@ -182,12 +211,17 @@ public class Client {
         createListByObject(out);
     }
 
-    private static void listMoviesByCategory(DataOutputStream out) throws IOException {
-        System.out.println(ANSI_GREEN + "Listing all movies of a certain category..." + ANSI_RESET);
+    /*
+    * @brief This method lists all movies of a certain genre according to the user input and sends it to the server.
+    * @param out The DataOutputStream object to send the serialized movie object to the server.
+    * @return void
+     */
+    private static void listMoviesByGenre(DataOutputStream out) throws IOException {
+        System.out.println(ANSI_GREEN + "Listing all movies of a certain genre..." + ANSI_RESET);
 
         // Create a new ClientRequest object for specifying the request type
         ClientRequest request = ClientRequest.newBuilder()
-                .setOperation(Operations.ListByGenre) // Set the operation to LISTBYCATEGORY
+                .setOperation(Operations.ListByGenre) // Set the operation to LISTBYGENRE
                 .build(); // Build the object
 
         // Serialize the request
@@ -202,7 +236,12 @@ public class Client {
     // End of CRUD operations
     // Start of Sending and Receiving methods
 
-    // create a method for sending packets to the server
+    /*
+    * @brief This method sends a serialized packet to the server.
+    * @param out The DataOutputStream object to send the serialized movie object to the server.
+    * @param serializedPacket The serialized packet to send to the server.
+    * @return void
+     */
     private static void sendPacket(DataOutputStream out, byte[] serializedPacket) throws IOException {
         out.writeInt(serializedPacket.length);
         System.out.println(ANSI_GREEN + "Serialized packet length: " + ANSI_CYAN + serializedPacket.length + ANSI_RESET);
@@ -211,6 +250,11 @@ public class Client {
         out.flush();
     }
 
+    /*
+    * @brief This method receives a serialized packet from the server.
+    * @param in The DataInputStream object to receive the serialized movie object from the server.
+    * @return byte[] The serialized packet received from the server.
+     */
     private static Movie receiveMovie(DataInputStream in) {
         System.out.println(ANSI_GREEN + "Receiving a movie..." + ANSI_RESET);
         try {
@@ -232,6 +276,11 @@ public class Client {
         return null;
     }
 
+    /*
+    * @brief This method receives a serialized packet from the server.
+    * @param in The DataInputStream object to receive the serialized movie object from the server.
+    * @return byte[] The serialized packet received from the server.
+     */
     private static ListBy receiveMoviesList(DataInputStream in) {
         try {
             // Create a new ListBy object
@@ -253,6 +302,12 @@ public class Client {
 
     // End of Sending and Receiving methods
     // Start of create object methods: createMovieObject and createListByObject
+
+    /*
+    * @brief This method creates a new Movie object and fills it with the user input.
+    * @param out the DataOutputStream object to send the serialized movie object to the server.
+    * @return void
+     */
     private static void createMovieObject(DataOutputStream out) throws IOException {
         // Create a new Movie object and fill it with the user input
         Movie movie = userFillCreateMovieObject();
@@ -265,6 +320,11 @@ public class Client {
         sendPacket(out, serializedMovie);
     }
 
+    /*
+    * @brief This method creates a new ClientListOperation object and fills it with the user input.
+    * @param out the DataOutputStream object to send the serialized movie object to the server.
+    * @return void
+     */
     private static void createListByObject(DataOutputStream out) throws IOException {
         // Create a new ClientListOperation object and fill it with the user input
         ClientListOperation list_movies_by = userFillListByObject();
@@ -280,7 +340,7 @@ public class Client {
     // Start of user fill objects methods: userFillCreateMovieObject, userFillGetMovieObject, userFillDeleteMovieObject, userFillListByObject
 
     /*
-    @brief: This function asks for the user input to fill a movie object
+    @brief: This function asks the user to fill the fields of a movie object and returns it.
     @param: None
     @return: A movie object
     */
@@ -388,6 +448,11 @@ public class Client {
         return null;
     }
 
+    /*
+    * @brief This function is used to fill the GetMovieOperation object with user input
+    * @param None
+    * @return GetMovieOperation object
+     */
     private static GetMovieOperation userFillGetMovieObject() {
         Scanner reader = new Scanner(System.in); // Read the user input
         boolean empty_field = true;
@@ -407,6 +472,11 @@ public class Client {
         return null;
     }
 
+    /*
+    * @brief This function is used to fill the DeleteMovieOperation object with user input
+    * @param None
+    * @return DeleteMovieOperation object
+     */
     private static DeleteMovieOperation userFillDeleteMovieObject() {
         Scanner reader = new Scanner(System.in); // Read the user input
         boolean empty_field = true;
@@ -426,6 +496,11 @@ public class Client {
         return null;
     }
 
+    /*
+    * @brief This function is used to fill the ClientListOperation object with user input
+    * @param None
+    * @return ClientListOperation object
+     */
     private static ClientListOperation userFillListByObject() {
         Scanner reader = new Scanner(System.in); // Read the user input
         boolean empty_field = true;
@@ -448,6 +523,12 @@ public class Client {
 
     // End of User Input Methods: userFillCreateMovieObject, userFillGetMovieObject, userFillDeleteMovieObject, userFillListByObject
     // Start of Response Code Methods
+
+    /*
+    * @brief This function is used to send the CreateMovieOperation object to the server
+    * @param out the DataOutputStream object
+    * @return ResponseCode object
+     */
     private static ResponseCode responseCodePacket(DataInputStream in) throws IOException {
         // Wait for the server response packet, which will be two packets. The first one is the length of the second one
         try {
@@ -469,7 +550,12 @@ public class Client {
         return null;
     }
 
-    // Create a method that validates the response code. If is 1, then the operation was successful, otherwise it failed
+    /*
+    * @brief This function is used to send the CreateMovieOperation object to the server
+    * @param ResponseCode object which contains the response code
+    * @param operation the operation that was performed
+    * @return true if the response code is 1, false otherwise
+     */
     private static boolean validateResponseCode(ResponseCode responseCode, String operation) {
         if (responseCode.getResponse().equals(SUCCESS_CODE)) {
             System.out.println(ANSI_GREEN + "Operation " + ANSI_CYAN + operation + " " + ANSI_GREEN + SUCCESS + "!" + ANSI_RESET);
@@ -501,6 +587,13 @@ public class Client {
         }
     }
 
+    /*
+    @brief: This function validates the user input for the operation to be performed
+    @param: in - The DataInputStream object
+    @param: out - The DataOutputStream object
+    @param: parts - The user input
+    @return: None
+     */
     private static void validateUserOperation(DataInputStream in, DataOutputStream out, String[] parts) throws IOException {
         switch (parts[0]) {
             case CREATE -> {
@@ -534,7 +627,7 @@ public class Client {
                 }
             }
             case LISTBYGENRE -> {
-                listMoviesByCategory(out);
+                listMoviesByGenre(out);
                 if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), LISTBYGENRE)) {
                     ListBy movies_list = receiveMoviesList(in);
                     System.out.println(ANSI_GREEN + "Movie(s): \n" + ANSI_CYAN + movies_list + ANSI_RESET);
