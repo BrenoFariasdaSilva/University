@@ -14,7 +14,7 @@ class backgroundColors: # Colors for the terminal
 	FAIL = "\033[91m" # Red
 
 # Server:
-SERVERADDRESS = ["localhost", 7001] # The server's address. The first element is the IP address, the second is the port.
+SERVERADDRESS = ["localhost", 7000] # The server's address. The first element is the IP address, the second is the port.
 
 ## Client:
 CLIENT_REQUEST_SIZE = 4 # The client request size is 4 byte
@@ -164,8 +164,9 @@ def getMoviesByActor(client_socket, database):
 
 	list_movies_object = parse_list_object(actor_name_string) # Create a list by object
 
-	print(f"{backgroundColors.OKGREEN} Getting movies from {backgroundColors.OKCYAN}{list_movies_object.filter}{backgroundColors.OKGREEN}actor{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN} Getting movies from {backgroundColors.OKCYAN}{list_movies_object.filter}{backgroundColors.OKGREEN} actor{Style.RESET_ALL}")
 	movies_list_document = database.listByActors(list_movies_object.filter)
+	movies_list = movies_pb2.ListBy()
 	for movie in movies_list_document:
 		print(f"{backgroundColors.OKGREEN} Movie title: {backgroundColors.OKCYAN}{movie.title}{Style.RESET_ALL}")
 		# append the movie marshalled to the movies list
@@ -177,12 +178,13 @@ def getMoviesByActor(client_socket, database):
 # @param database: The database object
 # @return: Movies List
 def getMoviesByCategory(client_socket, database):
-	movie_category = get_client_packet(client_socket) # Get the movie category5
+	category_name_string = get_client_packet(client_socket) # Get the actor name
 
-	list_movies_object = parse_list_object(movie_category) # Create a list by object
+	list_movies_object = parse_list_object(category_name_string) # Create a list by object
 
-	print(f"{backgroundColors.OKGREEN} Getting movies from {backgroundColors.OKCYAN}{list_movies_object.filter}{backgroundColors.OKGREEN}category{Style.RESET_ALL}")
+	print(f"{backgroundColors.OKGREEN} Getting movies from {backgroundColors.OKCYAN}{list_movies_object.filter}{backgroundColors.OKGREEN} category{Style.RESET_ALL}")
 	movies_list_document = database.listByCategory(list_movies_object.filter)
+	movies_list = movies_pb2.ListBy()
 	for movie in movies_list_document:
 		print(f"{backgroundColors.OKGREEN} Movie title: {backgroundColors.OKCYAN}{movie.title}{Style.RESET_ALL}")
 		# append the movie marshalled to the movies list

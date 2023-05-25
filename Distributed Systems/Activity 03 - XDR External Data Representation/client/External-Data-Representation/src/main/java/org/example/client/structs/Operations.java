@@ -33,9 +33,9 @@ public enum Operations
    */
   ListByActors(5),
   /**
-   * <code>ListByDirectors = 6;</code>
+   * <code>ListByCategory = 6;</code>
    */
-  ListByDirectors(6),
+  ListByCategory(6),
   UNRECOGNIZED(-1),
   ;
 
@@ -64,9 +64,9 @@ public enum Operations
    */
   public static final int ListByActors_VALUE = 5;
   /**
-   * <code>ListByDirectors = 6;</code>
+   * <code>ListByCategory = 6;</code>
    */
-  public static final int ListByDirectors_VALUE = 6;
+  public static final int ListByCategory_VALUE = 6;
 
 
   public final int getNumber() {
@@ -99,7 +99,7 @@ public enum Operations
       case 3: return Update;
       case 4: return Delete;
       case 5: return ListByActors;
-      case 6: return ListByDirectors;
+      case 6: return ListByCategory;
       default: return null;
     }
   }

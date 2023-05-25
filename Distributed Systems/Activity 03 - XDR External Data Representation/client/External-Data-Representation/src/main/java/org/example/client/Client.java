@@ -9,11 +9,11 @@ import java.util.Objects;
 import java.util.Scanner;
 
 /*
- * XDR - External Data Representation Activity
- * @author Breno Farias da Silva
- * @subject Distributed Systems
- * @date 15/05/2023
- * @lastUpdate 15/05/2023
+ * XDR - External Data Representation Activity.
+ * @author Breno Farias da Silva.
+ * @subject Distributed Systems.
+ * @date 15/05/2023.
+ * @lastUpdate 24/05/2023.
  * This file is the client side of the application.
  * This file creates a TCP socket in order to communicate with the server.
  * It's responsible for sending messages to the server.
@@ -37,17 +37,16 @@ public class Client {
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILURE = "FAILURE";
     public static final String SUCCESS_CODE = "1";
-    public static final String FAILURE_CODE = "0";
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in); // Read the user input
 
         // Address and port of the server
-        int serverPort = 7001; // Later put it inside a env variable
+        int serverPort = 7000; // Later put it inside a env variable
         InetAddress serverAddr = null; // Create an instance of InetAddress
         try {
             serverAddr = InetAddress.getByName("localhost"); // Get the IP address of the server, which is localhost = 127.0.0.1
         } catch (UnknownHostException e) {
-            System.out.println(ANSI_GREEN + "Unknown host: (String)" + ANSI_CYAN + e.getMessage() + ANSI_RESET);
+            System.out.println(ANSI_RED + "Unknown host!" + ANSI_CYAN + e.getMessage() + ANSI_RESET);
             return;
         }
 
@@ -60,9 +59,8 @@ public class Client {
             String user_input = "";
 
             // Show the user how to use the program
-            // showHelp();
             while (true) {
-                System.out.println(ANSI_GREEN + "Type a message: (String)" + ANSI_RESET);
+                System.out.println(ANSI_GREEN + "Type a message: " + ANSI_RED + "(String)" + ANSI_RESET);
                 user_input = reader.nextLine(); // Read the user input
 
                 // Convert the first word of the user input to uppercase
@@ -77,44 +75,8 @@ public class Client {
                 // Split the user input into an array of strings
                 String[] parts = user_input.split(" ");
 
-                // Validate the user input for CREATE, GET, UPDATE, DELETE...
-                switch (parts[0]) {
-                    case CREATE -> {
-                        createMovie(out);
-                        validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), CREATE);
-                    }
-                    case GET -> {
-                        getMovie(out);
-                        if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), GET)) {
-                            Movie movie = receiveMovie(in);
-                            System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_CYAN + movie + ANSI_RESET);
-                        } else {
-                            System.out.println(ANSI_GREEN + "Movie not found." + ANSI_RESET);
-                        }
-                    }
-                    case UPDATE -> System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
-                    case DELETE -> {
-                        deleteMovie(out);
-                        validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), DELETE);
-                    }
-                    case LISTBYACTORS -> {
-                        listMoviesByActors(out);
-                        if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), LISTBYACTORS)) {
-                            Movie movies_list = receiveMovie(in);
-                            System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_CYAN + movies_list + ANSI_RESET);
-                        } else {
-                            System.out.println(ANSI_GREEN + "Movie not found." + ANSI_RESET);
-                        }
-                    }
-                    case LISTBYCATEGORY -> {
-                        System.out.println(ANSI_GREEN + "Listing all movies by a category..." + ANSI_RESET);
-                    }
-                    case HELP -> showHelp();
-                    default -> {
-                        System.out.println(ANSI_GREEN + "Invalid command. Try again." + ANSI_RESET);
-                        continue;
-                    }
-                }
+                // Validate the user input for CREATE, GET, UPDATE, DELETE, LISTBYACTORS, LISTBYCATEGORY, HELP and Unknown commands.
+                validateUserOperation(in, out, parts);
             }
         } catch (EOFException eofe){
             System.out.println(ANSI_GREEN + "EOF:" + ANSI_CYAN + eofe.getMessage() + ANSI_RESET);
@@ -123,24 +85,42 @@ public class Client {
         }
     }
 
-    public static void listMoviesByActors(DataOutputStream out) throws IOException {
-        System.out.println(ANSI_GREEN + "Listing all movies by an actor..." + ANSI_RESET);
+    // End of main method
+    // CRUD OPERATIONS: CREATE, READ (GET), UPDATE, DELETE, LISTBYACTORS, LISTBYCATEGORY
+    private static void createMovie(DataOutputStream out) throws IOException {
+        System.out.println(ANSI_GREEN + "Creating a new movie..." + ANSI_RESET);
 
         // Create a new ClientRequest object for specifying the operation the server will execute
         ClientRequest request = ClientRequest.newBuilder()//.
-                .setOperation(Operations.ListByActors)
-                .build();
-
+                .setOperation(Operations.Create) // Set the operation to CREATE
+                .build(); // Build the object
         // Serialize the request
         byte[] serializedRequest = request.toByteArray();
+
         // Send the serialized request to the server
         sendPacket(out, serializedRequest);
 
-        // Create a new ClientListOperation object and fill it with the user input
-        ClientListOperation list_movies_by_actor = userFillListMoviesByActorsObject();
+        // Create a new Movie object and fill it with the user input
+        createMovieObject(out);
+    }
 
+    private static void getMovie(DataOutputStream out) throws IOException {
+        System.out.println(ANSI_GREEN + "Getting a movie..." + ANSI_RESET);
+
+        // Create a new ClientRequest object for specifying the operation the server will execute
+        ClientRequest request = ClientRequest.newBuilder()//.
+                .setOperation(Operations.Read) // Set the operation to READ
+                .build(); // Build the object
+        // Serialize the request
+        byte[] serializedRequest = request.toByteArray();
+
+        // Send the serialized request to the server
+        sendPacket(out, serializedRequest);
+
+        // Create a new Movie object and fill it with the user input
+        GetMovieOperation get_movie = userFillGetMovieObject();
         // Serialize the movie object
-        byte[] serializedMovie = list_movies_by_actor.toByteArray();
+        byte[] serializedMovie = get_movie.toByteArray();
 
         // Send the serialized movie to the server
         sendPacket(out, serializedMovie);
@@ -151,8 +131,8 @@ public class Client {
 
         // Create a new ClientRequest object for specifying the operation the server will execute
         ClientRequest request = ClientRequest.newBuilder()//.
-                .setOperation(Operations.Delete)
-                .build();
+                .setOperation(Operations.Delete) // Set the operation to DELETE
+                .build(); // Build the object
         // Serialize the request
         byte[] serializedRequest = request.toByteArray();
 
@@ -161,12 +141,74 @@ public class Client {
 
         // Create a new Movie object and fill it with the user input
         DeleteMovieOperation delete_movie = userFillDeleteMovieObject();
-        System.out.println(ANSI_GREEN + "Movie title: " + ANSI_CYAN + delete_movie.getMovieTitle() + ANSI_RESET);
         // Serialize the movie object
         byte[] serializedMovie = delete_movie.toByteArray();
 
         // Send the serialized movie to the server
         sendPacket(out, serializedMovie);
+    }
+
+    public static void updateMovie (DataOutputStream out) throws IOException {
+        System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
+
+        // Create a new ClientRequest object for specifying the operation the server will execute
+        ClientRequest request = ClientRequest.newBuilder()//.
+                .setOperation(Operations.Update) // Set the operation to UPDATE
+                .build(); // Build the object
+        // Serialize the request
+        byte[] serializedRequest = request.toByteArray();
+
+        // Send the serialized request to the server
+        sendPacket(out, serializedRequest);
+
+        // Create a new Movie object and fill it with the user input
+        createMovieObject(out);
+    }
+
+    public static void listMoviesByActors(DataOutputStream out) throws IOException {
+        System.out.println(ANSI_GREEN + "Listing all movies of a certain actor..." + ANSI_RESET);
+
+        // Create a new ClientRequest object for specifying the operation the server will execute
+        ClientRequest request = ClientRequest.newBuilder()//.
+                .setOperation(Operations.ListByActors) // Set the operation to LISTBYACTORS
+                .build(); // Build the object
+
+        // Serialize the request
+        byte[] serializedRequest = request.toByteArray();
+        // Send the serialized request to the server
+        sendPacket(out, serializedRequest);
+
+        // Create a new ClientListOperation object and fill it with the user input
+        createListByObject(out);
+    }
+
+    private static void listMoviesByCategory(DataOutputStream out) throws IOException {
+        System.out.println(ANSI_GREEN + "Listing all movies of a certain category..." + ANSI_RESET);
+
+        // Create a new ClientRequest object for specifying the request type
+        ClientRequest request = ClientRequest.newBuilder()
+                .setOperation(Operations.ListByCategory) // Set the operation to LISTBYCATEGORY
+                .build(); // Build the object
+
+        // Serialize the request
+        byte[] serializedRequest = request.toByteArray();
+        // Send the serialized request to the server
+        sendPacket(out, serializedRequest);
+
+        // Create a new ClientListOperation object and fill it with the user input
+        createListByObject(out);
+    }
+
+    // End of CRUD operations
+    // Start of Sending and Receiving methods
+
+    // create a method for sending packets to the server
+    private static void sendPacket(DataOutputStream out, byte[] serializedPacket) throws IOException {
+        out.writeInt(serializedPacket.length);
+        System.out.println(ANSI_GREEN + "Serialized packet length: " + ANSI_CYAN + serializedPacket.length + ANSI_RESET);
+        out.write(serializedPacket);
+        System.out.println(ANSI_GREEN + "Serialized packet: " + ANSI_CYAN + serializedPacket + ANSI_RESET);
+        out.flush();
     }
 
     private static Movie receiveMovie(DataInputStream in) {
@@ -190,77 +232,30 @@ public class Client {
         return null;
     }
 
-    private static void getMovie(DataOutputStream out) throws IOException {
-        System.out.println(ANSI_GREEN + "Getting a movie..." + ANSI_RESET);
+    private static ListBy receiveMoviesList(DataInputStream in) {
+        try {
+            // Create a new ListBy object
+            ListBy movies_list = null;
 
-        // Create a new ClientRequest object for specifying the operation the server will execute
-        ClientRequest request = ClientRequest.newBuilder()//.
-                .setOperation(Operations.Read)
-                .build();
-        // Serialize the request
-        byte[] serializedRequest = request.toByteArray();
+            // Receive the package size
+            int package_size = in.readInt();
+            // Create a byte array with the package size
+            byte[] serialized_movies_list = new byte[package_size];
 
-        // Send the serialized request to the server
-        sendPacket(out, serializedRequest);
+            // Receive the serialized movie list object from the server
+            in.readFully(serialized_movies_list);
+            return ListBy.parseFrom(serialized_movies_list);
+        } catch (IOException e) {
+            System.out.println(ANSI_GREEN + "IO:" + ANSI_CYAN + e.getMessage() + ANSI_RESET);
+        }
+        return null;
+    }
 
+    // End of Sending and Receiving methods
+    // Start of create object methods: createMovieObject and createListByObject
+    private static void createMovieObject(DataOutputStream out) throws IOException {
         // Create a new Movie object and fill it with the user input
-        GetMovieOperation get_movie = userFillGetMovieObject();
-        System.out.println(ANSI_GREEN + "Movie title: " + ANSI_CYAN + get_movie.getMovieTitle() + ANSI_RESET);
-        // Serialize the movie object
-        byte[] serializedMovie = get_movie.toByteArray();
-
-        // Send the serialized movie to the server
-        sendPacket(out, serializedMovie);
-    }
-
-    private static ClientListOperation userFillListByObject() {
-        Scanner reader = new Scanner(System.in); // Read the user input
-
-        System.out.println(ANSI_GREEN + "Type the actor name: (String)" + ANSI_RESET);
-        String actor = reader.nextLine(); // Read the user input
-
-        return ClientListOperation.newBuilder()
-                .setFilter(actor)
-                .build();
-    }
-
-    private static GetMovieOperation userFillGetMovieObject() {
-        Scanner reader = new Scanner(System.in); // Read the user input
-
-        System.out.println(ANSI_GREEN + "Type the movie title: (String)" + ANSI_RESET);
-        String title = reader.nextLine(); // Read the user input
-
-        return GetMovieOperation.newBuilder()
-                .setMovieTitle(title)
-                .build();
-    }
-
-    private static DeleteMovieOperation userFillDeleteMovieObject() {
-        Scanner reader = new Scanner(System.in); // Read the user input
-
-        System.out.println(ANSI_GREEN + "Type the movie title: (String)" + ANSI_RESET);
-        String title = reader.nextLine(); // Read the user input
-
-        return DeleteMovieOperation.newBuilder()
-                .setMovieTitle(title)
-                .build();
-    }
-
-    private static void createMovie(DataOutputStream out) throws IOException {
-        System.out.println(ANSI_GREEN + "Creating a new movie..." + ANSI_RESET);
-
-        // Create a new ClientRequest object for specifying the operation the server will execute
-        ClientRequest request = ClientRequest.newBuilder()//.
-                .setOperation(Operations.Create)
-                .build();
-        // Serialize the request
-        byte[] serializedRequest = request.toByteArray();
-
-        // Send the serialized request to the server
-        sendPacket(out, serializedRequest);
-
-        // Create a new Movie object and fill it with the user input
-        Movie movie = userFillMovieObject();
+        Movie movie = userFillCreateMovieObject();
         // System.out.println(movie);
         // Serialize the movie object
         assert movie != null;
@@ -270,6 +265,189 @@ public class Client {
         sendPacket(out, serializedMovie);
     }
 
+    private static void createListByObject(DataOutputStream out) throws IOException {
+        // Create a new ClientListOperation object and fill it with the user input
+        ClientListOperation list_movies_by = userFillListByObject();
+
+        // Serialize the movie object
+        byte[] serializedMovie = list_movies_by.toByteArray();
+
+        // Send the serialized movie to the server
+        sendPacket(out, serializedMovie);
+    }
+
+    // End of create object methods: createMovieObject and createListByObject
+    // Start of user fill objects methods: userFillCreateMovieObject, userFillGetMovieObject, userFillDeleteMovieObject, userFillListByObject
+
+    /*
+    @brief: This function asks for the user input to fill a movie object
+    @param: None
+    @return: A movie object
+    */
+    public static Movie userFillCreateMovieObject() {
+        Scanner reader = new Scanner(System.in); // Read the user input
+        boolean empty_fields = true;
+        while (empty_fields) {
+            // Ask for the user input: id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
+            System.out.println(ANSI_GREEN + "Type the id of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String id = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the plot of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String plot = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the genre of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String genre = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the runtime of the movie: (int)" + ANSI_RESET);
+            int runtime = reader.nextInt(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the number of casts in the movie: (int)" + ANSI_RESET);
+            int cast_number = reader.nextInt(); // Read the user input
+            // Create a list of casts
+            List<String> cast = new ArrayList<String>(cast_number);
+            reader.nextLine();
+            for (int i = 0; i < cast_number; i++) {
+                System.out.println(ANSI_GREEN + "Type the cast of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+                cast.add(reader.nextLine()); // Read the user input
+            }
+            System.out.println(ANSI_GREEN + "Type the num_mflix_comments of the movie: (int)" + ANSI_RESET);
+            int num_mflix_comments = reader.nextInt(); // Read the user input
+            reader.nextLine();
+            System.out.println(ANSI_GREEN + "Type the title of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String title = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the fullplot of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String fullplot = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the number of countries of the movie: (int)" + ANSI_RESET);
+            int countries_number = reader.nextInt(); // Read the user input
+            reader.nextLine();
+            List<String> countries = new ArrayList<String>(countries_number);
+            for (int i = 0; i < countries_number; i++) {
+                System.out.println(ANSI_GREEN + "Type the countries of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+                countries.add(reader.nextLine()); // Read the user input
+            }
+            System.out.println(ANSI_GREEN + "Type the released of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String released = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the number of directors of the movie: (int)" + ANSI_RESET);
+            int directors_number = reader.nextInt(); // Read the user input
+            reader.nextLine();
+            List<String> directors = new ArrayList<String>(directors_number);
+            for (int i = 0; i < directors_number; i++) {
+                System.out.println(ANSI_GREEN + "Type the directors of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+                directors.add(reader.nextLine()); // Read the user input
+            }
+            System.out.println(ANSI_GREEN + "Type the rated of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String rated = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the last updated of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String lastupdated = reader.nextLine(); // Read the user input
+            System.out.println(ANSI_GREEN + "Type the year of the movie: (int)" + ANSI_RESET);
+            int year = reader.nextInt(); // Read the user input
+            reader.nextLine();
+            System.out.println(ANSI_GREEN + "Type the type of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String type = reader.nextLine(); // Read the user input
+
+            // Initialize the variables id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
+            // String id = "id";
+            // String plot = "plot";
+            // String genre = "genre";
+            // int runtime = 1;
+            // List<String> cast = new ArrayList<>();
+            // cast.add("cast1");
+            // int num_mflix_comments = 1;
+            // String title = "title";
+            // String fullplot = "fullplot";
+            // List<String> countries = new ArrayList<>();
+            // countries.add("country1");
+            // String released = "released";
+            // List<String> directors = new ArrayList<>();
+            // directors.add("director1");
+            // String rated = "rated";
+            // String lastupdated = "lastupdated";
+            // int year = 2023;
+            // String type = "type";
+
+            // verify if there is no empty field
+            if (id.equals("") || plot.equals("") || genre.equals("") || runtime == 0 || cast.size() == 0 || num_mflix_comments == 0 || title.equals("") || fullplot.equals("") || countries.size() == 0 || released.equals("") || directors.size() == 0 || rated.equals("") || lastupdated.equals("") || year == 0 || type.equals("")) {
+                System.out.println(ANSI_RED + "Error: One or more fields are empty" + ANSI_RESET);
+            } else {
+                // Create a movie protobuf object and return it
+                return Movie.newBuilder()
+                        .setId(id) // String
+                        .setPlot(plot) // String
+                        .setGenre(genre) // String
+                        .setRuntime(runtime) // int
+                        .addAllCast(cast) // String
+                        .setNumMflixComments(num_mflix_comments) // int
+                        .setTitle(title) // String
+                        .setFullplot(fullplot) // String
+                        .addAllCountries(countries) // String
+                        .setReleased(released) // String
+                        .addAllDirectors(directors) // String
+                        .setRated(rated) // String
+                        .setLastupdated(lastupdated) // String
+                        .setYear(year) // int
+                        .setType(type) // String
+                        .build(); // Build the movie protobuf object
+            }
+        }
+        return null;
+    }
+
+    private static GetMovieOperation userFillGetMovieObject() {
+        Scanner reader = new Scanner(System.in); // Read the user input
+        boolean empty_field = true;
+
+        while (empty_field) {
+            System.out.println(ANSI_GREEN + "Type the movie title:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String title = reader.nextLine(); // Read the user input
+
+            if (title.equals("")) {
+                System.out.println(ANSI_RED + "Error: The title field is empty" + ANSI_RESET);
+            } else {
+                return GetMovieOperation.newBuilder()
+                        .setMovieTitle(title) // Set the movie title
+                        .build(); // Build the object
+            }
+        }
+        return null;
+    }
+
+    private static DeleteMovieOperation userFillDeleteMovieObject() {
+        Scanner reader = new Scanner(System.in); // Read the user input
+        boolean empty_field = true;
+
+        while (empty_field) {
+            System.out.println(ANSI_GREEN + "Type the movie title:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String title = reader.nextLine(); // Read the user input
+
+            if (title.equals("")) {
+                System.out.println(ANSI_RED + "Error: The title field is empty" + ANSI_RESET);
+            } else {
+                return DeleteMovieOperation.newBuilder()
+                        .setMovieTitle(title) // Set the movie title
+                        .build(); // Build the object
+            }
+        }
+        return null;
+    }
+
+    private static ClientListOperation userFillListByObject() {
+        Scanner reader = new Scanner(System.in); // Read the user input
+        boolean empty_field = true;
+
+        while (empty_field) {
+            System.out.println(ANSI_GREEN + "Type the listBy filter:" + ANSI_RED + " (String)" + ANSI_RESET);
+            String filter = reader.nextLine(); // Read the user input
+
+            // verify if there is no empty field
+            if (filter.equals("")) {
+                System.out.println(ANSI_RED + "Error: The filter field is empty" + ANSI_RESET);
+            } else {
+                return ClientListOperation.newBuilder()
+                        .setFilter(filter) // Set the filter
+                        .build(); // Build the object
+            }
+        }
+        return null;
+    }
+
+    // End of User Input Methods: userFillCreateMovieObject, userFillGetMovieObject, userFillDeleteMovieObject, userFillListByObject
+    // Start of Response Code Methods
     private static ResponseCode responseCodePacket(DataInputStream in) throws IOException {
         // Wait for the server response packet, which will be two packets. The first one is the length of the second one
         try {
@@ -301,139 +479,8 @@ public class Client {
         return false;
     }
 
-    // create a method for sending packets to the server
-    private static void sendPacket(DataOutputStream out, byte[] serializedPacket) throws IOException {
-        out.writeInt(serializedPacket.length);
-        System.out.println(ANSI_GREEN + "Serialized packet length: " + ANSI_CYAN + serializedPacket.length + ANSI_RESET);
-        out.write(serializedPacket);
-        System.out.println(ANSI_GREEN + "Serialized packet: " + ANSI_CYAN + serializedPacket + ANSI_RESET);
-        out.flush();
-    }
-
-    /*
-     @brief: This function shows the user how to use the program
-     @param: None
-     @return: None
-     */
-    public static void showHelp() {
-        System.out.println(ANSI_GREEN + "CREATE: Create a new movie" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + "GET: Get a movie by title" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + "UPDATE: Update a movie" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + "DELETE: Delete a movie by title" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + "LISTACTORS: List all movies by an actor" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + "LISTCATEGORY: List all movies by a category" + ANSI_RESET);
-        System.out.println(ANSI_GREEN + "EXIT: Exit the program" + ANSI_RESET);
-    }
-
-    /*
-    @brief: This function asks for the user input to fill a movie object
-    @param: None
-    @return: A movie object
-    */
-    public static Movie userFillMovieObject() {
-        Scanner reader = new Scanner(System.in); // Read the user input
-        boolean empty_fields = true;
-        while (empty_fields) {
-            // Ask for the user input: id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
-            System.out.println(ANSI_GREEN + "Type the id of the movie: (String)" + ANSI_RESET);
-            String id = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the plot of the movie: (String)" + ANSI_RESET);
-            String plot = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the genre of the movie: (String)" + ANSI_RESET);
-            String genre = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the runtime of the movie: (int)" + ANSI_RESET);
-            int runtime = reader.nextInt(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the number of casts in the movie: (int)" + ANSI_RESET);
-            int cast_number = reader.nextInt(); // Read the user input
-            // Create a list of casts
-            List<String> cast = new ArrayList<String>(cast_number);
-            reader.nextLine();
-            for (int i = 0; i < cast_number; i++) {
-                System.out.println(ANSI_GREEN + "Type the cast of the movie: (String)" + ANSI_RESET);
-                cast.add(reader.nextLine()); // Read the user input
-            }
-            System.out.println(ANSI_GREEN + "Type the num_mflix_comments of the movie: (int)" + ANSI_RESET);
-            int num_mflix_comments = reader.nextInt(); // Read the user input
-            reader.nextLine();
-            System.out.println(ANSI_GREEN + "Type the title of the movie: (String)" + ANSI_RESET);
-            String title = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the fullplot of the movie: (String)" + ANSI_RESET);
-            String fullplot = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the number of countries of the movie: (int)" + ANSI_RESET);
-            int countries_number = reader.nextInt(); // Read the user input
-            reader.nextLine();
-            List<String> countries = new ArrayList<String>(countries_number);
-            for (int i = 0; i < countries_number; i++) {
-                System.out.println(ANSI_GREEN + "Type the countries of the movie: (String)" + ANSI_RESET);
-                countries.add(reader.nextLine()); // Read the user input
-            }
-            System.out.println(ANSI_GREEN + "Type the released of the movie: (String)" + ANSI_RESET);
-            String released = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the number of directors of the movie: (int)" + ANSI_RESET);
-            int directors_number = reader.nextInt(); // Read the user input
-            reader.nextLine();
-            List<String> directors = new ArrayList<String>(directors_number);
-            for (int i = 0; i < directors_number; i++) {
-                System.out.println(ANSI_GREEN + "Type the directors of the movie: (String)" + ANSI_RESET);
-                directors.add(reader.nextLine()); // Read the user input
-            }
-            System.out.println(ANSI_GREEN + "Type the rated of the movie: (String)" + ANSI_RESET);
-            String rated = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the last updated of the movie: (String)" + ANSI_RESET);
-            String lastupdated = reader.nextLine(); // Read the user input
-            System.out.println(ANSI_GREEN + "Type the year of the movie: (int)" + ANSI_RESET);
-            int year = reader.nextInt(); // Read the user input
-            reader.nextLine();
-            System.out.println(ANSI_GREEN + "Type the type of the movie: (String)" + ANSI_RESET);
-            String type = reader.nextLine(); // Read the user input
-
-            // Initialize the variables id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
-            // String id = "id";
-            // String plot = "plot";
-            // String genre = "genre";
-            // int runtime = 1;
-            // List<String> cast = new ArrayList<>();
-            // cast.add("cast1");
-            // int num_mflix_comments = 1;
-            // String title = "title";
-            // String fullplot = "fullplot";
-            // List<String> countries = new ArrayList<>();
-            // countries.add("country1");
-            // String released = "released";
-            // List<String> directors = new ArrayList<>();
-            // directors.add("director1");
-            // String rated = "rated";
-            // String lastupdated = "lastupdated";
-            // int year = 2023;
-            // String type = "type";
-
-            // verify if there is no empty field
-            if (id.equals("") || plot.equals("") || genre.equals("") || runtime == 0 || cast.size() == 0 || num_mflix_comments == 0 || title.equals("") || fullplot.equals("") || countries.size() == 0 || released.equals("") || directors.size() == 0 || rated.equals("") || lastupdated.equals("") || year == 0 || type.equals("")) {
-                System.out.println(ANSI_RED + "Error: One or more fields are empty" + ANSI_RESET);
-            } else {
-                empty_fields = false;
-                // Create a movie protobuf object and return it
-                return Movie.newBuilder()
-                        .setId(id) // String
-                        .setPlot(plot) // String
-                        .setGenre(genre) // String
-                        .setRuntime(runtime) // int
-                        .addAllCast(cast) // String
-                        .setNumMflixComments(num_mflix_comments) // int
-                        .setTitle(title) // String
-                        .setFullplot(fullplot) // String
-                        .addAllCountries(countries) // String
-                        .setReleased(released) // String
-                        .addAllDirectors(directors) // String
-                        .setRated(rated) // String
-                        .setLastupdated(lastupdated) // String
-                        .setYear(year) // int
-                        .setType(type) // String
-                        .build(); // Build the movie protobuf object
-            }
-        }
-        return null;
-    }
+    // End of response code methods
+    // Start of auxiliary methods
 
     /*
     @brief: This function takes a string and returns it with the first word in uppercase
@@ -453,4 +500,70 @@ public class Client {
             return s.toUpperCase();
         }
     }
+
+    private static void validateUserOperation(DataInputStream in, DataOutputStream out, String[] parts) throws IOException {
+        switch (parts[0]) {
+            case CREATE -> {
+                createMovie(out);
+                validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), CREATE);
+            }
+            case GET -> {
+                getMovie(out);
+                if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), GET)) {
+                    Movie movie = receiveMovie(in);
+                    System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_CYAN + movie + ANSI_RESET);
+                } else {
+                    System.out.println(ANSI_GREEN + "Movie not found." + ANSI_RESET);
+                }
+            }
+            case UPDATE -> {
+                updateMovie(out);
+                validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), UPDATE);
+            }
+            case DELETE -> {
+                deleteMovie(out);
+                validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), DELETE);
+            }
+            case LISTBYACTORS -> {
+                listMoviesByActors(out);
+                if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), LISTBYACTORS)) {
+                    ListBy movies_list = receiveMoviesList(in);
+                    System.out.println(ANSI_GREEN + "Movie(s): \n" + ANSI_CYAN + movies_list + ANSI_RESET);
+                } else {
+                    System.out.println(ANSI_GREEN + "Movie not found." + ANSI_RESET);
+                }
+            }
+            case LISTBYCATEGORY -> {
+                listMoviesByCategory(out);
+                if (validateResponseCode(Objects.requireNonNull(responseCodePacket(in)), LISTBYCATEGORY)) {
+                    ListBy movies_list = receiveMoviesList(in);
+                    System.out.println(ANSI_GREEN + "Movie(s): \n" + ANSI_CYAN + movies_list + ANSI_RESET);
+                } else {
+                    System.out.println(ANSI_GREEN + "Movie not found." + ANSI_RESET);
+                }
+            }
+            case HELP -> showHelp();
+            default -> {
+                System.out.println(ANSI_GREEN + "Invalid command. Try again." + ANSI_RESET);
+                showHelp();
+            }
+        }
+    }
+
+    /*
+     @brief: This function shows the user how to use the program
+     @param: None
+     @return: None
+     */
+    public static void showHelp() {
+        System.out.println(ANSI_GREEN + "CREATE: Create a new movie" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "GET: Get a movie by title" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "UPDATE: Update a movie " + ANSI_RED + "(New ID must be the same as old ID!)" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "DELETE: Delete a movie by title" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "LISTBYACTORS: List all movies by an actor" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "LISTBYCATEGORY: List all movies by a category" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "EXIT: Exit the program" + ANSI_RESET);
+    }
+    // End of auxiliary methods
 }
+// End of class
