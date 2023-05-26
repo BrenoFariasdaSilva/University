@@ -1,9 +1,9 @@
 import socket # For creating the TCP/STREAM socket
 import threading # For creating the client thread
-from database.database import MongoDatabase # For the database
-import structs.movies_pb2 as movies_pb2 # For the protocol buffers
 from google.protobuf.json_format import MessageToJson # For converting the protocol buffer to a dictionary
 import google.protobuf.internal.decoder as decoder # For decoding the protocol buffer
+import structs.movies_pb2 as movies_pb2 # For the protocol buffers. It is importing the movies_pb2.py file from the structs folder
+from database.database import MongoDatabase # For the database. It is importing the database.py file from the database folder
 from colorama import Style # For coloring the terminal
 
 # Background colors:
