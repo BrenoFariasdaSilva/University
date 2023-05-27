@@ -9,8 +9,8 @@ database_run:
 	clear; python3 server/database.py
 
 protoc:
-	python -m grpc_tools.protoc -I. --python_out=./server/structs --grpc_python_out=./server/structs movies.proto
-	protoc -I=$SRC_DIR --java_out=$DST_DIR $SRC_DIR/HelloService.proto
+	python3 -m grpc_tools.protoc -I. --python_out=./server/structs --pyi_out=./server/structs --grpc_python_out=./server/structs movies.proto
+	# protoc -I=$SRC_DIR --java_out=$DST_DIR $SRC_DIR/HelloService.proto
 
 setup:
 	sudo pip install protobuf

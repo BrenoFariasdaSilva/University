@@ -1,73 +1,24 @@
 syntax = "proto3";
 
-package org.example.client.structs;
+package moviesPackage;
 
-enum Operations {
-  Zero = 0;
-  Create = 1;
-  Read = 2;
-  Update = 3;
-  Delete = 4;
-  ListByActor = 5;
-  ListByGenre = 6;
+option java_multiple_files = true;
+option java_package = "org.example.client.structs";
+
+service MovieService {
+  rpc CreateMovie(Movie) returns (Message) {};
+  rpc GetMovie(Message) returns (Movie) {};
+  rpc UpdateMovie(Movie) returns (Message) {};
+  rpc DeleteMovie(Message) returns (Message) {};
+  rpc ListMoviesByActor(Message) returns (MoviesList) {};
+  rpc ListMoviesByGenre(Message) returns (MoviesList) {};
 }
 
-message ClientRequest {
-  Operations operation = 1;
+message Message {
+  string message = 1;
 }
 
-message CreateMovieOperation {
-  string title = 1;
-  string plot = 2;
-  string genre = 3;
-  int32 runtime = 4;
-  repeated string cast = 5;
-  int32 num_mflix_comments = 6;
-  string fullplot = 7;
-  repeated string countries = 8;
-  string released = 9;
-  repeated string directors = 10;
-  string rated = 11;
-  string lastupdated = 12;
-  int32 year = 13;
-  string type = 14;
-}
-
-message GetMovieOperation {
-  string movie_title = 1;
-}
-
-message UpdateMovieOperation {
-  string movie_id = 1;
-  string title = 2;
-  string plot = 3;
-  string genre = 4;
-  int32 runtime = 5;
-  repeated string cast = 6;
-  int32 num_mflix_comments = 7;
-  string fullplot = 8;
-  repeated string countries = 9;
-  string released = 10;
-  repeated string directors = 11;
-  string rated = 12;
-  string lastupdated = 13;
-  int32 year = 14;
-  string type = 15;
-}
-
-message DeleteMovieOperation {
-  string movie_title = 1;
-}
-
-message ResponseCode {
-  string response = 1;
-}
-
-message ClientListOperation {
-  string filter = 1;
-}
-
-message ServerListBy {
+message MoviesList {
   repeated Movie movies = 1;
 }
 
@@ -87,14 +38,4 @@ message Movie {
   string lastupdated = 13;
   int32 year = 14;
   string type = 15;
-}
-
-service MovieService {
-  rpc OperationRequest(ClientRequest) returns (ResponseCode) {};
-  rpc GetMovie(GetMovieOperation) returns (Movie) {};
-  rpc DeleteMovie(DeleteMovieOperation) returns (ResponseCode) {};
-  rpc CreateMovie(CreateMovieOperation) returns (ResponseCode) {};
-  rpc UpdateMovie(UpdateMovieOperation) returns (ResponseCode) {};
-  rpc ListMoviesByActor(ClientListOperation) returns (ServerListBy) {};
-  rpc ListMoviesByGenre(ClientListOperation) returns (ServerListBy) {};
 }

@@ -1,10 +1,14 @@
-import socket # For creating the TCP/STREAM socket
-import threading # For creating the client thread
 from google.protobuf.json_format import MessageToJson # For converting the protocol buffer to a dictionary
 import google.protobuf.internal.decoder as decoder # For decoding the protocol buffer
 import structs.movies_pb2 as movies_pb2 # For the protocol buffers. It is importing the movies_pb2.py file from the structs folder
 from database.database import MongoDatabase # For the database. It is importing the database.py file from the database folder
 from colorama import Style # For coloring the terminal
+
+from concurrent import futures
+import grpc
+import structs.movies_pb2 as movies_pb2
+import structs.movies_pb2_grpc as movies_pb2_grpc
+import signal
 
 # Background colors:
 class backgroundColors: # Colors for the terminal
@@ -15,6 +19,7 @@ class backgroundColors: # Colors for the terminal
 
 # Server:
 SERVERADDRESS = ["localhost", 7070] # The server's address. The first element is the IP address, the second is the port.
+MAX_WORKERS = 10 # The maximum number of workers
 
 # Client:
 CLIENT_REQUEST_SIZE = 4 # The client request size is 4 byte
@@ -343,16 +348,18 @@ def client_input(client_socket, client_address):
 # @param: None
 # @return: None
 def main():
+	# Setup the server pool of threads
+	server_pool = grpc.server(futures.ThreadPoolExecutor(max_workers=MAX_WORKERS))
+	# Add the server to the pool
+	movies_pb2_grpc.add_MoviesServicer_to_server(MoviesServicer(), server_pool)
+	# Bind the server to the port
+	server_pool.add_insecure_port(f"[::]:{SERVERADDRESS[1]}")
+	# Start the server
+	server_pool.start()
 	print(f"{backgroundColors.OKGREEN}Server started{Style.RESET_ALL}")
-	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Create a TCP/STREAM socket
-	server_socket.bind((SERVERADDRESS[0], SERVERADDRESS[1])) # Bind the socket to the server address
-	server_socket.listen() # Listen for connections
- 
-	while True:
-		client_socket, client_address = server_socket.accept() # Accept the client connection
-		print(f"{backgroundColors.OKGREEN}Client connected with address {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{Style.RESET_ALL}")
-		client_thread = threading.Thread(target=client_input, args=(client_socket, client_address)) # Create a thread for the client
-		client_thread.start() # Start the client thread
+
+	# Wait for the server to terminate
+	server_pool.wait_for_termination() # Wait for the server to terminate
 
 if __name__ == "__main__":
 	main()

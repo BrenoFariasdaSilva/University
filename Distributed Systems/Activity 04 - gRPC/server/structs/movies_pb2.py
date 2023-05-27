@@ -13,33 +13,20 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0cmovies.proto\x12\x1aorg.example.client.structs\"J\n\rClientRequest\x12\x39\n\toperation\x18\x01 \x01(\x0e\x32&.org.example.client.structs.Operations\"\x87\x02\n\x14\x43reateMovieOperation\x12\r\n\x05title\x18\x01 \x01(\t\x12\x0c\n\x04plot\x18\x02 \x01(\t\x12\r\n\x05genre\x18\x03 \x01(\t\x12\x0f\n\x07runtime\x18\x04 \x01(\x05\x12\x0c\n\x04\x63\x61st\x18\x05 \x03(\t\x12\x1a\n\x12num_mflix_comments\x18\x06 \x01(\x05\x12\x10\n\x08\x66ullplot\x18\x07 \x01(\t\x12\x11\n\tcountries\x18\x08 \x03(\t\x12\x10\n\x08released\x18\t \x01(\t\x12\x11\n\tdirectors\x18\n \x03(\t\x12\r\n\x05rated\x18\x0b \x01(\t\x12\x13\n\x0blastupdated\x18\x0c \x01(\t\x12\x0c\n\x04year\x18\r \x01(\x05\x12\x0c\n\x04type\x18\x0e \x01(\t\"(\n\x11GetMovieOperation\x12\x13\n\x0bmovie_title\x18\x01 \x01(\t\"\x99\x02\n\x14UpdateMovieOperation\x12\x10\n\x08movie_id\x18\x01 \x01(\t\x12\r\n\x05title\x18\x02 \x01(\t\x12\x0c\n\x04plot\x18\x03 \x01(\t\x12\r\n\x05genre\x18\x04 \x01(\t\x12\x0f\n\x07runtime\x18\x05 \x01(\x05\x12\x0c\n\x04\x63\x61st\x18\x06 \x03(\t\x12\x1a\n\x12num_mflix_comments\x18\x07 \x01(\x05\x12\x10\n\x08\x66ullplot\x18\x08 \x01(\t\x12\x11\n\tcountries\x18\t \x03(\t\x12\x10\n\x08released\x18\n \x01(\t\x12\x11\n\tdirectors\x18\x0b \x03(\t\x12\r\n\x05rated\x18\x0c \x01(\t\x12\x13\n\x0blastupdated\x18\r \x01(\t\x12\x0c\n\x04year\x18\x0e \x01(\x05\x12\x0c\n\x04type\x18\x0f \x01(\t\"+\n\x14\x44\x65leteMovieOperation\x12\x13\n\x0bmovie_title\x18\x01 \x01(\t\" \n\x0cResponseCode\x12\x10\n\x08response\x18\x01 \x01(\t\"%\n\x13\x43lientListOperation\x12\x0e\n\x06\x66ilter\x18\x01 \x01(\t\"A\n\x0cServerListBy\x12\x31\n\x06movies\x18\x01 \x03(\x0b\x32!.org.example.client.structs.Movie\"\x84\x02\n\x05Movie\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04plot\x18\x02 \x01(\t\x12\r\n\x05genre\x18\x03 \x01(\t\x12\x0f\n\x07runtime\x18\x04 \x01(\x05\x12\x0c\n\x04\x63\x61st\x18\x05 \x03(\t\x12\x1a\n\x12num_mflix_comments\x18\x06 \x01(\x05\x12\r\n\x05title\x18\x07 \x01(\t\x12\x10\n\x08\x66ullplot\x18\x08 \x01(\t\x12\x11\n\tcountries\x18\t \x03(\t\x12\x10\n\x08released\x18\n \x01(\t\x12\x11\n\tdirectors\x18\x0b \x03(\t\x12\r\n\x05rated\x18\x0c \x01(\t\x12\x13\n\x0blastupdated\x18\r \x01(\t\x12\x0c\n\x04year\x18\x0e \x01(\x05\x12\x0c\n\x04type\x18\x0f \x01(\t*f\n\nOperations\x12\x08\n\x04Zero\x10\x00\x12\n\n\x06\x43reate\x10\x01\x12\x08\n\x04Read\x10\x02\x12\n\n\x06Update\x10\x03\x12\n\n\x06\x44\x65lete\x10\x04\x12\x0f\n\x0bListByActor\x10\x05\x12\x0f\n\x0bListByGenre\x10\x06\x32\xf6\x05\n\x0cMovieService\x12g\n\x10OperationRequest\x12).org.example.client.structs.ClientRequest\x1a(.org.example.client.structs.ResponseCode\x12\\\n\x08GetMovie\x12-.org.example.client.structs.GetMovieOperation\x1a!.org.example.client.structs.Movie\x12i\n\x0b\x44\x65leteMovie\x12\x30.org.example.client.structs.DeleteMovieOperation\x1a(.org.example.client.structs.ResponseCode\x12i\n\x0b\x43reateMovie\x12\x30.org.example.client.structs.CreateMovieOperation\x1a(.org.example.client.structs.ResponseCode\x12i\n\x0bUpdateMovie\x12\x30.org.example.client.structs.UpdateMovieOperation\x1a(.org.example.client.structs.ResponseCode\x12n\n\x11ListMoviesByActor\x12/.org.example.client.structs.ClientListOperation\x1a(.org.example.client.structs.ServerListBy\x12n\n\x11ListMoviesByGenre\x12/.org.example.client.structs.ClientListOperation\x1a(.org.example.client.structs.ServerListByb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0cmovies.proto\x12\rmoviesPackage\"\x1a\n\x07Message\x12\x0f\n\x07message\x18\x01 \x01(\t\"2\n\nMoviesList\x12$\n\x06movies\x18\x01 \x03(\x0b\x32\x14.moviesPackage.Movie\"\x84\x02\n\x05Movie\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04plot\x18\x02 \x01(\t\x12\r\n\x05genre\x18\x03 \x01(\t\x12\x0f\n\x07runtime\x18\x04 \x01(\x05\x12\x0c\n\x04\x63\x61st\x18\x05 \x03(\t\x12\x1a\n\x12num_mflix_comments\x18\x06 \x01(\x05\x12\r\n\x05title\x18\x07 \x01(\t\x12\x10\n\x08\x66ullplot\x18\x08 \x01(\t\x12\x11\n\tcountries\x18\t \x03(\t\x12\x10\n\x08released\x18\n \x01(\t\x12\x11\n\tdirectors\x18\x0b \x03(\t\x12\r\n\x05rated\x18\x0c \x01(\t\x12\x13\n\x0blastupdated\x18\r \x01(\t\x12\x0c\n\x04year\x18\x0e \x01(\x05\x12\x0c\n\x04type\x18\x0f \x01(\t2\x9d\x03\n\x0cMovieService\x12=\n\x0b\x43reateMovie\x12\x14.moviesPackage.Movie\x1a\x16.moviesPackage.Message\"\x00\x12:\n\x08GetMovie\x12\x16.moviesPackage.Message\x1a\x14.moviesPackage.Movie\"\x00\x12=\n\x0bUpdateMovie\x12\x14.moviesPackage.Movie\x1a\x16.moviesPackage.Message\"\x00\x12?\n\x0b\x44\x65leteMovie\x12\x16.moviesPackage.Message\x1a\x16.moviesPackage.Message\"\x00\x12H\n\x11ListMoviesByActor\x12\x16.moviesPackage.Message\x1a\x19.moviesPackage.MoviesList\"\x00\x12H\n\x11ListMoviesByGenre\x12\x16.moviesPackage.Message\x1a\x19.moviesPackage.MoviesList\"\x00\x42\x1e\n\x1aorg.example.client.structsP\x01\x62\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'movies_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _OPERATIONS._serialized_start=1160
-  _OPERATIONS._serialized_end=1262
-  _CLIENTREQUEST._serialized_start=44
-  _CLIENTREQUEST._serialized_end=118
-  _CREATEMOVIEOPERATION._serialized_start=121
-  _CREATEMOVIEOPERATION._serialized_end=384
-  _GETMOVIEOPERATION._serialized_start=386
-  _GETMOVIEOPERATION._serialized_end=426
-  _UPDATEMOVIEOPERATION._serialized_start=429
-  _UPDATEMOVIEOPERATION._serialized_end=710
-  _DELETEMOVIEOPERATION._serialized_start=712
-  _DELETEMOVIEOPERATION._serialized_end=755
-  _RESPONSECODE._serialized_start=757
-  _RESPONSECODE._serialized_end=789
-  _CLIENTLISTOPERATION._serialized_start=791
-  _CLIENTLISTOPERATION._serialized_end=828
-  _SERVERLISTBY._serialized_start=830
-  _SERVERLISTBY._serialized_end=895
-  _MOVIE._serialized_start=898
-  _MOVIE._serialized_end=1158
-  _MOVIESERVICE._serialized_start=1265
-  _MOVIESERVICE._serialized_end=2023
+  DESCRIPTOR._serialized_options = b'\n\032org.example.client.structsP\001'
+  _MESSAGE._serialized_start=31
+  _MESSAGE._serialized_end=57
+  _MOVIESLIST._serialized_start=59
+  _MOVIESLIST._serialized_end=109
+  _MOVIE._serialized_start=112
+  _MOVIE._serialized_end=372
+  _MOVIESERVICE._serialized_start=375
+  _MOVIESERVICE._serialized_end=788
 # @@protoc_insertion_point(module_scope)
