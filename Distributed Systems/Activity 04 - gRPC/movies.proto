@@ -90,11 +90,11 @@ message Movie {
 }
 
 service MovieService {
-  rpc OperationRequest(ClientRequest) returns (ResponseCode);
-  rpc GetMovie(GetMovieOperation) returns (Movie);
-  rpc DeleteMovie(DeleteMovieOperation) returns (ResponseCode);
-  rpc CreateMovie(CreateMovieOperation) returns (ResponseCode);
-  rpc UpdateMovie(UpdateMovieOperation) returns (ResponseCode);
-  rpc ListMoviesByActor(ClientListOperation) returns (ServerListBy);
-  rpc ListMoviesByGenre(ClientListOperation) returns (ServerListBy);
+  rpc OperationRequest(ClientRequest) returns (ResponseCode) {};
+  rpc GetMovie(GetMovieOperation) returns (Movie) {};
+  rpc DeleteMovie(DeleteMovieOperation) returns (ResponseCode) {};
+  rpc CreateMovie(CreateMovieOperation) returns (ResponseCode) {};
+  rpc UpdateMovie(UpdateMovieOperation) returns (ResponseCode) {};
+  rpc ListMoviesByActor(ClientListOperation) returns (ServerListBy) {};
+  rpc ListMoviesByGenre(ClientListOperation) returns (ServerListBy) {};
 }
