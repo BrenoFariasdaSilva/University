@@ -88,7 +88,7 @@ class MongoDatabase:
 	# @param genre: The genre of the movie
 	# @return: A list with all the movies in the database according to the genre
 	def listByGenre(self, genre):
-		return list(self.collection.find({"genres": genre}))
+		return list(self.collection.find({"genre": genre}))
 	
 	# @brief: This method deletes all the movies in the database
 	# @param: None

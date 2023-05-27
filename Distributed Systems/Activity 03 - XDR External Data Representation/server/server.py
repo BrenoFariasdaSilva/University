@@ -153,6 +153,7 @@ def getMovie(client_socket, database):
 	movie_document = database.getMovieByTitle(deserialized_get_movie.movie_title)
 
 	if movie_document is None:
+		print(f"{backgroundColors.FAIL}	Movie {backgroundColors.OKCYAN}{deserialized_get_movie.movie_title}{backgroundColors.FAIL} not found{Style.RESET_ALL}")
 		return None
 	
 	# Convert the movie object to a string and send it to the client
@@ -290,6 +291,8 @@ def handle_client_input(client_socket, client_address, database, client_request)
 			if not response_movie is None:
 				send_response_code(client_socket, SUCCESS) # Send the response to the client
 				send_movie(client_socket, response_movie) # Send the response to the client
+			else:
+				send_response_code(client_socket, FAILURE) # Send the response to the client
 		case movies_pb2.Operations.Update: # If the operation is update movie: 3
 			print(f"{backgroundColors.OKGREEN}	Client {backgroundColors.OKCYAN}{client_address[0]}:{client_address[1]}{backgroundColors.OKGREEN} sent update movie command{Style.RESET_ALL}")
 			response_code = updateMovie(client_socket, database) # Update the movie

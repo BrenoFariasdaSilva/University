@@ -676,10 +676,10 @@ public class Client {
      */
     private static boolean validateResponseCode(ResponseCode responseCode, String operation) {
         if (responseCode.getResponse().equals(SUCCESS_CODE)) {
-            System.out.println(ANSI_GREEN + "Operation " + ANSI_CYAN + operation + " " + ANSI_GREEN + SUCCESS + "!" + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "Operation " + ANSI_CYAN + operation + " " + ANSI_CYAN + SUCCESS + "!" + ANSI_RESET);
             return true;
         }
-        System.out.println(ANSI_GREEN + "Operation " + ANSI_CYAN + operation + " " + ANSI_GREEN + FAILURE + "!" + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "Operation " + ANSI_CYAN + operation + " " + ANSI_RED + FAILURE + "!" + ANSI_RESET);
         return false;
     }
 
@@ -724,7 +724,7 @@ public class Client {
                     Movie movie = receiveMovie(in);
                     System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_CYAN + movie + ANSI_RESET);
                 } else {
-                    System.out.println(ANSI_GREEN + "Movie not found." + ANSI_RESET);
+                    System.out.println(ANSI_RED + "Movie not found." + ANSI_RESET);
                 }
             }
             case UPDATE -> {
