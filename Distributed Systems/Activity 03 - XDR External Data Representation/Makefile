@@ -1,11 +1,11 @@
-server:
+server_run:
 	clear; python3 server/server.py
 
-client:
+client_run:
 	clear
 	javac client/Client.java; java client
 
-database:
+database_run:
 	clear; python3 server/database.py
 
 protoc:

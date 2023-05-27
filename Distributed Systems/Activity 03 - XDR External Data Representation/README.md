@@ -8,7 +8,19 @@
 @TODO: Update README.md.  
 @TODO: Test multilpe clients and multiple values in a field.    
 
-### ***Quick notes:***   
+### ***Quick notes:*** 
+Note that in the ```/server/database.py``` file we have the following code in the database constructor (```__init__```):
+```python
+    load_dotenv()
+    uri = f"mongodb+srv://{os.getenv('USERNAME')}:{os.getenv('PASSWORD')}@{os.getenv('DATABASE_URL')}"
+```
+Is used the ```os.getenv()``` function to get the environment variables, so you need to create a ```.env``` file in the ```'root'``` directory of the project (next to the Makefile), and inside it, you need to have the following variables:
+```python
+USERNAME=your_username
+PASSWORD=your_password
+DATABASE_URL=your_database_url
+```
+For obvious reasons, i'm not going to share my database credentials, so you need to create your own database and get your own credentials in your MongoDB account.
 
 ## Install dependencies
 The dependency inside the makefile command are required to run this project so, before that, make sure you have makefile installed on your machine.
