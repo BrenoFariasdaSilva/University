@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import org.example.structs.Message;
-import org.example.structs.Movie;
-import org.example.structs.Movies;
+import org.example.structs.*;
 
 /*
  * gRPC - Google Remote Procedure Call
@@ -38,7 +36,7 @@ public class Client {
     public static final String FAILURE = "FAILURE";
     public static final String SUCCESS_CODE = "1";
 
-    private final ManagedChannel channel;
+    public static ManagedChannel channel;
 
     public Client() {
         this.channel = ManagedChannelBuilder
@@ -81,6 +79,7 @@ public class Client {
     @return: None
      */
     private static void validateUserOperation(String[] parts) throws IOException {
+        Movie.MovieServiceBlockingStub blockingStub = MovieServiceGrpc.newBlockingStub(channel);
         switch (parts[0]) {
             case CREATE -> {}
             case GET -> {}
