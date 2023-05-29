@@ -1,9 +1,11 @@
 server_run:
-	clear; python3 server/server.py
+	clear;
+	python3 server/server.py;
 
 client_run:
-	clear
-	javac client/Client.java; java client
+	clear;
+	javac client/gRPC/src/main/java/Client.java;
+	java client.gRPC.src.main.java.Client;
 
 database_run:
 	clear; python3 server/database.py
