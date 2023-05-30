@@ -1,4 +1,3 @@
-
 import grpc
 import structs.movies_pb2 as movies_pb2
 import structs.movies_pb2_grpc as movies_pb2_grpc
@@ -34,7 +33,7 @@ EMPTY_LIST_FIELD = [] # The empty field
 # @brief: This class is the server class which inherits from the movies_pb2_grpc class
 # @param: None
 # @return: None
-class MoviesServicer(movies_pb2_grpc.MoviesServicer):
+class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @brief: This is the constructor of the class
 	# @param: None
 	# @return: MongoDatabase connection object
@@ -121,7 +120,7 @@ def main():
 	# Setup the server pool of threads
 	server_pool = grpc.server(futures.ThreadPoolExecutor(max_workers=MAX_WORKERS))
 	# Add the server to the pool
-	movies_pb2_grpc.add_MoviesServicer_to_server(MoviesServicer(), server_pool)
+	movies_pb2_grpc.add_MovieServiceServicer_to_server(MoviesServicer(), server_pool)
 	# Bind the server to the port
 	server_pool.add_insecure_port(f"[::]:{SERVERADDRESS[1]}")
 	# Start the server

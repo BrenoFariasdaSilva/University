@@ -28,8 +28,7 @@ Also, you need to have [Maven](https://maven.apache.org/) installed on your comp
 
 ## How to run
 In order to run this project, you need to open two terminals.
-#### ***Important notes:*** The order of which terminal you open first is important, so make sure you follow the order below.  In a client-server architecture, the server needs to be running before the client, otherwise, the client will not be able to connect to the server.
-Also, as i'm using MongoDB, you can install [MongoDB Compass](https://www.mongodb.com/try/download/compass) to see the database in a more friendly way.
+#### ***Important notes:*** The order of which terminal you open first is important, so make sure you follow the order below.  In a client-server architecture, the server needs to be running before the client, otherwise, the client will not be able to connect to the server. From my personal experience, I recommend you to open the server (`Python`) on `Visual Studio Code` and the client (`Java`) on `IntelliJ IDEA`.
 * On the server terminal, type:  
     ```bash
     make server_run
@@ -38,10 +37,8 @@ Also, as i'm using MongoDB, you can install [MongoDB Compass](https://www.mongod
     ```bash 
     make client_run
     ```
-## How to use
-
 ## Example of usage
-* On the client terminal, type:  
+* On the server terminal, type:  
     ```bash
     
     ```
