@@ -2,7 +2,7 @@
 @author: Breno Farias da Silva    
 @date: 29/05/2023  
 @last update: 29/05/2021  
-@[repository]()  
+@[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2006%20-%20Indirect%20Communication)  
 
 ### ***Quick notes:*** 
 Note that in this project uses RabbitMQ, so you need to install it first [here](https://www.rabbitmq.com/getstarted.html).  
