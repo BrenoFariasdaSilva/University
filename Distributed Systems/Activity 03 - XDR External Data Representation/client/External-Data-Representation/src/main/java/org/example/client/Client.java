@@ -54,6 +54,7 @@ public class Client {
         }
 
         try (var clientSocket = new Socket(serverAddr, serverPort)) { // Var inferes the type of the variable, which can only be used with local variables
+            System.out.println(ANSI_GREEN + "Connected to server " + ANSI_CYAN + serverAddr + ANSI_RESET);
             // Create the read and write objects for the socket
             DataInputStream in = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
