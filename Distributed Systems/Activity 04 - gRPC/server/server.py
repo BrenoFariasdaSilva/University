@@ -1,7 +1,7 @@
-import grpc
-import structs.movies_pb2 as movies_pb2
-import structs.movies_pb2_grpc as movies_pb2_grpc
-from concurrent import futures
+import grpc # For the gRPC
+import structs.movies_pb2 as movies_pb2 # For the protocol buffer
+import structs.movies_pb2_grpc as movies_pb2_grpc # For the protocol buffer
+from concurrent import futures # For the maximum number of workers
 from google.protobuf.json_format import MessageToJson # For converting the protocol buffer to a dictionary
 from database.database import MongoDatabase # For the database. It is importing the database.py file from the database folder
 from colorama import Style # For coloring the terminal

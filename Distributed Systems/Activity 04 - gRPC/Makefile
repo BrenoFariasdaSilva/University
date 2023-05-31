@@ -12,7 +12,6 @@ database_run:
 
 protoc:
 	python3 -m grpc_tools.protoc -I. --python_out=./server/structs --pyi_out=./server/structs --grpc_python_out=./server/structs movies.proto
-	protoc -I=. --java_out=client/gRPC/src/main/java movies.proto
 
 setup:
 	sudo pip install protobuf
