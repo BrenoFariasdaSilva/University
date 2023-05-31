@@ -14,6 +14,8 @@ def main():
     channel = connection.channel() # Create the communication channel
 
     file = open(CSVFile.folder + CSVFile.file, errors="ignore") # CSV file path
+    
+    # TODO: Read only the "tweet" column in the csv file for the dataAssets variable
     dataAssets = csv.DictReader(file) # Read the csv file
 
     for asset in dataAssets:

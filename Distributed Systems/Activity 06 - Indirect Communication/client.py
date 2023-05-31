@@ -14,7 +14,7 @@ class backgroundColors: # Colors for the terminal
 	BOLD = "\033[1m" # Bold
 	UNDERLINE = "\033[4m" # Underline
  
-class Categories:
+class Categories: # Update this to "car", "bitcoin", "Tesla", "SpaceX", "dogecoin", etc categories.
     PEOPLE = "people"
     BEAUTIFUL = "beautiful"
     FAST = "Fasting"
