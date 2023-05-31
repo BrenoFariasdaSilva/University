@@ -18,6 +18,19 @@ Is used the ```os.getenv()``` function to get the environment variables, so you 
 
 For obvious reasons, i'm not going to share my database credentials, so you need to create your own database and get your own credentials in your MongoDB account.
 
+Also, if you are trying to run "`make server_run`" and it shows this error:
+```bash
+ModuleNotFoundError: No module named 'movies_pb2'
+```
+Just open the `server/structs/movies_pb2_grpc.py` file update the import statement from:
+```python
+import movies_pb2 as movies__pb2
+```
+to:
+```python
+import structs.movies_pb2 as movies__pb2
+```
+
 ## Install dependencies
 The dependency inside the makefile command are required to run this project so, before that, make sure you have makefile installed on your machine.
 ```bash

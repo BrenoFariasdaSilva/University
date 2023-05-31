@@ -39,7 +39,7 @@ public class Client {
     public static ManagedChannel channel;
 
     public Client() {
-        this.channel = ManagedChannelBuilder
+        channel = ManagedChannelBuilder
                 .forAddress("localhost", 7070)
                 .usePlaintext()
                 .build();
@@ -55,7 +55,7 @@ public class Client {
             user_input = reader.nextLine(); // Read the user input
 
             // Convert the first word of the user input to uppercase
-//            user_input = stringToUpperCase(user_input);
+            user_input = stringToUpperCase(user_input);
 
             if (user_input.equals(EXIT)) {
                 System.out.println(ANSI_GREEN + "Closing the connection..." + ANSI_RESET);
@@ -66,9 +66,8 @@ public class Client {
             String[] parts = user_input.split(" ");
 
             // Validate the user input for CREATE, GET, UPDATE, DELETE, LISTBYACTOR, LISTBYGENRE, HELP and Unknown commands.
-//            validateUserOperation(parts);
+            validateUserOperation(parts);
         }
-
     }
 
     /*
@@ -79,20 +78,23 @@ public class Client {
     @return: None
      */
     private static void validateUserOperation(String[] parts) throws IOException {
-//        Movie.MovieServiceBlockingStub blockingStub = MovieServiceGrpc.newBlockingStub(channel);
-//        switch (parts[0]) {
-//            case CREATE -> {}
-//            case GET -> {}
-//            case UPDATE -> {}
-//            case DELETE -> {}
-//            case LISTBYACTOR -> {}
-//            case LISTBYGENRE -> {}
-//            case HELP -> showHelp();
-//            default -> {
-//                System.out.println(ANSI_GREEN + "Invalid command. Try again." + ANSI_RESET);
-//                showHelp();
-//            }
-//        }
+        MovieServiceGrpc.MovieServiceBlockingStub blockingStub = MovieServiceGrpc.newBlockingStub(channel);
+        switch (parts[0]) {
+            case CREATE -> {
+                System.out.println(ANSI_GREEN + "Creating a new movie..." + ANSI_RESET);
+                Movie movie = userFillCreateMovieObject(false);
+            }
+            case GET -> {}
+            case UPDATE -> {}
+            case DELETE -> {}
+            case LISTBYACTOR -> {}
+            case LISTBYGENRE -> {}
+            case HELP -> showHelp();
+            default -> {
+                System.out.println(ANSI_GREEN + "Invalid command. Try again." + ANSI_RESET);
+                showHelp();
+            }
+        }
     }
 
     public static void createMovie() {

@@ -2,11 +2,12 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import movies_pb2 as movies__pb2
+import structs.movies_pb2 as movies__pb2
 
 
 class MovieServiceStub(object):
-    """Missing associated documentation comment in .proto file."""
+    """The service definition, which contains the RPCs, arguments, and return types
+    """
 
     def __init__(self, channel):
         """Constructor.
@@ -47,7 +48,8 @@ class MovieServiceStub(object):
 
 
 class MovieServiceServicer(object):
-    """Missing associated documentation comment in .proto file."""
+    """The service definition, which contains the RPCs, arguments, and return types
+    """
 
     def CreateMovie(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -126,7 +128,8 @@ def add_MovieServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class MovieService(object):
-    """Missing associated documentation comment in .proto file."""
+    """The service definition, which contains the RPCs, arguments, and return types
+    """
 
     @staticmethod
     def CreateMovie(request,
