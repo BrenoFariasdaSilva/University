@@ -1,9 +1,8 @@
 
-# External Data Representation (XDR) Programming using Protobuffers
+# [External Data Representation (XDR) Programming using Protobuffers](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2003%20-%20XDR%20External%20Data%20Representation)
 @author: Breno Farias da Silva    
 @date: 07/05/2023  
 @last update: 27/05/2021  
-@[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2003%20-%20XDR%20External%20Data%20Representation)  
 
 ### ***Quick notes:*** 
 Note that in the ```/server/database.py``` file we have the following code in the database constructor (```__init__```):
@@ -21,10 +20,10 @@ For obvious reasons, i'm not going to share my database credentials, so you need
 
 ## Install dependencies
 The dependency inside the makefile command are required to run this project so, before that, make sure you have makefile installed on your machine.
-    ```bash
-    sudo apt install make -y
-    make setup
-    ```
+```bash
+sudo apt install make -y
+make setup
+```
 Also, you need to have [Maven](https://maven.apache.org/) installed on your computer, as we have lots of dependencies on the client side, inside the ```pom.xml``` file, like `protobuf` and `JUnit`.  
 
 ## How to use
