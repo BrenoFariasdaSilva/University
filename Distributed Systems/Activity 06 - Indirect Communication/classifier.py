@@ -22,6 +22,7 @@ def main():
         # Decode the dataset
         dataset = body.decode()
 
+        # @TODO: Make this dinamic, so it doesn't need to be hardcoded, and the user can add more topics
         # Verify if the has a topic related word
         if Categories.PEOPLE in dataset.lower():
             topic = Categories.PEOPLE
