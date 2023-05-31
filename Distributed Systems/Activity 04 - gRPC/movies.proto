@@ -4,7 +4,7 @@ syntax = "proto3";
 // Create a package for the movies service
 package moviesPackage;
 
-// Allow the generated files to be splited into multiple files
+// Allow the generated files to be split into multiple files
 option java_multiple_files = true;
 
 // Allow the generated files to be accessed by the specified package
@@ -30,7 +30,7 @@ message MoviesList {
   repeated Movie movies = 1;
 }
 
-// The Movie definition that is used to send a movie 
+// The Movie definition that is used to send a movie
 message Movie {
   string id = 1;
   string plot = 2;

@@ -77,6 +77,7 @@ public class Client {
     public static void createMovie(MovieServiceGrpc.MovieServiceBlockingStub blockingStub) {
         System.out.println(ANSI_GREEN + "Creating a new movie..." + ANSI_RESET);
         Movie movie = userFillCreateMovieObject(false); // Create a movie object and fill it with the user input
+        // System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_RESET + movie);
         System.out.println(ANSI_GREEN + "Sending the movie to the server..." + ANSI_RESET);
         Message response = blockingStub.createMovie(movie); // Send the movie object to the server
         System.out.println("Response: " + response.getMessage()); // Print the response from the server. It can be "SUCCESS" or "ERROR
