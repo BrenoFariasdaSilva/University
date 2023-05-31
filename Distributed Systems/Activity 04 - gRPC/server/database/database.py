@@ -42,7 +42,6 @@ class MongoDatabase:
 		movie = json.loads(movie)
 		if movie.get('id'):
 			movie.pop('id')
-		print(f"{backgroundColors.OKGREEN}Creating movie {backgroundColors.OKCYAN}{movie}{Style.RESET_ALL}")
 		reponse_document = self.collection.insert_one(movie)
 		if reponse_document.acknowledged: # If the movie was created
 			return SUCCESS

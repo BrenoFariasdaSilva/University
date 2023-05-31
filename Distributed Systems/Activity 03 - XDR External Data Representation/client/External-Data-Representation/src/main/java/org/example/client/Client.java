@@ -366,7 +366,7 @@ public class Client {
     public static Movie userFillCreateMovieObject(boolean allow_empty_fields) {
         Scanner reader = new Scanner(System.in); // Read the user input
         while (true) {
-            Ask for the user input: id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
+            // Ask for the user input: id, plot, genre, runtime, cast, num_mflix_comments, title, fullplot, countries, released, directors, rated, lastupdated, year, type
            System.out.println(ANSI_GREEN + "Type the id of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
            String id = reader.nextLine(); // Read the user input
            System.out.println(ANSI_GREEN + "Type the plot of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);

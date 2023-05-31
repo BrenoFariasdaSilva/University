@@ -22,8 +22,8 @@ SERVERADDRESS = ["localhost", 7070] # The server's address. The first element is
 MAX_WORKERS = 10 # The maximum number of workers
 
 # Status messages:
-SUCCESS = "Success" # The success response code
-FAILURE = "Failure" # The failure response code
+SUCCESS = 1 # The success response code
+FAILURE = 0 # The failure response code
 
 # Empty Fields:
 EMPTY_STRING_FIELD = "Undefined" # The empty field
@@ -45,12 +45,14 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @param context: The context
 	# @return: The message protocol buffer
 	def CreateMovie(self, movie_string, context):
-		print(backgroundColors.GREEN + "CreateMovie" + Style.RESET_ALL)
 		movie_json = MessageToJson(movie_string) # Convert the movie protocol buffer to a dictionary / JSON
+		print(f"{backgroundColors.GREEN}Creating Movie: {backgroundColors.CYAN}{movie_string['title']}{Style.RESET_ALL}")
 		movie_document = self.database.createMovie(movie_json) # Create the movie
 
-		if movie_document == None:
+		if movie_document == SUCCESS:
+			print(f"{backgroundColors.GREEN}Movie {backgroundColors.CYAN}{movie_string['title']}{backgroundColors.GREEN} created successfully{Style.RESET_ALL}")
 			return movies_pb2.Message(message=FAILURE) # Return the success message
+		print(f"{backgroundColors.RED}Failed to create movie {backgroundColors.CYAN}{movie_string['title']}{Style.RESET_ALL}")
 		return movies_pb2.Message(message=SUCCESS)
 	
 	# @brief: This function gets a movie
@@ -58,10 +60,12 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @param context: The context
 	# @return: The movie protocol buffer
 	def GetMovie(self, Message, context):
-		print(backgroundColors.GREEN + "GetMovie" + Style.RESET_ALL)
 		movie_document = self.database.getMovieByTitle(Message.message) # Get the movie
+		print(f"{backgroundColors.GREEN}Getting Movie: {backgroundColors.CYAN}{Message.message}{Style.RESET_ALL}")
 		if movie_document == None:
-			movie_document = {} # Set the movie document to an empty dictionary
+			print(f"{backgroundColors.RED}Movie {backgroundColors.CYAN}{Message.message}{backgroundColors.RED} not found{Style.RESET_ALL}")
+		else:
+			print(f"{backgroundColors.GREEN}Movie {backgroundColors.CYAN}{Message.message}{backgroundColors.GREEN} found{Style.RESET_ALL}")
 		return self.convert_document_to_protocol_buffer(movie_document) # Return the converted the movie document to a protocol buffer
 	
 	# @brief: This function updates a movie
@@ -70,11 +74,13 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @return: The message protocol buffer
 	# @note: This needs to be fixed
 	def UpdateMovie(self, movie_string, context):
-		print(backgroundColors.GREEN + "UpdateMovie" + Style.RESET_ALL)
 		movie_json = MessageToJson(movie_string)
+		print(f"{backgroundColors.GREEN}Updating Movie: {backgroundColors.CYAN}{movie_string['title']}{Style.RESET_ALL}")
 		movie_document = self.database.updateMovie(movie_json) # Update the movie
 		if movie_document == None:
+			print(f"{backgroundColors.RED}Movie {backgroundColors.CYAN}{movie_string['title']}{backgroundColors.RED} not found{Style.RESET_ALL}")
 			return movies_pb2.Message(message=FAILURE)
+		print(f"{backgroundColors.GREEN}Movie {backgroundColors.CYAN}{movie_string['title']}{backgroundColors.GREEN} updated successfully{Style.RESET_ALL}")
 		return movies_pb2.Message(message=SUCCESS)
 	
 	# @brief: This function deletes a movie
@@ -82,10 +88,12 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @param context: The context
 	# @return: The message protocol buffer
 	def DeleteMovie(self, Message, context):
-		print(backgroundColors.GREEN + "DeleteMovie" + Style.RESET_ALL)
 		movie_document = self.database.deleteMovie(Message.message)
+		print(f"{backgroundColors.GREEN}Deleting Movie: {backgroundColors.CYAN}{Message.message}{Style.RESET_ALL}")
 		if movie_document == None:
+			print(f"{backgroundColors.RED}Movie {backgroundColors.CYAN}{Message.message}{backgroundColors.RED} not found{Style.RESET_ALL}")
 			return movies_pb2.Message(message=FAILURE)
+		print(f"{backgroundColors.GREEN}Movie {backgroundColors.CYAN}{Message.message}{backgroundColors.GREEN} deleted successfully{Style.RESET_ALL}")
 		return movies_pb2.Message(message=SUCCESS)
 
 	# @brief: This function converts the document to a protocol buffer
