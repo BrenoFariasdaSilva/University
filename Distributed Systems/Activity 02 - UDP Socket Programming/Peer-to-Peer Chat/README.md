@@ -1,7 +1,7 @@
 # UDP Socket Programming
 @author Breno Farias da Silva    
 @date 24/04/2023  
-@last update 28/04/2021  
+@last update 28/04/2023  
 @[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2002%20-%20UDP%20Socket%20Programming/Peer-to-Peer%20Chat)  
 @**ToDo**: Get port number randomly in order to have multiple users.   
 **@Aditional**: Optional TCP server for holding the peers list, like nickname and IP address.  
