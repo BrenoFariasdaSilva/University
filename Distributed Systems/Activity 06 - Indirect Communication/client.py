@@ -13,6 +13,15 @@ class backgroundColors: # Colors for the terminal
 	WHITE = "\033[97m" # White
 	BOLD = "\033[1m" # Bold
 	UNDERLINE = "\033[4m" # Underline
+ 
+class Categories:
+    PEOPLE = "people"
+    BEAUTIFUL = "beautiful"
+    FAST = "Fasting"
+    INNOVATION = "innovation"
+    SAUDADE = "saudade"
+    HOUSE = "house"
+    ALONE = "alone"
 
 def main(): 
     # Connect to the RabbitMQ server
@@ -23,7 +32,7 @@ def main():
     result = channel.queue_declare(queue="", exclusive=True) # Create an exclusive queue
     queueName = result.method.queue # Catch the queue name
 
-    queues = ["people", "beautiful", "actor", "Fasting", "innovation", "house", "alone"] # Queues list
+    queues = [Categories.PEOPLE, Categories.BEAUTIFUL, Categories.FAST, Categories.INNOVATION, Categories.SAUDADE, Categories.HOUSE, Categories.ALONE) # The queue list 
     topics = sys.argv[1:] # Topics list
 
     if not topics: # If there is no topic

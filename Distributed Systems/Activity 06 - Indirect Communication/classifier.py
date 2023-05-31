@@ -1,4 +1,5 @@
-import pika as pk # Import the pika library that is used for the Advanced Message Queuing Protocol (AMQP) used by RabbitMQ
+import pika as pk # Impo1rt the pika library that is used for the Advanced Message Queuing Protocol (AMQP) used by RabbitMQ
+from client import Categories # Import the Categories class from client.py
 
 # #brief: This is the main classifier.py function of the program
 # #param: None
@@ -22,20 +23,20 @@ def main():
         dataset = body.decode()
 
         # Verify if the has a topic related word
-        if "people" in dataset:
-            topic = "people"
-        elif "beautiful" in dataset:
-            topic = "beautiful"
-        elif "Fasting" in dataset:
-            topic = "Fasting"
-        elif "innovation" in dataset:
-            topic = "innovation"
-        elif "saudade" in dataset:
-            topic = "saudade"
-        elif "house" in dataset:
-            topic = "house"
-        elif "alone" in dataset:
-            topic = "alone"
+        if Categories.PEOPLE in dataset.lower():
+            topic = Categories.PEOPLE
+        elif Categories.BEAUTIFUL in dataset.lower():
+            topic = Categories.BEAUTIFUL
+        elif Categories.FAST in dataset.lower():
+            topic = Categories.FAST
+        elif Categories.INNOVATION in dataset.lower():
+            topic = Categories.INNOVATION
+        elif Categories.SAUDADE in dataset.lower():
+            topic = Categories.SAUDADE
+        elif Categories.HOUSE in dataset.lower():
+            topic = Categories.HOUSE
+        elif Categories.ALONE in dataset.lower():
+            topic = Categories.ALONE
 
         # Channel used for communication between client classifier
         channel.exchange_declare(exchange="direct_logs", exchange_type="direct")
