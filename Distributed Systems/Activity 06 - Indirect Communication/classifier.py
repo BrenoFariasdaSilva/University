@@ -24,20 +24,16 @@ def main():
 
         # @TODO: Make this dinamic, so it doesn't need to be hardcoded, and the user can add more topics
         # Verify if the has a topic related word
-        if Categories.PEOPLE in dataset.lower():
-            topic = Categories.PEOPLE
-        elif Categories.BEAUTIFUL in dataset.lower():
-            topic = Categories.BEAUTIFUL
-        elif Categories.FAST in dataset.lower():
-            topic = Categories.FAST
-        elif Categories.INNOVATION in dataset.lower():
-            topic = Categories.INNOVATION
-        elif Categories.SAUDADE in dataset.lower():
-            topic = Categories.SAUDADE
-        elif Categories.HOUSE in dataset.lower():
-            topic = Categories.HOUSE
-        elif Categories.ALONE in dataset.lower():
-            topic = Categories.ALONE
+        if Categories.CAR in dataset.lower():
+            topic = Categories.CAR
+        elif Categories.BITCOIN in dataset.lower():
+            topic = Categories.BITCOIN
+        elif Categories.DOGECOIN in dataset.lower():
+            topic = Categories.DOGECOIN
+        elif Categories.TESLA in dataset.lower():
+            topic = Categories.TESLA
+        elif Categories.SPACEX in dataset.lower():
+            topic = Categories.SPACEX
 
         # Channel used for communication between client classifier
         channel.exchange_declare(exchange="direct_logs", exchange_type="direct")

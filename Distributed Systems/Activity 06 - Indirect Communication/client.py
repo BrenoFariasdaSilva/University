@@ -1,6 +1,4 @@
 import pika as pk # Import the pika library that is used for the Advanced Message Queuing Protocol (AMQP) used by RabbitMQ
-import sys # For system calls
-
 from colorama import Style # For coloring the terminal
 
 # Background colors:
@@ -14,14 +12,12 @@ class backgroundColors: # Colors for the terminal
 	BOLD = "\033[1m" # Bold
 	UNDERLINE = "\033[4m" # Underline
  
-class Categories: # Update this to "car", "bitcoin", "Tesla", "SpaceX", "dogecoin", etc categories.
-    PEOPLE = "people"
-    BEAUTIFUL = "beautiful"
-    FAST = "Fasting"
-    INNOVATION = "innovation"
-    SAUDADE = "saudade"
-    HOUSE = "house"
-    ALONE = "alone"
+class Categories: 
+    CAR = "car"
+    BITCOIN = "bitcoin"
+    DOGECOIN = "dogecoin"
+    TESLA = "tesla"
+    SPACEX = "SpaceX"
 
 def main(): 
     # Connect to the RabbitMQ server
@@ -32,21 +28,32 @@ def main():
     result = channel.queue_declare(queue="", exclusive=True) # Create an exclusive queue
     queueName = result.method.queue # Catch the queue name
 
-    queues = [Categories.PEOPLE, Categories.BEAUTIFUL, Categories.FAST, Categories.INNOVATION, Categories.SAUDADE, Categories.HOUSE, Categories.ALONE) # The queue list 
-    topics = sys.argv[1:] # Topics list
+    # Get all the attributes of the Categories class
+    category_attrs = [getattr(Categories, attr) for attr in dir(Categories) if not callable(getattr(Categories, attr)) and not attr.startswith("__")]
 
-    if not topics: # If there is no topic
-        print(f"{backgroundColors.YELLOW} Register in one of the following topics: people, beautiful, actor, Fasting, innovation, lesson, alone{Style.RESET_ALL}")
-        exit(1) # Exit the program
+    # Filter the attributes to include only the desired categories
+    categories = [attr for attr in category_attrs if isinstance(attr, str)]
 
-    for i in range(len(topics)): # For each topic
-        if topics[i] not in queues: # If the topic is not in the queues list
-            print(f"{backgroundColors.RED}Invalid topic. Register in one of the following topics: people, beautiful, actor, Fasting, innovation, lesson, alone{Style.RESET_ALL}")
-            exit(1) # Exit the program
+    # Queues list
+    queues = categories
+
+    breakFlag = False # Flag to break the loop
+    # Ask the user for the topics to subscribe
+    print(f"{backgroundColors.GREEN} Register in one of the following topics: {queues}{Style.RESET_ALL}")
+    while not breakFlag:
+        topics = input("Enter the topics to subscribe (separated by spaces): ").split()
+        if not topics: # If there is no topic
+            print(f"{backgroundColors.YELLOW} You must enter at least one topic{Style.RESET_ALL}")
+            continue
+        for i in range(len(topics)): # For each topic
+            if topics[i] not in queues: # If the topic is not in the queues list
+                print(f"{backgroundColors.RED}Invalid topic. Register in one of the following topics: {queues}{Style.RESET_ALL}")
+                break
+            breakFlag = True # Break the loop
     
     # Create a queue for each topic
-    for topico in topics:
-        channel.queue_bind(exchange="direct_logs", queue=queueName, routing_key=topico) # Bind the queue to the topic
+    for topic in topics:
+        channel.queue_bind(exchange="direct_logs", queue=queueName, routing_key=topic) # Bind the queue to the topic
 
     print(backgroundColors.GREEN + backgroundColors.BOLD + "Waiting for messages..." + Style.RESET_ALL) # Print the waiting message
 

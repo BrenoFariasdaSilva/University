@@ -11,8 +11,8 @@ collector_run:
 	python3 collector.py
 
 setup:
-	sudo pip install pika
-	sudo pip install colorama
+	pip install pika
+	pip install colorama
 
 remove:
 	rm *.pyc
