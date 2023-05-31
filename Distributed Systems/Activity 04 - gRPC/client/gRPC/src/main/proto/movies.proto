@@ -1,16 +1,16 @@
-# The syntax type of the proto file
 syntax = "proto3";
+// The syntax type of the proto file
 
-# Create a package for the movies service
+// Create a package for the movies service
 package moviesPackage;
 
-# Allow the generated files to be splited into multiple files
+// Allow the generated files to be split into multiple files
 option java_multiple_files = true;
 
-# Allow the generated files to be accessed by the specified package
+// Allow the generated files to be accessed by the specified package
 option java_package = "org.example.structs";
 
-# The service definition, which contains the RPCs, arguments, and return types
+// The service definition, which contains the RPCs, arguments, and return types
 service MovieService {
   rpc CreateMovie(Movie) returns (Message) {};
   rpc GetMovie(Message) returns (Movie) {};
@@ -20,17 +20,17 @@ service MovieService {
   rpc ListMoviesByGenre(Message) returns (MoviesList) {};
 }
 
-# The Message definition that is used to send a message
+// The Message definition that is used to send a message
 message Message {
   string message = 1;
 }
 
-# The MoviesList definition that is used to send a list of movies
+// The MoviesList definition that is used to send a list of movies
 message MoviesList {
   repeated Movie movies = 1;
 }
 
-# The Movie definition that is used to send a movie 
+// The Movie definition that is used to send a movie
 message Movie {
   string id = 1;
   string plot = 2;
