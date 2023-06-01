@@ -1,7 +1,7 @@
 # [Indirect Communication](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2006%20-%20Indirect%20Communication)
-@author: Breno Farias da Silva    
-@date: 29/05/2023  
-@last update: 31/05/2023
+`@author: Breno Farias da Silva.`     
+`@date: 29/05/2023.`    
+`@last update: 31/05/2023.`  
 ### ***Quick notes:*** 
 Note that in this project uses RabbitMQ, so you need to install it first [here](https://www.rabbitmq.com/getstarted.html).  
 Also, i try to simplify things by using `Makefile`, so you need to install it too [here](https://www.gnu.org/software/make/), or if you are running a Unix-based system, just run:
