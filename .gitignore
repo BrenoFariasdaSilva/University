@@ -633,4 +633,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-*/processed_data/*
+*/processed_tweets/*
