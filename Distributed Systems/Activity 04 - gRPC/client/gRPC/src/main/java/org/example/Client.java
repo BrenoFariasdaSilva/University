@@ -80,8 +80,6 @@ public class Client {
         // System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_RESET + movie);
         System.out.println(ANSI_GREEN + "Sending the movie to the server..." + ANSI_RESET);
         Message response = blockingStub.createMovie(movie); // Send the movie object to the server
-        System.out.println("Response: " + response.getMessage()); // Print the response from the server. It can be "SUCCESS" or "ERROR
-        System.out.println("response.getMessage().equals(SUCCESS): " + response.getMessage().equals(SUCCESS));
         if (response.getMessage().equals(SUCCESS)) {
             System.out.println(ANSI_GREEN + "Movie " + ANSI_CYAN + movie.getTitle() + ANSI_GREEN + " created successfully!" + ANSI_RESET);
         } else {
