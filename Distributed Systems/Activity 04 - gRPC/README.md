@@ -36,7 +36,7 @@ The dependency inside the makefile command are required to run this project so, 
 sudo apt install make -y
 make setup
 ```
-Also, you need to have [Maven](https://maven.apache.org/) installed on your computer, as we have lots of dependencies on the client side, inside the ```pom.xml``` file, like `grpc-protobuf`, `grpc-stub` and `grpc-netty`.  When developing this project, the `protocol buffer compiler` was version `libprotoc 23.0`, and Maven was version `Apache Maven 3.6.3`.  If you have any problems with the dependencies, try to update them to the same version as mine or update them to the latest version.
+Also, you need to have [Maven](https://maven.apache.org/) installed on your computer, as we have lots of dependencies on the client side, inside the ```pom.xml``` file, like `grpc-protobuf`, `grpc-stub` and `grpc-netty`.  When developing this project, the `protocol buffer compiler` was version `libprotoc 23.0`, and Maven was version `Apache Maven 3.6.3`.  If you have any problems with the dependencies, try to update them to the same version as mine or update them to the latest version. The `pom.xml` file is inside the `client` directory already contains the version of the dependencies that i used, so you don't need to worry about that.
 
 ## How to use
 The avaliable commands are:
