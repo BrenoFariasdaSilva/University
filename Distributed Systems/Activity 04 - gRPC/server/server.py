@@ -125,6 +125,7 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 # @param: None
 # @return: None
 def main():
+	print(f"{backgroundColors.GREEN}Server started{Style.RESET_ALL}")
 	# Setup the server pool of threads
 	server_pool = grpc.server(futures.ThreadPoolExecutor(max_workers=MAX_WORKERS))
 	# Add the server to the pool
@@ -133,7 +134,6 @@ def main():
 	server_pool.add_insecure_port(f"[::]:{SERVERADDRESS[1]}")
 	# Start the server
 	server_pool.start()
-	print(f"{backgroundColors.GREEN}Server started{Style.RESET_ALL}")
 	# Wait for the server to terminate
 	server_pool.wait_for_termination()
 

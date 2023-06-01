@@ -38,6 +38,34 @@ make setup
 ```
 Also, you need to have [Maven](https://maven.apache.org/) installed on your computer, as we have lots of dependencies on the client side, inside the ```pom.xml``` file, like `grpc-protobuf`, `grpc-stub` and `grpc-netty`.  
 
+## How to use
+The avaliable commands are:
+- ***`HELP`*** : Show all available commands
+- ***`CREATE`*** : Create a new movie, which will ask you to fill every movie field.
+- ***`GET`*** : Get a movie by title
+- ***`UPDATE`*** : Update a movie (New ID must be the same as old ID!)
+- ***`DELETE`*** : Delete a movie by title
+- ***`LISTBYACTOR`*** : List all movies by an actor
+- ***`LISTBYGENRE`*** : List all movies by a genre
+- ***`EXIT`*** : Exit the program
+
+The movie fields are specified in the `movies.proto` file, which are:
+- ***`ID`*** : The movie ID as a `string`.
+- ***`plot`*** : The movie plot as a `string`.
+- ***`genre`*** : The movie genre as a `string`.
+- ***`runtime`*** : The movie runtime as a `integer`.
+- ***`cast`*** : The movie cast as a `array`.
+- ***`num_mflix_comments`*** : The movie num_mflix_comments as a `integer`.
+- ***`title`*** : The movie title as a `string`.
+- ***`fullplot`*** : The movie fullplot as a `string`.
+- ***`countries`*** : The movie countries as a `array`.
+- ***`released`*** : The movie released as a `string`.
+- ***`directors`*** : The movie directors as a `array`.
+- ***`rated`*** : The movie rated as a `string`.
+- ***`lastupdated`*** : The movie lastupdated as a `string`.
+- ***`year`*** : The movie year as a `integer`.
+- ***`type`*** : The movie type as a `string`.
+
 ## How to run
 In order to run this project, you need to open two terminals.
 #### ***Important notes:*** The order of which terminal you open first is important, so make sure you follow the order below.  In a client-server architecture, the server needs to be running before the client, otherwise, the client will not be able to connect to the server. From my personal experience, I recommend you to open the server (`Python`) on `Visual Studio Code` and the client (`Java`) on `IntelliJ IDEA`.
@@ -59,6 +87,61 @@ In order to run this project, you need to open two terminals.
     make client_run
     # In my case, i simply click on "run" button on IntelliJ IDEA
     ```
+
+Now the client must have connected to the server, and you can start to send requests to the server, giving you something like this:
+```bash
+Server started
+Server Connected to distributedsystems MongoDB database using brenofarias user
+```
+And the client will be asking for a user input, like this:
+```bash
+Type a message: (String)
+```
+Now type the help command on the client, so you can see all the available commands:
+```bash
+help
+```
+Now type a operation, like `GET`, and follow the instructions:
+```bash
+get
+```
+Now type the movie title, and you will get the movie information:
+```bash
+title
+```
+It create a request to the server, which will return the movie information, like this:
+```bash
+id: "6472338bd2dca46e62b59403"
+plot: "plot"
+genre: "genre"
+runtime: 1
+cast: "actor1"
+num_mflix_comments: 1
+title: "title"
+fullplot: "fullplot"
+countries: "country1"
+released: "released"
+directors: "director1"
+rated: "rated"
+lastupdated: "lastupdated"
+year: 2023
+type: "type"
+```
+Or not, if the movie doesn't exist.
+You could also delete the returned movie, by typing the `DELETE` command, and following the instructions:
+```bash
+delete
+```
+Now type the movie title, and you will delete the movie:
+```bash
+title
+```
+If the operation was successful, you will get a message like this:
+```bash
+Operation DELETE SUCCESS!
+```
+Now, in order to close the connection, you need to type the `EXIT` command.
+
 ## Libraries
 First, the python libraries (for the server side) used in this project are:
 - **grpc**: This is a Python implementation of gRPC, a high-performance, open-source framework for remote procedure calls (RPC). gRPC enables communication between distributed systems and provides features like authentication, load balancing, and bidirectional streaming. The grpc library allows you to create gRPC servers and clients, define service interfaces using Protocol Buffers, and perform remote method invocations.

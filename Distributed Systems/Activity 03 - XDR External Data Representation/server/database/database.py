@@ -26,7 +26,7 @@ class MongoDatabase:
 		self.database = self.client["movies"]
 		self.collection = self.database["movies"]
 		database_name = os.getenv("DATABASE_URL")[:os.getenv("DATABASE_URL").find(".")]
-		print(f"{backgroundColors.OKGREEN}Client Connected to {backgroundColors.OKCYAN}{database_name}{backgroundColors.OKGREEN} server using {backgroundColors.OKCYAN}{os.getenv('USERNAME')} {backgroundColors.OKGREEN}user{Style.RESET_ALL}")
+		print(f"{backgroundColors.OKGREEN}Server Connected to {backgroundColors.OKCYAN}{database_name}{backgroundColors.OKGREEN} MongoDB database using {backgroundColors.OKCYAN}{os.getenv('USERNAME')} {backgroundColors.OKGREEN}user{Style.RESET_ALL}")
 		print("")
 
 	## Methods:
