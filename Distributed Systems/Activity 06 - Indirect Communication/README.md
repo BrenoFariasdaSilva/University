@@ -51,7 +51,6 @@ So, just type the topic you want to subscribe, but separated by spaces
     Tesla SpaceX
     ```
 Now you need to wait for the `collector.py` to read the `/dataset/Tweets.csv` file and send the tweets to the `classifier.py` to classify them, and then send the classified tweets to the `client.py`, where inside the `/processed_tweets` folder, will have a file for each of the tweet topics you were subscribed.  
-<img src="/assets/processed_tweets.png" alt="processed_tweets" width="500"/>
 
 ## Libraries
 The python used libraries in this project are:
