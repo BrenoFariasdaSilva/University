@@ -38,15 +38,21 @@ In order to run this project, you need to open three terminals, one for the clie
 ## How to use
 
 ## Example of usage
-After openning the three terminals, the client terminal will be askin
+After openning the three terminals, the client terminal will be asking for the topic you want to subscribe of the available topics, which are:  
+  - `tesla`
+  - `SpaceX`
+  - `car`
+  - `bitcoin`
+  - `dogecoin`  
+  
+So, just type the topic you want to subscribe, but separated by spaces
 * On the client terminal, type:  
     ```bash
-    
+    Tesla SpaceX
     ```
-* On the client terminal, type:   
-    ```bash
+Now you need to wait for the `collector.py` to read the `/dataset/Tweets.csv` file and send the tweets to the `classifier.py` to classify them, and then send the classified tweets to the `client.py`, where inside the `/processed_tweets` folder, will have a file for each of the tweet topics you were subscribed.  
+<img src="/assets/processed_tweets.png" alt="processed_tweets" width="500"/>
 
-    ```
 ## Libraries
 The python used libraries in this project are:
 - **pika**: The `pika` library is a feature-rich Python client for RabbitMQ, a popular message broker. It provides a high-level API for interacting with RabbitMQ, allowing you to publish and consume messages, create and manage queues, and handle connections and channels. Pika makes it easier to build scalable and robust distributed systems using RabbitMQ.
