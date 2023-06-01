@@ -17,7 +17,7 @@ Is used the ```os.getenv()``` function to get the environment variables, so you 
 
 For obvious reasons, i'm not going to share my database credentials, so you need to create your own database and get your own credentials in your MongoDB account.
 
-Also, if you are trying to run "`make server_run`" and it shows this error:
+Also, if you are trying to run `make server_run` and it shows this error:
 ```bash
 ModuleNotFoundError: No module named 'movies_pb2'
 ```
