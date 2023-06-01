@@ -1,8 +1,7 @@
-# gRPC - Google Remote Procedure Call
+# [gRPC - Google Remote Procedure Call](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2004%20-%20gRPC)
 @author: Breno Farias da Silva    
 @date: 27/05/2023  
-@last update: 29/05/2023  
-@[repository](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2004%20-%20gRPC)  
+@last update: 31/05/2023  
 
 ### ***Quick notes:*** 
 Note that in the ```/server/database.py``` file we have the following code in the database constructor (```__init__```):
@@ -53,11 +52,12 @@ In order to run this project, you need to open two terminals.
 ## Example of usage
 * On the server terminal, type:  
     ```bash
-    
+    make server_run
     ```
 * On the client terminal, type:   
     ```bash
-
+    make client_run
+    # In my case, i simply click on "run" button on IntelliJ IDEA
     ```
 ## Libraries
 First, the python libraries (for the server side) used in this project are:
