@@ -12,7 +12,7 @@ collector_run:
 
 docker_run:
 	docker pull rabbitmq
-	docker run -d --hostnamemy-rabbit --name rabbitmq-tweets rabbitmq:3
+	docker run -d --hostname my-rabbit --name rabbitmq-tweets rabbitmq:3
 
 setup:
 	pip install pika
