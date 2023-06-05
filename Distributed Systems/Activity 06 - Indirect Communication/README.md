@@ -74,4 +74,5 @@ The python used libraries in this project are:
 - **What is a Queue?** A queue is a buffer that stores messages. A queue can be durable (it will survive a broker restart), exclusive (only one consumer can consume from it), and auto-delete (it will be deleted when the last consumer unsubscribes).
 - **What is a Routing Key?** A routing key is a key that the exchange looks at to decide how to route the message to queues (depending on exchange type).
 - **What is a Binding Key?** A binding key is a key that the exchange looks at to decide how to route the message to queues (depending on exchange type).
+
 So, with that in mind, we can say that the `client.py` is the consumer, the `classifier.py` is the exchange, and the `collector.py` is the producer.
