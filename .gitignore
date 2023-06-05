@@ -634,3 +634,5 @@ FodyWeavers.xsd
 *.sln.iml
 
 */processed_tweets/*
+*/processed_tweets
+processed_tweets
