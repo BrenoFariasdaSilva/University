@@ -19,11 +19,11 @@ class Topics:
     BITCOIN = "bitcoin"
     DOGECOIN = "dogecoin"
     TESLA = "tesla"
-    SPACEX = "SpaceX"
+    SPACEX = "spacex"
 
 # This is the Database class of the program which stores the database information
 class Database:
-    ipAddress = "172.17.0.2"
+    ipAddress = "172.17.0.5"
 
 # This is the CSVFile class of the program which stores the CSV file information
 class ProcessedTweets:
@@ -53,7 +53,7 @@ def validateTopics(topics, available_topics):
         return False
     for i in range(len(topics)): # For each topic
         if topics[i] not in available_topics: # If the topic is not in the available_topics
-            print(f"{BackgroundColors.RED}Invalid topic. Register in one of the following topics: {BackgroundColors.CYAN}{available_topics}{Style.RESET_ALL}")
+            print(f"{BackgroundColors.RED}Topic {BackgroundColors.CYAN}{topics[i]}{BackgroundColors.RED} is invalid. Register in one of the following topics: {BackgroundColors.CYAN}{available_topics}{Style.RESET_ALL}")
             return False
     return True
 

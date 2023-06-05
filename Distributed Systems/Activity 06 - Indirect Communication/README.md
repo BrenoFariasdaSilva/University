@@ -35,7 +35,6 @@ In order to run this project, you need to open three terminals, one for the clie
     ```bash
     make collector_run
     ```
-## How to use
 
 ## Example of usage
 After openning the three terminals, the client terminal will be asking for the topic you want to subscribe of the available topics, which are:  
@@ -65,3 +64,14 @@ The python used libraries in this project are:
 ## Useful Documentation
 * [RabbitMQ Tutorials](https://www.rabbitmq.com/getstarted.html)
 * [RabbitMQ Installation](https://www.rabbitmq.com/download.html)
+
+## Quick notes
+- **What is RabbitMQ?** RabbitMQ is a message broker that allows you to send and receive messages between different systems and devices. It implements the Advanced Message Queuing Protocol (AMQP), an open standard for exchanging messages between applications. RabbitMQ is written in the Erlang programming language and is built on the Open Telecom Platform framework for clustering and failover. It is a robust and reliable message broker that supports a wide range of messaging patterns and can be deployed in distributed and federated configurations to meet high-scale, high-availability requirements.
+- **What is a producer?** A producer emits messages to an exchange.
+- **What is a consucer?** A consumer receives messages from a queue
+- **What is a binding?** Binding is a link between a queue and an exchange
+- **What is a Exchange?** Exchange is a routing agent that receives messages from producers and pushes them to queues depending on the rules defined by the exchange type, which can be direct (the default, where binding key must match routing key), topic (where binding key can be a pattern), headers (where binding key is ignored and routing key is a set of headers), and fanout (where binding key is ignored and routing key is ignored, and messages are sent to all queues bound to the exchange).
+- **What is a Queue?** A queue is a buffer that stores messages. A queue can be durable (it will survive a broker restart), exclusive (only one consumer can consume from it), and auto-delete (it will be deleted when the last consumer unsubscribes).
+- **What is a Routing Key?** A routing key is a key that the exchange looks at to decide how to route the message to queues (depending on exchange type).
+- **What is a Binding Key?** A binding key is a key that the exchange looks at to decide how to route the message to queues (depending on exchange type).
+So, with that in mind, we can say that the `client.py` is the consumer, the `classifier.py` is the exchange, and the `collector.py` is the producer.

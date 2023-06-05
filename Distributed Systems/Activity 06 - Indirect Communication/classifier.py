@@ -38,7 +38,7 @@ def main():
         elif Topics.SPACEX in dataset.lower():
             topic = Topics.SPACEX
 
-        # Channel used for communication between client classifier
+        # Channel used for communication between the classifier and the client
         channel.exchange_declare(exchange="direct_logs", exchange_type="direct")
         # Send the topic to the tweet queue
         channel.basic_publish(exchange="direct_logs", routing_key=str(topic), body=body) # Publica a mensagem no topico
