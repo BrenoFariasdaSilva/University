@@ -1,7 +1,7 @@
 # [Indirect Communication](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2006%20-%20Indirect%20Communication)
 `@author: Breno Farias da Silva.`     
 `@date: 29/05/2023.`    
-`@last update: 31/05/2023.`  
+`@last update: 05/06/2023.`  
 ### ***Quick notes:*** 
 I usually try to simplify things by using `Makefile`, so you need to install it too [here](https://www.gnu.org/software/make/), or if you are running a Unix-based system, just run:
 ```bash
@@ -48,7 +48,7 @@ After openning the three terminals, the client terminal will be asking for the t
 So, just type the topic you want to subscribe, but separated by spaces
 * On the client terminal, type:  
     ```bash
-    Tesla SpaceX
+    tesla SpaceX
     ```
 Now you need to wait for the `collector.py` to read the `/dataset/Tweets.csv` file and send the tweets to the `classifier.py` to classify them, and then send the classified tweets to the `client.py`, where inside the `/processed_tweets` folder, will have a file for each of the tweet topics you were subscribed.  
 
