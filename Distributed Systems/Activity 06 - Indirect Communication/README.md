@@ -7,7 +7,7 @@ I usually try to simplify things by using `Makefile`, so you need to install it 
 ```bash
 sudo apt install make -y
 ```
-
+Also, the [`Tweets.csv`](https://www.kaggle.com/datasets/andradaolteanu/all-elon-musks-tweets?resource=download) file has downloaded from [Kaggle](https://www.kaggle.com/), so you can also download yours (and paste it into `/datasets`) and modify this code to work with it.  
 Note that in this project uses [RabbitMQ](https://www.rabbitmq.com/), so you need to install it [locally](https://www.rabbitmq.com/download.html), or just use a [docker container](https://hub.docker.com/_/rabbitmq).  If you decide to use the docker container (which is easier), you need to [install docker](https://docs.docker.com/get-docker/) first, and use the `make docker_run` to , both pull the rabbitmq image and create a container with it named as `rabbitmq-tweets`.
 So, as you are using a docker container, when you create the container, it will automatically start the rabbitmq server, so you don't need to start it manually, but, more importantly, it will get a random available `IP Address` and `port` so, in order for the `client.py` to connect with the container, you must update the `ipAddress` attribute that is inside the `Database` class in the `client.py` file. To get the `IP Address` of the container, you can run:
 ```bash
