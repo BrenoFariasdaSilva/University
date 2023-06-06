@@ -1,4 +1,4 @@
-# University Exercises [![Build Status](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml/badge.svg)](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml)
+# [University Exercises](https://github.com/BrenoFariasdaSilva/University) [![Build Status](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml/badge.svg)](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml)
 
 [![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/University.svg)](https://wakatime.com/badge/github/BrenoFariasdaSilva/University)
 
