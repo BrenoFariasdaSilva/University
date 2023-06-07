@@ -22,8 +22,8 @@ SERVERADDRESS = ["localhost", 7070] # The server's address. The first element is
 MAX_WORKERS = 10 # The maximum number of workers
 
 # Status messages:
-SUCCESS = 1 # The success response code
-FAILURE = 0 # The failure response code
+SUCCESS = "1" # The success response code
+FAILURE = "0" # The failure response code
 
 # Empty Fields:
 EMPTY_STRING_FIELD = "Undefined" # The empty field
@@ -44,15 +44,16 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @param movie_string: The movie protocol buffer as a string
 	# @param context: The context
 	# @return: The message protocol buffer
-	def CreateMovie(self, movie_string, context):
-		movie_json = MessageToJson(movie_string) # Convert the movie protocol buffer to a dictionary / JSON
-		print(f"{backgroundColors.GREEN}Creating Movie: {backgroundColors.CYAN}{movie_string['title']}{Style.RESET_ALL}")
-		movie_document = self.database.createMovie(movie_json) # Create the movie
+	def CreateMovie(self, request, context):
+		print(f"{backgroundColors.GREEN}Creating Movie: {backgroundColors.CYAN}{request.title}{Style.RESET_ALL}")
+		# movie_json = MessageToJson(movie_string) # Convert the movie protocol buffer to a dictionary / JSON
+		# print(f"{backgroundColors.GREEN}Creating Movie: {backgroundColors.CYAN}{movie_string['title']}{Style.RESET_ALL}")
+		# movie_document = self.database.createMovie(movie_json) # Create the movie
 
-		if movie_document == SUCCESS:
-			print(f"{backgroundColors.GREEN}Movie {backgroundColors.CYAN}{movie_string['title']}{backgroundColors.GREEN} created successfully{Style.RESET_ALL}")
-			return movies_pb2.Message(message=FAILURE) # Return the success message
-		print(f"{backgroundColors.RED}Failed to create movie {backgroundColors.CYAN}{movie_string['title']}{Style.RESET_ALL}")
+		# if movie_document == SUCCESS:
+		# 	print(f"{backgroundColors.GREEN}Movie {backgroundColors.CYAN}{movie_string['title']}{backgroundColors.GREEN} created successfully{Style.RESET_ALL}")
+		# 	return movies_pb2.Message(message=FAILURE) # Return the success message
+		# print(f"{backgroundColors.RED}Failed to create movie {backgroundColors.CYAN}{movie_string['title']}{Style.RESET_ALL}")
 		return movies_pb2.Message(message=SUCCESS)
 	
 	# @brief: This function gets a movie

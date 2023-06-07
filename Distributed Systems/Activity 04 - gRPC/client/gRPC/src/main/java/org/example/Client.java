@@ -32,7 +32,7 @@ public class Client {
     public static final String LISTBYGENRE = "LISTBYGENRE";
     public static final String HELP = "HELP";
     public static final String EXIT = "EXIT";
-    public static final int SUCCESS = 1;
+    public static final String SUCCESS = "1";
     public static final String input_movie_title = "Type the title of the movie: (String)";
     public static final String input_movie_actor = "Type the actor of the movie: (String)";
     public static final String input_movie_genre = "Type the genre of the movie: (String)";
