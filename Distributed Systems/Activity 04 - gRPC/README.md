@@ -1,7 +1,7 @@
 # [gRPC - Google Remote Procedure Call](https://github.com/BrenoFariasdaSilva/University/tree/main/Distributed%20Systems/Activity%2004%20-%20gRPC)
 `@author: Breno Farias da Silva.`     
 `@date: 27/05/2023.`    
-`@last update: 31/05/2023.`    
+`@last update: 08/06/2023.`    
 
 ### ***Quick notes:*** 
 Note that in the ```/server/database.py``` file we have the following code in the database constructor (```__init__```):
