@@ -77,7 +77,7 @@ public class Client {
     public static void createMovie(MovieServiceGrpc.MovieServiceBlockingStub blockingStub) {
         System.out.println(ANSI_GREEN + "Creating a new movie..." + ANSI_RESET);
         Movie movie = userFillCreateMovieObject(false); // Create a movie object and fill it with the user input
-        // System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_RESET + movie);
+        System.out.println(ANSI_GREEN + "Movie: \n" + ANSI_RESET + movie);
         System.out.println(ANSI_GREEN + "Sending the movie to the server..." + ANSI_RESET);
         Message response = blockingStub.createMovie(movie); // Send the movie object to the server
         if (response.getMessage().equals(SUCCESS)) {
@@ -85,6 +85,7 @@ public class Client {
         } else {
             System.out.println(ANSI_RED + "Movie " + ANSI_CYAN + movie.getTitle() + ANSI_GREEN + " could not be created!" + ANSI_RESET);
         }
+        System.out.println();
     } // End of createMovie
 
     /*
@@ -95,13 +96,16 @@ public class Client {
     public static void getMovie(MovieServiceGrpc.MovieServiceBlockingStub blockingStub) {
         System.out.println(ANSI_GREEN + "Getting a movie..." + ANSI_RESET);
         Message movie_title = userFillMessageObject(input_movie_title); // Create a message object and fill it with the user input
+        System.out.println(ANSI_GREEN + "Sending the movie title to the server..." + ANSI_RESET);
         Movie movie = blockingStub.getMovie(movie_title); // Send the title to the server
+        System.out.println(ANSI_GREEN + "Received the movie object from the server..." + ANSI_RESET);
         if (movie.getTitle().equals(movie_title.getMessage())) {
             System.out.println(ANSI_GREEN + "Movie " + ANSI_CYAN + movie.getTitle() + ANSI_GREEN + " found!" + ANSI_RESET);
             System.out.println(ANSI_GREEN + "Movie: " + ANSI_RESET + movie);
         } else {
             System.out.println(ANSI_RED + "Movie " + ANSI_CYAN + movie.getTitle() + ANSI_GREEN + " not found!" + ANSI_RESET);
         }
+        System.out.println();
     } // End of getMovie
 
     /*
@@ -119,6 +123,7 @@ public class Client {
         } else {
             System.out.println(ANSI_RED + "Movie " + ANSI_CYAN + movie.getTitle() + ANSI_GREEN + " could not be updated!" + ANSI_RESET);
         }
+        System.out.println();
     } // End of updateMovie
 
     /*
@@ -135,6 +140,7 @@ public class Client {
         } else {
             System.out.println(ANSI_RED + "Movie " + ANSI_CYAN + movie_title.getMessage() + ANSI_GREEN + " could not be deleted!" + ANSI_RESET);
         }
+        System.out.println();
     } // End of deleteMovie
 
     /*

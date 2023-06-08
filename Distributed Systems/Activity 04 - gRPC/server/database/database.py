@@ -43,6 +43,7 @@ class MongoDatabase:
 		if movie.get('id'):
 			movie.pop('id')
 		reponse_document = self.collection.insert_one(movie)
+		print(f"{backgroundColors.OKGREEN}Movie {backgroundColors.OKCYAN}{movie['title']}{backgroundColors.OKGREEN} created in the database{Style.RESET_ALL}")
 		if reponse_document.acknowledged: # If the movie was created
 			return SUCCESS
 		return None
