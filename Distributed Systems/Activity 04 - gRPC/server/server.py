@@ -6,8 +6,6 @@ from database.database import MongoDatabase # For the database. It is importing 
 from google.protobuf.json_format import MessageToJson # For converting the protocol buffer to JSON
 from colorama import Style # For coloring the terminal
 
-# TODO: Function to clean the database!
-
 # Background colors:
 class backgroundColors: # Colors for the terminal
 	CYAN = "\033[96m" # Cyan
@@ -83,7 +81,8 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @note: This needs to be fixed
 	def UpdateMovie(self, request, context):
 		print(f"{backgroundColors.GREEN}Updating Movie: {backgroundColors.CYAN}{request.title}{Style.RESET_ALL}")
-		movie_document = self.database.updateMovie(request) # Update the movie
+		movie = MessageToJson(request) # Convert the movie to JSON
+		movie_document = self.database.updateMovie(movie) # Update the movie
 		status_message = FAILURE
 		if movie_document: # If the movie was found
 			print(f"{backgroundColors.GREEN}Movie {backgroundColors.CYAN}{request.title}{backgroundColors.GREEN} updated successfully{Style.RESET_ALL}")

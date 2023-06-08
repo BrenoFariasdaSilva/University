@@ -114,13 +114,16 @@ public class Client {
     */
     public static void updateMovie(MovieServiceGrpc.MovieServiceBlockingStub blockingStub) {
         System.out.println(ANSI_GREEN + "Updating a movie..." + ANSI_RESET);
-        Movie movie = userFillCreateMovieObject(true); // Create a movie object and fill it with the user input
-        System.out.println(ANSI_GREEN + "Sending the movie to the server..." + ANSI_RESET);
-        Message response = blockingStub.updateMovie(movie); // Send the movie object to the server
+        Movie old_movie = getMovieObject(blockingStub); // Create a movie object and fill it with the user input
+        if (old_movie == null) {
+            System.out.println(ANSI_RED + "Error updating the movie!: Movie not found!" + ANSI_RESET);
+            return;
+        }
+        Message response = blockingStub.updateMovie(updateMovieObjectFields(old_movie)); // Send the movie object to the server
         if (response.getMessage().equals(SUCCESS)) {
-            System.out.println(ANSI_GREEN + "Movie " + ANSI_CYAN + movie.getTitle() + ANSI_GREEN + " updated successfully!" + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "Movie " + ANSI_CYAN + old_movie.getTitle() + ANSI_GREEN + " updated successfully!" + ANSI_RESET);
         } else {
-            System.out.println(ANSI_RED + "Movie " + ANSI_CYAN + movie.getTitle() + ANSI_GREEN + " could not be updated!" + ANSI_RESET);
+            System.out.println(ANSI_RED + "Movie " + ANSI_CYAN + old_movie.getTitle() + ANSI_GREEN + " could not be updated!" + ANSI_RESET);
         }
     } // End of updateMovie
 
@@ -151,12 +154,7 @@ public class Client {
         MoviesList movie_list = blockingStub.listMoviesByActor(movie_actor); // Send the actor to the server
         System.out.println(ANSI_GREEN + "Received the movie list from the server..." + ANSI_RESET);
         System.out.println(ANSI_GREEN + "Movies: " + ANSI_RESET + movie_list);
-        if (movie_list.getMoviesCount() > 0) {
-            System.out.println(ANSI_GREEN + "Movies of " + ANSI_CYAN + movie_actor.getMessage() + ANSI_GREEN + " found!" + ANSI_RESET);
-            System.out.println(ANSI_GREEN + "Movies: " + ANSI_RESET + movie_list);
-        } else {
-            System.out.println(ANSI_RED + "Movies of " + ANSI_CYAN + movie_actor.getMessage() + ANSI_GREEN + " not found!" + ANSI_RESET);
-        }
+        showMoviesList(movie_actor, movie_list);
     } // End of listByActor
 
     /*
@@ -168,12 +166,7 @@ public class Client {
         System.out.println(ANSI_GREEN + "Listing movies by genre..." + ANSI_RESET);
         Message movie_genre = userFillMessageObject(input_movie_genre); // Create a message object and fill it with the user input
         MoviesList movie_list = blockingStub.listMoviesByGenre(movie_genre); // Send the genre to the server
-        if (movie_list.getMoviesCount() > 0) {
-            System.out.println(ANSI_GREEN + "Movies of " + ANSI_CYAN + movie_genre.getMessage() + ANSI_GREEN + " found!" + ANSI_RESET);
-            System.out.println(ANSI_GREEN + "Movies: " + ANSI_RESET + movie_list);
-        } else {
-            System.out.println(ANSI_RED + "Movies of " + ANSI_CYAN + movie_genre.getMessage() + ANSI_GREEN + " not found!" + ANSI_RESET);
-        }
+        showMoviesList(movie_genre, movie_list);
     } // End of listByGenre
 
     // START OF AUXILIARY METHODS:
@@ -331,6 +324,16 @@ public class Client {
     } // End of createMovie
 
     /*
+     @brief: This function asks the user to fill the movie title message and create a update movie object.
+     @param: MovieServiceGrpc.MovieServiceBlockingStub blockingStub
+     @return: Movie object
+     */
+    public static Movie getMovieObject(MovieServiceGrpc.MovieServiceBlockingStub blockingStub) {
+        Message message = userFillMessageObject(input_movie_title);
+        return blockingStub.getMovie(message);
+    } // End of userFillUpdateMovieObject
+
+    /*
      @brief: asks the user to fill the message field for a message object and returns it.
      @param: String user_input_message
      @return: Message object
@@ -343,6 +346,172 @@ public class Client {
                 .setMessage(message) // String
                 .build(); // Build the message protobuf object
     } // End of userFillMessageObject
+
+    /*
+        @brief: This function asks the user to fill the update movie object and returns it.
+        @param: Movie movie
+        @return: Movie object
+     */
+    public static Movie updateMovieObjectFields(Movie movie) {
+        // print the movie.id
+        System.out.println(ANSI_GREEN + "Movie ID: " + ANSI_RED + movie.getId() + ANSI_RESET);
+        System.out.println(ANSI_RED + "Empty String (\"\") means no change" + ANSI_RESET);
+        System.out.println(ANSI_RED + "Empty int (-1) means no change" + ANSI_RESET);
+        System.out.println(ANSI_RED + "Empty List ([]) means no change" + ANSI_RESET);
+        Scanner reader = new Scanner(System.in); // Reading from System.in
+//        System.out.println(ANSI_GREEN + "Type the new plot of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//        String plot = reader.nextLine(); // Read the user input
+//        if (plot.equals(""))
+//            plot = movie.getPlot();
+//        System.out.println(ANSI_GREEN + "Type the new genre of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//        String genre = reader.nextLine(); // Read the user input
+//        if (genre.equals(""))
+//            genre = movie.getGenre();
+//        System.out.println(ANSI_GREEN + "Type the new runtime of the movie: (int)" + ANSI_RESET);
+//        int runtime = reader.nextInt(); // Read the user input
+//        reader.nextLine();
+//        if (runtime == -1)
+//            runtime = movie.getRuntime();
+//        System.out.println(ANSI_GREEN + "Type the new number of casts in the movie: (int)" + ANSI_RESET);
+//        int cast_number = reader.nextInt(); // Read the user input
+//        reader.nextLine();
+//        // Create a list of casts
+//        List<String> cast = new ArrayList<String>(cast_number);
+//        if (cast_number == 0)
+//            cast = movie.getCastList();
+//        else {
+//            reader.nextLine();
+//            for (int i = 0; i < cast_number; i++) {
+//                System.out.println(ANSI_GREEN + "Type the new cast of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//                cast.add(reader.nextLine()); // Read the user input
+//            }
+//        }
+//        System.out.println(ANSI_GREEN + "Type the new num_mflix_comments of the movie: (int)" + ANSI_RESET);
+//        int num_mflix_comments = reader.nextInt(); // Read the user input
+//        reader.nextLine();
+//        if (num_mflix_comments == -1)
+//            num_mflix_comments = movie.getNumMflixComments();
+        System.out.println(ANSI_GREEN + "Type the new title of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+        String title = reader.nextLine(); // Read the user input
+        if (title.equals(""))
+            title = movie.getTitle();
+//        System.out.println(ANSI_GREEN + "Type the new fullplot of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//        String fullplot = reader.nextLine(); // Read the user input
+//        if (fullplot.equals(""))
+//            fullplot = movie.getFullplot();
+//        System.out.println(ANSI_GREEN + "Type the new number of countries of the movie: (int)" + ANSI_RESET);
+//        int countries_number = reader.nextInt(); // Read the user input
+//        reader.nextLine();
+//        List<String> countries = new ArrayList<String>(countries_number);
+//        if (countries_number == 0)
+//            countries = movie.getCountriesList();
+//        else {
+//            for (int i = 0; i < countries_number; i++) {
+//                System.out.println(ANSI_GREEN + "Type the new countries of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//                countries.add(reader.nextLine()); // Read the user input
+//            }
+//        }
+//        System.out.println(ANSI_GREEN + "Type the new released of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//        String released = reader.nextLine(); // Read the user input
+//        if (released.equals(""))
+//            released = movie.getReleased();
+//        System.out.println(ANSI_GREEN + "Type the new number of directors of the movie: (int)" + ANSI_RESET);
+//        int directors_number = reader.nextInt(); // Read the user input
+//        reader.nextLine();
+//        List<String> directors = new ArrayList<String>(directors_number);
+//        if (directors_number == 0)
+//            directors = movie.getDirectorsList();
+//        else {
+//            for (int i = 0; i < directors_number; i++) {
+//                System.out.println(ANSI_GREEN + "Type the new directors of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//                directors.add(reader.nextLine()); // Read the user input
+//            }
+//        }
+//        System.out.println(ANSI_GREEN + "Type the new rated of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//        String rated = reader.nextLine(); // Read the user input
+//        if (rated.equals(""))
+//            rated = movie.getRated();
+//        System.out.println(ANSI_GREEN + "Type the new last updated of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//        String lastupdated = reader.nextLine(); // Read the user input
+//        if (lastupdated.equals(""))
+//            lastupdated = movie.getLastupdated();
+//        System.out.println(ANSI_GREEN + "Type the new year of the movie: (int)" + ANSI_RESET);
+//        int year = reader.nextInt(); // Read the user input
+//        reader.nextLine();
+//        if (year == -1)
+//            year = movie.getYear();
+//        System.out.println(ANSI_GREEN + "Type the new type of the movie:" + ANSI_RED + " (String)" + ANSI_RESET);
+//        String type = reader.nextLine(); // Read the user input
+//        if (type.equals(""))
+//            type = movie.getType();
+
+//        String plot = movie.getPlot();
+//        String genre = movie.getGenre();
+//        int runtime = movie.getRuntime();
+//        List<String> cast = movie.getCastList();
+//        int num_mflix_comments = movie.getNumMflixComments();
+//        String fullplot = movie.getFullplot();
+//        List<String> countries = movie.getCountriesList();
+//        String released = movie.getReleased();
+//        List<String> directors = movie.getDirectorsList();
+//        String rated = movie.getRated();
+//        String lastupdated = movie.getLastupdated();
+//        int year = movie.getYear();
+//        String type = movie.getType();
+
+        String id = "id";
+        String plot = "plot";
+        String genre = "genre";
+        int runtime = 1;
+        List<String> cast = new ArrayList<>();
+        cast.add("actor1");
+        int num_mflix_comments = 1;
+//             String title = "title";
+        String fullplot = "fullplot";
+        List<String> countries = new ArrayList<>();
+        countries.add("country1");
+        String released = "released";
+        List<String> directors = new ArrayList<>();
+        directors.add("director1");
+        String rated = "rated";
+        String lastupdated = "lastupdated";
+        int year = 2023;
+        String type = "type";
+
+        // build the movie object
+        return Movie.newBuilder()
+                .setId(id) // String
+                .setPlot(plot) // String
+                .setGenre(genre) // String
+                .setRuntime(runtime) // int
+                .addAllCast(cast) // String
+                .setNumMflixComments(num_mflix_comments) // int
+                .setTitle(title) // String
+                .setFullplot(fullplot) // String
+                .addAllCountries(countries) // String
+                .setReleased(released) // String
+                .addAllDirectors(directors) // String
+                .setRated(rated) // String
+                .setLastupdated(lastupdated) // String
+                .setYear(year) // int
+                .setType(type) // String
+                .build(); // Build the movie protobuf object
+    }
+
+    /*
+     * @brief: This function shows the movies list
+     * @param: Message filter - The message object that contains the filter
+     * @param: MoviesList movie_list - The movies list
+     * @return: None
+     */
+    private static void showMoviesList(Message filter, MoviesList movie_list) {
+        if (movie_list.getMoviesCount() > 0) {
+            System.out.println(ANSI_GREEN + "Movies of " + ANSI_CYAN + filter.getMessage() + ANSI_GREEN + " found!" + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "Movies: " + ANSI_RESET + movie_list);
+        } else {
+            System.out.println(ANSI_RED + "Movies of " + ANSI_CYAN + filter.getMessage() + ANSI_GREEN + " not found!" + ANSI_RESET);
+        }
+    }
 
     /*
      @brief: This function takes a string and returns it with the first word in uppercase

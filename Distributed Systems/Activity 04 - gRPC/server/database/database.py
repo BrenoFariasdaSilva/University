@@ -64,9 +64,13 @@ class MongoDatabase:
 	# @param old_movie_object: The old movie object
 	# @param new_movie_object: The new movie object
 	# @return: The new movie object if the movie was updated, None if not
-	def updateMovie(self, old_movie_object, new_movie_object):
-		if (self.deleteMovie(old_movie_object["title"])):
-			return self.createMovie(new_movie_object)
+	def updateMovie(self, new_movie_object):
+		movie = json.loads(new_movie_object) # Convert the movie object to JSON
+		# delete the movie with the same id
+		if self.collection.delete_one({"id": movie["id"]}).acknowledged:
+			# Create the new movie
+			if self.collection.insert_one(movie).acknowledged:
+				return movie
 		return None
 
 	# @brief: This method deletes a movie in the database
