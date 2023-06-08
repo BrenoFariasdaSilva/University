@@ -62,18 +62,19 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @brief: This function gets a movie
 	# @param request: The message protocol buffer containing the movie title
 	# @param context: The context
-	# @return: The movie protocol buffer
+	# @return: The movie protocol buffer object
 	def GetMovie(self, request, context):
 		print(f"{backgroundColors.GREEN}Getting Movie: {backgroundColors.CYAN}{request.message}{Style.RESET_ALL}")
 		movie_document = self.database.getMovieByTitle(request.message) # Get the movie by title
+		print(f"{backgroundColors.GREEN}movie_document.: {backgroundColors.CYAN}{movie_document}{Style.RESET_ALL}")
+		movie_object = movies_pb2.Movie() # Create an empty movie object
 		if movie_document: # If the movie was found
 			print(f"{backgroundColors.GREEN}Movie {backgroundColors.CYAN}{movie_document['title']}{backgroundColors.GREEN} found{Style.RESET_ALL}")
+			movie_object = convert_document_to_protocol_buffer(movie_document) # Convert the movie document to a protocol buffer
 		else: # If the movie was not found
-			print(f"{backgroundColors.RED}Movie {backgroundColors.CYAN}{movie_document['title']}{backgroundColors.RED} not found{Style.RESET_ALL}")
+			print(f"{backgroundColors.RED}Movie {backgroundColors.CYAN}{request.message}{backgroundColors.RED} not found{Style.RESET_ALL}")
 		print()
-		movie_object = self.convert_document_to_protocol_buffer(movie_document) # Convert the movie document to a protocol buffer
-		print(f"{backgroundColors.GREEN}movie_object.plot: {backgroundColors.CYAN}{movie_object.plot}{Style.RESET_ALL}")
-		return movie_object
+		return movie_object # Return the movie object
 	
 	# @brief: This function updates a movie
 	# @param request: The movie protocol buffer as an object
@@ -108,30 +109,30 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 		print()
 		return movies_pb2.Message(message=status_message)
 
-	# @brief: This function converts the document to a protocol buffer
-	# @param document: The movie document
-	# @return: The movie protocol buffer
-	def convert_document_to_protocol_buffer(document):
-		movie = movies_pb2.Movie() # Create a movie object
-		movie.id = str(document["_id"]) # Set the id
-		movie.plot = document["plot"] if document["plot"] else EMPTY_STRING_FIELD # Set the plot
-		movie.genre = document["genre"] if document["genre"] else EMPTY_STRING_FIELD # Set the genre
-		movie.runtime = document["runtime"] if document["runtime"] else EMPTY_INT_FIELD # Set the runtime
-		if document["cast"]:
-			movie.cast.extend(document["cast"]) # Set the cast
-		movie.num_mflix_comments = document["numMflixComments"] if document["numMflixComments"] else EMPTY_INT_FIELD # Set the num_mflix_comments
-		movie.title = document["title"] if document["title"] else EMPTY_STRING_FIELD # Set the title
-		movie.fullplot = document["fullplot"] if document["fullplot"] else EMPTY_STRING_FIELD # Set the fullplot
-		if document["countries"]:
-			movie.countries.extend(document["countries"])
-		movie.released = document["released"] if document["released"] else EMPTY_STRING_FIELD # Set the released
-		if document["directors"]:
-			movie.directors.extend(document["directors"])
-		movie.rated = document["rated"] if document["rated"] else EMPTY_STRING_FIELD # Set the rated
-		movie.lastupdated = document["lastupdated"] if document["lastupdated"] else EMPTY_STRING_FIELD # Set the lastupdated
-		movie.year = document["year"] if document["year"] else EMPTY_INT_FIELD # Set the year
-		movie.type = document["type"] if document["type"] else EMPTY_STRING_FIELD # Set the type
-		return movie # Return the movie object
+# @brief: This function converts the document to a protocol buffer
+# @param document: The movie document
+# @return: The movie protocol buffer
+def convert_document_to_protocol_buffer(document):
+	movie = movies_pb2.Movie() # Create a movie object
+	movie.id = str(document["_id"]) # Set the id
+	movie.plot = document["plot"] if document["plot"] else EMPTY_STRING_FIELD # Set the plot
+	movie.genre = document["genre"] if document["genre"] else EMPTY_STRING_FIELD # Set the genre
+	movie.runtime = document["runtime"] if document["runtime"] else EMPTY_INT_FIELD # Set the runtime
+	if document["cast"]:
+		movie.cast.extend(document["cast"]) # Set the cast
+	movie.num_mflix_comments = document["numMflixComments"] if document["numMflixComments"] else EMPTY_INT_FIELD # Set the num_mflix_comments
+	movie.title = document["title"] if document["title"] else EMPTY_STRING_FIELD # Set the title
+	movie.fullplot = document["fullplot"] if document["fullplot"] else EMPTY_STRING_FIELD # Set the fullplot
+	if document["countries"]:
+		movie.countries.extend(document["countries"])
+	movie.released = document["released"] if document["released"] else EMPTY_STRING_FIELD # Set the released
+	if document["directors"]:
+		movie.directors.extend(document["directors"])
+	movie.rated = document["rated"] if document["rated"] else EMPTY_STRING_FIELD # Set the rated
+	movie.lastupdated = document["lastupdated"] if document["lastupdated"] else EMPTY_STRING_FIELD # Set the lastupdated
+	movie.year = document["year"] if document["year"] else EMPTY_INT_FIELD # Set the year
+	movie.type = document["type"] if document["type"] else EMPTY_STRING_FIELD # Set the type
+	return movie # Return the movie object
 
 # @brief: This is the main function of the server
 # @param: None

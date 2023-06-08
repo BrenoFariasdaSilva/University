@@ -105,7 +105,6 @@ public class Client {
         } else {
             System.out.println(ANSI_RED + "Movie " + ANSI_CYAN + movie.getTitle() + ANSI_GREEN + " not found!" + ANSI_RESET);
         }
-        System.out.println();
     } // End of getMovie
 
     /*
@@ -123,7 +122,6 @@ public class Client {
         } else {
             System.out.println(ANSI_RED + "Movie " + ANSI_CYAN + movie.getTitle() + ANSI_GREEN + " could not be updated!" + ANSI_RESET);
         }
-        System.out.println();
     } // End of updateMovie
 
     /*
@@ -140,7 +138,6 @@ public class Client {
         } else {
             System.out.println(ANSI_RED + "Movie " + ANSI_CYAN + movie_title.getMessage() + ANSI_GREEN + " could not be deleted!" + ANSI_RESET);
         }
-        System.out.println();
     } // End of deleteMovie
 
     /*
