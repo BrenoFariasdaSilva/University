@@ -21,6 +21,9 @@ class backgroundColors: # Colors for the terminal
 SERVERADDRESS = ["localhost", 7070] # The server's address. The first element is the IP address, the second is the port.
 MAX_WORKERS = 10 # The maximum number of workers
 
+# Database:
+ERASE_DATABASE = False # If the database should be erased at startup
+
 # Status messages:
 SUCCESS = "1" # The success response code
 FAILURE = "0" # The failure response code
@@ -39,6 +42,9 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @return: MongoDatabase connection object
 	def __init__(self):
 		self.database = MongoDatabase()
+		if ERASE_DATABASE: # If the database should be erased
+			self.database.eraseAllMovies() # Erase the database
+			print(f"{backgroundColors.RED}Erased the database{Style.RESET_ALL}")
 
 	# @brief: This function creates a movie
 	# @param request: The movie protocol buffer as an object
