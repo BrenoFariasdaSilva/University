@@ -108,6 +108,44 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 			print(f"{backgroundColors.RED}Movie {backgroundColors.CYAN}{request.message}{backgroundColors.RED} not found{Style.RESET_ALL}")
 		print()
 		return movies_pb2.Message(message=status_message)
+	
+	# @brief: This function gets all the movies of a specific actor
+	# @param request: The message protocol buffer containing the actor name
+	# @param context: The context
+	# @return: The movie list protocol buffer object
+	def ListMoviesByActor(self, request, context):
+		print(f"{backgroundColors.GREEN}Getting Movies By Actor: {backgroundColors.CYAN}{request.message}{Style.RESET_ALL}")
+		movie_documents = self.database.listByActor(request.message)
+		print(f"{backgroundColors.GREEN}movie_documents: {backgroundColors.CYAN}{movie_documents}{Style.RESET_ALL}")
+		movie_list = movies_pb2.MoviesList() # Create an empty movie list
+		if movie_documents: # If the movies were found
+			print(f"{backgroundColors.GREEN}Movies found{Style.RESET_ALL}")
+			for movie_document in movie_documents: # For each movie document
+				movie_object = convert_document_to_protocol_buffer(movie_document) # Convert the movie document to a protocol buffer
+				movie_list.movies.extend([movie_object]) # Add the movie to the movie list
+		else: # If the movies were not found
+			print(f"{backgroundColors.RED}Movies not found{Style.RESET_ALL}")
+		print()
+		return movie_list # Return the movie list
+	
+	# @brief: This function gets all the movies of a specific genre
+	# @param request: The message protocol buffer containing the genre
+	# @param context: The context
+	# @return: The movie list protocol buffer object
+	def ListMoviesByGenre(self, request, context):
+		print(f"{backgroundColors.GREEN}Getting Movies By Genre: {backgroundColors.CYAN}{request.message}{Style.RESET_ALL}")
+		movie_documents = self.database.listByGenre(request.message)
+		print(f"{backgroundColors.GREEN}movie_documents: {backgroundColors.CYAN}{movie_documents}{Style.RESET_ALL}")
+		movie_list = movies_pb2.MoviesList()
+		if movie_documents: # If the movies were found
+			print(f"{backgroundColors.GREEN}Movies found{Style.RESET_ALL}")
+			for movie_document in movie_documents: # For each movie document
+				movie_object = convert_document_to_protocol_buffer(movie_document) # Convert the movie document to a protocol buffer
+				movie_list.movies.extend([movie_object]) # Add the movie to the movie list
+		else: # If the movies were not found
+			print(f"{backgroundColors.RED}Movies not found{Style.RESET_ALL}")
+		print()
+		return movie_list # Return the movie list
 
 # @brief: This function converts the document to a protocol buffer
 # @param document: The movie document

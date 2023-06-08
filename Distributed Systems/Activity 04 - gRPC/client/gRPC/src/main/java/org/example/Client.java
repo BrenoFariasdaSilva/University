@@ -34,7 +34,7 @@ public class Client {
     public static final String EXIT = "EXIT";
     public static final String SUCCESS = "1";
     public static final String input_movie_title = "Type the title of the movie: (String)";
-    public static final String input_movie_actor = "Type the actor of the movie: (String)";
+    public static final String input_movie_actor = "Type the actor name of the movie: (String)";
     public static final String input_movie_genre = "Type the genre of the movie: (String)";
     public static ManagedChannel channel;
 
@@ -149,6 +149,8 @@ public class Client {
         System.out.println(ANSI_GREEN + "Listing movies by actor..." + ANSI_RESET);
         Message movie_actor = userFillMessageObject(input_movie_actor); // Create a message object and fill it with the user input
         MoviesList movie_list = blockingStub.listMoviesByActor(movie_actor); // Send the actor to the server
+        System.out.println(ANSI_GREEN + "Received the movie list from the server..." + ANSI_RESET);
+        System.out.println(ANSI_GREEN + "Movies: " + ANSI_RESET + movie_list);
         if (movie_list.getMoviesCount() > 0) {
             System.out.println(ANSI_GREEN + "Movies of " + ANSI_CYAN + movie_actor.getMessage() + ANSI_GREEN + " found!" + ANSI_RESET);
             System.out.println(ANSI_GREEN + "Movies: " + ANSI_RESET + movie_list);
