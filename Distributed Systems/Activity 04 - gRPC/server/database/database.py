@@ -13,8 +13,8 @@ class backgroundColors: # Colors for the terminal
 	FAIL = "\033[91m" # Red
 
 # Status messages:
-SUCCESS = 1 # Success
-FAILURE = 0 # Failure
+SUCCESS = "1" # Success
+FAILURE = "0" # Failure
 
 # @brief: This class is used to connect to the database, as well as all the CRUD related methods.
 class MongoDatabase:
