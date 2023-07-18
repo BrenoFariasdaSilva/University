@@ -1,18 +1,27 @@
 <div align="center">
   
-# [University Exercises.](https://github.com/BrenoFariasdaSilva/University) <img src="https://github.com/BrenoFariasdaSilva/University/blob/main/assets/BooksStack.svg"  width="3%" height="3%">
+# [University.](https://github.com/BrenoFariasdaSilva/University) <img src="https://github.com/BrenoFariasdaSilva/University/blob/main/assets/BooksStack.svg"  width="3%" height="3%">
 
 </div>
+
+<div align="center">
 
 <div align="center">
   
 ---
 
-![Build Status](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml/badge.svg)
-![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/University.svg)
+This repo is made with the objective of showing the content taught at a computer science university. \
+Here you can find basically all exercises I'm solving during my University journey. This repo will contain lots of folders inside of it, each of one related to one subject, so it won't be limited to one language, but any exercise related to my university course at UTFPR-CM (Universidade Tecnológica Federal do Paraná campus Campo Mourão). \
+You can use this repository as a way to measure your learning to ensure you know all the fundamentals taught in college.
   
 ---
 
+</div>
+
+
+![Build Status](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml/badge.svg)
+![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/University.svg)
+  
 </div>
 
 <div align="center">
@@ -26,12 +35,22 @@
 
 </div>
 
+## Table of Contents
+- [University. ](#university-)
+  - [Table of Contents](#table-of-contents)
+  - [Languages:](#languages)
+  - [Installation](#installation)
+  - [How to Run](#how-to-run)
+  - [Contributing](#contributing)
+  - [License](#license)
+
+
+
+
 ## Languages:
 <img src="https://github.com/devicons/devicon/blob/master/icons/c/c-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/cplusplus/cplusplus-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original.svg"  width="3%" height="3%">
 
-This repo is made with the objective of showing the content taught at a computer science university. \
-Here you can find basically all exercises I'm solving during my University journey. This repo will contain lots of folders inside of it, each of one related to one subject, so it won't be limited to one language, but any exercise related to my university course at UTFPR-CM (Universidade Tecnológica Federal do Paraná campus Campo Mourão). \
-You can use this repository as a way to measure your learning to ensure you know all the fundamentals taught in college.
+
 
 ## Installation
 
