@@ -32,7 +32,6 @@ You can use this repository as a way to measure your learning to ensure you know
 
 <div align="center">
 
-
 </div>
 
 ## Table of Contents
@@ -44,13 +43,27 @@ You can use this repository as a way to measure your learning to ensure you know
   - [Contributing](#contributing)
   - [License](#license)
 
-
-
-
 ## Languages:
-<img src="https://github.com/devicons/devicon/blob/master/icons/c/c-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/cplusplus/cplusplus-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original.svg"  width="3%" height="3%">
-
-
+<div>
+  <p align="center">
+    <a href="#"><img alt="c" height="36" width="64" src="https://img.shields.io/badge/c-%2300599C.svg?style=for-the-badge&logo=c&logoColor=white"></a>
+    &nbsp;
+    <a href="#"><img alt="c++" height="36" width="85" src="https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white"></a>
+    &nbsp;
+    <a href="#"><img alt="Elixir" height="36" width="90" src="https://img.shields.io/badge/elixir-%234B275F.svg?style=for-the-badge&logo=elixir&logoColor=white"></a>
+    &nbsp;
+    <a href="#"><img alt="java" height="36" width="100" src="https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white"></a>
+    &nbsp;
+    <a href="#"><img alt="javascript" height="36" width="150" src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"></a>
+    &nbsp;
+    <a href="#"><img alt="python" height="36" width="100" src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54"></a>
+    &nbsp;
+    <a href="#"><img alt="ruby" height="36" width="90" src="https://img.shields.io/badge/ruby-%23CC342D.svg?style=for-the-badge&logo=ruby&logoColor=white"></a>
+    &nbsp;
+    <a href="#"><img alt="typescript" height="36" width="140" src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white"></a>
+    &nbsp;
+  </p>
+</div>
 
 ## Installation
 
