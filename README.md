@@ -10,8 +10,8 @@
   
 ---
 
-This repo is made with the objective of showing the content taught at a computer science university. \
-Here you can find basically all exercises I'm solving during my University journey. This repo will contain lots of folders inside of it, each of one related to one subject, so it won't be limited to one language, but any exercise related to my university course at UTFPR-CM (Universidade Tecnológica Federal do Paraná campus Campo Mourão). \
+This repo is made with the objective of showing the content learned at my Computer Science university course. \
+Here you can find basically all exercises I'm solving during my University journey. This repo will contain lots of folders inside of it, each of one related to one subject, so it won't be limited to one language, but any exercise related to my university course at [UTFPR-CM](https://pt.wikipedia.org/wiki/Universidade_Tecnol%C3%B3gica_Federal_do_Paran%C3%A1). \
 You can use this repository as a way to measure your learning to ensure you know all the fundamentals taught in college.
   
 ---
