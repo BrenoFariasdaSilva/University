@@ -15,6 +15,17 @@
 
 </div>
 
+<div align="center">
+  
+![RepoBeats Statistics](https://repobeats.axiom.co/api/embed/d85626d04b05db948a28d708506a52a384fe0728.svg "Repobeats analytics image")
+
+</div>
+
+<div align="center">
+
+
+</div>
+
 ## Languages:
 <img src="https://github.com/devicons/devicon/blob/master/icons/c/c-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/cplusplus/cplusplus-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original.svg"  width="3%" height="3%"> <img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original.svg"  width="3%" height="3%">
 
