@@ -1,6 +1,6 @@
 <div align="center">
   
-# [University Exercises.](https://github.com/BrenoFariasdaSilva/University) 
+# [University Exercises.](https://github.com/BrenoFariasdaSilva/University) <img src="https://github.com/BrenoFariasdaSilva/University/blob/main/assets/BooksStack.svg"  width="3%" height="3%">
 
 </div>
 
