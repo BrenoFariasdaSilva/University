@@ -1,5 +1,10 @@
-# [University Exercises](https://github.com/BrenoFariasdaSilva/University) [![Build Status](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml/badge.svg)](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml)
+<div align="center">
+  
+# [University Exercises.](https://github.com/BrenoFariasdaSilva/University) 
 
+</div>
+(https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml)
+[![Build Status](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml/badge.svg)]
 [![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/University.svg)](https://wakatime.com/badge/github/BrenoFariasdaSilva/University)
 
 ## Languages:
