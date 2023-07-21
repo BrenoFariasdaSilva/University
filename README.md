@@ -19,6 +19,7 @@ You can use this repository as a way to measure your learning to ensure you know
 <div align="center">
 
 ![Build Status](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml/badge.svg)
+![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/BrenoFariasdaSilva/University)
 ![License](https://img.shields.io/github/license/BrenoFariasdaSilva/University)
 ![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/University.svg)
 
