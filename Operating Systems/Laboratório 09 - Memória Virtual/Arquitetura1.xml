@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE AmnesiaConfiguration SYSTEM "Configuration/amnesia.dtd">
+<?xml-stylesheet type="text/css" href="teste.css"?>
+<AmnesiaConfiguration>
+    <Processor>
+        <processorContains>0</processorContains>
+        <createTraceFile>0</createTraceFile>
+    </Processor>
+    <Trace>
+        <wordSize>4</wordSize>
+    </Trace>
+    <CPU>
+        <wordSize>4</wordSize>
+    </CPU>
+    <MainMemory>
+        <blockSize>1</blockSize>
+        <memorySize>16</memorySize>
+        <ciclesPerAccessRead>1</ciclesPerAccessRead>
+        <ciclesPerAccessWrite>2</ciclesPerAccessWrite>
+        <timeCicle>10</timeCicle>
+    </MainMemory>
+	<VirtualMemory>
+        <pageSize>4</pageSize>
+        <diskMemorySize>16</diskMemorySize>
+        <diskCiclesPerAccessRead>1</diskCiclesPerAccessRead>
+        <diskCiclesPerAccessWrite>2</diskCiclesPerAccessWrite>
+        <timeCicle>100</timeCicle>
+        
+        <!-- Configuracao da política FIFO, NRU, LRU -->
+        <pageTableReplacementAlgorithm>FIFO</pageTableReplacementAlgorithm>
+
+        <!-- Sem TLB -->
+        <TLBType>none</TLBType>
+<!-- Com TLB         
+		<TLBType>unified</TLBType>
+		<unifiedTLB>
+			<memorySize>2</memorySize>
+			<ciclesPerAccessRead>1</ciclesPerAccessRead>
+			<ciclesPerAccessWrite>2</ciclesPerAccessWrite>
+			<timeCicle>1</timeCicle>
+			<replacementAlgorithm>FIFO</replacementAlgorithm>
+		</unifiedTLB>
+-->
+	</VirtualMemory>
+</AmnesiaConfiguration>

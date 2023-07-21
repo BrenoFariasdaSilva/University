@@ -1,0 +1,1 @@
+Para a execução de cada programa (ex01 ou ex02 ou ex03) é necessario digitar no terminal "make ex0i" onde i = 1, 2, 3.
