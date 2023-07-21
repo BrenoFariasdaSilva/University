@@ -27,8 +27,8 @@ Comandos para execução:
       obs. O comando head -n <value> exibe as primeiras VALUE linhas do arquivo.
 
 Autores:
-   Felipe Archanjo da Cunha Mendes,    RA: 2252740
    Breno Farias da Silva,              RA: 2300516
+   Felipe Archanjo da Cunha Mendes,    RA: 2252740
    Pamella Lissa Sato Tamura,          RA: 2254107
 
 Data:
