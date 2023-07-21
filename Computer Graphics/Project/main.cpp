@@ -1,6 +1,6 @@
 // ############################## PROJETO ILHAS DE FERRO ##############################
-// # Autor 1: Felipe Archanjo da Cunha Mendes
-// # Autor 2: Breno Farias da Silva
+// # Autor 1: Breno Farias da Silva
+// # Autor 2: Felipe Archanjo da Cunha Mendes
 
 // ############################## TUTORIAL ##############################
 // # TECLA "e": Liga e desliga o navio

@@ -1,0 +1,19 @@
+IceRiver cubemap textures, thanks Emil Persson, aka Humus (http://www.humus.name), for Creative Commons license.
+bodyMetal.bmp, licensed.
+canLabel.bmp, thanks anonymous.
+canLabelSpecularMap.bmp, own modification from canLabel.bmp
+canTop.bmp, thanks www.acoustica.com.
+cray2.bmp, thanks NASA website www.nasa.gov.
+earth.bmp, thanks NASA/JPL-Caltech.
+grass.bmp, thanks www.amazingtextures.com.
+launch.bmp, thanks NASA website www.nasa.gov.
+nightsky.bmp, thanks anonymous.
+number1.bmp, licensed.
+propellerMetal.bmp, licensed.
+sky.bmp, thanks www.mega-tex.nl.
+specMapOn.bmp, own creation.
+specMapOff.bmp, own creation.
+star.bmp, licensed.
+sugary.bmp, licensed.
+trees.bmp, thanks anonymous.
+
