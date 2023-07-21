@@ -19,8 +19,9 @@ You can use this repository as a way to measure your learning to ensure you know
 <div align="center">
 
 ![Build Status](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml/badge.svg)
+![License](https://img.shields.io/github/license/BrenoFariasdaSilva/University)
 ![wakatime](https://wakatime.com/badge/github/BrenoFariasdaSilva/University.svg)
-  
+
 </div>
 
 <div align="center">
