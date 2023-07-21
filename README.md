@@ -1,6 +1,6 @@
 <div align="center">
   
-# [University.](https://github.com/BrenoFariasdaSilva/University) <img src="https://github.com/BrenoFariasdaSilva/University/blob/main/assets/BooksStack.svg"  width="3%" height="3%">
+# [University.](https://github.com/BrenoFariasdaSilva/University) <img src="https://github.com/BrenoFariasdaSilva/University/blob/main/.assets/BooksStack.svg"  width="3%" height="3%">
 
 </div>
 
