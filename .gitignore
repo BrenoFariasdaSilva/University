@@ -633,6 +633,11 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+# Distributed Systems
 */processed_tweets/*
 */processed_tweets
 processed_tweets
+
+# Artificial Intelligence
+**/data/digits/
+**/results/
