@@ -639,5 +639,6 @@ FodyWeavers.xsd
 processed_tweets
 
 # Artificial Intelligence
-**/data/digits/
+**/dataset/
+**/dataset/digits/
 **/results/

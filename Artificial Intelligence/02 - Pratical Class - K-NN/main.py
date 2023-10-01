@@ -12,8 +12,8 @@ data_set = data_sets[0]
 
 for data_set in data_sets:
 	# Load the data
-	tr = np.loadtxt(f"./data/{data_set}/train.txt");
-	ts = np.loadtxt(f"./data/{data_set}/test.txt");
+	tr = np.loadtxt(f"./dataset/{data_set}/train.txt");
+	ts = np.loadtxt(f"./dataset/{data_set}/test.txt");
 	y_test = ts[:,-1]
 	y_train = tr[:,-1]
 	X_train = tr[:, 1 : -1]
