@@ -1,6 +1,5 @@
 import os # Import the os module for navigating the file system
 import pandas as pd # Import the pandas module for data manipulation
-import random # Import the random module for generating random numbers
 from colorama import Style # For coloring the terminal
 from tqdm import tqdm # For Generating the Progress Bars
 
