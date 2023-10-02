@@ -210,8 +210,8 @@ def main():
 							# Process each image
 							process_each_image(image_path, x_grid, y_grid, output_file)
 
-			# Normalize the data stored in the csv
-			normalize_data(output_file_path)
+				# Normalize the data stored in the csv
+				normalize_data(output_file_path)
 			
 			# Update the progress bar			
 			progress_bar.update(1)
