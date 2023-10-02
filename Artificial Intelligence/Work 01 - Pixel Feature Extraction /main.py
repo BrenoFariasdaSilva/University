@@ -177,14 +177,14 @@ def normalize_data(output_file_path):
 # @param: None
 # @return: None
 def main():
-	print(f"{backgroundColors.CYAN}Welcome to the Pixel Feature Extractor{Style.RESET_ALL}")
-
-	# Verify if the output directory exists
-	verify_output_directory(OUTPUT_PATH)
+	print(f"{backgroundColors.GREEN}Welcome to the {backgroundColors.CYAN}Pixel Feature Extractor{Style.RESET_ALL}")
 
 	# Verify if the test and training dataset exists
 	if not verify_datasets():
 		return # Exit the program
+	
+	# Verify if the output directory exists
+	verify_output_directory(OUTPUT_PATH)
 
 	# Create a progress bar for the splits
 	with tqdm(total=len(SPLITS.items()), desc=f"{backgroundColors.GREEN}Splits{Style.RESET_ALL}") as progress_bar:
