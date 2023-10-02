@@ -1,3 +1,5 @@
+# @TODO: Normalizar a contagem de pixels usando o método min-max ou z-score.
+
 import os # Import the os module for navigating the file system
 from colorama import Style # For coloring the terminal
 from PIL import Image # Import the PIL module for image manipulation
