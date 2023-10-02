@@ -1,8 +1,8 @@
-# @TODO: Normalizar a contagem de pixels usando o método min-max ou z-score.
-
 import os # Import the os module for navigating the file system
+import pandas as pd # Import the pandas module for data manipulation
 from colorama import Style # For coloring the terminal
 from PIL import Image # Import the PIL module for image manipulation
+from sklearn.preprocessing import MinMaxScaler # Import the MinMaxScaler for normalizing the data
 from tqdm import tqdm # For Generating the Progress Bars
 
 # Macros:
@@ -158,6 +158,21 @@ def write_pixel_counters(output_file, image_path, pixels_counter, x_grid, y_grid
 	# Write the line values to the output file
 	output_file.write(line_values + "\n")
 
+# @brief: This function normalizes the data using Min-Max scaling
+# @param: output_file_path: The path for the output file
+# @return: None
+def normalize_data(output_file_path):
+	# Create a DataFrame from the data
+	normalized_data = pd.read_csv(output_file_path)
+	# Normalize the data using Min-Max scaling for columns after "Image Name"
+	scaler = MinMaxScaler()
+	# Normalize the data
+	normalized_data.iloc[:, 3:] = scaler.fit_transform(normalized_data.iloc[:, 3:])
+	# Create the normalized output file path
+	normalized_output_file_path = f"{output_file_path.split('.')[0]}-normalized{OUTPUT_FILE_FORMAT}"
+	# Save the normalized data to a CSV file
+	normalized_data.to_csv(normalized_output_file_path, index=False)
+
 # @brief: The main function
 # @param: None
 # @return: None
@@ -195,6 +210,9 @@ def main():
 							# Process each image
 							process_each_image(image_path, x_grid, y_grid, output_file)
 
+			# Normalize the data stored in the csv
+			normalize_data(output_file_path)
+			
 			# Update the progress bar			
 			progress_bar.update(1)
 
