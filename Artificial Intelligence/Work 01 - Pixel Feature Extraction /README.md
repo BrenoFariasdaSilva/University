@@ -27,7 +27,7 @@ TODO: Normalize the number of pixels by the total number of pixels in the image.
 		- [count\_pixels](#count_pixels)
 		- [write\_pixel\_counters](#write_pixel_counters)
 		- [normalize\_data](#normalize_data)
-		- [Why it is Necessary to Normalize the Data](#why-it-is-necessary-to-normalize-the-data)
+			- [Why it is Necessary to Normalize the Data](#why-it-is-necessary-to-normalize-the-data)
 	- [Contributing](#contributing)
 	- [License](#license)
 
@@ -136,17 +136,17 @@ The Pixel Feature Extractor performs the following steps:
 - **Output**: None
 - **Purpose**: Normalizes the data in the output CSV file using Min-Max scaling for columns after "Image Name."
 
-### Why it is Necessary to Normalize the Data
+	#### Why it is Necessary to Normalize the Data
 
-Normalization is essential for the following reasons:
+	Normalization is essential for the following reasons:
 
-1. **Consistent Scale**: Normalizing the data ensures that the pixel count values are on a consistent scale. This is crucial when working with machine learning algorithms that are sensitive to the magnitude of input features. Non-normalized data can lead to poor model performance due to the differences in the scale of the input features, for example, weights in kilograms and heights in centimeters. If you had the weight in grams in the same dataset, the model would be more likely to give more importance to the weight in grams than to the weight in kilogram, as the weight in grams has a higher value.
+	1. **Consistent Scale**: Normalizing the data ensures that the pixel count values are on a consistent scale. This is crucial when working with machine learning algorithms that are sensitive to the magnitude of input features. Non-normalized data can lead to poor model performance due to the differences in the scale of the input features, for example, weights in kilograms and heights in centimeters. If you had the weight in grams in the same dataset, the model would be more likely to give more importance to the weight in grams than to the weight in kilogram, as the weight in grams has a higher value.
 
-2. **Improved Model Performance**: Many machine learning models perform better when the input features are on a similar scale. Normalization helps prevent features with larger values from dominating the learning process and doing this in this step makes us save time in the model training process, as it won't be necessary to normalize the data before training the model.
+	2. **Improved Model Performance**: Many machine learning models perform better when the input features are on a similar scale. Normalization helps prevent features with larger values from dominating the learning process and doing this in this step makes us save time in the model training process, as it won't be necessary to normalize the data before training the model.
 
-3. **Comparability**: Normalized data allows for better comparability between different images and datasets. It ensures that pixel count values are comparable regardless of the image's size or complexity.
+	3. **Comparability**: Normalized data allows for better comparability between different images and datasets. It ensures that pixel count values are comparable regardless of the image's size or complexity.
 
-By normalizing the pixel count data, we make it more suitable for further analysis, feature extraction, or machine learning tasks, ultimately leading to more accurate and meaningful results.
+	By normalizing the pixel count data, we make it more suitable for further analysis, feature extraction, or machine learning tasks, ultimately leading to more accurate and meaningful results.
 
 ## Contributing
 Code improvement recommendations are very welcome, but keep in mind that many exercises will be very simple, with a lot of room for improvement, after all here is all the history of my learning progress.
