@@ -172,6 +172,8 @@ def normalize_data(output_file_path):
 	normalized_output_file_path = f"{output_file_path.split('-')[0]}-normalized-{output_file_path.split('-')[1]}"
 	# Save the normalized data to a CSV file
 	normalized_data.to_csv(normalized_output_file_path, index=False)
+	# Delete the unnormalized data
+	os.remove(output_file_path)
 
 # @brief: The main function
 # @param: None
