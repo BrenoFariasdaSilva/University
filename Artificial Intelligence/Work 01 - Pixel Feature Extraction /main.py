@@ -3,8 +3,6 @@ from colorama import Style # For coloring the terminal
 from PIL import Image # Import the PIL module for image manipulation
 from tqdm import tqdm # For Generating the Progress Bars
 
-import time
-
 # Macros:
 class backgroundColors: # Colors for the terminal
 	CYAN = "\033[96m" # Cyan
@@ -63,13 +61,13 @@ def create_output_file_header(x_split, y_split, output_file_path):
 	# Add columns for each grid cell
 	for i in range(x_split):
 		for j in range(y_split):
-			cell_label = f"{i+1}x{j+1}"  # Grid cell label
+			cell_label = f"{i+1}x{j+1}" # Grid cell label
 			header_string += f", {cell_label} Black, {cell_label} White"
 
 	# Write the header to the output CSV file
 	output_file.write(header_string + "\n")
 
-	return output_file  # Return the output file object
+	return output_file # Return the output file object
 
 # @brief: This function opens each image in the digit class and process each image
 # @param: image_path: The path for the image
@@ -158,7 +156,6 @@ def write_pixel_counters(output_file, image_path, pixels_counter, x_grid, y_grid
 	# Write the line values to the output file
 	output_file.write(line_values + "\n")
 
-
 # @brief: The main function
 # @param: None
 # @return: None
@@ -173,7 +170,7 @@ def main():
 		return # Exit the program
 
 	# Create a progress bar for the splits
-	with tqdm(total=len(SPLITS.items()), desc="Splits") as progress_bar:
+	with tqdm(total=len(SPLITS.items()), desc=f"{backgroundColors.GREEN}Splits{Style.RESET_ALL}") as progress_bar:
 		# Loop through the splits: 1x1, 2x2, 3x3, 5x5
 		for x_grid, y_grid in SPLITS.items():
 			# Loop through the datasets
