@@ -43,7 +43,6 @@ def main():
 		for image_path in os.listdir(digit_class_path):
 			# Get the path for the current image
 			image_path = os.path.join(digit_class_path, image_path)
-			print(f"{backgroundColors.GREEN}Image: {image_path}{Style.RESET_ALL}")
 
 			# Verify if the current file is a image
 			if not image_path.endswith(".bmp"):
@@ -53,8 +52,8 @@ def main():
 			image = Image.open(image_path)
 			# Load the image pixels
 			image_pixels = image.load()
-			# Get the image's height and width
-			image_width, image_height = image_pixels.size
+			# Get the image width and height
+			image_width, image_height = image.size
 
 			# For all of the splits: 1x1, 2x2, 3x3, 5x5, count the number of black and white pixels in each split
 			for x_split, y_split in SPLITS.items():
@@ -77,8 +76,6 @@ def main():
 								elif pixel_color == 255:
 									# Increment the number of white pixels in the split
 									split_pixels[x // x_split, y // y_split, 1] += 1
-
-				print(split_pixels)
 
 if __name__ == '__main__':
 	main()
