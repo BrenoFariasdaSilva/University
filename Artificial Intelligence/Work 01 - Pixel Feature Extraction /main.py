@@ -16,7 +16,6 @@ WHITE = 255
 
 # Constants:
 TRAINNING_DATASET_PATH = "dataset/digits/trainning"
-TEST_DATASET_PATH = "dataset/digits/test"
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
 
 # Define a main() 
@@ -26,11 +25,6 @@ def main():
 	# Verify if the trainning dataset exists
 	if not os.path.exists(TRAINNING_DATASET_PATH):
 		print(f"{backgroundColors.RED}The trainning dataset does not exist{Style.RESET_ALL}")
-		return
-	
-	# Verify if the test dataset exists
-	if not os.path.exists(TEST_DATASET_PATH):
-		print(f"{backgroundColors.RED}The test dataset does not exist{Style.RESET_ALL}")
 		return
 
 	# Verify if the output directory exists
