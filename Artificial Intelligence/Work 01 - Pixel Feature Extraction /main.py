@@ -169,7 +169,7 @@ def normalize_data(output_file_path):
 	# Normalize the data
 	normalized_data.iloc[:, 3:] = scaler.fit_transform(normalized_data.iloc[:, 3:])
 	# Create the normalized output file path
-	normalized_output_file_path = f"{output_file_path.split('.')[0]}-normalized{OUTPUT_FILE_FORMAT}"
+	normalized_output_file_path = f"{output_file_path.split('-')[0]}-normalized-{output_file_path.split('-')[1]}"
 	# Save the normalized data to a CSV file
 	normalized_data.to_csv(normalized_output_file_path, index=False)
 
