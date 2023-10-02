@@ -15,8 +15,7 @@ BLACK = 0 # Black Pixel Color
 WHITE = 255 # White Pixel Color
 
 # Constants:
-TRAINNING_DATASET_PATH = "dataset/digits/trainning" # The path for the trainning dataset
-TEST_DATASET_PATH = "dataset/digits/test" # The path for the test dataset
+DATASETS_PATH = {"test":"dataset/digits/test", "trainning":"dataset/digits/trainning"} # The path for the trainning dataset
 OUTPUT_PATH = "output" # The path for the output directory
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
 IMAGE_FILE_FORMAT = ".bmp" # The image file format
@@ -26,32 +25,27 @@ OUTPUT_FILE_FORMAT = ".csv" # The output file format
 def main():
 	print(f"{backgroundColors.CYAN}Welcome to the Pixel Feature Extractor{Style.RESET_ALL}")
 
-	# Verify if the trainning dataset exists
-	if not os.path.exists(TRAINNING_DATASET_PATH):
-		print(f"{backgroundColors.RED}The trainning dataset does not exist{Style.RESET_ALL}")
-		return # Exit the program
-	
-	# Verify if the test dataset exists
-	if not os.path.exists(TEST_DATASET_PATH):
-		print(f"{backgroundColors.RED}The test dataset does not exist{Style.RESET_ALL}")
-		return # Exit the program
-
 	# Verify if the output directory exists
 	if not os.path.exists(OUTPUT_PATH):
 		# Create the output directory
 		os.mkdir(OUTPUT_PATH)
 
-	# Create the output file csv header:
-	with open(os.path.join(OUTPUT_PATH, f"pixel_count{OUTPUT_FILE_FORMAT}"), "w") as output_file:
-		output_file.write("black,white\n")
+	# Verify if the test and trainning dataset exists
+	for dataset_name, dataset_path in DATASETS_PATH.items():
+		if not os.path.exists(dataset_path):
+			print(f"{backgroundColors.RED}The {dataset_path} does not exists{Style.RESET_ALL}")
+			return
+		else:
+			with open(os.path.join(OUTPUT_PATH, f"{dataset_name}_pixel_count{OUTPUT_FILE_FORMAT}"), "w") as output_file:
+				output_file.write("Split,Digit Class,Filename, Black Counter, White Counter\n")
 
 	pixels_counter = {} # A dictionary for storing the number of black and white pixels in each split
 
-	# Open each digit class directory in the trainning dataset
-	with tqdm(total=len(os.listdir(TRAINNING_DATASET_PATH)), desc=f"{backgroundColors.CYAN}Trainning Dataset{Style.RESET_ALL}") as pbar:
-		for digit_class in sorted(os.listdir(TRAINNING_DATASET_PATH)):
+	for dataset_name, dataset_path in DATASETS_PATH.items():
+		# Open each digit class directory in the trainning dataset
+		for digit_class in sorted(os.listdir(dataset_path)):
 			# Get the path for the current digit class
-			digit_class_path = os.path.join(TRAINNING_DATASET_PATH, digit_class)
+			digit_class_path = os.path.join(dataset_path, digit_class)
 			# Open each image in the digit class
 			for image_path in os.listdir(digit_class_path):
 				# Get the path for the current image
@@ -89,11 +83,11 @@ def main():
 										return
 					# Write the current pixel counter to the output file
 					with open(os.path.join(OUTPUT_PATH, f"{x_split}x{y_split}{OUTPUT_FILE_FORMAT}"), "a") as output_file:
-						# Write the number of black and white pixels in the current split
-						output_file.write(f"{pixels_counter[f'{x_split}x{y_split}'][f'{digit_class}'][f'black']},{pixels_counter[f'{x_split}x{y_split}'][f'{digit_class}'][f'white']}\n")
-							
-			# Update the progress bar
-			pbar.update(1)
+						# Write the number of black and white pixels in the current split: split, digit class, filename, black counter, white counter
+						output_file.write(f"{x_split}x{y_split},{digit_class},{image_path.split('/')[-1]},{pixels_counter[f'{x_split}x{y_split}'][f'{digit_class}'][f'black']},{pixels_counter[f'{x_split}x{y_split}'][f'{digit_class}'][f'white']}\n")
+
+					# Reset the pixel counter dictionary
+					pixels_counter = {}
 
 if __name__ == '__main__':
 	main()
