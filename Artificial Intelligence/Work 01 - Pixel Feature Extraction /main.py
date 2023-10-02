@@ -62,32 +62,35 @@ def main():
 				# Get the image width and height
 				image_width, image_height = image.size
 
-				# For all of the splits: 1x1, 2x2, 3x3, 5x5, count the number of black and white pixels in each split
-				for x_split, y_split in SPLITS.items():
-					# For each split in the image
-					for x_split_iterator in range(0, x_split):
-						for y_split_iterator in range(0, y_split):
-							for i in range(0, image_width // x_split):
-								for j in range(0, image_height // y_split):
-									# Get the pixel color
-									pixel_color = image_pixels[i + (x_split_iterator * (image_width // x_split)), j + (y_split_iterator * (image_height // y_split))]
-									
-									if pixel_color == BLACK: # Verify if the pixel is black
-										# Increment the number of black pixels
-										pixels_counter[f"{x_split}x{y_split}"][f"{digit_class}"][f"black"] += 1
-									elif pixel_color == WHITE: # Verify if the pixel is white
-										# Increment the number of white pixels
-										pixels_counter[f"{x_split}x{y_split}"][f"{digit_class}"][f"white"] += 1
-									else: # The pixel color is not black or white
-										print(f"{backgroundColors.RED}The pixel color is not black or white{Style.RESET_ALL}")
-										return
-					# Write the current pixel counter to the output file
-					with open(os.path.join(OUTPUT_PATH, f"{x_split}x{y_split}{OUTPUT_FILE_FORMAT}"), "a") as output_file:
-						# Write the number of black and white pixels in the current split: split, digit class, filename, black counter, white counter
-						output_file.write(f"{x_split}x{y_split},{digit_class},{image_path.split('/')[-1]},{pixels_counter[f'{x_split}x{y_split}'][f'{digit_class}'][f'black']},{pixels_counter[f'{x_split}x{y_split}'][f'{digit_class}'][f'white']}\n")
+				# Loop through image pixels and update the counters
+				for x_grid, y_grid in SPLITS.items():
+					pixels_counter[f"{x_grid}x{y_grid}"] = {}  # Initialize the pixel counter dictionary for this split
+					for digit_class in range(10):  # Assuming you have 10 digit classes
+						pixels_counter[f"{x_grid}x{y_grid}"][f"{digit_class}"] = {"black": 0, "white": 0}
+					
+					for x_split_iterator in range(0, x_grid):  # Iterate over the number of splits in the x axis
+						for y_split_iterator in range(0, y_grid):  # Iterate over the number of splits in the y axis
+								for i in range(0, image_width // x_grid):  # Iterate over the number of pixels in the x axis
+									for j in range(0, image_height // y_grid):  # Iterate over the number of pixels in the y axis
+										# Get the pixel color
+										pixel_color = image_pixels[i + (x_split_iterator * (image_width // x_grid)), j + (y_split_iterator * (image_height // y_grid))]
+										
+										if pixel_color == BLACK:  # Verify if the pixel is black
+												# Increment the number of black pixels
+												pixels_counter[f"{x_grid}x{y_grid}"][f"{digit_class}"]["black"] += 1
+										elif pixel_color == WHITE:  # Verify if the pixel is white
+												# Increment the number of white pixels
+												pixels_counter[f"{x_grid}x{y_grid}"][f"{digit_class}"]["white"] += 1
+										else:  # The pixel color is not black or white
+												print(f"{backgroundColors.RED}The pixel color is not black or white{Style.RESET_ALL}")
 
-					# Reset the pixel counter dictionary
-					pixels_counter = {}
+				# Write the current pixel counters to the output file
+				for x_grid, y_grid in SPLITS.items():
+					with open(os.path.join(OUTPUT_PATH, f"{dataset_name}_pixel_count{OUTPUT_FILE_FORMAT}"), "a") as output_file:
+						for digit_class in range(10):  # Assuming you have 10 digit classes
+								output_file.write(f"{x_grid}x{y_grid},{digit_class},{image_path.split('/')[-1]},"
+														f"{pixels_counter[f'{x_grid}x{y_grid}'][f'{digit_class}']['black']},"
+														f"{pixels_counter[f'{x_grid}x{y_grid}'][f'{digit_class}']['white']}\n")
 
 if __name__ == '__main__':
 	main()
