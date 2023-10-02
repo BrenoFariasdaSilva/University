@@ -16,7 +16,7 @@ WHITE = 255 # White Pixel Color
 
 # Constants:
 DATASETS_PATH = {"test":"dataset/digits/test", "trainning":"dataset/digits/trainning"} # The path for the trainning dataset
-OUTPUT_PATH = "output" # The path for the output directory
+OUTPUT_PATH = "pixels_count" # The path for the output directory
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
 IMAGE_FILE_FORMAT = ".bmp" # The image file format
 OUTPUT_FILE_FORMAT = ".csv" # The output file format
