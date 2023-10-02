@@ -13,8 +13,11 @@ class backgroundColors: # Colors for the terminal
 
 # Constants:
 DATASETS_PATH = {"test":"dataset/digits/test", "training":"dataset/digits/training"} # The path for the training dataset
+OUTPUT_DIRECTORY = "output" # The path for the output file
+TRAINING_DATASET_SIZE = [0.25, 0.5, 1] # The size of the training dataset
+NEIGHBOURS_VALUES = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19] # The K values for the KNN algorithm
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
-IMAGE_FILE_FORMAT = ".bmp" # The image file format
+DATASET_FILES_FORMAT = ".csv" # The dataset files format
 OUTPUT_FILE_FORMAT = ".csv" # The output file format
 
 # @brief: This function verifies if the test and training dataset exists
@@ -27,6 +30,13 @@ def verify_datasets():
 			return False # If the dataset does not exists
 	return True # If all of the datasets exists
 
+# @brief: This function verifies if the output directory exists, if not, it creates the output directory
+# @param: output_path: The path for the output directory
+# @return: None
+def verify_output_directory(output_path):
+	if not os.path.exists(output_path): # If the output directory does not exists
+		os.mkdir(output_path) # Create the output directory
+
 # @brief: This is the main function
 # @param: None
 # @return: None
@@ -35,6 +45,10 @@ def main():
 	if not verify_datasets():
 		return # If the datasets does not exists, exit the program
 	
+	# Verify if the output directory exists, if not, it creates the output directory
+	verify_output_directory(OUTPUT_DIRECTORY)
+	
+
 # @brief: The entry point of the program
 # @param: None
 # @return: None
