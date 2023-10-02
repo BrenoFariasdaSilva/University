@@ -15,7 +15,7 @@ BLACK = 0 # Black Pixel Color
 WHITE = 255 # White Pixel Color
 
 # Constants:
-DATASETS_PATH = {"test":"dataset/digits/test", "trainning":"dataset/digits/trainning"} # The path for the trainning dataset
+DATASETS_PATH = {"test":"dataset/digits/test", "training":"dataset/digits/training"} # The path for the training dataset
 OUTPUT_PATH = "pixels_count" # The path for the output directory
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
 IMAGE_FILE_FORMAT = ".bmp" # The image file format
@@ -33,7 +33,7 @@ def verify_output_directory(output_path):
 		if not os.path.exists(os.path.join(output_path, f"{dataset_name}")): # If the output directory for the current dataset does not exists
 			os.mkdir(os.path.join(output_path, f"{dataset_name}")) # Create the output directory for the current dataset
 
-# @brief: This function verifies if the test and trainning dataset exists
+# @brief: This function verifies if the test and training dataset exists
 # @param: None
 # @return: True if the dataset exists, False otherwise
 def verify_datasets():
@@ -165,7 +165,7 @@ def main():
 	# Verify if the output directory exists
 	verify_output_directory(OUTPUT_PATH)
 
-	# Verify if the test and trainning dataset exists
+	# Verify if the test and training dataset exists
 	if not verify_datasets():
 		return # Exit the program
 
