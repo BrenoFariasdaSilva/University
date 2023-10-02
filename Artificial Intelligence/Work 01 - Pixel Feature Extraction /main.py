@@ -162,7 +162,7 @@ def write_pixel_counters(output_file, image_path, pixels_counter, x_grid, y_grid
 # @param: output_file_path: The path for the output file
 # @return: None
 def normalize_data(output_file_path):
-	# Create a DataFrame from the data
+	# Read the data from the CSV file
 	normalized_data = pd.read_csv(output_file_path)
 	# Normalize the data using Min-Max scaling for columns after "Image Name"
 	scaler = MinMaxScaler()
