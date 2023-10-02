@@ -11,12 +11,15 @@ class backgroundColors: # Colors for the terminal
 	RED = "\033[91m" # Red
 
 # Colors:
-BLACK = 0
-WHITE = 255
+BLACK = 0 # Black Pixel Color 
+WHITE = 255 # White Pixel Color
 
 # Constants:
-TRAINNING_DATASET_PATH = "dataset/digits/trainning"
+TRAINNING_DATASET_PATH = "dataset/digits/trainning" # The path for the trainning dataset
+OUTPUT_PATH = "output" # The path for the output directory
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
+IMAGE_FILE_FORMAT = ".bmp" # The image file format
+OUTPUT_FILE_FORMAT = ".csv" # The output file format
 
 # Define a main() 
 def main():
@@ -25,12 +28,12 @@ def main():
 	# Verify if the trainning dataset exists
 	if not os.path.exists(TRAINNING_DATASET_PATH):
 		print(f"{backgroundColors.RED}The trainning dataset does not exist{Style.RESET_ALL}")
-		return
+		return # Exit the program
 
 	# Verify if the output directory exists
-	if not os.path.exists("output"):
+	if not os.path.exists(OUTPUT_PATH):
 		# Create the output directory
-		os.mkdir("output")
+		os.mkdir(OUTPUT_PATH)
 
 	pixels_counter = {} # A dictionary for storing the number of black and white pixels in each split
 
@@ -45,7 +48,7 @@ def main():
 				image_path = os.path.join(digit_class_path, image_path)
 
 				# Verify if the current file is a bmp image
-				if not image_path.endswith(".bmp"):
+				if not image_path.endswith(IMAGE_FILE_FORMAT):
 					continue
 
 				# Open the image
