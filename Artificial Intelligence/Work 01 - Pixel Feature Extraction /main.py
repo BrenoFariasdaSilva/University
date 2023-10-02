@@ -16,6 +16,7 @@ WHITE = 255 # White Pixel Color
 
 # Constants:
 TRAINNING_DATASET_PATH = "dataset/digits/trainning" # The path for the trainning dataset
+TEST_DATASET_PATH = "dataset/digits/test" # The path for the test dataset
 OUTPUT_PATH = "output" # The path for the output directory
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
 IMAGE_FILE_FORMAT = ".bmp" # The image file format
@@ -29,19 +30,28 @@ def main():
 	if not os.path.exists(TRAINNING_DATASET_PATH):
 		print(f"{backgroundColors.RED}The trainning dataset does not exist{Style.RESET_ALL}")
 		return # Exit the program
+	
+	# Verify if the test dataset exists
+	if not os.path.exists(TEST_DATASET_PATH):
+		print(f"{backgroundColors.RED}The test dataset does not exist{Style.RESET_ALL}")
+		return # Exit the program
 
 	# Verify if the output directory exists
 	if not os.path.exists(OUTPUT_PATH):
 		# Create the output directory
 		os.mkdir(OUTPUT_PATH)
 
+	# Create the output file csv header:
+	with open(os.path.join(OUTPUT_PATH, f"pixel_count{OUTPUT_FILE_FORMAT}"), "w") as output_file:
+		output_file.write("black,white\n")
+
 	pixels_counter = {} # A dictionary for storing the number of black and white pixels in each split
 
 	# Open each digit class directory in the trainning dataset
 	with tqdm(total=len(os.listdir(TRAINNING_DATASET_PATH)), desc=f"{backgroundColors.CYAN}Trainning Dataset{Style.RESET_ALL}") as pbar:
-		for digit_classes in sorted(os.listdir(TRAINNING_DATASET_PATH)):
+		for digit_class in sorted(os.listdir(TRAINNING_DATASET_PATH)):
 			# Get the path for the current digit class
-			digit_class_path = os.path.join(TRAINNING_DATASET_PATH, digit_classes)
+			digit_class_path = os.path.join(TRAINNING_DATASET_PATH, digit_class)
 			# Open each image in the digit class
 			for image_path in os.listdir(digit_class_path):
 				# Get the path for the current image
@@ -49,7 +59,7 @@ def main():
 
 				# Verify if the current file is a bmp image
 				if not image_path.endswith(IMAGE_FILE_FORMAT):
-					continue
+					continue # Skip the current file
 
 				# Open the image
 				image = Image.open(image_path)
@@ -61,24 +71,27 @@ def main():
 				# For all of the splits: 1x1, 2x2, 3x3, 5x5, count the number of black and white pixels in each split
 				for x_split, y_split in SPLITS.items():
 					# For each split in the image
-					for x in range(0, image_width, x_split):
-						for y in range(0, image_height, y_split):
-							# Count the number of black and white pixels in the split
-							for x_offset in range(x_split):
-								for y_offset in range(y_split):
+					for x_split_iterator in range(0, x_split):
+						for y_split_iterator in range(0, y_split):
+							for i in range(0, image_width // x_split):
+								for j in range(0, image_height // y_split):
 									# Get the pixel color
-									pixel_color = image_pixels[x + x_offset, y + y_offset]
-									# Verify if the pixel color is black
-									if pixel_color == BLACK:
+									pixel_color = image_pixels[i + (x_split_iterator * (image_width // x_split)), j + (y_split_iterator * (image_height // y_split))]
+									
+									if pixel_color == BLACK: # Verify if the pixel is black
 										# Increment the number of black pixels
-										pixels_counter[(x_split, y_split, x, y, "black")] = pixels_counter.get((x_split, y_split, x, y, "black"), 0) + 1
-									# Verify if the pixel color is white
-									elif pixel_color == WHITE:
+										pixels_counter[f"{x_split}x{y_split}"][f"{digit_class}"][f"black"] += 1
+									elif pixel_color == WHITE: # Verify if the pixel is white
 										# Increment the number of white pixels
-										pixels_counter[(x_split, y_split, x, y, "white")] = pixels_counter.get((x_split, y_split, x, y, "white"), 0) + 1
-									else:
-										# Raise an exception
-										raise Exception(f"The pixel color {pixel_color} is not supported")
+										pixels_counter[f"{x_split}x{y_split}"][f"{digit_class}"][f"white"] += 1
+									else: # The pixel color is not black or white
+										print(f"{backgroundColors.RED}The pixel color is not black or white{Style.RESET_ALL}")
+										return
+					# Write the current pixel counter to the output file
+					with open(os.path.join(OUTPUT_PATH, f"{x_split}x{y_split}{OUTPUT_FILE_FORMAT}"), "a") as output_file:
+						# Write the number of black and white pixels in the current split
+						output_file.write(f"{pixels_counter[f'{x_split}x{y_split}'][f'{digit_class}'][f'black']},{pixels_counter[f'{x_split}x{y_split}'][f'{digit_class}'][f'white']}\n")
+							
 			# Update the progress bar
 			pbar.update(1)
 
