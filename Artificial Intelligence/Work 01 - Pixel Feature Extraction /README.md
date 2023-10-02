@@ -27,7 +27,6 @@ TODO: Normalize the number of pixels by the total number of pixels in the image.
 		- [count\_pixels](#count_pixels)
 		- [write\_pixel\_counters](#write_pixel_counters)
 		- [normalize\_data](#normalize_data)
-			- [Why it is Necessary to Normalize the Data](#why-it-is-necessary-to-normalize-the-data)
 	- [Contributing](#contributing)
 	- [License](#license)
 
@@ -42,7 +41,7 @@ This code requires the following packages:
 You can install the required packages using pip:
 
 ```bash
-pip install colorama Pillow tqdm
+pip3 install colorama pandas Pillow scikit-learn tqdm
 # or
 make dependencies
 ```

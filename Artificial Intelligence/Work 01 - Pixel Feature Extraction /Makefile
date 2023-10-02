@@ -2,4 +2,4 @@ all:
 	clear; python3 ./main.py
 
 depencencies:
-	pip3 install colorama Pillow tqdm
+	pip3 install colorama pandas Pillow scikit-learn tqdm
