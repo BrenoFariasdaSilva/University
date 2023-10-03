@@ -58,7 +58,7 @@ def initialize_results():
 
 # @brief: This function process the datasets
 # @param: results: The results dictionary
-# @return: None
+# @return: results: The results dictionary
 def process_datasets(results):
 	# Create the progress bar
 	with tqdm(total=len(NEIGHBOURS_VALUES) * len(SPLITS) * len(TRAINING_DATASET_SIZE), desc="Processing Datasets") as progress_bar:
@@ -66,10 +66,15 @@ def process_datasets(results):
 			for x_split, y_split in SPLITS.items(): # Loop through the splits: 1x1, 2x2, 3x3 and 5x5.
 				for training_dataset_size in TRAINING_DATASET_SIZE: # Loop through the training dataset sizes
 					training_dataset, test_dataset = read_datasets(x_split, y_split, training_dataset_size) # Read the datasets
+
+					# Create a new dictionary for the current neighbours value, split and training dataset size that will save the correct predictions, total predictions and accuracy
+					results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size] = {"Correct Predictions":0, "Total Predictions":0, "Accuracy":0.00}
 					results = process_test_dataset(training_dataset, test_dataset, neighbours_value, x_split, y_split, training_dataset_size, results) # Process each test dataset row
 
 					# Update the progress bar
 					progress_bar.update(1)
+
+	return results # Return the results dictionary
 
 # @brief: This function reads the datasets
 # @param: x_split: The x split for the feature extractor
@@ -104,6 +109,8 @@ def read_datasets(x_split, y_split, training_dataset_size):
 # @return: results: The results dictionary
 def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_split, y_split, training_dataset_size, results):
 	distances = {} # The euclidean distances dictionary
+	# Create a dictionary for the current neighbours value, split and training dataset size that will save the correct predictions, total predictions and accuracy
+	
 	# For every line in the test dataset
 	with tqdm(total=len(test_dataset)*len(training_dataset), desc=f"GRID: {x_split}x{y_split}, Training Dataset Size: {training_dataset_size}, K: {neighbours_value}") as progress_bar:
 		for index, test_dataset_row in test_dataset.iterrows():
@@ -148,6 +155,33 @@ def validate_results(results, neighbours_value, x_split, y_split, training_datas
 	# Calculate the accuracy
 	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] / results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"]
 
+# @brief: This function loops through the results dictionary and call the write_results_to_csv function
+# @param: results: The results dictionary
+# @return: None
+def write_results(results):
+	for neighbours_value in NEIGHBOURS_VALUES: # Loop through the neighbours values: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19
+		for x_split, y_split in SPLITS.items(): # Loop through the splits: 1x1, 2x2, 3x3 and 5x5.
+			for training_dataset_size in TRAINING_DATASET_SIZE: # Loop through the training dataset sizes
+				write_results_to_csv(results, neighbours_value, x_split, y_split, training_dataset_size) # Write the results to a csv file
+
+# @brief: This function writes the results to a csv file
+# @param: results: The results dictionary
+# @param: neighbours_value: The K value for the KNN algorithm
+# @param: x_split: The x split for the feature extractor
+# @param: y_split: The y split for the feature extractor
+# @param: training_dataset_size: The size of the training dataset
+# @return: None
+def write_results_to_csv(results, neighbours_value, x_split, y_split, training_dataset_size):
+	# The path for the output file
+	output_file_path = f"{OUTPUT_DIRECTORY}/{x_split}x{y_split}-{training_dataset_size}-{neighbours_value}{OUTPUT_FILE_FORMAT}"
+	# Create the output file
+	output_file = open(output_file_path, "w")
+	# Write the results to the output file
+	output_file.write(f"Correct Predictions,Total Predictions,Accuracy\n")
+	output_file.write(f"{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Correct Predictions']},{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Total Predictions']},{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Accuracy']}\n")
+	# Close the output file
+	output_file.close()
+
 # @brief: This is the main function
 # @param: None
 # @return: None
@@ -162,7 +196,10 @@ def main():
 	results = initialize_results() # Initialize the results dictionary
 
 	# Process the datasets
-	process_datasets(results)
+	results = process_datasets(results)
+
+	# Write the results to a csv file
+	write_results(results)
 
 # @brief: The entry point of the program
 # @param: None
