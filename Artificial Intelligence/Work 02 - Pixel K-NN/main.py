@@ -52,6 +52,20 @@ def initialize_results():
 				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = 0.00 # Initialize the accuracy to 0
 	return results # Return the results dictionary
 
+# @brief: This function process the datasets
+# @param: results: The results dictionary
+# @return: None
+def process_datasets(results):
+	# Create the progress bar
+	with tqdm(total=len(NEIGHBOURS_VALUES)*len(SPLITS)*len(TRAINING_DATASET_SIZE)) as progress_bar:
+		for neighbours_value in NEIGHBOURS_VALUES: # Loop through the neighbours values: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19
+			for x_split, y_split in SPLITS.items(): # Loop through the splits: 1x1, 2x2, 3x3 and 5x5.
+				for training_dataset_size in TRAINING_DATASET_SIZE: # Loop through the training dataset sizes
+					read_datasets(neighbours_value, x_split, y_split, training_dataset_size, results) # Read the datasets
+
+		# Update the progress bar
+		progress_bar.update(1)
+
 # @brief: This function reads the datasets
 # @param: neighbours_value: The K value for the KNN algorithm
 # @param: x_split: The x split for the feature extractor
@@ -114,16 +128,9 @@ def main():
 	verify_output_directory(OUTPUT_DIRECTORY)
 
 	results = initialize_results() # Initialize the results dictionary
-	
-	with tqdm(total=len(NEIGHBOURS_VALUES)*len(SPLITS)*len(TRAINING_DATASET_SIZE)) as progress_bar: # Create the progress bar
-		for neighbours_value in NEIGHBOURS_VALUES: # Loop through the neighbours values: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19
-			for x_split, y_split in SPLITS.items(): # Loop through the splits: 1x1, 2x2, 3x3 and 5x5.
-				for training_dataset_size in TRAINING_DATASET_SIZE: # Loop through the training dataset sizes
-					# Open and read the dataset files
-					read_datasets(neighbours_value, x_split, y_split, training_dataset_size, results)	
 
-			# Update the progress bar
-			progress_bar.update(1)
+	# Process the datasets
+	process_datasets(results)
 
 # @brief: The entry point of the program
 # @param: None
