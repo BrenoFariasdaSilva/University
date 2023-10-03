@@ -61,15 +61,15 @@ def initialize_results():
 # @return: None
 def process_datasets(results):
 	# Create the progress bar
-	with tqdm(total=len(NEIGHBOURS_VALUES)*len(SPLITS)*len(TRAINING_DATASET_SIZE)) as progress_bar:
+	with tqdm(total=len(NEIGHBOURS_VALUES) * len(SPLITS) * len(TRAINING_DATASET_SIZE), desc="Processing Datasets") as progress_bar:
 		for neighbours_value in NEIGHBOURS_VALUES: # Loop through the neighbours values: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19
 			for x_split, y_split in SPLITS.items(): # Loop through the splits: 1x1, 2x2, 3x3 and 5x5.
 				for training_dataset_size in TRAINING_DATASET_SIZE: # Loop through the training dataset sizes
 					training_dataset, test_dataset = read_datasets(x_split, y_split, training_dataset_size) # Read the datasets
 					results = process_test_dataset(training_dataset, test_dataset, neighbours_value, x_split, y_split, training_dataset_size, results) # Process each test dataset row
 
-		# Update the progress bar
-		progress_bar.update(1)
+					# Update the progress bar
+					progress_bar.update(1)
 
 # @brief: This function reads the datasets
 # @param: x_split: The x split for the feature extractor
@@ -105,22 +105,26 @@ def read_datasets(x_split, y_split, training_dataset_size):
 def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_split, y_split, training_dataset_size, results):
 	distances = {} # The euclidean distances dictionary
 	# For every line in the test dataset
-	for index, test_dataset_row in test_dataset.iterrows():
-		for index, training_dataset_row in training_dataset.iterrows():
-			euclidean_distance = 0 # The euclidean distances
-			# Calculate the euclidean distance between the test dataset row and the training dataset
-			for i in range(3, len(test_dataset_row)):
-				euclidean_distance += (test_dataset_row.values[i] - training_dataset_row.values[i])**2
-			distances[f"{training_dataset_row}->{test_dataset_row}"] = euclidean_distance # Add the euclidean distance to the distances dictionary
-			# Sort the distances dictionary
-			distances = dict(sorted(distances.items(), key=lambda item: item[1]))
-			# Get the K nearest neighbours
-			nearest_neighbours = list(distances.keys())[:neighbours_value]
-			# Get the most frequent label from the K nearest neighbours list
-			most_frequent_label = max(set(nearest_neighbours), key = nearest_neighbours.count)
-			
-			# Validate the results
-			validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_frequent_label)
+	with tqdm(total=len(test_dataset)*len(training_dataset), desc=f"GRID: {x_split}x{y_split}, Training Dataset Size: {training_dataset_size}, K: {neighbours_value}") as progress_bar:
+		for index, test_dataset_row in test_dataset.iterrows():
+			for index, training_dataset_row in training_dataset.iterrows():
+				euclidean_distance = 0 # The euclidean distances
+				# Calculate the euclidean distance between the test dataset row and the training dataset
+				for i in range(3, len(test_dataset_row)):
+					euclidean_distance += (test_dataset_row.values[i] - training_dataset_row.values[i])**2
+				distances[f"{euclidean_distance}"] = training_dataset_row[1] # Add the the digit class for the current euclidean distance
+				# Sort the distances dictionary by its keys
+				distances = dict(sorted(distances.items()))
+				# Get the K nearest neighbours
+				nearest_neighbours = list(distances.values())[:neighbours_value]
+				# Get the most frequent values in the nearest neighbours
+				most_frequent_label = max(set(nearest_neighbours), key = nearest_neighbours.count)
+				
+				# Validate the results
+				validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_frequent_label)
+
+				# Update the progress bar
+				progress_bar.update(1)
 			
 	# Return the results dictionary
 	return results
@@ -136,7 +140,7 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 # @return: results: The results dictionary
 def validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_frequent_label):
 	# Verify if the most frequent label is equal to the actual label (Digit Class) column
-	if most_frequent_label == test_dataset_row["Digit Class"]:
+	if most_frequent_label == test_dataset_row[1]:
 		# Add 1 to the correct predictions column
 		results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] += 1
 	# Add 1 to the total predictions column
