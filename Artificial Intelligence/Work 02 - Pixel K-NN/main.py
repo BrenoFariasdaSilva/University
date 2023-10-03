@@ -54,12 +54,35 @@ def main():
 				training_file_path = f"{DATASETS_PATH['training']}/{x_split}x{y_split}-normalized-pixel_count{DATASET_FILES_FORMAT}"
 				# Load the training dataset
 				training_dataset = pd.read_csv(training_file_path)
+				# Pick a random sample from the training dataset
+				training_dataset = training_dataset.sample(frac=training_dataset_size)
 
 				# The path for the test dataset file
 				test_file_path = f"{DATASETS_PATH['test']}/{x_split}x{y_split}-normalized-pixel_count{DATASET_FILES_FORMAT}"
-
 				# Load the test dataset
 				test_dataset = pd.read_csv(test_file_path)
+
+				# For every line in the test dataset
+				for index, test_dataset_row in tqdm(test_dataset.iterrows(), desc=f"KNN: {neighbours_value} - {x_split}x{y_split} - {training_dataset_size}"):
+					# Calculate the euclidean distance between the test dataset row and the training dataset
+					euclidean_distances = ((training_dataset.iloc[:, 2:] - test_dataset_row[2:]) ** 2).sum(axis=1) ** 0.5
+					# Create a new column with the euclidean distances
+					training_dataset["euclidean_distance"] = euclidean_distances
+					# Sort the training dataset by the euclidean distance
+					training_dataset = training_dataset.sort_values(by=["euclidean_distance"])
+					# Get the first K rows from the training dataset
+					k_nearest_neighbours = training_dataset.head(neighbours_value)
+					# Get the most frequent label from the K nearest neighbours
+					most_frequent_label = k_nearest_neighbours["Digit Class"].mode()[0]
+					# Add the most frequent label to the test dataset
+					test_dataset.loc[index, "KNN"] = most_frequent_label
+					# Verify if the most frequent label is equal to the actual label (Digit Class) column
+					if most_frequent_label == test_dataset_row["Digit Class"]:
+						# Add 1 to the correct predictions column
+						test_dataset.loc[index, "Correct Predictions"] = 1
+					else:
+						# Add 0 to the correct predictions column
+						test_dataset.loc[index, "Correct Predictions"] = 0
 
 # @brief: The entry point of the program
 # @param: None
