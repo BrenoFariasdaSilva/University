@@ -1,3 +1,7 @@
+# @TODO: FIX -> Eucledian distance is not working properly.
+# @TODO: FEAT -> Write the results to a csv file.
+# @TODO: FEAT -> Cross Validation.
+
 import os # Import the os module for navigating the file system
 import pandas as pd # Import the pandas module for data manipulation
 from colorama import Style # For coloring the terminal
