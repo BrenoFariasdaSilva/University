@@ -3,6 +3,8 @@ import pandas as pd # Import the pandas module for data manipulation
 from colorama import Style # For coloring the terminal
 from tqdm import tqdm # For Generating the Progress Bars
 
+import time
+
 # Macros:
 class backgroundColors: # Colors for the terminal
 	CYAN = "\033[96m" # Cyan
@@ -82,6 +84,8 @@ def main():
 
 				# For every line in the test dataset
 				for index, test_dataset_row in tqdm(test_dataset.iterrows(), desc=f"{backgroundColors.CYAN}KNN: K={neighbours_value}, GRID={x_split}x{y_split} and Training Size={training_dataset_size}{Style.RESET_ALL}"):
+					print(f"{backgroundColors.YELLOW}training_dataset: {training_dataset.shape}{Style.RESET_ALL}")
+					time.sleep(5)
 					# Calculate the euclidean distance between the test dataset row and the training dataset
 					euclidean_distances = ((training_dataset.iloc[:, 2:] - test_dataset_row[2:]) ** 2).sum(axis=1) ** 0.5
 					# Create a new column with the euclidean distances
