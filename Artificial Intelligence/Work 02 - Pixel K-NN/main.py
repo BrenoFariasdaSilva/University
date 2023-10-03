@@ -84,29 +84,33 @@ def main():
 
 				# For every line in the test dataset
 				for index, test_dataset_row in tqdm(test_dataset.iterrows(), desc=f"{backgroundColors.CYAN}KNN: K={neighbours_value}, GRID={x_split}x{y_split} and Training Size={training_dataset_size}{Style.RESET_ALL}"):
-					print(f"{backgroundColors.YELLOW}training_dataset: {training_dataset.shape}{Style.RESET_ALL}")
-					time.sleep(5)
-					# Calculate the euclidean distance between the test dataset row and the training dataset
-					euclidean_distances = ((training_dataset.iloc[:, 2:] - test_dataset_row[2:]) ** 2).sum(axis=1) ** 0.5
-					# Create a new column with the euclidean distances
-					training_dataset["euclidean_distance"] = euclidean_distances
-					# Sort the training dataset by the euclidean distance
-					training_dataset = training_dataset.sort_values(by=["euclidean_distance"])
-					# Get the first K rows from the training dataset
-					k_nearest_neighbours = training_dataset.head(neighbours_value)
-					# Get the most frequent label from the K nearest neighbours
-					most_frequent_label = k_nearest_neighbours["Digit Class"].mode()[0]
-					# Add the most frequent label to the test dataset
-					test_dataset.loc[index, "KNN"] = most_frequent_label
-					# Verify if the most frequent label is equal to the actual label (Digit Class) column
-					if most_frequent_label == test_dataset_row["Digit Class"]:
-						# Add 1 to the correct predictions column
-						results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] += 1
-					else:
-						# Add 0 to the correct predictions column
-						results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] += 0
-					# Add 1 to the total predictions column
-					results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"] += 1
+					for index, training_dataset_row in training_dataset.iterrows():
+						euclidean_distances = [] # The euclidean distances
+						# Calculate the euclidean distance between the test dataset row and the training dataset
+						for i in range(len(test_dataset_row.values)):
+							print(f"{backgroundColors.YELLOW}test_dataset_row.values: {test_dataset_row.values[i]}{Style.RESET_ALL}")
+							print(f"{backgroundColors.YELLOW}training_dataset_row.values: {training_dataset_row.values[i]}{Style.RESET_ALL}")
+							time.sleep(1)
+							eucledian_distance = ((float(test_dataset_row.values[i]) - float(training_dataset_row.values[i])) ** 2) ** 0.5
+						# Create a new column with the euclidean distances
+						training_dataset["euclidean_distance"] = euclidean_distances
+						# Sort the training dataset by the euclidean distance
+						training_dataset = training_dataset.sort_values(by=["euclidean_distance"])
+						# Get the first K rows from the training dataset
+						k_nearest_neighbours = training_dataset.head(neighbours_value)
+						# Get the most frequent label from the K nearest neighbours
+						most_frequent_label = k_nearest_neighbours["Digit Class"].mode()[0]
+						# Add the most frequent label to the test dataset
+						test_dataset.loc[index, "KNN"] = most_frequent_label
+						# Verify if the most frequent label is equal to the actual label (Digit Class) column
+						if most_frequent_label == test_dataset_row["Digit Class"]:
+							# Add 1 to the correct predictions column
+							results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] += 1
+						else:
+							# Add 0 to the correct predictions column
+							results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] += 0
+						# Add 1 to the total predictions column
+						results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"] += 1
 
 # @brief: The entry point of the program
 # @param: None
