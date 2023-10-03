@@ -97,10 +97,12 @@ def main():
 					# Verify if the most frequent label is equal to the actual label (Digit Class) column
 					if most_frequent_label == test_dataset_row["Digit Class"]:
 						# Add 1 to the correct predictions column
-						test_dataset.loc[index, "Correct Predictions"] = 1
+						results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] += 1
 					else:
 						# Add 0 to the correct predictions column
-						test_dataset.loc[index, "Correct Predictions"] = 0
+						results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] += 0
+					# Add 1 to the total predictions column
+					results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"] += 1
 
 # @brief: The entry point of the program
 # @param: None
