@@ -99,27 +99,22 @@ def read_datasets(x_split, y_split, training_dataset_size):
 # @param: results: The results dictionary
 # @return: results: The results dictionary
 def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_split, y_split, training_dataset_size, results):
+	distances = {} # The euclidean distances dictionary
 	# For every line in the test dataset
 	for index, test_dataset_row in test_dataset.iterrows():
 		for index, training_dataset_row in training_dataset.iterrows():
-			euclidean_distances = [] # The euclidean distances
+			euclidean_distance = 0 # The euclidean distances
 			# Calculate the euclidean distance between the test dataset row and the training dataset
 			for i in range(3, len(test_dataset_row)):
-				print(f"{backgroundColors.YELLOW}test_dataset_row.values: {test_dataset_row.values[i]}{Style.RESET_ALL}")
-				print(f"{backgroundColors.YELLOW}training_dataset_row.values: {training_dataset_row.values[i]}{Style.RESET_ALL}")
-				print(f"{backgroundColors.YELLOW}euclidean_distances: {euclidean_distances}{Style.RESET_ALL}")
-				euclidean_distances.append((test_dataset_row.values[i] - training_dataset_row.values[i])**2)
-			# Create a new column with the euclidean distances
-			training_dataset["euclidean_distance"] = euclidean_distances
-			# Sort the training dataset by the euclidean distance
-			training_dataset = training_dataset.sort_values(by=["euclidean_distance"])
-			# Get the first K rows from the training dataset
-			k_nearest_neighbours = training_dataset.head(neighbours_value)
-			# Get the most frequent label from the K nearest neighbours
-			most_frequent_label = k_nearest_neighbours["Digit Class"].mode()[0]
-			# Add the most frequent label to the test dataset
-			test_dataset.loc[index, "KNN"] = most_frequent_label
-
+				euclidean_distance += (test_dataset_row.values[i] - training_dataset_row.values[i])**2
+			distances[f"{training_dataset_row}->{test_dataset_row}"] = euclidean_distance # Add the euclidean distance to the distances dictionary
+			# Sort the distances dictionary
+			distances = dict(sorted(distances.items(), key=lambda item: item[1]))
+			# Get the K nearest neighbours
+			nearest_neighbours = list(distances.keys())[:neighbours_value]
+			# Get the most frequent label from the K nearest neighbours list
+			most_frequent_label = max(set(nearest_neighbours), key = nearest_neighbours.count)
+			
 			# Validate the results
 			validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_frequent_label)
 			
