@@ -119,19 +119,31 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 			most_frequent_label = k_nearest_neighbours["Digit Class"].mode()[0]
 			# Add the most frequent label to the test dataset
 			test_dataset.loc[index, "KNN"] = most_frequent_label
-			# Verify if the most frequent label is equal to the actual label (Digit Class) column
-			if most_frequent_label == test_dataset_row["Digit Class"]:
-				# Add 1 to the correct predictions column
-				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] += 1
-			else:
-				# Add 0 to the correct predictions column
-				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] += 0
-			# Add 1 to the total predictions column
-			results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"] += 1
-			# Calculate the accuracy
-			results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] / results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"]
+
+			# Validate the results
+			validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_frequent_label)
+			
 	# Return the results dictionary
 	return results
+
+# @brief: This function validates the results
+# @param: results: The results dictionary
+# @param: neighbours_value: The K value for the KNN algorithm
+# @param: x_split: The x split for the feature extractor
+# @param: y_split: The y split for the feature extractor
+# @param: training_dataset_size: The size of the training dataset
+# @param: test_dataset_row: The current test dataset row
+# @param: most_frequent_label: The most frequent label from the K nearest neighbours
+# @return: results: The results dictionary
+def validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_frequent_label):
+	# Verify if the most frequent label is equal to the actual label (Digit Class) column
+	if most_frequent_label == test_dataset_row["Digit Class"]:
+		# Add 1 to the correct predictions column
+		results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] += 1
+	# Add 1 to the total predictions column
+	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"] += 1
+	# Calculate the accuracy
+	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] / results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"]
 
 # @brief: This is the main function
 # @param: None
