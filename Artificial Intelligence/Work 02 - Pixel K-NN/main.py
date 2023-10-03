@@ -36,6 +36,22 @@ def verify_output_directory(output_path):
 	if not os.path.exists(output_path): # If the output directory does not exists
 		os.mkdir(output_path) # Create the output directory
 
+# @brief: This function initialize the results dictionary
+# @param: none
+# @return: results: The results dictionary
+def initialize_results():
+	results = {} # The results dictionary
+	for neighbours_value in NEIGHBOURS_VALUES: # Loop through the neighbours values: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19
+		results[neighbours_value] = {} # Create a new dictionary for the current neighbours value
+		for x_split, y_split in SPLITS.items(): # Loop through the splits: 1x1, 2x2, 3x3 and 5x5.
+			results[neighbours_value][f"{x_split}x{y_split}"] = {} # Create a new dictionary for the current split
+			for training_dataset_size in TRAINING_DATASET_SIZE: # Loop through the training dataset sizes
+				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size] = {} # Create a new dictionary for the current training dataset size
+				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] = 0 # Initialize the correct predictions to 0
+				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"] = 0 # Initialize the total predictions to 0
+				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = 0.00 # Initialize the accuracy to 0
+	return results # Return the results dictionary
+
 # @brief: This is the main function
 # @param: None
 # @return: None
@@ -46,6 +62,8 @@ def main():
 	
 	# Verify if the output directory exists, if not, it creates the output directory
 	verify_output_directory(OUTPUT_DIRECTORY)
+
+	results = initialize_results() # Initialize the results dictionary
 	
 	for neighbours_value in NEIGHBOURS_VALUES: # Loop through the neighbours values: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19
 		for x_split, y_split in SPLITS.items(): # Loop through the splits: 1x1, 2x2, 3x3 and 5x5.
