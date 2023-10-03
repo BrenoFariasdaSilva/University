@@ -52,7 +52,7 @@ In order to run the script, you must have a training dataset and a test dataset 
 ```bash
 make
 # or
-clear; python3 main.py
+clear; time python3 main.py
 ```
 
 ## Configuration
