@@ -81,7 +81,7 @@ def main():
 				test_dataset = pd.read_csv(test_file_path)
 
 				# For every line in the test dataset
-				for index, test_dataset_row in tqdm(test_dataset.iterrows(), desc=f"KNN: {neighbours_value} - {x_split}x{y_split} - {training_dataset_size}"):
+				for index, test_dataset_row in tqdm(test_dataset.iterrows(), desc=f"{backgroundColors.CYAN}KNN: K={neighbours_value}, GRID={x_split}x{y_split} and Training Size={training_dataset_size}{Style.RESET_ALL}"):
 					# Calculate the euclidean distance between the test dataset row and the training dataset
 					euclidean_distances = ((training_dataset.iloc[:, 2:] - test_dataset_row[2:]) ** 2).sum(axis=1) ** 0.5
 					# Create a new column with the euclidean distances
