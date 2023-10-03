@@ -89,7 +89,7 @@ def read_datasets(x_split, y_split, training_dataset_size):
 	# Return the training and test datasets
 	return training_dataset, test_dataset
 
-# @brief: This function process each test dataset row
+# @brief: This function process each test dataset row, calculating the euclidean distance between the test dataset row and the training dataset
 # @param: training_dataset: The training dataset
 # @param: test_dataset: The test dataset
 # @param: neighbours_value: The K value for the KNN algorithm
