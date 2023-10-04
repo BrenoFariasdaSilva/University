@@ -165,17 +165,17 @@ def write_pixel_counters(output_file, image_path, pixels_counter, x_grid, y_grid
 # @return: None
 def normalize_data(output_file_path):
 	# Read the data from the CSV file
-	normalized_data = pd.read_csv(output_file_path)
-	# Normalize the data using Min-Max scaling for columns after "Image Name"
-	scaler = MinMaxScaler()
-	# Normalize the data
-	normalized_data.iloc[:, 3:] = scaler.fit_transform(normalized_data.iloc[:, 3:])
-	# Create the normalized output file path
-	normalized_output_file_path = f"{output_file_path.split('-')[0]}-normalized-{output_file_path.split('-')[1]}"
-	# Save the normalized data to a CSV file
-	normalized_data.to_csv(normalized_output_file_path, index=False)
-	# Delete the unnormalized data
-	os.remove(output_file_path)
+	normalized_data = pd.read_csv(output_file_path, encoding='utf-8'
+	# # Normalize the data using Min-Max scaling for columns after "Image Name"
+	# scaler = MinMaxScaler()
+	# # Normalize the data
+	# normalized_data.iloc[:, 3:] = scaler.fit_transform(normalized_data.iloc[:, 3:])
+	# # Create the normalized output file path
+	# normalized_output_file_path = f"{output_file_path.split('-')[0]}-normalized-{output_file_path.split('-')[1]}"
+	# # Save the normalized data to a CSV file
+	# normalized_data.to_csv(normalized_output_file_path, index=False)
+	# # Delete the unnormalized data
+	# os.remove(output_file_path)
 
 # @brief: The main function
 # @param: None
