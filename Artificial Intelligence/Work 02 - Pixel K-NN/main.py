@@ -112,7 +112,7 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 	# Create a dictionary for the current neighbours value, split and training dataset size that will save the correct predictions, total predictions and accuracy
 	
 	# For every line in the test dataset
-	with tqdm(total=len(test_dataset)*len(training_dataset), desc=f"GRID: {x_split}x{y_split}, Training Dataset Size: {training_dataset_size}, K: {neighbours_value}") as progress_bar:
+	with tqdm(total=len(test_dataset), desc=f"GRID: {x_split}x{y_split}, Training Dataset Size: {training_dataset_size}, K: {neighbours_value}") as progress_bar:
 		for index, test_dataset_row in test_dataset.iterrows():
 			for index, training_dataset_row in training_dataset.iterrows():
 				euclidean_distance = 0 # The euclidean distances
@@ -120,18 +120,19 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 				for i in range(3, len(test_dataset_row)):
 					euclidean_distance += (test_dataset_row.values[i] - training_dataset_row.values[i])**2
 				distances[f"{euclidean_distance}"] = training_dataset_row[1] # Add the the digit class for the current euclidean distance
-				# Sort the distances dictionary by its keys
-				distances = dict(sorted(distances.items()))
-				# Get the K nearest neighbours
-				nearest_neighbours = list(distances.values())[:neighbours_value]
-				# Get the most frequent values in the nearest neighbours
-				most_frequent_label = max(set(nearest_neighbours), key = nearest_neighbours.count)
-				
-				# Validate the results
-				validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_frequent_label)
 
-				# Update the progress bar
-				progress_bar.update(1)
+			# Sort the distances dictionary by its keys
+			distances = dict(sorted(distances.items()))
+			# Get the K nearest neighbours
+			nearest_neighbours = list(distances.values())[:neighbours_value]
+			# Get the most frequent values in the nearest neighbours
+			most_frequent_label = max(set(nearest_neighbours), key = nearest_neighbours.count)
+			
+			# Validate the results
+			validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_frequent_label)
+
+			# Update the progress bar
+			progress_bar.update(1)
 			
 	# Return the results dictionary
 	return results
