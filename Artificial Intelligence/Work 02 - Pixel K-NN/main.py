@@ -1,5 +1,4 @@
 # @TODO: FEAT -> Cross Validation.
-# @TODO: REFACTOR -> Adding descriptions to the progress bars.
 
 import os # Import the os module for navigating the file system
 import pandas as pd # Import the pandas module for data manipulation
@@ -60,7 +59,7 @@ def initialize_results():
 # @return: results: The results dictionary
 def process_datasets(results):
 	# Create the progress bar
-	with tqdm(total=len(NEIGHBOURS_VALUES) * len(SPLITS) * len(TRAINING_DATASET_SIZE), desc="Processing Datasets") as progress_bar:
+	with tqdm(total=len(NEIGHBOURS_VALUES) * len(SPLITS) * len(TRAINING_DATASET_SIZE), desc=f"{backgroundColors.GREEN}Processing Datasets{Style.RESET_ALL}") as progress_bar:
 		for neighbours_value in NEIGHBOURS_VALUES: # Loop through the neighbours values: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19
 			for x_split, y_split in SPLITS.items(): # Loop through the splits: 1x1, 2x2, 3x3 and 5x5.
 				for training_dataset_size in TRAINING_DATASET_SIZE: # Loop through the training dataset sizes
@@ -111,7 +110,7 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 	# Create a dictionary for the current neighbours value, split and training dataset size that will save the correct predictions, total predictions and accuracy
 	
 	# For every line in the test dataset
-	with tqdm(total=len(test_dataset), desc=f"GRID: {x_split}x{y_split}, Training Dataset Size: {training_dataset_size}, K: {neighbours_value}") as progress_bar:
+	with tqdm(total=len(test_dataset), desc=f"{backgroundColors.GREEN}GRID: {backgroundColors.CYAN}{x_split}x{y_split}{backgroundColors.GREEN}, Training Dataset Size: {backgroundColors.CYAN}{training_dataset_size}{backgroundColors.GREEN}, K: {backgroundColors.CYAN}{neighbours_value}{Style.RESET_ALL}") as progress_bar:
 		for index, test_dataset_row in test_dataset.iterrows():
 			for index, training_dataset_row in training_dataset.iterrows():
 				euclidean_distance = 0 # The euclidean distances
