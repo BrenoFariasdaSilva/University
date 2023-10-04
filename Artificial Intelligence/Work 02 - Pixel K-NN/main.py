@@ -1,12 +1,10 @@
 # @TODO: FEAT -> Cross Validation.
 
 import os # Import the os module for navigating the file system
+import math # Import the math module for the square root function
 import pandas as pd # Import the pandas module for data manipulation
 from colorama import Style # For coloring the terminal
 from tqdm import tqdm # For Generating the Progress Bars
-
-import math
-import time
 
 # Macros:
 class backgroundColors: # Colors for the terminal
@@ -18,9 +16,9 @@ class backgroundColors: # Colors for the terminal
 # Constants:
 DATASETS_PATH = {"test":"dataset/digits/test", "training":"dataset/digits/training"} # The path for the training dataset
 OUTPUT_DIRECTORY = "output" # The path for the output file
-TRAINING_DATASET_SIZE = [0.25, 0.5, 1] # The size of the training dataset
-NEIGHBOURS_VALUES = [19] # The K values for the KNN algorithm
-SPLITS = {5:5} # The splits for the feature extractor
+TRAINING_DATASET_SIZE = [0.25, 0.5, 1] # The training dataset sizes
+NEIGHBOURS_VALUES = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19] # The K values for the KNN algorithm
+SPLITS = {"1":1, "2":2, "3":3, "5":5} # The x and y splits for the feature extractor
 DATASET_FILES_FORMAT = ".csv" # The dataset files format
 OUTPUT_FILE_FORMAT = ".csv" # The output file format
 
@@ -54,7 +52,7 @@ def initialize_results():
 				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size] = {} # Create a new dictionary for the current training dataset size
 				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] = 0 # Initialize the correct predictions to 0
 				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"] = 0 # Initialize the total predictions to 0
-				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = 0.00 # Initialize the accuracy to 0
+				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = 0
 	return results # Return the results dictionary
 
 # @brief: This function process the datasets
@@ -115,13 +113,14 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 	with tqdm(total=len(test_dataset), desc=f"{backgroundColors.GREEN}GRID: {backgroundColors.CYAN}{x_split}x{y_split}{backgroundColors.GREEN}, Training Dataset Size: {backgroundColors.CYAN}{training_dataset_size}{backgroundColors.GREEN}, K: {backgroundColors.CYAN}{neighbours_value}{Style.RESET_ALL}") as progress_bar:
 		for index, test_dataset_row in test_dataset.iterrows():
 			for index, training_dataset_row in training_dataset.iterrows():
-				euclidean_distance = 0 # The euclidean distances
+				squared_difference = 0 # The euclidean distances
 				# Loop through the columns that contains the pixel count (Starts after the "Image Name" column).
 				for i in range(3, len(test_dataset_row)):
-					euclidean_distance += (test_dataset_row.values[i] - training_dataset_row.values[i])**2
+					# euclidean_distance is the square root of the sum of the squared differences between the two vectors
+					squared_difference = (test_dataset_row[i] - training_dataset_row[i]) ** 2
 				
 				# Add the value from the "Digit Class" column to the distances dictionary
-				distances[f"{euclidean_distance}"] = training_dataset_row[1]
+				distances[f"{math.sqrt(squared_difference)}"] = training_dataset_row[1]
 
 			# Sort the distances dictionary by its keys
 			sorted_distances = dict(sorted(distances.items()))
@@ -135,6 +134,9 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 
 			# Update the progress bar
 			progress_bar.update(1)
+
+	# Calculate the accuracy
+	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] / results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"]
 			
 	# Return the results dictionary
 	return results
