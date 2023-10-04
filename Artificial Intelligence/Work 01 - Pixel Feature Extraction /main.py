@@ -156,7 +156,7 @@ def write_pixel_counters(output_file, image_path, pixels_counter, x_grid, y_grid
 			line_values += f", {pixels_counter[grid_key]['black']}, {pixels_counter[grid_key]['white']}"
 
 	# Write the line values to the output file
-	output_file.write(line_values + "\n")
+	output_file.write(f"{line_values}\n")
 
 # @brief: This function normalizes the data using Min-Max scaling
 # @param: output_file_path: The path for the output file
@@ -211,6 +211,8 @@ def main():
 						if image_path.endswith(IMAGE_FILE_FORMAT):
 							# Process each image
 							process_each_image(image_path, x_grid, y_grid, output_file)
+						else:
+							print(f"{backgroundColors.RED}The current file is not a bmp image{Style.RESET_ALL}")
 
 				# Normalize the data stored in the csv
 				normalize_data(output_file_path)

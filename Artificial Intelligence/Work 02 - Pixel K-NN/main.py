@@ -5,6 +5,9 @@ import pandas as pd # Import the pandas module for data manipulation
 from colorama import Style # For coloring the terminal
 from tqdm import tqdm # For Generating the Progress Bars
 
+import math
+import time
+
 # Macros:
 class backgroundColors: # Colors for the terminal
 	CYAN = "\033[96m" # Cyan
@@ -16,8 +19,8 @@ class backgroundColors: # Colors for the terminal
 DATASETS_PATH = {"test":"dataset/digits/test", "training":"dataset/digits/training"} # The path for the training dataset
 OUTPUT_DIRECTORY = "output" # The path for the output file
 TRAINING_DATASET_SIZE = [0.25, 0.5, 1] # The size of the training dataset
-NEIGHBOURS_VALUES = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19] # The K values for the KNN algorithm
-SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
+NEIGHBOURS_VALUES = [19] # The K values for the KNN algorithm
+SPLITS = {5:5} # The splits for the feature extractor
 DATASET_FILES_FORMAT = ".csv" # The dataset files format
 OUTPUT_FILE_FORMAT = ".csv" # The output file format
 
@@ -66,7 +69,6 @@ def process_datasets(results):
 					training_dataset, test_dataset = read_datasets(x_split, y_split, training_dataset_size) # Read the datasets
 
 					# Create a new dictionary for the current neighbours value, split and training dataset size that will save the correct predictions, total predictions and accuracy
-					results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size] = {"Correct Predictions":0, "Total Predictions":0, "Accuracy":0.00}
 					results = process_test_dataset(training_dataset, test_dataset, neighbours_value, x_split, y_split, training_dataset_size, results) # Process each test dataset row
 
 					# Update the progress bar
@@ -114,15 +116,17 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 		for index, test_dataset_row in test_dataset.iterrows():
 			for index, training_dataset_row in training_dataset.iterrows():
 				euclidean_distance = 0 # The euclidean distances
-				# Calculate the euclidean distance between the test dataset row and the training dataset
+				# Loop through the columns that contains the pixel count (Starts after the "Image Name" column).
 				for i in range(3, len(test_dataset_row)):
 					euclidean_distance += (test_dataset_row.values[i] - training_dataset_row.values[i])**2
-				distances[f"{euclidean_distance}"] = training_dataset_row[1] # Add the the digit class for the current euclidean distance
+				
+				# Add the value from the "Digit Class" column to the distances dictionary
+				distances[f"{euclidean_distance}"] = training_dataset_row[1]
 
 			# Sort the distances dictionary by its keys
-			distances = dict(sorted(distances.items()))
+			sorted_distances = dict(sorted(distances.items()))
 			# Get the K nearest neighbours
-			nearest_neighbours = list(distances.values())[:neighbours_value]
+			nearest_neighbours = list(sorted_distances.values())[:neighbours_value]
 			# Get the most frequent values in the nearest neighbours
 			most_frequent_label = max(set(nearest_neighbours), key = nearest_neighbours.count)
 			
@@ -151,8 +155,6 @@ def validate_results(results, neighbours_value, x_split, y_split, training_datas
 		results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] += 1
 	# Add 1 to the total predictions column
 	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"] += 1
-	# Calculate the accuracy
-	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = round(results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] / results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"], 5)
 
 # @brief: This function loops through the results dictionary and call the write_results_to_csv function
 # @param: results: The results dictionary
