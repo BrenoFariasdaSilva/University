@@ -164,6 +164,9 @@ def write_results(results):
 			for training_dataset_size in TRAINING_DATASET_SIZE: # Loop through the training dataset sizes
 				write_results_to_csv(results, neighbours_value, x_split, y_split, training_dataset_size, output_file_path) # Write the results to a csv file
 
+	# Sort the output file by the accuracy column
+	sort_output_file(output_file_path)
+
 # @brief: This function initializes the output file (creates the output file and writes the headers)
 # @param: None
 # @return: output_file_path: The path for the output file
@@ -191,6 +194,17 @@ def write_results_to_csv(results, neighbours_value, x_split, y_split, training_d
 	with open(output_file_path, "a") as output_file:
 		# Write the results to the output file
 		output_file.write(f"{x_split}x{y_split}, {training_dataset_size}, {neighbours_value}, {results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Correct Predictions']}, {results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Total Predictions']}, {results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Accuracy']}\n")
+
+# @brief: This function sorts the output file by the accuracy column
+# @param: output_file_path: The path for the output file
+# @return: None
+def sort_output_file(output_file_path):
+	# Read the output file
+	output_file = pd.read_csv(output_file_path)
+	# Sort the output file by the accuracy column
+	output_file = output_file.sort_values(by=["Accuracy"], ascending=False)
+	# Save the output file
+	output_file.to_csv(output_file_path, index=False)
 
 # @brief: This is the main function
 # @param: None
