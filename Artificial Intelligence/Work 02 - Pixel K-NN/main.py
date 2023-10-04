@@ -62,7 +62,7 @@ def initialize_results():
 				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size] = {} # Create a new dictionary for the current training dataset size
 				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] = 0 # Initialize the correct predictions to 0
 				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"] = 0 # Initialize the total predictions to 0
-				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = 0
+				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = 0 # Initialize the accuracy to 0
 	return results # Return the results dictionary
 
 # @brief: This function process the datasets
@@ -106,6 +106,31 @@ def read_datasets(x_split, y_split, training_dataset_size):
 	# Return the training and test datasets
 	return training_dataset, test_dataset
 
+# @brief: This function finds the most common element in a list
+# @param: lst: The list
+# @return: most_common_value: The most common element in the list
+def most_common_element(nearest_neighbours):
+	# Verify if the list is empty
+	if not nearest_neighbours:
+		return None # Return None for an empty list
+	
+	most_common_value = None # Initialize most_common_value to None
+	max_count = 0 # Initialize max_count to 0
+	
+	# Loop through the nearest neighbours list
+	for item in nearest_neighbours:
+		count = nearest_neighbours.count(item) # Count occurrences of the current item
+		# Verify if the current count is greater than the max_count
+		if count > max_count:
+			max_count = count # Update max_count
+			most_common_value = item # Update most_common_value
+
+	# Verify if there is a tie, return the first value that appears the most
+	if max_count == 1:
+		most_common_value = nearest_neighbours[0] # If there is a tie, it will return the first value that appears the most.
+	
+	return most_common_value # Return most_common_value
+
 # @brief: This function process each test dataset row, calculating the euclidean distance between the test dataset row and the training dataset
 # @param: training_dataset: The training dataset
 # @param: test_dataset: The test dataset
@@ -134,13 +159,13 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 
 			# Sort the distances dictionary by its keys
 			sorted_distances = dict(sorted(distances.items()))
-			# Get the K nearest neighbours
+			# Get the first K values from the sorted distances dictionary
 			nearest_neighbours = list(sorted_distances.values())[:neighbours_value]
-			# Get the most frequent values in the nearest neighbours
-			most_frequent_label = max(set(nearest_neighbours), key = nearest_neighbours.count)
+			# Find the element with the maximum count
+			most_common_neighbour = most_common_element(nearest_neighbours)
 			
 			# Validate the results
-			validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_frequent_label)
+			validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_common_neighbour)
 
 			# Update the progress bar
 			progress_bar.update(1)
