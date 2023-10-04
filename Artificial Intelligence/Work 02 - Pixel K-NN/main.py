@@ -177,7 +177,7 @@ def initialize_output_file():
 	# Create the output file
 	with open(output_file_path, "w") as output_file: 
 		# Write the headers to the output file
-		output_file.write(f"Grid, Training Dataset %, K Value, Correct Predictions, Total Predictions, Accuracy\n")
+		output_file.write(f"Grid,Training Dataset %,K Value,Correct Predictions,Total Predictions,Accuracy\n")
 
 	return output_file_path # Return the output file path
 
@@ -193,7 +193,7 @@ def write_results_to_csv(results, neighbours_value, x_split, y_split, training_d
 	# Append the results to the output file
 	with open(output_file_path, "a") as output_file:
 		# Write the results to the output file
-		output_file.write(f"{x_split}x{y_split}, {training_dataset_size}, {neighbours_value}, {results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Correct Predictions']}, {results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Total Predictions']}, {results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Accuracy']}\n")
+		output_file.write(f"{x_split}x{y_split},{training_dataset_size},{neighbours_value},{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Correct Predictions']},{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Total Predictions']},{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Accuracy']}\n")
 
 # @brief: This function sorts the output file by the accuracy column
 # @param: output_file_path: The path for the output file
