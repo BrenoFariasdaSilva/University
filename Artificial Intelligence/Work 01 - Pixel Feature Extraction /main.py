@@ -18,7 +18,7 @@ WHITE = 255 # White Pixel Color
 
 # Constants:
 DATASETS_PATH = {"test":"dataset/digits/test", "training":"dataset/digits/training"} # The path for the training dataset
-OUTPUT_PATH = "pixels_count" # The path for the output directory
+OUTPUT_PATH = "pixels_count/digits" # The path for the output directory
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
 IMAGE_FILE_FORMAT = ".bmp" # The image file format
 OUTPUT_FILE_FORMAT = ".csv" # The output file format
@@ -202,11 +202,11 @@ def main():
 				# Open each digit class directory in the current dataset
 				for digit_class in sorted(os.listdir(dataset_path)):
 					# Get the path for the current digit class
-					digit_class_path = os.path.join(dataset_path, digit_class)
+					digit_class_folder_path = os.path.join(dataset_path, digit_class)
 					# Open each image in the digit class
-					for image_path in os.listdir(digit_class_path):
+					for image_path in os.listdir(digit_class_folder_path):
 						# Get the path for the current image
-						image_path = os.path.join(digit_class_path, image_path)
+						image_path = os.path.join(digit_class_folder_path, image_path)
 						# Verify if the current file is a bmp image
 						if image_path.endswith(IMAGE_FILE_FORMAT):
 							# Process each image
