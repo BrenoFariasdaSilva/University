@@ -152,7 +152,7 @@ def validate_results(results, neighbours_value, x_split, y_split, training_datas
 	# Add 1 to the total predictions column
 	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"] += 1
 	# Calculate the accuracy
-	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] / results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"]
+	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = round(results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] / results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"], 5)
 
 # @brief: This function loops through the results dictionary and call the write_results_to_csv function
 # @param: results: The results dictionary
