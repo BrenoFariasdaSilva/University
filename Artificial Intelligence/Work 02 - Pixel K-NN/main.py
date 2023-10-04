@@ -1,4 +1,5 @@
 # @TODO: FEAT -> Cross Validation.
+# @TODO: REFACTOR -> Adding descriptions to the progress bars.
 
 import os # Import the os module for navigating the file system
 import pandas as pd # Import the pandas module for data manipulation
