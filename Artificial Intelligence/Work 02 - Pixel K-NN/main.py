@@ -1,8 +1,10 @@
 # @TODO: FEAT -> Cross Validation.
 
+import atexit # For playing a sound when the program finishes
 import os # Import the os module for navigating the file system
 import math # Import the math module for the square root function
 import pandas as pd # Import the pandas module for data manipulation
+import platform # For getting the operating system name
 from colorama import Style # For coloring the terminal
 from tqdm import tqdm # For Generating the Progress Bars
 
@@ -13,14 +15,22 @@ class backgroundColors: # Colors for the terminal
 	YELLOW = "\033[93m" # Yellow
 	RED = "\033[91m" # Red
 
-# Constants:
+# Dataset Constants:
 DATASETS_PATH = {"test":"dataset/digits/test", "training":"dataset/digits/training"} # The path for the training dataset
-OUTPUT_DIRECTORY = "output" # The path for the output file
+
+# KNN Constants:
 TRAINING_DATASET_SIZE = [0.25, 0.5, 1] # The training dataset sizes
 NEIGHBOURS_VALUES = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19] # The K values for the KNN algorithm
 SPLITS = {"1":1, "2":2, "3":3, "5":5} # The x and y splits for the feature extractor
+
+# File Constants:
+OUTPUT_DIRECTORY = "output" # The path for the output file
 DATASET_FILES_FORMAT = ".csv" # The dataset files format
 OUTPUT_FILE_FORMAT = ".csv" # The output file format
+
+# Sound Constants:
+SOUND_COMMANDS = {"Darwin": "afplay", "Linux": "aplay", "Windows": "start"} # The sound commands for each operating system
+SOUND_FILE = "../../.assets/NotificationSound.wav" # The path to the sound file
 
 # @brief: This function verifies if the test and training dataset exists
 # @param: None
@@ -209,6 +219,21 @@ def sort_output_file(output_file_path):
 	output_file = output_file.sort_values(by=["Accuracy"], ascending=False)
 	# Save the output file
 	output_file.to_csv(output_file_path, index=False)
+
+# @brief: This function defines the command to play a sound when the program finishes
+# @param: None
+# @return: None
+def play_sound():
+	if os.path.exists(SOUND_FILE):
+		if platform.system() in SOUND_COMMANDS: # if the platform.system() is in the SOUND_COMMANDS dictionary
+			os.system(f"{SOUND_COMMANDS[platform.system()]} {SOUND_FILE}")
+		else: # if the platform.system() is not in the SOUND_COMMANDS dictionary
+			print(f"{backgroundColors.RED}The {backgroundColors.CYAN}platform.system(){backgroundColors.RED} is not in the {backgroundColors.CYAN}SOUND_COMMANDS dictionary{backgroundColors.RED}. Please add it!{Style.RESET_ALL}")
+	else: # if the sound file does not exist
+		print(f"{backgroundColors.RED}Sound file {backgroundColors.CYAN}{SOUND_FILE}{backgroundColors.RED} not found. Make sure the file exists.{Style.RESET_ALL}")
+
+# Register the function to play a sound when the program finishes
+atexit.register(play_sound)
 
 # @brief: This is the main function
 # @param: None
