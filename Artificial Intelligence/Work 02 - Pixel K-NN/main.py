@@ -1,5 +1,3 @@
-# @TODO: FIX -> Eucledian distance is not working properly.
-# @TODO: FEAT -> Write the results to a csv file.
 # @TODO: FEAT -> Cross Validation.
 
 import os # Import the os module for navigating the file system
