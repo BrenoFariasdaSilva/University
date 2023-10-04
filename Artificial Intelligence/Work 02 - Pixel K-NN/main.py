@@ -158,28 +158,39 @@ def validate_results(results, neighbours_value, x_split, y_split, training_datas
 # @param: results: The results dictionary
 # @return: None
 def write_results(results):
+	output_file_path = initialize_output_file() # Initialize the output file
 	for neighbours_value in NEIGHBOURS_VALUES: # Loop through the neighbours values: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19
 		for x_split, y_split in SPLITS.items(): # Loop through the splits: 1x1, 2x2, 3x3 and 5x5.
 			for training_dataset_size in TRAINING_DATASET_SIZE: # Loop through the training dataset sizes
-				write_results_to_csv(results, neighbours_value, x_split, y_split, training_dataset_size) # Write the results to a csv file
+				write_results_to_csv(results, neighbours_value, x_split, y_split, training_dataset_size, output_file_path) # Write the results to a csv file
 
-# @brief: This function writes the results to a csv file
+# @brief: This function initializes the output file (creates the output file and writes the headers)
+# @param: None
+# @return: output_file_path: The path for the output file
+def initialize_output_file():
+	# The path for the output file
+	output_file_path = f"{OUTPUT_DIRECTORY}/K-NN{OUTPUT_FILE_FORMAT}"
+
+	# Create the output file
+	with open(output_file_path, "w") as output_file: 
+		# Write the headers to the output file
+		output_file.write(f"Grid, Training Dataset %, K Value, Correct Predictions, Total Predictions, Accuracy\n")
+
+	return output_file_path # Return the output file path
+
+# @brief: This function appends the results to a csv file
 # @param: results: The results dictionary
 # @param: neighbours_value: The K value for the KNN algorithm
 # @param: x_split: The x split for the feature extractor
 # @param: y_split: The y split for the feature extractor
 # @param: training_dataset_size: The size of the training dataset
+# @param: output_file_path: The path for the output file
 # @return: None
-def write_results_to_csv(results, neighbours_value, x_split, y_split, training_dataset_size):
-	# The path for the output file
-	output_file_path = f"{OUTPUT_DIRECTORY}/{x_split}x{y_split}-{training_dataset_size}-{neighbours_value}{OUTPUT_FILE_FORMAT}"
-	# Create the output file
-	output_file = open(output_file_path, "w")
-	# Write the results to the output file
-	output_file.write(f"Correct Predictions,Total Predictions,Accuracy\n")
-	output_file.write(f"{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Correct Predictions']},{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Total Predictions']},{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Accuracy']}\n")
-	# Close the output file
-	output_file.close()
+def write_results_to_csv(results, neighbours_value, x_split, y_split, training_dataset_size, output_file_path):
+	# Append the results to the output file
+	with open(output_file_path, "a") as output_file:
+		# Write the results to the output file
+		output_file.write(f"{x_split}x{y_split}, {training_dataset_size}, {neighbours_value}, {results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Correct Predictions']}, {results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Total Predictions']}, {results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Accuracy']}\n")
 
 # @brief: This is the main function
 # @param: None
