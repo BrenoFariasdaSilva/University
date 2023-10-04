@@ -106,31 +106,6 @@ def read_datasets(x_split, y_split, training_dataset_size):
 	# Return the training and test datasets
 	return training_dataset, test_dataset
 
-# @brief: This function finds the most common element in a list
-# @param: lst: The list
-# @return: most_common_value: The most common element in the list
-def most_common_element(nearest_neighbours):
-	# Verify if the list is empty
-	if not nearest_neighbours:
-		return None # Return None for an empty list
-	
-	most_common_value = None # Initialize most_common_value to None
-	max_count = 0 # Initialize max_count to 0
-	
-	# Loop through the nearest neighbours list
-	for item in nearest_neighbours:
-		count = nearest_neighbours.count(item) # Count occurrences of the current item
-		# Verify if the current count is greater than the max_count
-		if count > max_count:
-			max_count = count # Update max_count
-			most_common_value = item # Update most_common_value
-
-	# Verify if there is a tie, return the first value that appears the most
-	if max_count == 1:
-		most_common_value = nearest_neighbours[0] # If there is a tie, it will return the first value that appears the most.
-	
-	return most_common_value # Return most_common_value
-
 # @brief: This function process each test dataset row, calculating the euclidean distance between the test dataset row and the training dataset
 # @param: training_dataset: The training dataset
 # @param: test_dataset: The test dataset
@@ -176,6 +151,31 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 	# Return the results dictionary
 	return results
 
+# @brief: This function finds the most common element in a list
+# @param: lst: The list
+# @return: most_common_value: The most common element in the list
+def most_common_element(nearest_neighbours):
+	# Verify if the list is empty
+	if not nearest_neighbours:
+		return None # Return None for an empty list
+	
+	most_common_value = None # Initialize most_common_value to None
+	max_count = 0 # Initialize max_count to 0
+	
+	# Loop through the nearest neighbours list
+	for item in nearest_neighbours:
+		count = nearest_neighbours.count(item) # Count occurrences of the current item
+		# Verify if the current count is greater than the max_count
+		if count > max_count:
+			max_count = count # Update max_count
+			most_common_value = item # Update most_common_value
+
+	# Verify if there is a tie, return the first value that appears the most
+	if max_count == 1:
+		most_common_value = nearest_neighbours[0] # If there is a tie, it will return the first value that appears the most.
+	
+	return most_common_value # Return most_common_value
+
 # @brief: This function validates the results
 # @param: results: The results dictionary
 # @param: neighbours_value: The K value for the KNN algorithm
@@ -186,6 +186,7 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 # @param: most_frequent_label: The most frequent label from the K nearest neighbours
 # @return: results: The results dictionary
 def validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_frequent_label):
+	print(f"{backgroundColors.GREEN}Actual Label: {backgroundColors.CYAN}{test_dataset_row[1]}{backgroundColors.GREEN}, Predicted Label: {backgroundColors.CYAN}{most_frequent_label}{Style.RESET_ALL}")
 	# Verify if the most frequent label is equal to the actual label (Digit Class) column
 	if most_frequent_label == test_dataset_row[1]:
 		# Add 1 to the correct predictions column
@@ -195,7 +196,7 @@ def validate_results(results, neighbours_value, x_split, y_split, training_datas
 
 # @brief: This function loops through the results dictionary and call the write_results_to_csv function
 # @param: results: The results dictionary
-# @return: None
+# @return: output_file_path: The path for the output file
 def write_results(results):
 	output_file_path = initialize_output_file() # Initialize the output file
 	for neighbours_value in NEIGHBOURS_VALUES: # Loop through the neighbours values: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19
@@ -203,8 +204,8 @@ def write_results(results):
 			for training_dataset_size in TRAINING_DATASET_SIZE: # Loop through the training dataset sizes
 				write_results_to_csv(results, neighbours_value, x_split, y_split, training_dataset_size, output_file_path) # Write the results to a csv file
 
-	# Sort the output file by the accuracy column
-	sort_output_file(output_file_path)
+	# return the output file path
+	return output_file_path
 
 # @brief: This function initializes the output file (creates the output file and writes the headers)
 # @param: None
@@ -277,7 +278,10 @@ def main():
 	results = process_datasets(results)
 
 	# Write the results to a csv file
-	write_results(results)
+	output_file_path = write_results(results)
+
+	# Sort the output file by the accuracy column
+	sort_output_file(output_file_path)
 
 # @brief: The entry point of the program
 # @param: None
