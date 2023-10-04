@@ -28,12 +28,12 @@ OUTPUT_FILE_FORMAT = ".csv" # The output file format
 # @return: None
 def verify_output_directory(output_path):
 	if not os.path.exists(output_path): # If the output directory does not exists
-		os.mkdir(output_path) # Create the output directory
+		os.makedirs(output_path) # Create the output directory
 	
 	# Loop through the datasets
 	for dataset_name in DATASETS_PATH.keys():
 		if not os.path.exists(os.path.join(output_path, f"{dataset_name}")): # If the output directory for the current dataset does not exists
-			os.mkdir(os.path.join(output_path, f"{dataset_name}")) # Create the output directory for the current dataset
+			os.makedirs(os.path.join(output_path, f"{dataset_name}")) # Create the output directory for the current dataset
 
 # @brief: This function verifies if the test and training dataset exists
 # @param: None
@@ -58,13 +58,13 @@ def create_output_file_header(x_split, y_split, output_file_path):
 	output_file.truncate(0)
 	
 	# Create the header string
-	header_string = "GRID, Digit Class, Image Name"
+	header_string = "GRID,Digit Class,Image Name"
 
 	# Add columns for each grid cell
 	for i in range(x_split):
 		for j in range(y_split):
 			cell_label = f"{i+1}x{j+1}" # Grid cell label
-			header_string += f", {cell_label} Black, {cell_label} White"
+			header_string += f",{cell_label} Black,{cell_label} White"
 
 	# Write the header to the output CSV file
 	output_file.write(header_string + "\n")
@@ -88,6 +88,8 @@ def process_each_image(image_path, x_grid, y_grid, output_file):
 
 	# Write the pixel counters to the output file
 	write_pixel_counters(output_file, image_path, pixels_counter, x_grid, y_grid)
+	
+	image.close() # Close the image
 
 # @brief: This function initializes the pixel counter dictionary
 # @param: x_grid: The number of splits in the x axis
@@ -144,7 +146,7 @@ def write_pixel_counters(output_file, image_path, pixels_counter, x_grid, y_grid
 	digit_class = image_path.split('/')[-2]
 
 	# Create the line values
-	line_values = f"{x_grid}x{y_grid}, {digit_class}, {image_name}"
+	line_values = f"{x_grid}x{y_grid},{digit_class},{image_name}"
 
 	# Write the current pixel counters to the output file
 	for i in range(x_grid):
@@ -153,7 +155,7 @@ def write_pixel_counters(output_file, image_path, pixels_counter, x_grid, y_grid
 			grid_key = f"{i + 1}x{j + 1}"
 			
 			# Append the "{i}x{j} Black,{i}x{j} White" to the header string
-			line_values += f", {pixels_counter[grid_key]['black']}, {pixels_counter[grid_key]['white']}"
+			line_values += f",{pixels_counter[grid_key]['black']},{pixels_counter[grid_key]['white']}"
 
 	# Write the line values to the output file
 	output_file.write(f"{line_values}\n")
@@ -203,7 +205,6 @@ def main():
 				for digit_class in sorted(os.listdir(dataset_path)):
 					# Get the path for the current digit class
 					digit_class_folder_path = os.path.join(dataset_path, digit_class)
-					# Open each image in the digit class
 					for image_path in os.listdir(digit_class_folder_path):
 						# Get the path for the current image
 						image_path = os.path.join(digit_class_folder_path, image_path)
@@ -216,6 +217,9 @@ def main():
 
 				# Normalize the data stored in the csv
 				normalize_data(output_file_path)
+
+				# Close the output file
+				output_file.close()
 			
 			# Update the progress bar			
 			progress_bar.update(1)
