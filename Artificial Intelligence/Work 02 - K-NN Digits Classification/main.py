@@ -16,7 +16,7 @@ class backgroundColors: # Colors for the terminal
 	RED = "\033[91m" # Red
 
 # Dataset Constants:
-DATASETS_PATH = {"test":"dataset/digits/test", "training":"dataset/digits/training"} # The path for the training dataset
+DATASETS_PATH = {"training":"dataset/digits/training", "test":"dataset/digits/test"} # The path for the training dataset
 
 # KNN Constants:
 TRAINING_DATASET_SIZE = [0.25, 0.5, 1] # The training dataset sizes
