@@ -17,7 +17,7 @@ BLACK = 0 # Black Pixel Color
 WHITE = 255 # White Pixel Color
 
 # Constants:
-DATASETS_PATH = {"test":"dataset/digits/test", "training":"dataset/digits/training"} # The path for the training dataset
+DATASETS_PATH = {"training":"dataset/digits/training", "test":"dataset/digits/test",} # The path for the training and test datasets
 OUTPUT_PATH = "pixels_count/digits" # The path for the output directory
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
 IMAGE_FILE_FORMAT = ".bmp" # The image file format
@@ -45,6 +45,27 @@ def verify_output_directory(output_path):
 		if not os.path.exists(os.path.join(output_path, f"{dataset_name}")): # If the output directory for the current dataset does not exists
 			os.makedirs(os.path.join(output_path, f"{dataset_name}")) # Create the output directory for the current dataset
 
+# @brief: This function processes each image, counting the number of black and white pixels in each split
+# @param: x_grid: The number of splits in the x axis
+# @param: y_grid: The number of splits in the y axis
+# @param: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
+# @param: digit_class: The current digit class
+# @param: image_name: The current image name
+# @return: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
+def process_each_image(digit_class_pixel_counters, digit_class, image_name, digit_class_folder_path, x_grid, y_grid):
+	# Initialize the pixel counter for the current image
+	digit_class_pixel_counters[digit_class][image_name] = {}
+	# Initialize the pixel counter for the current image
+	digit_class_pixel_counters = initialize_pixel_counter(digit_class_pixel_counters, digit_class, image_name, x_grid, y_grid)
+	if image_name.endswith(IMAGE_FILE_FORMAT): # Verify if the current file is a bmp image
+		# Get the path for the current image
+		image_path = os.path.join(digit_class_folder_path, image_name)
+		# Process each image
+		digit_class_pixel_counters = count_pixels(image_path, x_grid, y_grid, digit_class_pixel_counters, digit_class, image_name)
+	else: # If the current file is not a bmp image
+		print(f"{backgroundColors.RED}The current file is not a bmp image{Style.RESET_ALL}")
+	return digit_class_pixel_counters # Return the digit_class_pixel_counters dictionary
+	
 # @brief: This function initializes the pixel counter dictionary
 # @param: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
 # @param: digit_class: The current digit class
@@ -53,126 +74,89 @@ def verify_output_directory(output_path):
 # @param: y_grid: The number of splits in the y axis
 # @return: pixels_counter: A dictionary for storing the number of black and white pixels for the current image in the current digit class
 def initialize_pixel_counter(digit_class_pixel_counters, digit_class, image_name, x_grid, y_grid):
+	# Loop through the number of splits for the current grid in the current digit class and image name
 	for i in range(0, x_grid * y_grid):
-		digit_class_pixel_counters[digit_class][image_name][i] = {}
-		digit_class_pixel_counters[digit_class][image_name][i]["black"] = 0
-		digit_class_pixel_counters[digit_class][image_name][i]["white"] = 0
+		digit_class_pixel_counters[digit_class][image_name][i] = {} # Initialize the pixel counter for the current image
+		digit_class_pixel_counters[digit_class][image_name][i]["black"] = 0 # Initialize the black pixel counter for the current image
+		digit_class_pixel_counters[digit_class][image_name][i]["white"] = 0 # Initialize the white pixel counter for the current image
 	return digit_class_pixel_counters # Return the initialized pixel counter dictionary 
 
-# @brief: This function opens each image in the digit class and process each image
-# @param: image_path: The path for the current image
-# @param: x_grid: The number of splits in the x axis
-# @param: y_grid: The number of splits in the y axis
-# @param: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
-# @param: digit_class: The current digit class
-# @param: image_name: The current image name
-# @return: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
-def process_each_image(image_path, x_grid, y_grid, digit_class_pixel_counters, digit_class, image_name):
-	image = Image.open(image_path) # Open the image
-	# Count the number of black and white pixels in each split
-	digit_class_pixel_counters = count_pixels(image, x_grid, y_grid, digit_class_pixel_counters, digit_class, image_name)
-	image.close() # Close the image
-	return digit_class_pixel_counters # Return the pixel counter dictionary
-
 # @brief: This function counts the number of black and white pixels in each split
-# @param: image: The image
+# @param: image_path: The image path
 # @param: x_grid: The number of splits in the x axis
 # @param: y_grid: The number of splits in the y axis
 # @param: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
 # @param: digit_class: The current digit class
 # @param: image_name: The current image name
 # @return: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
-def count_pixels(image, x_grid, y_grid, digit_class_pixel_counters, digit_class, image_name):
-	# Load the image pixels
-	image_pixels = image.load()
-	# Get the image width and height
-	image_width, image_height = image.size
-	# Initialize the split number
-	split_number = 0
+def count_pixels(image_path, x_grid, y_grid, digit_class_pixel_counters, digit_class, image_name):
+	image = Image.open(image_path) # Open the image
+	image_pixels = image.load() # Load the image pixels
+	image_width, image_height = image.size # Get the image width and height
+	split_number = 0 # Initialize the split number
 	# Loop through the number of splits in the x axis
 	for x_split_number in range(0, x_grid):
 		# Loop through the number of splits in the y axis
 		for y_split_number in range(0, y_grid):
-			pixel_colors = [0, 0]
+			pixel_colors = [0, 0] # Initialize the pixel colors counter that stores the number of black and white pixels
 			# Loop inside the pixels range for the current x_split_number
 			for i in range(0, image_width // x_grid):
 				# Loop inside the pixels range for the current y_split_number
 				for j in range(0, image_height // y_grid):
 					# Get the pixel color
 					pixel_color = image_pixels[i + (x_split_number * (image_width // x_grid)), j + (y_split_number * (image_height // y_grid))]
-					if pixel_color == BLACK:
-						pixel_colors[0] += 1
-					elif pixel_color == WHITE:
-						pixel_colors[1] += 1
-					else:
+					if pixel_color == BLACK: # If the pixel color is black
+						pixel_colors[0] += 1 # Update the black pixel counter
+					elif pixel_color == WHITE: # If the pixel color is white
+						pixel_colors[1] += 1 # Update the white pixel counter
+					else: # If the pixel color is not black or white
 						print(f"{backgroundColors.RED}The pixel color is not black or white{Style.RESET_ALL}")
 
-			# Update the pixel counter dictionary
+			# Update the black and white pixel counter dictionary
 			digit_class_pixel_counters[digit_class][image_name][split_number]["black"] += pixel_colors[0]
 			digit_class_pixel_counters[digit_class][image_name][split_number]["white"] += pixel_colors[1]
 			split_number += 1 # Update the split number
 
-	# Return the pixel counter dictionary
-	return digit_class_pixel_counters
+	image.close() # Close the image
+	return digit_class_pixel_counters # Return the pixel counter dictionary
+
+# @brief: This function writes the results to the output file
+# @param: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
+# @param: dataset_name: The current dataset name
+# @param: x_grid: The number of splits in the x axis
+# @param: y_grid: The number of splits in the y axis
+# @param: dataset_path: The path for the current dataset
+# @return: None
+def write_results_to_output_file(digit_class_pixel_counters, dataset_name, x_grid, y_grid):
+	# Create the output file path
+	raw_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-pixel_count{OUTPUT_FILE_FORMAT}")
+	# write the digit_class_pixel_counters to the output file
+	write_pixel_counters(raw_output_file_path, digit_class_pixel_counters, x_grid, y_grid)
+	# Create the output file path
+	norm_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-normalized-pixel_count{OUTPUT_FILE_FORMAT}")
+	# Normalize the data stored in the csv
+	normalized_digit_class_pixel_counters = normalize_data(digit_class_pixel_counters, x_grid, y_grid)
+	# Write the digit_class_pixel_counters to the output file
+	write_pixel_counters(norm_output_file_path, normalized_digit_class_pixel_counters, x_grid, y_grid)
 
 # @brief: This function writes the pixel counters to the output file
 # @param: output_file: The output file
 # @param: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
 # @param: x_grid: The number of splits in the x axis
 # @param: y_grid: The number of splits in the y axis
-# @param: dataset_path: The path for the current dataset
 # @return: None
-def write_pixel_counters(output_file_path, digit_class_pixel_counters, x_grid, y_grid, dataset_path):
+def write_pixel_counters(output_file_path, digit_class_pixel_counters, x_grid, y_grid):
+	# Create and open the output CSV file
 	output_file = create_output_file_header(x_grid, y_grid, output_file_path)
-	for digit_class, digit_class_data in digit_class_pixel_counters.items(): # Loop through the digit classes
-		for image_name in digit_class_data.keys(): # Loop through the images
-			output_string = f"{x_grid}x{y_grid},{digit_class},{image_name}"
+	# Loop through the digit classes
+	for digit_class, digit_class_data in digit_class_pixel_counters.items():
+		# Loop through the images in the current digit class
+		for image_name in digit_class_data.keys():
+			output_string = f"{x_grid}x{y_grid},{digit_class},{image_name}" # Initialize the output string
+			# Loop through the splits for the current image in the current digit class
 			for i in range(0, x_grid * y_grid):
-				black_pixel = digit_class_pixel_counters[digit_class][image_name][i]["black"]
-				white_pixel = digit_class_pixel_counters[digit_class][image_name][i]["white"]
-				output_string += f",{black_pixel},{white_pixel}"
+				output_string += f",{digit_class_pixel_counters[digit_class][image_name][i]['black']},{digit_class_pixel_counters[digit_class][image_name][i]['white']}"
 			output_file.write(output_string + "\n")
-
-# @brief: This function normalizes the data stored in the digit_class_pixel_counters dictionary using Min-Max scaling
-# @param: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
-# @param: x_grid: The number of splits in the x axis
-# @param: y_grid: The number of splits in the y axis
-# @return: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
-def normalize_data(digit_class_pixel_counters, x_grid, y_grid):
-	all_images_data = [] # Initialize a list to store pixel data for all images
-	# Loop through the digit classes
-	for digit_class_data in digit_class_pixel_counters.values():
-		# Loop through the images in the current digit class
-		for splits_data in digit_class_data.values():
-			image_data = [] # Initialize a list to store pixel data for the current image
-			# Loop through the splits
-			for i in range(x_grid * y_grid):
-				# Append the pixel data to the image_data list
-				image_data.extend([splits_data[i]["black"], splits_data[i]["white"]])
-			# Append the image_data list to all_images_data
-			all_images_data.append(image_data)
-
-	# Convert all_images_data to a NumPy array
-	image_pixels = np.array(all_images_data, dtype=np.float64)
-	# Normalize the data using Min-Max scaling
-	scaler = MinMaxScaler()
-	image_pixels = scaler.fit_transform(image_pixels)
-
-	# Re-assign the normalized data to the digit_class_pixel_counters dictionary
-	image_index = 0 # Initialize the image index
-	# Loop through the digit classes
-	for digit_class_data in digit_class_pixel_counters.values():
-		# Loop through the images in the current digit class
-		for splits_data in digit_class_data.values():
-			# Loop through the splits
-			for i in range(x_grid * y_grid):
-				# Update the dictionary with the normalized values
-				splits_data[i]["black"] = image_pixels[image_index][2 * i]
-				splits_data[i]["white"] = image_pixels[image_index][2 * i + 1]
-			image_index += 1 # Update the image index
-
-	# Return the digit_class_pixel_counters dictionary
-	return digit_class_pixel_counters
 
 # @brief: This function create the header for the output file
 # @param: x_split: The number of splits in the x axis
@@ -182,10 +166,8 @@ def normalize_data(digit_class_pixel_counters, x_grid, y_grid):
 def create_output_file_header(x_split, y_split, output_file_path):
 	# Create and open the output CSV file
 	output_file = open(output_file_path, "a")
-	
 	# Clear the output file (truncate its contents)
 	output_file.truncate(0)
-	
 	# Create the header string
 	header_string = "GRID,Digit Class,Image Name"
 
@@ -199,6 +181,45 @@ def create_output_file_header(x_split, y_split, output_file_path):
 	output_file.write(header_string + "\n")
 
 	return output_file # Return the output file object
+
+# @brief: This function normalizes the data stored in the digit_class_pixel_counters dictionary using Min-Max scaling
+# @param: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
+# @param: x_grid: The number of splits in the x axis
+# @param: y_grid: The number of splits in the y axis
+# @return: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
+def normalize_data(digit_class_pixel_counters, x_grid, y_grid):
+	all_images_data = [] # Initialize a list to store pixel data for all images
+	# Loop through the digit classes
+	for digit_class_data in digit_class_pixel_counters.values():
+		# Loop through the images in the current digit class
+		for splits_data in digit_class_data.values():
+			image_data = [] # Initialize a list to store the black and white pixel data for the current image
+			# Loop through the splits for the current image in the current digit class
+			for i in range(x_grid * y_grid):
+				# Append the pixel data to the image_data list
+				image_data.extend([splits_data[i]["black"], splits_data[i]["white"]])
+			# Append the image_data list to all_images_data
+			all_images_data.append(image_data)
+
+	# Convert all_images_data to a NumPy array
+	image_pixels = np.array(all_images_data, dtype=np.float64)
+	scaler = MinMaxScaler() # Initialize the MinMaxScaler
+	image_pixels = scaler.fit_transform(image_pixels) # Normalize the data using Min-Max scaling
+
+	# Re-assign the normalized data to the digit_class_pixel_counters dictionary
+	image_index = 0 # Initialize the image index
+	# Loop through the digit classes
+	for digit_class_data in digit_class_pixel_counters.values():
+		# Loop through the images in the current digit class
+		for splits_data in digit_class_data.values():
+			# Loop through the splits for the current image in the current digit class
+			for i in range(x_grid * y_grid):
+				# Update the dictionary with the normalized values
+				splits_data[i]["black"] = image_pixels[image_index][2 * i]
+				splits_data[i]["white"] = image_pixels[image_index][2 * i + 1]
+			image_index += 1 # Update the image index
+
+	return digit_class_pixel_counters # Return the digit_class_pixel_counters dictionary
 
 # @brief: The main function
 # @param: None
@@ -218,12 +239,9 @@ def main():
 	with tqdm(total=len(SPLITS.items()), desc=f"{backgroundColors.GREEN}Splits{Style.RESET_ALL}") as progress_bar:
 		# Loop through the splits: 1x1, 2x2, 3x3, 5x5
 		for x_grid, y_grid in SPLITS.items():
-			# Loop through the datasets
+			# Loop through the datasets: training and test
 			for dataset_name, dataset_path in DATASETS_PATH.items():
-				# Initialize the digit class pixel counters dictionary
-				digit_class_pixel_counters = {}
-				# Initialize the number of images counter
-				images_number = 0
+				digit_class_pixel_counters = {} # Initialize the digit class pixel counters dictionary
 				# Open each digit class directory that is inside the current dataset
 				for digit_class in sorted(os.listdir(dataset_path)):
 					# Initialize the pixel counter for the current digit class
@@ -232,32 +250,10 @@ def main():
 					digit_class_folder_path = os.path.join(dataset_path, digit_class)
 					# Open each image that is inside the current digit class directory
 					for image_name in os.listdir(digit_class_folder_path):
-						# Initialize the digit class pixel counters for the current image in the current digit class
-						digit_class_pixel_counters[digit_class][image_name] = {}
-						# Initialize the pixel counter for the current image
-						digit_class_pixel_counters = initialize_pixel_counter(digit_class_pixel_counters, digit_class, image_name, x_grid, y_grid)
-						# Verify if the current file is a bmp image
-						if image_name.endswith(IMAGE_FILE_FORMAT):
-							# Get the path for the current image
-							image_path = os.path.join(digit_class_folder_path, image_name)
-							# Process each image
-							digit_class_pixel_counters = process_each_image(image_path, x_grid, y_grid, digit_class_pixel_counters, digit_class, image_name)
-							# Update the number of images counter
-							images_number += 1
-						else:
-							print(f"{backgroundColors.RED}The current file is not a bmp image{Style.RESET_ALL}")
-
-				# Create the output file path
-				raw_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-pixel_count{OUTPUT_FILE_FORMAT}")
-				# write the digit_class_pixel_counters to the output file
-				write_pixel_counters(raw_output_file_path, digit_class_pixel_counters, x_grid, y_grid, dataset_path)
-				# Create the output file path
-				norm_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-pixel_count_normalized{OUTPUT_FILE_FORMAT}")
-				# Normalize the data stored in the csv
-				normalized_digit_class_pixel_counters = normalize_data(digit_class_pixel_counters, x_grid, y_grid)
-				# Write the digit_class_pixel_counters to the output file
-				write_pixel_counters(norm_output_file_path, normalized_digit_class_pixel_counters, x_grid, y_grid, dataset_path)
-			
+						# Process each image
+						digit_class_pixel_counters = process_each_image(digit_class_pixel_counters, digit_class, image_name, digit_class_folder_path, x_grid, y_grid)
+				# Write results to the output file
+				write_results_to_output_file(digit_class_pixel_counters, dataset_name, x_grid, y_grid)
 			# Update the progress bar			
 			progress_bar.update(1)
 
