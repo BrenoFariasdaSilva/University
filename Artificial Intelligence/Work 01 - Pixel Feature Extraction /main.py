@@ -125,14 +125,13 @@ def count_pixels(image, x_grid, y_grid, digit_class_pixel_counters, digit_class,
 def write_pixel_counters(output_file_path, digit_class_pixel_counters, x_grid, y_grid, dataset_path):
 	output_file = create_output_file_header(x_grid, y_grid, output_file_path)
 	for digit_class, digit_class_data in digit_class_pixel_counters.items(): # Loop through the digit classes
-		for image_name, image_data in digit_class_data.items(): # Loop through the images
-			for split_number, split_data in image_data.items():
-				output_string = f"{x_grid}x{y_grid},{digit_class},{image_name}"
-				for i in range(0, x_grid * y_grid):
-					black_pixel = digit_class_pixel_counters[digit_class][image_name][i]["black"]
-					white_pixel = digit_class_pixel_counters[digit_class][image_name][i]["white"]
-					output_string += f",{black_pixel},{white_pixel}"
-				output_file.write(output_string + "\n")
+		for image_name in digit_class_data.keys(): # Loop through the images
+			output_string = f"{x_grid}x{y_grid},{digit_class},{image_name}"
+			for i in range(0, x_grid * y_grid):
+				black_pixel = digit_class_pixel_counters[digit_class][image_name][i]["black"]
+				white_pixel = digit_class_pixel_counters[digit_class][image_name][i]["white"]
+				output_string += f",{black_pixel},{white_pixel}"
+			output_file.write(output_string + "\n")
 
 # @brief: This function normalizes the data stored in the digit_class_pixel_counters dictionary using Min-Max scaling
 # @param: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
