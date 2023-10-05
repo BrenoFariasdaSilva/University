@@ -75,13 +75,10 @@ def process_datasets(results):
 			for x_split, y_split in SPLITS.items(): # Loop through the splits: 1x1, 2x2, 3x3 and 5x5.
 				for training_dataset_size in TRAINING_DATASET_SIZE: # Loop through the training dataset sizes
 					training_dataset, test_dataset = read_datasets(x_split, y_split, training_dataset_size) # Read the datasets
-
 					# Create a new dictionary for the current neighbours value, split and training dataset size that will save the correct predictions, total predictions and accuracy
 					results = process_test_dataset(training_dataset, test_dataset, neighbours_value, x_split, y_split, training_dataset_size, results) # Process each test dataset row
-
 					# Update the progress bar
 					progress_bar.update(1)
-
 	return results # Return the results dictionary
 
 # @brief: This function reads the datasets
@@ -97,12 +94,10 @@ def read_datasets(x_split, y_split, training_dataset_size):
 	training_dataset = pd.read_csv(training_file_path)
 	# Pick a random sample from the training dataset
 	training_dataset = training_dataset.sample(frac=training_dataset_size)
-
 	# The path for the test dataset file
 	test_file_path = f"{DATASETS_PATH['test']}/{x_split}x{y_split}-normalized-pixel_count{DATASET_FILES_FORMAT}"
 	# Load the test dataset
 	test_dataset = pd.read_csv(test_file_path)
-
 	# Return the training and test datasets
 	return training_dataset, test_dataset
 
@@ -117,18 +112,15 @@ def read_datasets(x_split, y_split, training_dataset_size):
 # @return: results: The results dictionary
 def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_split, y_split, training_dataset_size, results):
 	distances = {} # The euclidean distances dictionary
-	# Create a dictionary for the current neighbours value, split and training dataset size that will save the correct predictions, total predictions and accuracy
-	
 	# For every line in the test dataset
 	with tqdm(total=len(test_dataset), desc=f"{backgroundColors.GREEN}GRID: {backgroundColors.CYAN}{x_split}x{y_split}{backgroundColors.GREEN}, Training Dataset Size: {backgroundColors.CYAN}{training_dataset_size}{backgroundColors.GREEN}, K: {backgroundColors.CYAN}{neighbours_value}{Style.RESET_ALL}") as progress_bar:
-		for index, test_dataset_row in test_dataset.iterrows():
-			for index, training_dataset_row in training_dataset.iterrows():
+		for test_dataset_row in test_dataset.iterrows():
+			for training_dataset_row in training_dataset.iterrows():
 				squared_difference = 0 # The euclidean distances
 				# Loop through the columns that contains the pixel count (Starts after the "Image Name" column).
 				for i in range(3, len(test_dataset_row)):
 					# euclidean_distance is the square root of the sum of the squared differences between the two vectors
 					squared_difference = (test_dataset_row[i] - training_dataset_row[i]) ** 2
-				
 				# Add the value from the "Digit Class" column to the distances dictionary
 				distances[f"{math.sqrt(squared_difference)}"] = training_dataset_row[1]
 
@@ -138,10 +130,8 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 			nearest_neighbours = list(sorted_distances.values())[:neighbours_value]
 			# Find the element with the maximum count
 			most_common_neighbour = most_common_element(nearest_neighbours)
-			
 			# Validate the results
 			validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_common_neighbour)
-
 			# Update the progress bar
 			progress_bar.update(1)
 
@@ -186,7 +176,6 @@ def most_common_element(nearest_neighbours):
 # @param: most_frequent_label: The most frequent label from the K nearest neighbours
 # @return: results: The results dictionary
 def validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_frequent_label):
-	print(f"{backgroundColors.GREEN}Actual Label: {backgroundColors.CYAN}{test_dataset_row[1]}{backgroundColors.GREEN}, Predicted Label: {backgroundColors.CYAN}{most_frequent_label}{Style.RESET_ALL}")
 	# Verify if the most frequent label is equal to the actual label (Digit Class) column
 	if most_frequent_label == test_dataset_row[1]:
 		# Add 1 to the correct predictions column
