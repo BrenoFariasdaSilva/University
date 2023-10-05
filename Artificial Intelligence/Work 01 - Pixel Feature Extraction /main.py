@@ -54,10 +54,7 @@ def verify_output_directory(output_path):
 # @return: pixels_counter: A dictionary for storing the number of black and white pixels for the current image in the current digit class
 def initialize_pixel_counter(digit_class_pixel_counters, digit_class, image_name, x_grid, y_grid):
 	for i in range(0, x_grid * y_grid):
-		# Check if the split_number key exists, and if not, initialize it
-		if i not in digit_class_pixel_counters[digit_class][image_name]:
-			digit_class_pixel_counters[digit_class][image_name][i] = {}
-		# Initialize the black and white pixel counter for the current digit class and image
+		digit_class_pixel_counters[digit_class][image_name][i] = {}
 		digit_class_pixel_counters[digit_class][image_name][i]["black"] = 0
 		digit_class_pixel_counters[digit_class][image_name][i]["white"] = 0
 	return digit_class_pixel_counters # Return the initialized pixel counter dictionary 
@@ -90,25 +87,30 @@ def count_pixels(image, x_grid, y_grid, digit_class_pixel_counters, digit_class,
 	image_pixels = image.load()
 	# Get the image width and height
 	image_width, image_height = image.size
-
-	# Loop through the image pixels
-	for x_split_iterator in range(0, x_grid):
-		for y_split_iterator in range(0, y_grid):
-			split_number = 0
+	# Initialize the split number
+	split_number = 0
+	# Loop through the number of splits in the x axis
+	for x_split_number in range(0, x_grid):
+		# Loop through the number of splits in the y axis
+		for y_split_number in range(0, y_grid):
 			pixel_colors = [0, 0]
+			# Loop inside the pixels range for the current x_split_number
 			for i in range(0, image_width // x_grid):
+				# Loop inside the pixels range for the current y_split_number
 				for j in range(0, image_height // y_grid):
 					# Get the pixel color
-					pixel_color = image_pixels[i + (x_split_iterator * (image_width // x_grid)), j + (y_split_iterator * (image_height // y_grid))]
+					pixel_color = image_pixels[i + (x_split_number * (image_width // x_grid)), j + (y_split_number * (image_height // y_grid))]
 					if pixel_color == BLACK:
 						pixel_colors[0] += 1
 					elif pixel_color == WHITE:
 						pixel_colors[1] += 1
 					else:
 						print(f"{backgroundColors.RED}The pixel color is not black or white{Style.RESET_ALL}")
+
+			# Update the pixel counter dictionary
 			digit_class_pixel_counters[digit_class][image_name][split_number]["black"] += pixel_colors[0]
 			digit_class_pixel_counters[digit_class][image_name][split_number]["white"] += pixel_colors[1]
-			split_number += 1
+			split_number += 1 # Update the split number
 
 	# Return the pixel counter dictionary
 	return digit_class_pixel_counters
@@ -127,8 +129,8 @@ def write_pixel_counters(output_file_path, digit_class_pixel_counters, x_grid, y
 			for split_number, split_data in image_data.items():
 				output_string = f"{x_grid}x{y_grid},{digit_class},{image_name}"
 				for i in range(0, x_grid * y_grid):
-					black_pixel = digit_class_pixel_counters[digit_class][image_name][split_number]["black"]
-					white_pixel = digit_class_pixel_counters[digit_class][image_name][split_number]["white"]
+					black_pixel = digit_class_pixel_counters[digit_class][image_name][i]["black"]
+					white_pixel = digit_class_pixel_counters[digit_class][image_name][i]["white"]
 					output_string += f",{black_pixel},{white_pixel}"
 				output_file.write(output_string + "\n")
 
