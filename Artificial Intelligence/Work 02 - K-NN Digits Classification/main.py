@@ -124,21 +124,24 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 				distances[f"{math.sqrt(squared_difference)}"] = training_dataset_row[2] # Add the squared difference to the distances dictionary
 
 			# Sort the distances dictionary by its keys
-			sorted_distances = dict(sorted(distances.items()))
+			sorted_distances = {key: distances[key] for key in sorted(distances.keys())}
+			nearest_neighbours = [] # Initialize the nearest neighbours list
 			# Get the first K values from the sorted distances dictionary
-			nearest_neighbours = list(sorted_distances.values())[:neighbours_value]
+			for index, (key, value) in enumerate(sorted_distances.items()):
+				if index < neighbours_value:
+					nearest_neighbours.append(value)
 			# Find the element with the maximum count
 			most_common_neighbour = most_common_element(nearest_neighbours)
 			# Validate the results
 			validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_common_neighbour)
+			# Clear the distances dictionary
+			distances.clear()
 			# Update the progress bar
 			progress_bar.update(1)
 
 	# Calculate the accuracy
 	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = (results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] / results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"]) * 100
-	print(f"{backgroundColors.GREEN}Accuracy for {backgroundColors.CYAN}{x_split}x{y_split}{backgroundColors.GREEN} with {backgroundColors.CYAN}{training_dataset_size}{backgroundColors.GREEN} of the training dataset and {backgroundColors.CYAN}{neighbours_value}{backgroundColors.GREEN} neighbours: {backgroundColors.CYAN}{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Accuracy']}%{backgroundColors.GREEN} {Style.RESET_ALL}", end="\n\n")
 
-			
 	# Return the results dictionary
 	return results
 
@@ -232,7 +235,7 @@ def sort_output_file(output_file_path):
 	# Read the output file
 	output_file = pd.read_csv(output_file_path)
 	# Sort the output file by the accuracy column
-	output_file = output_file.sort_values(by=["Accuracy"], ascending=False)
+	output_file = output_file.sort_values(by=["Accuracy %"], ascending=False)
 	# Save the output file
 	output_file.to_csv(output_file_path, index=False)
 
