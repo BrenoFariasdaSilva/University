@@ -36,6 +36,7 @@ This code requires the following packages:
 - Python 3.x
 - colorama (for terminal coloring)
 - Pillow (PIL, for image manipulation)
+- sklearn (for Min-Max scaling)
 - tqdm (for generating progress bars)
 
 You can install the required packages using pip:
