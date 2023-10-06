@@ -212,7 +212,10 @@ The script records the following results for different combinations of K values,
 The recorded results are sorted by accuracy, allowing you to identify the most effective K-NN configurations for digit classification.
 
 Explore the results to gain insights into the performance of the K-NN algorithm under different settings.
-
+You can preview the results in the [K-NN-Digits-Classification.txt](./results/K-NN-Digits-Classification.txt) file.
+<div style="text-align:center">
+  ![Alt text](./results/K-NN-Digits-Classification.txt)
+</div>
 
 ## Contributing
 Code improvement recommendations are very welcome and appreciated. If you would like to contribute, please fork the repository and use a feature branch. Pull requests are warmly welcome here.
