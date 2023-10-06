@@ -62,7 +62,7 @@ def initialize_results():
 				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size] = {} # Create a new dictionary for the current training dataset size
 				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] = 0 # Initialize the correct predictions to 0
 				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"] = 0 # Initialize the total predictions to 0
-				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = 0 # Initialize the accuracy to 0
+				results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = 0.00 # Initialize the accuracy to 0.00
 	return results # Return the results dictionary
 
 # @brief: This function process the datasets
@@ -92,7 +92,7 @@ def read_datasets(x_split, y_split, training_dataset_size):
 	training_file_path = f"{DATASETS_PATH['training']}/{x_split}x{y_split}-normalized-pixel_count{DATASET_FILES_FORMAT}"
 	# Load the training dataset
 	training_dataset = pd.read_csv(training_file_path)
-	# Pick a random sample from the training dataset
+	# Pick a random sample from the training dataset based on the training dataset size
 	training_dataset = training_dataset.sample(frac=training_dataset_size)
 	# The path for the test dataset file
 	test_file_path = f"{DATASETS_PATH['test']}/{x_split}x{y_split}-normalized-pixel_count{DATASET_FILES_FORMAT}"
@@ -112,17 +112,16 @@ def read_datasets(x_split, y_split, training_dataset_size):
 # @return: results: The results dictionary
 def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_split, y_split, training_dataset_size, results):
 	distances = {} # The euclidean distances dictionary
-	# For every line in the test dataset
 	with tqdm(total=len(test_dataset), desc=f"{backgroundColors.GREEN}GRID: {backgroundColors.CYAN}{x_split}x{y_split}{backgroundColors.GREEN}, Training Dataset Size: {backgroundColors.CYAN}{training_dataset_size}{backgroundColors.GREEN}, K: {backgroundColors.CYAN}{neighbours_value}{Style.RESET_ALL}") as progress_bar:
-		for test_dataset_row in test_dataset.iterrows():
-			for training_dataset_row in training_dataset.iterrows():
-				squared_difference = 0 # The euclidean distances
-				# Loop through the columns that contains the pixel count (Starts after the "Image Name" column).
-				for i in range(3, len(test_dataset_row)):
-					# euclidean_distance is the square root of the sum of the squared differences between the two vectors
-					squared_difference = (test_dataset_row[i] - training_dataset_row[i]) ** 2
-				# Add the value from the "Digit Class" column to the distances dictionary
-				distances[f"{math.sqrt(squared_difference)}"] = training_dataset_row[1]
+		# For every line in the test dataset
+		for test_dataset_row in test_dataset.itertuples():
+			# For every line in the training dataset
+			for training_dataset_row in training_dataset.itertuples():
+				squared_difference = 0 # Initialize the squared difference to 0
+				# loop through from the fourth column to the last column
+				for i in range(4, len(training_dataset_row)):
+					squared_difference += (test_dataset_row[i] - training_dataset_row[i]) ** 2 # Calculate the squared difference
+				distances[f"{math.sqrt(squared_difference)}"] = training_dataset_row[2] # Add the squared difference to the distances dictionary
 
 			# Sort the distances dictionary by its keys
 			sorted_distances = dict(sorted(distances.items()))
@@ -137,6 +136,7 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 
 	# Calculate the accuracy
 	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] / results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"]
+	print(f"{backgroundColors.GREEN}Accuracy for {backgroundColors.CYAN}{x_split}x{y_split}{backgroundColors.GREEN} with {backgroundColors.CYAN}{training_dataset_size}{backgroundColors.GREEN} of the training dataset and {backgroundColors.CYAN}{neighbours_value}{backgroundColors.GREEN} neighbours: {backgroundColors.CYAN}{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Accuracy']}{Style.RESET_ALL}")
 			
 	# Return the results dictionary
 	return results
@@ -163,7 +163,7 @@ def most_common_element(nearest_neighbours):
 	# Verify if there is a tie, return the first value that appears the most
 	if max_count == 1:
 		most_common_value = nearest_neighbours[0] # If there is a tie, it will return the first value that appears the most.
-	
+
 	return most_common_value # Return most_common_value
 
 # @brief: This function validates the results
@@ -177,7 +177,7 @@ def most_common_element(nearest_neighbours):
 # @return: results: The results dictionary
 def validate_results(results, neighbours_value, x_split, y_split, training_dataset_size, test_dataset_row, most_frequent_label):
 	# Verify if the most frequent label is equal to the actual label (Digit Class) column
-	if most_frequent_label == test_dataset_row[1]:
+	if most_frequent_label == test_dataset_row[2]:
 		# Add 1 to the correct predictions column
 		results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] += 1
 	# Add 1 to the total predictions column
