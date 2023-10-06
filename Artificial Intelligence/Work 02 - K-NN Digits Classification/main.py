@@ -135,8 +135,9 @@ def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_spl
 			progress_bar.update(1)
 
 	# Calculate the accuracy
-	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] / results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"]
-	print(f"{backgroundColors.GREEN}Accuracy for {backgroundColors.CYAN}{x_split}x{y_split}{backgroundColors.GREEN} with {backgroundColors.CYAN}{training_dataset_size}{backgroundColors.GREEN} of the training dataset and {backgroundColors.CYAN}{neighbours_value}{backgroundColors.GREEN} neighbours: {backgroundColors.CYAN}{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Accuracy']}{Style.RESET_ALL}")
+	results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Accuracy"] = (results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Correct Predictions"] / results[neighbours_value][f"{x_split}x{y_split}"][training_dataset_size]["Total Predictions"]) * 100
+	print(f"{backgroundColors.GREEN}Accuracy for {backgroundColors.CYAN}{x_split}x{y_split}{backgroundColors.GREEN} with {backgroundColors.CYAN}{training_dataset_size}{backgroundColors.GREEN} of the training dataset and {backgroundColors.CYAN}{neighbours_value}{backgroundColors.GREEN} neighbours: {backgroundColors.CYAN}{results[neighbours_value][f'{x_split}x{y_split}'][training_dataset_size]['Accuracy']}%{backgroundColors.GREEN} {Style.RESET_ALL}", end="\n\n")
+
 			
 	# Return the results dictionary
 	return results
@@ -206,7 +207,7 @@ def initialize_output_file():
 	# Create the output file
 	with open(output_file_path, "w") as output_file: 
 		# Write the headers to the output file
-		output_file.write(f"Grid,Training Dataset %,K Value,Correct Predictions,Total Predictions,Accuracy\n")
+		output_file.write(f"Grid,Training Dataset %,K Value,Correct Predictions,Total Predictions,Accuracy %\n")
 
 	return output_file_path # Return the output file path
 
