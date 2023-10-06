@@ -1,5 +1,3 @@
-# @TODO: FEAT -> Cross Validation.
-
 import atexit # For playing a sound when the program finishes
 import os # Import the os module for navigating the file system
 import math # Import the math module for the square root function
