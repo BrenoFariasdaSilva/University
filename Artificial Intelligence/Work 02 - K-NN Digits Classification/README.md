@@ -212,12 +212,16 @@ The script records the following results for different combinations of K values,
 The recorded results are sorted by accuracy, allowing you to identify the most effective K-NN configurations for digit classification.
 
 Explore the results to gain insights into the performance of the K-NN algorithm under different settings.
-You can preview the results in the [K-NN-Digits-Classification.txt](./results/K-NN-Digits-Classification.txt) file.
-<center>
+You can preview the results in the [K-NN-Digits-Classification.txt](./results/K-NN-Digits-Classification.txt) file. As you can see, my best results were for:
 
-![Results](./results/K-NN-Digits-Classification.txt)
-
-</center>
+<div align="center" style="color: rgba(148, 239, 148, 1);">
+Grid = 5x5 <br>
+Training Dataset % = 1 <br>
+K Value = 1 <br>
+Correct Predictions = 974 <br>
+Total Predictions = 1000 <br>
+Accuracy = 97.4% <br>
+</div>
 
 ## Contributing
 Code improvement recommendations are very welcome and appreciated. If you would like to contribute, please fork the repository and use a feature branch. Pull requests are warmly welcome here.
