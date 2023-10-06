@@ -1,6 +1,6 @@
 <div align="center">
   
-# [Pixel Feature Extractor](https://github.com/BrenoFariasdaSilva/University/tree/main/Artificial%20Intelligence/Work%2001%20-%20Pixel%20Feature%20Extraction%20) <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original.svg"  width="3%" height="3%">
+# [Pixel Feature Extractor.](https://github.com/BrenoFariasdaSilva/University/tree/main/Artificial%20Intelligence/Work%2001%20-%20Pixel%20Feature%20Extraction%20) <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original.svg"  width="3%" height="3%">
 
 </div>
 
@@ -13,7 +13,7 @@ TODO: Normalize the number of pixels by the total number of pixels in the image.
 
 </div>
 
-- [Pixel Feature Extractor ](#pixel-feature-extractor-)
+- [Pixel Feature Extractor. ](#pixel-feature-extractor-)
 	- [Prerequisites](#prerequisites)
 	- [Execution](#execution)
 	- [Configuration](#configuration)

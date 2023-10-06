@@ -1,6 +1,6 @@
 <div align="center">
   
-# [K-NN Digits Classification](https://github.com/BrenoFariasdaSilva/University/tree/main/Artificial%20Intelligence/Work%2002%20-%20K-NN%20Digits%20Classification) <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original.svg"  width="3%" height="3%">
+# [K-NN Digits Classification.](https://github.com/BrenoFariasdaSilva/University/tree/main/Artificial%20Intelligence/Work%2002%20-%20K-NN%20Digits%20Classification) <img src="https://github.com/devicons/devicon/blob/master/icons/python/python-original.svg"  width="3%" height="3%">
 
 </div>
 
