@@ -205,7 +205,7 @@ def write_results(results):
 # @return: output_file_path: The path for the output file
 def initialize_output_file():
 	# The path for the output file
-	output_file_path = f"{OUTPUT_DIRECTORY}/K-NN{OUTPUT_FILE_FORMAT}"
+	output_file_path = f"{OUTPUT_DIRECTORY}/K-NN-Digits-Classification{OUTPUT_FILE_FORMAT}"
 
 	# Create the output file
 	with open(output_file_path, "w") as output_file: 
