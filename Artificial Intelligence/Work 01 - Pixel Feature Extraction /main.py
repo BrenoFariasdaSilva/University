@@ -1,5 +1,6 @@
 import os # Import the os module for navigating the file system
 import numpy as np # Import the numpy module for data manipulation
+import threading # Import the threading module for creating threads
 from colorama import Style # For coloring the terminal
 from PIL import Image # Import the PIL module for image manipulation
 from sklearn.preprocessing import MinMaxScaler # Import the MinMaxScaler for normalizing the data
@@ -44,6 +45,46 @@ def verify_output_directory(output_path):
 	for dataset_name in DATASETS_PATH.keys():
 		if not os.path.exists(os.path.join(output_path, f"{dataset_name}")): # If the output directory for the current dataset does not exists
 			os.makedirs(os.path.join(output_path, f"{dataset_name}")) # Create the output directory for the current dataset
+
+# @brief:This function process each split, creating a thread for each split
+# @param: None
+# @return: None
+def process_each_split():
+	with tqdm(total=len(SPLITS.items()), desc=f"{backgroundColors.GREEN}Splits{Style.RESET_ALL}") as progress_bar:
+		# Create threads for each split
+		threads = []
+		for x_grid, y_grid in SPLITS.items():
+			thread = threading.Thread(target=process_split, args=(x_grid, y_grid, progress_bar))
+			threads.append(thread)
+			thread.start()
+
+		# Wait for all threads to finish
+		for thread in threads:
+			thread.join()
+
+# @brief:This function process each split, creating a thread for each split
+# @param: x_grid: The number of splits in the x axis
+# @param: y_grid: The number of splits in the y axis
+# @param: progress_bar: The progress bar for the splits
+# @return: None
+def process_split(x_grid, y_grid, progress_bar):
+	for dataset_name, dataset_path in DATASETS_PATH.items():
+		digit_class_pixel_counters = {}  # Initialize the digit class pixel counters dictionary
+		# Open each digit class directory that is inside the current dataset
+		for digit_class in sorted(os.listdir(dataset_path)):
+			# Initialize the pixel counter for the current digit class
+			digit_class_pixel_counters[digit_class] = {}
+			# Get the path for the current digit class
+			digit_class_folder_path = os.path.join(dataset_path, digit_class)
+			# Open each image that is inside the current digit class directory
+			for image_name in os.listdir(digit_class_folder_path):
+				# Process each image
+				digit_class_pixel_counters = process_each_image(
+					digit_class_pixel_counters, digit_class, image_name, digit_class_folder_path, x_grid, y_grid)
+		# Write results to the output file
+		write_results_to_output_file(digit_class_pixel_counters, dataset_name, x_grid, y_grid)
+		# Update the progress bar
+		progress_bar.update(1)
 
 # @brief: This function processes each image, counting the number of black and white pixels in each split
 # @param: x_grid: The number of splits in the x axis
@@ -235,27 +276,8 @@ def main():
 	# Verify if the output directory exists
 	verify_output_directory(OUTPUT_PATH)
 
-	# Create a progress bar for the splits
-	with tqdm(total=len(SPLITS.items()), desc=f"{backgroundColors.GREEN}Splits{Style.RESET_ALL}") as progress_bar:
-		# Loop through the splits: 1x1, 2x2, 3x3, 5x5
-		for x_grid, y_grid in SPLITS.items():
-			# Loop through the datasets: training and test
-			for dataset_name, dataset_path in DATASETS_PATH.items():
-				digit_class_pixel_counters = {} # Initialize the digit class pixel counters dictionary
-				# Open each digit class directory that is inside the current dataset
-				for digit_class in sorted(os.listdir(dataset_path)):
-					# Initialize the pixel counter for the current digit class
-					digit_class_pixel_counters[digit_class] = {}
-					# Get the path for the current digit class
-					digit_class_folder_path = os.path.join(dataset_path, digit_class)
-					# Open each image that is inside the current digit class directory
-					for image_name in os.listdir(digit_class_folder_path):
-						# Process each image
-						digit_class_pixel_counters = process_each_image(digit_class_pixel_counters, digit_class, image_name, digit_class_folder_path, x_grid, y_grid)
-				# Write results to the output file
-				write_results_to_output_file(digit_class_pixel_counters, dataset_name, x_grid, y_grid)
-			# Update the progress bar			
-			progress_bar.update(1)
+	# Process each split
+	process_each_split()
 
 # @brief: The entry point of the program
 # @param: None
