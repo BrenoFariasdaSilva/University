@@ -31,7 +31,7 @@ def load_data():
 # This function trains a k-NN classifier and prints the classification report
 def train_knn(train_features_values, train_label, test_features_values, test_label):
     print(f"{backgroundColors.GREEN}K-NN Classifier:{backgroundColors.CYAN}")
-    neigh = KNeighborsClassifier(n_neighbors=1, metric='euclidean')
+    neigh = KNeighborsClassifier(n_neighbors=1, metric="euclidean")
     neigh.fit(train_features_values, train_label)
     print(f"{classification_report(test_label, neigh.predict(test_features_values))}{Style.RESET_ALL}")
 
@@ -40,16 +40,16 @@ def train_svm_with_grid_search(train_features_values, train_label, test_features
     print(f"{backgroundColors.GREEN}SVM Classifier with Grid Search:{backgroundColors.CYAN}")
     C_range = 2. ** np.arange(-5, 15, 2)
     gamma_range = 2. ** np.arange(3, -15, -2)
-    k = ['rbf']
+    k = ["rbf"]
 
     # Instantiate the classifier with probability
-    srv = svm.SVC(probability=True, kernel='rbf')
+    srv = svm.SVC(probability=True, kernel="rbf")
     ss = StandardScaler()
-    pipeline = Pipeline([('scaler', ss), ('svm', srv)])
+    pipeline = Pipeline([("scaler", ss), ("svm", srv)])
 
     param_grid = {
-        'svm__C': C_range,
-        'svm__gamma': gamma_range
+        "svm__C": C_range,
+        "svm__gamma": gamma_range
     }
 
     # Perform Grid Search
