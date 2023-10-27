@@ -1,90 +1,73 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Exemplo do Algoritmo k-NN para scikit-learn.
-@author: diegobertolini
-"""
-import sys
-import numpy as np
-from sklearn import svm
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import classification_report
-from sklearn.neural_network import MLPClassifier
-from sklearn.svm import SVC
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV, train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.datasets import make_classification
-from sklearn import tree
+import numpy as np # For the data manipulation
+from sklearn.neighbors import KNeighborsClassifier # For the k-NN classifier
+from sklearn.metrics import classification_report # For the classification report
+from sklearn.neural_network import MLPClassifier # For the MLP classifier
+from sklearn.preprocessing import StandardScaler # For the standard scaler
+from sklearn.ensemble import RandomForestClassifier # For the random forest classifier
+from sklearn import tree # For the decision tree classifier
+from colorama import Style # For coloring the terminal
 
+# Macros:
+class backgroundColors: # Colors for the terminal
+    CYAN = "\033[96m" # Cyan
+    GREEN = "\033[92m" # Green
+    YELLOW = "\033[93m" # Yellow
+    RED = "\033[91m" # Red
+
+# This function loads the data from the dataset files and returns the training and test sets
+def load_data():
+    print(f"{backgroundColors.YELLOW}Remember to remove the header line from the dataset files. They should be in the format: {backgroundColors.CYAN}label feature1 feature2 ... featureN{Style.RESET_ALL}")
+    print(f"{backgroundColors.GREEN}Loading data...{Style.RESET_ALL}")
+    tr = np.loadtxt("./dataset/digits/training/5x5-normalized-pixel_count.txt")
+    ts = np.loadtxt("./dataset/digits/test/5x5-normalized-pixel_count.txt")
+    test_label = ts[:, 0] # The first column is the label
+    train_label = tr[:, 0] # The first column is the label
+    train_features_values = tr[:, 1:] # The second column to the last is the feature vector
+    test_features_values = ts[:, 1:] # The second column to the last is the feature vector
+    return train_features_values, train_label, test_features_values, test_label # Return the data
+
+# This function trains a SVM classifier with grid search and prints the classification report
+def train_decision_tree(train_features_values, train_label, test_features_values, test_label):
+    print(f"{backgroundColors.GREEN}Decision Tree Classifier:{backgroundColors.CYAN}")
+    clf = tree.DecisionTreeClassifier() # Instantiate the classifier
+    clf.fit(train_features_values, train_label) # Train the classifier
+    print(clf.predict(test_features_values)) # Print the predictions
+    print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
+
+# This function trains a k-NN classifier and prints the classification report
+def train_knn(train_features_values, train_label, test_features_values, test_label):
+    print(f"{backgroundColors.GREEN}K-NN Classifier:{backgroundColors.CYAN}")
+    neigh = KNeighborsClassifier(n_neighbors=1, metric="euclidean") # Instantiate the classifier
+    neigh.fit(train_features_values, train_label) # Train the classifier
+    print(f"{classification_report(test_label, neigh.predict(test_features_values))}") # Print the classification report
+
+# This function trains a SVM classifier with grid search and prints the classification report
+def train_mlp(train_features_values, train_label, test_features_values, test_label):
+    print(f"{backgroundColors.GREEN}RNA/MLP Classifier:{backgroundColors.CYAN}")
+    scaler = StandardScaler() # Instantiate the standard scaler
+    train_features_values = scaler.fit_transform(train_features_values) # Scale the training features
+    test_features_values = scaler.fit_transform(test_features_values) # Scale the test features
+    clf = MLPClassifier(solver="adam", alpha=1e-5, hidden_layer_sizes=(20), random_state=1) # Instantiate the classifier
+    clf.fit(train_features_values, train_label) # Train the classifier
+    print(clf.predict(test_features_values)) # Print the predictions
+    print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
+
+# This function trains a SVM classifier with grid search and prints the classification report
+def train_random_forest(train_features_values, train_label, test_features_values, test_label):
+    print(f"{backgroundColors.GREEN}Random Forest Classifier:{backgroundColors.CYAN}")
+    clf = RandomForestClassifier(n_estimators=10000, max_depth=30, random_state=1) # Instantiate the classifier
+    clf.fit(train_features_values, train_label) # Train the classifier
+    print(clf.predict(test_features_values)) # Print the predictions
+    print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
+
+# This is the main function. It calls the other functions, building the project workflow
 def main():
+    train_features_values, train_label, test_features_values, test_label = load_data() # Load the data
+    train_decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the decision tree classifier
+    train_knn(train_features_values, train_label, test_features_values, test_label) # Train the k-NN classifier
+    train_mlp(train_features_values, train_label, test_features_values, test_label) # Train the MLP classifier
+    train_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the random forest classifier
 
-        # load data
-        print ("Loading data...")
-        #tr = np.loadtxt(dataTr) ;
-        #ts = np.loadtxt(dataTs) ;
-        tr = np.loadtxt('treinamento.txt') ;
-        ts = np.loadtxt('teste.txt');
-        y_test  = ts[:,132]
-        y_train = tr[:,132]
-        X_train = tr[:, 1 : 132]
-        X_test  = ts[:, 1 : 132]
-        
- # k-NN classifier
-#        from sklearn.metrics import classification_report
-#        neigh = KNeighborsClassifier(n_neighbors=1, metric='euclidean')
-#        neigh.fit(X_train, y_train)
-#        #neigh.score(X_test, y_test)
-#        print(classification_report(y_test, neigh.predict(X_test)))
-        
-###SVM com Grid search
-#        C_range = 2. ** np.arange(-5,15,2)
-#        gamma_range = 2. ** np.arange(3,-15,-2)
-#        k = [ 'rbf']
-#        # instancia o classificador, gerando probabilidades
-#        srv = svm.SVC(probability=True, kernel='rbf')
-#        ss = StandardScaler()
-#        pipeline = Pipeline([ ('scaler', ss), ('svm', srv) ])
-#        
-#        param_grid = {
-#            'svm__C' : C_range,
-#            'svm__gamma' : gamma_range
-#        }
-#        
-#        # faz a busca
-#        grid = GridSearchCV(pipeline, param_grid, n_jobs=-1, verbose=True)
-#        grid.fit(X_train, y_train)
-#        
-#        # recupera o melhor modelo
-#        model = grid.best_estimator_
-#        print(classification_report(y_test, model.predict(X_test)))
-#        
-### MLP 
-        scaler = StandardScaler()
-        X_train = scaler.fit_transform(X_train)
-        X_test = scaler.fit_transform(X_test)
-        
-        clf = MLPClassifier(solver='adam', alpha=1e-5, hidden_layer_sizes=(20), random_state=1)
-        clf.fit(X_train, y_train)
-        print(clf.predict(X_test))
-        print(classification_report(y_test, clf.predict(X_test)))
-
-## Random Forest Classifier
-        #X, y = make_classification(n_samples=1000, n_features=4, n_informative=2, n_redundant=0, random_state=0, shuffle=False)
-#        clf = RandomForestClassifier(n_estimators=10000, max_depth=30, random_state=1)
-#        clf.fit(X_train, y_train)  
-#        #print(clf.feature_importances_)
-#        print(clf.predict(X_test))
-#        print(classification_report(y_test, clf.predict(X_test)))
-        
-
-### Decision Tree
-#        clf = tree.DecisionTreeClassifier()
-#        clf.fit(X_train, y_train)
-#        print(clf.predict(X_test))
-#        print(classification_report(y_test, clf.predict(X_test)))
-#        tree.plot_tree(clf)
-
+# This the boilerplate that calls the main function
 if __name__ == "__main__":
-        main()
+    main() # Call the main function
