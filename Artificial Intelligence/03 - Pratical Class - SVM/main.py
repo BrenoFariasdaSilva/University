@@ -1,12 +1,11 @@
-import numpy as np
-from sklearn import tree
-from sklearn import svm
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import classification_report
-from sklearn.svm import SVC
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV
+import numpy as np # For loading the dataset files
+from sklearn import tree # For the decision tree classifier
+from sklearn import svm # For the SVM classifier
+from sklearn.neighbors import KNeighborsClassifier # For the k-NN classifier
+from sklearn.metrics import classification_report # For the classification report
+from sklearn.preprocessing import StandardScaler # For the standard scaler
+from sklearn.pipeline import Pipeline # For the pipeline
+from sklearn.model_selection import GridSearchCV # For the grid search
 from colorama import Style # For coloring the terminal
 
 # Macros:
@@ -67,11 +66,13 @@ def train_decision_tree(train_features_values, train_label, test_features_values
     clf = clf.fit(train_features_values, train_label)
     print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}")
 
+# This is the main function. It calls the other functions, building the project workflow
 def main():
     train_features_values, train_label, test_features_values, test_label = load_data()
     train_knn(train_features_values, train_label, test_features_values, test_label)
     train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label)
     train_decision_tree(train_features_values, train_label, test_features_values, test_label)
 
+# This the boilerplate that calls the main function
 if __name__ == "__main__":
     main() # Call the main function
