@@ -92,8 +92,8 @@ def train_random_forest(train_features_values, train_label, test_features_values
 # This is the main function. It calls the other functions, building the project workflow
 def main():
     train_features_values, train_label, test_features_values, test_label = load_data() # Load the data
-    train_decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
     train_knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
+    train_decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
     train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
     train_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN - Multilayer Perceptron classifier
     train_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
