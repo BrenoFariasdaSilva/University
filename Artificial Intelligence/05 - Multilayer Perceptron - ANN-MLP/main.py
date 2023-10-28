@@ -29,7 +29,7 @@ def train_multilayer_perceptron(train_features_values, train_label, test_feature
     scaler = StandardScaler() # Instantiate the standard scaler
     train_features_values = scaler.fit_transform(train_features_values) # Scale the training features
     test_features_values = scaler.fit_transform(test_features_values) # Scale the test features
-    clf = MLPClassifier(solver="adam", alpha=1e-5, hidden_layer_sizes=(20), random_state=1) # Instantiate the classifier
+    clf = MLPClassifier(solver="adam", alpha=1e-5, hidden_layer_sizes=(500, 500, 500, 500), random_state=1) # Instantiate the classifier
     clf.fit(train_features_values, train_label) # Train the classifier
     print(clf.predict(test_features_values)) # Print the predictions
     print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
