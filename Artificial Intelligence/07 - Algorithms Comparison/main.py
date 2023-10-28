@@ -34,7 +34,7 @@ def train_knn(train_features_values, train_label, test_features_values, test_lab
     print(f"{backgroundColors.GREEN}1º K-NN Classifier:{backgroundColors.CYAN}")
     neigh = KNeighborsClassifier(n_neighbors=1, metric="euclidean") # Instantiate the classifier
     neigh.fit(train_features_values, train_label) # Train the classifier
-    print(f"{classification_report(test_label, neigh.predict(test_features_values))}") # Print the classification report
+    print(f"{classification_report(test_label, neigh.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
 
 # This function trains a SVM classifier with grid search and prints the classification report
 def train_decision_tree(train_features_values, train_label, test_features_values, test_label):
