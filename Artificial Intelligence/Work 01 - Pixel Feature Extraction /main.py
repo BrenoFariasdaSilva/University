@@ -22,7 +22,7 @@ DATASETS_PATH = {"training":"dataset/digits/training", "test":"dataset/digits/te
 OUTPUT_PATH = "pixels_count/digits" # The path for the output directory
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
 IMAGE_FILE_FORMAT = ".bmp" # The image file format
-OUTPUT_FILE_FORMAT = ".txt" # The output file format
+OUTPUT_FILES_FORMAT = {".csv": True, ".txt": False} # The output file format
 ADD_HEADER = False # Add header to the output file
 
 # @brief: This function verifies if the test and training dataset exists
@@ -83,9 +83,7 @@ def process_split(x_grid, y_grid, progress_bar):
 				digit_class_pixel_counters = process_each_image(
 					digit_class_pixel_counters, digit_class, image_name, digit_class_folder_path, x_grid, y_grid)
 		# Write results to the output file
-		write_results_to_output_file(digit_class_pixel_counters, dataset_name, x_grid, y_grid)
-		# Delete the non normalized pixel counters files
-		os.remove(os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-pixel_count{OUTPUT_FILE_FORMAT}"))
+		write_results_to_output_files(digit_class_pixel_counters, dataset_name, x_grid, y_grid)
 		# Update the progress bar
 		progress_bar.update(1)
 
@@ -171,17 +169,20 @@ def count_pixels(image_path, x_grid, y_grid, digit_class_pixel_counters, digit_c
 # @param: y_grid: The number of splits in the y axis
 # @param: dataset_path: The path for the current dataset
 # @return: None
-def write_results_to_output_file(digit_class_pixel_counters, dataset_name, x_grid, y_grid):
-	# Create the output file path
-	raw_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-pixel_count{OUTPUT_FILE_FORMAT}")
-	# write the digit_class_pixel_counters to the output file
-	write_pixel_counters(raw_output_file_path, digit_class_pixel_counters, x_grid, y_grid)
-	# Create the output file path
-	norm_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-normalized-pixel_count{OUTPUT_FILE_FORMAT}")
-	# Normalize the data stored in the csv
-	normalized_digit_class_pixel_counters = normalize_data(digit_class_pixel_counters, x_grid, y_grid)
-	# Write the digit_class_pixel_counters to the output file
-	write_pixel_counters(norm_output_file_path, normalized_digit_class_pixel_counters, x_grid, y_grid)
+def write_results_to_output_files(digit_class_pixel_counters, dataset_name, x_grid, y_grid):
+	for output_file_format in OUTPUT_FILES_FORMAT.keys():
+		# Create the output file path
+		raw_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-pixel_count{output_file_format}")
+		# write the digit_class_pixel_counters to the output file
+		write_pixel_counters(raw_output_file_path, digit_class_pixel_counters, x_grid, y_grid)
+		# Create the output file path
+		norm_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-normalized-pixel_count{output_file_format}")
+		# Normalize the data stored in the csv
+		normalized_digit_class_pixel_counters = normalize_data(digit_class_pixel_counters, x_grid, y_grid)
+		# Write the digit_class_pixel_counters to the output file
+		write_pixel_counters(norm_output_file_path, normalized_digit_class_pixel_counters, x_grid, y_grid)
+		# Delete the non normalized pixel counters files
+		os.remove(raw_output_file_path)
 
 # @brief: This function writes the pixel counters to the output file
 # @param: output_file: The output file
@@ -190,9 +191,10 @@ def write_results_to_output_file(digit_class_pixel_counters, dataset_name, x_gri
 # @param: y_grid: The number of splits in the y axis
 # @return: None
 def write_pixel_counters(output_file_path, digit_class_pixel_counters, x_grid, y_grid):
-	# Create and open the output CSV file
-	output_file = create_output_file(output_file_path)
-	if ADD_HEADER: # If the header is not added
+	output_file = create_output_file(output_file_path) # Create the output file
+	# Get the file format (dot included)
+	file_format = os.path.splitext(output_file_path)[1]
+	if OUTPUT_FILES_FORMAT[file_format]: # If the header is not added
 		# Create the header for the output file
 		output_file = create_output_file_header(x_grid, y_grid, output_file)
 	# Loop through the digit classes
