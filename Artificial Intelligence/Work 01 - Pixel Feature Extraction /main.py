@@ -23,6 +23,7 @@ OUTPUT_PATH = "pixels_count/digits" # The path for the output directory
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
 IMAGE_FILE_FORMAT = ".bmp" # The image file format
 OUTPUT_FILE_FORMAT = ".txt" # The output file format
+ADD_HEADER = False # Add header to the output file
 
 # @brief: This function verifies if the test and training dataset exists
 # @param: None
@@ -190,7 +191,10 @@ def write_results_to_output_file(digit_class_pixel_counters, dataset_name, x_gri
 # @return: None
 def write_pixel_counters(output_file_path, digit_class_pixel_counters, x_grid, y_grid):
 	# Create and open the output CSV file
-	output_file = create_output_file_header(x_grid, y_grid, output_file_path)
+	output_file = create_output_file(output_file_path)
+	if ADD_HEADER: # If the header is not added
+		# Create the header for the output file
+		output_file = create_output_file_header(x_grid, y_grid, output_file)
 	# Loop through the digit classes
 	for digit_class, digit_class_data in digit_class_pixel_counters.items():
 		# Loop through the images in the current digit class
@@ -201,16 +205,22 @@ def write_pixel_counters(output_file_path, digit_class_pixel_counters, x_grid, y
 				output_string += f" {digit_class_pixel_counters[digit_class][image_name][i]['black']} {digit_class_pixel_counters[digit_class][image_name][i]['white']}"
 			output_file.write(output_string + "\n")
 
-# @brief: This function create the header for the output file
-# @param: x_split: The number of splits in the x axis
-# @param: y_split: The number of splits in the y axis
+# @brief: This function create and return the output file object
 # @param: output_file_path: The path for the output file
 # @return: output_file: The output file object
-def create_output_file_header(x_split, y_split, output_file_path):
+def create_output_file(output_file_path):
 	# Create and open the output CSV file
 	output_file = open(output_file_path, "a")
 	# Clear the output file (truncate its contents)
 	output_file.truncate(0)
+	return output_file # Return the output file object
+
+# @brief: This function create the header for the output file
+# @param: x_split: The number of splits in the x axis
+# @param: y_split: The number of splits in the y axis
+# @param: output_file: The output file object
+# @return: output_file: The output file object
+def create_output_file_header(x_split, y_split, output_file):
 	# Create the header string
 	header_string = "Digit Class"
 
