@@ -24,7 +24,7 @@ def load_data():
 
 # This function trains a decision tree classifier and prints the classification report
 def train_decision_tree(train_features_values, train_label, test_features_values, test_label):
-    print(f"{backgroundColors.GREEN}2º Decision Tree Classifier:{backgroundColors.CYAN}")
+    print(f"{backgroundColors.GREEN}1º Decision Tree Classifier:{backgroundColors.CYAN}")
     clf = tree.DecisionTreeClassifier() # Instantiate the classifier
     clf = clf.fit(train_features_values, train_label) # Train the classifier
     print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
