@@ -23,7 +23,6 @@ OUTPUT_PATH = "pixels_count/digits" # The path for the output directory
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
 IMAGE_FILE_FORMAT = ".bmp" # The image file format
 OUTPUT_FILES_FORMAT = {".csv": True, ".txt": False} # The output file format
-ADD_HEADER = False # Add header to the output file
 
 # @brief: This function verifies if the test and training dataset exists
 # @param: None
