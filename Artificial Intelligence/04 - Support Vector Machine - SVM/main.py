@@ -29,7 +29,7 @@ def load_data():
 def train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label):
     print(f"{backgroundColors.GREEN}SVM Classifier with Grid Search:{backgroundColors.CYAN}")
     C_range = 2. ** np.arange(-5, 15, 2) # The range of C values
-    gamma_range = 2. ** np.arange(3, -15, -2) # The range of gamma values
+    gamma_range = 2. ** np.arange(3, -15, -2) # The range of gamma values which defines the influence of a single training example
     k = ["rbf"] # The kernel
 
     # Instantiate the classifier with probability
@@ -49,6 +49,7 @@ def train_svm_with_grid_search(train_features_values, train_label, test_features
 
     # Retrieve the best model
     model = grid.best_estimator_ # Retrieve the best model
+    print(f"{backgroundColors.GREEN}Best parameters set found on development set is {backgroundColors.CYAN}{model.get_params}{Style.RESET_ALL}") # Print the best parameters
     print(f"{classification_report(test_label, model.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
 
 # This is the main function. It calls the other functions, building the project workflow
