@@ -22,7 +22,8 @@ DATASETS_PATH = {"training":"dataset/digits/training", "test":"dataset/digits/te
 OUTPUT_PATH = "pixels_count/digits" # The path for the output directory
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
 IMAGE_FILE_FORMAT = ".bmp" # The image file format
-OUTPUT_FILE_FORMAT = ".csv" # The output file format
+OUTPUT_FILES_FORMAT = {".csv": True, ".txt": False} # The output file format
+ADD_HEADER = False # Add header to the output file
 
 # @brief: This function verifies if the test and training dataset exists
 # @param: None
@@ -82,7 +83,7 @@ def process_split(x_grid, y_grid, progress_bar):
 				digit_class_pixel_counters = process_each_image(
 					digit_class_pixel_counters, digit_class, image_name, digit_class_folder_path, x_grid, y_grid)
 		# Write results to the output file
-		write_results_to_output_file(digit_class_pixel_counters, dataset_name, x_grid, y_grid)
+		write_results_to_output_files(digit_class_pixel_counters, dataset_name, x_grid, y_grid)
 		# Update the progress bar
 		progress_bar.update(1)
 
@@ -168,17 +169,20 @@ def count_pixels(image_path, x_grid, y_grid, digit_class_pixel_counters, digit_c
 # @param: y_grid: The number of splits in the y axis
 # @param: dataset_path: The path for the current dataset
 # @return: None
-def write_results_to_output_file(digit_class_pixel_counters, dataset_name, x_grid, y_grid):
-	# Create the output file path
-	raw_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-pixel_count{OUTPUT_FILE_FORMAT}")
-	# write the digit_class_pixel_counters to the output file
-	write_pixel_counters(raw_output_file_path, digit_class_pixel_counters, x_grid, y_grid)
-	# Create the output file path
-	norm_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-normalized-pixel_count{OUTPUT_FILE_FORMAT}")
-	# Normalize the data stored in the csv
-	normalized_digit_class_pixel_counters = normalize_data(digit_class_pixel_counters, x_grid, y_grid)
-	# Write the digit_class_pixel_counters to the output file
-	write_pixel_counters(norm_output_file_path, normalized_digit_class_pixel_counters, x_grid, y_grid)
+def write_results_to_output_files(digit_class_pixel_counters, dataset_name, x_grid, y_grid):
+	for output_file_format in OUTPUT_FILES_FORMAT.keys():
+		# Create the output file path
+		raw_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-pixel_count{output_file_format}")
+		# write the digit_class_pixel_counters to the output file
+		write_pixel_counters(raw_output_file_path, digit_class_pixel_counters, x_grid, y_grid)
+		# Create the output file path
+		norm_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-normalized-pixel_count{output_file_format}")
+		# Normalize the data stored in the csv
+		normalized_digit_class_pixel_counters = normalize_data(digit_class_pixel_counters, x_grid, y_grid)
+		# Write the digit_class_pixel_counters to the output file
+		write_pixel_counters(norm_output_file_path, normalized_digit_class_pixel_counters, x_grid, y_grid)
+		# Delete the non normalized pixel counters files
+		os.remove(raw_output_file_path)
 
 # @brief: This function writes the pixel counters to the output file
 # @param: output_file: The output file
@@ -187,36 +191,46 @@ def write_results_to_output_file(digit_class_pixel_counters, dataset_name, x_gri
 # @param: y_grid: The number of splits in the y axis
 # @return: None
 def write_pixel_counters(output_file_path, digit_class_pixel_counters, x_grid, y_grid):
-	# Create and open the output CSV file
-	output_file = create_output_file_header(x_grid, y_grid, output_file_path)
+	output_file = create_output_file(output_file_path) # Create the output file
+	# Get the file format (dot included)
+	file_format = os.path.splitext(output_file_path)[1]
+	if OUTPUT_FILES_FORMAT[file_format]: # If the header is not added
+		# Create the header for the output file
+		output_file = create_output_file_header(x_grid, y_grid, output_file)
 	# Loop through the digit classes
 	for digit_class, digit_class_data in digit_class_pixel_counters.items():
 		# Loop through the images in the current digit class
 		for image_name in digit_class_data.keys():
-			output_string = f"{x_grid}x{y_grid},{digit_class},{image_name}" # Initialize the output string
+			output_string = f"{digit_class}" # Initialize the output string
 			# Loop through the splits for the current image in the current digit class
 			for i in range(0, x_grid * y_grid):
-				output_string += f",{digit_class_pixel_counters[digit_class][image_name][i]['black']},{digit_class_pixel_counters[digit_class][image_name][i]['white']}"
+				output_string += f" {digit_class_pixel_counters[digit_class][image_name][i]['black']} {digit_class_pixel_counters[digit_class][image_name][i]['white']}"
 			output_file.write(output_string + "\n")
 
-# @brief: This function create the header for the output file
-# @param: x_split: The number of splits in the x axis
-# @param: y_split: The number of splits in the y axis
+# @brief: This function create and return the output file object
 # @param: output_file_path: The path for the output file
 # @return: output_file: The output file object
-def create_output_file_header(x_split, y_split, output_file_path):
+def create_output_file(output_file_path):
 	# Create and open the output CSV file
 	output_file = open(output_file_path, "a")
 	# Clear the output file (truncate its contents)
 	output_file.truncate(0)
+	return output_file # Return the output file object
+
+# @brief: This function create the header for the output file
+# @param: x_split: The number of splits in the x axis
+# @param: y_split: The number of splits in the y axis
+# @param: output_file: The output file object
+# @return: output_file: The output file object
+def create_output_file_header(x_split, y_split, output_file):
 	# Create the header string
-	header_string = "GRID,Digit Class,Image Name"
+	header_string = "Digit Class"
 
 	# Add columns for each grid cell
 	for i in range(x_split):
 		for j in range(y_split):
 			cell_label = f"{i}x{j}" # Grid cell label
-			header_string += f",{cell_label} Black,{cell_label} White"
+			header_string += f" {cell_label} Black {cell_label} White"
 
 	# Write the header to the output CSV file
 	output_file.write(header_string + "\n")
