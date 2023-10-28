@@ -22,7 +22,8 @@ DATASETS_PATH = {"training":"dataset/digits/training", "test":"dataset/digits/te
 OUTPUT_PATH = "pixels_count/digits" # The path for the output directory
 SPLITS = {1:1, 2:2, 3:3, 5:5} # The splits for the feature extractor
 IMAGE_FILE_FORMAT = ".bmp" # The image file format
-OUTPUT_FILES_FORMAT = {".csv": True, ".txt": False} # The output file format
+OUTPUT_FILES_FORMAT_HEADER = {".csv": True, ".txt": False} # The output file format
+OUTPUT_INFORMATION = {".csv": "detailed", ".txt": "simplified"} # The output file type
 
 # @brief: This function verifies if the test and training dataset exists
 # @param: None
@@ -169,17 +170,24 @@ def count_pixels(image_path, x_grid, y_grid, digit_class_pixel_counters, digit_c
 # @param: dataset_path: The path for the current dataset
 # @return: None
 def write_results_to_output_files(digit_class_pixel_counters, dataset_name, x_grid, y_grid):
-	for output_file_format in OUTPUT_FILES_FORMAT.keys():
+	for output_file_format in OUTPUT_FILES_FORMAT_HEADER.keys():
 		# Create the output file path
 		raw_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-pixel_count{output_file_format}")
-		# write the digit_class_pixel_counters to the output file
-		write_pixel_counters(raw_output_file_path, digit_class_pixel_counters, x_grid, y_grid)
+		if OUTPUT_INFORMATION[output_file_format] == "detailed": # If the output file is detailed
+			# Write the pixel counters to the output file
+			write_detailed_pixel_counters(raw_output_file_path, digit_class_pixel_counters, x_grid, y_grid)
+		else:
+			# Write the pixel counters to the output file
+			write_simplified_pixel_counters(raw_output_file_path, digit_class_pixel_counters, x_grid, y_grid)
 		# Create the output file path
 		norm_output_file_path = os.path.join(OUTPUT_PATH, f"{dataset_name}/{x_grid}x{y_grid}-normalized-pixel_count{output_file_format}")
 		# Normalize the data stored in the csv
 		normalized_digit_class_pixel_counters = normalize_data(digit_class_pixel_counters, x_grid, y_grid)
 		# Write the digit_class_pixel_counters to the output file
-		write_pixel_counters(norm_output_file_path, normalized_digit_class_pixel_counters, x_grid, y_grid)
+		if OUTPUT_INFORMATION[output_file_format] == "detailed": # If the output file is detailed
+			write_detailed_pixel_counters(norm_output_file_path, normalized_digit_class_pixel_counters, x_grid, y_grid)
+		else:
+			write_simplified_pixel_counters(norm_output_file_path, normalized_digit_class_pixel_counters, x_grid, y_grid)
 		# Delete the non normalized pixel counters files
 		os.remove(raw_output_file_path)
 
@@ -189,13 +197,36 @@ def write_results_to_output_files(digit_class_pixel_counters, dataset_name, x_gr
 # @param: x_grid: The number of splits in the x axis
 # @param: y_grid: The number of splits in the y axis
 # @return: None
-def write_pixel_counters(output_file_path, digit_class_pixel_counters, x_grid, y_grid):
+def write_detailed_pixel_counters(output_file_path, digit_class_pixel_counters, x_grid, y_grid):
 	output_file = create_output_file(output_file_path) # Create the output file
 	# Get the file format (dot included)
 	file_format = os.path.splitext(output_file_path)[1]
-	if OUTPUT_FILES_FORMAT[file_format]: # If the header is not added
+	if OUTPUT_FILES_FORMAT_HEADER[file_format]: # If this file format requires a header
 		# Create the header for the output file
-		output_file = create_output_file_header(x_grid, y_grid, output_file)
+		output_file = create_detailed_output_file_header(output_file, x_grid, y_grid)
+	# Loop through the digit classes
+	for digit_class, digit_class_data in digit_class_pixel_counters.items():
+		# Loop through the images in the current digit class
+		for image_name in digit_class_data.keys():
+			output_string = f"{x_grid}x{y_grid},{digit_class},{image_name}" # Initialize the output string
+			# Loop through the splits for the current image in the current digit class
+			for i in range(0, x_grid * y_grid):
+				output_string += f",{digit_class_pixel_counters[digit_class][image_name][i]['black']},{digit_class_pixel_counters[digit_class][image_name][i]['white']}"
+			output_file.write(output_string + "\n")
+
+# @brief: This function writes the pixel counters to the output file
+# @param: output_file: The output file
+# @param: digit_class_pixel_counters: A dictionary for storing the number of black and white pixels for the current image in the current digit class
+# @param: x_grid: The number of splits in the x axis
+# @param: y_grid: The number of splits in the y axis
+# @return: None
+def write_simplified_pixel_counters(output_file_path, digit_class_pixel_counters, x_grid, y_grid):
+	output_file = create_output_file(output_file_path) # Create the output file
+	# Get the file format (dot included)
+	file_format = os.path.splitext(output_file_path)[1]
+	if OUTPUT_FILES_FORMAT_HEADER[file_format]: # If this file format requires a header
+		# Create the header for the output file
+		output_file = create_simplified_output_file_header(output_file, x_grid, y_grid)
 	# Loop through the digit classes
 	for digit_class, digit_class_data in digit_class_pixel_counters.items():
 		# Loop through the images in the current digit class
@@ -216,12 +247,32 @@ def create_output_file(output_file_path):
 	output_file.truncate(0)
 	return output_file # Return the output file object
 
-# @brief: This function create the header for the output file
+# @brief: This function create the detailed header for the output file
+# @param: output_file: The output file object
 # @param: x_split: The number of splits in the x axis
 # @param: y_split: The number of splits in the y axis
-# @param: output_file: The output file object
 # @return: output_file: The output file object
-def create_output_file_header(x_split, y_split, output_file):
+def create_detailed_output_file_header(output_file, x_split, y_split):
+	# Create the header string
+	header_string = "GRID,Digit Class,Image Name"
+
+	# Add columns for each grid cell
+	for i in range(x_split):
+		for j in range(y_split):
+			cell_label = f"{i}x{j}" # Grid cell label
+			header_string += f",{cell_label} Black,{cell_label} White"
+
+	# Write the header to the output CSV file
+	output_file.write(header_string + "\n")
+
+	return output_file # Return the output file object
+
+# @brief: This function create the simplified header for the output file
+# @param: output_file: The output file object
+# @param: x_split: The number of splits in the x axis
+# @param: y_split: The number of splits in the y axis
+# @return: output_file: The output file object
+def create_simplified_output_file_header(output_file, x_split, y_split):
 	# Create the header string
 	header_string = "Digit Class"
 
@@ -229,7 +280,7 @@ def create_output_file_header(x_split, y_split, output_file):
 	for i in range(x_split):
 		for j in range(y_split):
 			cell_label = f"{i}x{j}" # Grid cell label
-			header_string += f" {cell_label} Black {cell_label} White"
+			header_string += f",{cell_label} Black,{cell_label} White"
 
 	# Write the header to the output CSV file
 	output_file.write(header_string + "\n")
