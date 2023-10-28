@@ -29,21 +29,21 @@ def load_data():
 
 # This function trains a k-NN classifier and prints the classification report
 def train_knn(train_features_values, train_label, test_features_values, test_label):
-    print(f"{backgroundColors.GREEN}K-NN Classifier:{backgroundColors.CYAN}")
+    print(f"{backgroundColors.GREEN}1º K-NN Classifier:{backgroundColors.CYAN}")
     neigh = KNeighborsClassifier(n_neighbors=1, metric="euclidean") # Instantiate the classifier
     neigh.fit(train_features_values, train_label) # Train the classifier
     print(f"{classification_report(test_label, neigh.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
 
 # This function trains a decision tree classifier and prints the classification report
 def train_decision_tree(train_features_values, train_label, test_features_values, test_label):
-    print(f"{backgroundColors.GREEN}Decision Tree Classifier:{backgroundColors.CYAN}")
+    print(f"{backgroundColors.GREEN}2º Decision Tree Classifier:{backgroundColors.CYAN}")
     clf = tree.DecisionTreeClassifier() # Instantiate the classifier
     clf = clf.fit(train_features_values, train_label) # Train the classifier
     print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
 
 # This function trains a SVM classifier with grid search and prints the classification report
 def train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label):
-    print(f"{backgroundColors.GREEN}SVM Classifier with Grid Search:{backgroundColors.CYAN}")
+    print(f"{backgroundColors.GREEN}3º SVM Classifier with Grid Search:{backgroundColors.CYAN}")
     C_range = 2. ** np.arange(-5, 15, 2) # The range of C values
     gamma_range = 2. ** np.arange(3, -15, -2) # The range of gamma values
     k = ["rbf"] # The kernel
