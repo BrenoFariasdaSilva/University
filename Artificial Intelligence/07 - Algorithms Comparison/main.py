@@ -48,7 +48,7 @@ def train_decision_tree(train_features_values, train_label, test_features_values
 def train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label):
     print(f"{backgroundColors.GREEN}3º SVM Classifier with Grid Search:{backgroundColors.CYAN}")
     C_range = 2. ** np.arange(-5, 15, 2) # The range of C values
-    gamma_range = 2. ** np.arange(3, -15, -2) # The range of gamma values
+    gamma_range = 2. ** np.arange(3, -15, -2) # The range of gamma values which defines the influence of a single training example
     k = ["rbf"] # The kernel
 
     # Instantiate the classifier with probability
@@ -76,7 +76,7 @@ def train_multilayer_perceptron(train_features_values, train_label, test_feature
     scaler = StandardScaler() # Instantiate the standard scaler
     train_features_values = scaler.fit_transform(train_features_values) # Scale the training features
     test_features_values = scaler.fit_transform(test_features_values) # Scale the test features
-    clf = MLPClassifier(solver="adam", alpha=1e-5, hidden_layer_sizes=(20), random_state=1) # Instantiate the classifier
+    clf = MLPClassifier(solver="adam", alpha=1e-5, hidden_layer_sizes=(500, 500, 500, 500), random_state=1) # Instantiate the classifier
     clf.fit(train_features_values, train_label) # Train the classifier
     print(clf.predict(test_features_values)) # Print the predictions
     print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
