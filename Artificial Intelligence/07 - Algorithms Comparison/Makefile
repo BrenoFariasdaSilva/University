@@ -1,7 +1,7 @@
-all: dependencies run
+all: depencencies run
 
 run:
 	clear; python3 ./main.py
 
-dependencies:
-	pip install numpy colorama scikit-learn
+depencencies:
+	pip install colorama numpy scikit-learn
