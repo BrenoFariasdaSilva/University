@@ -1,1 +1,0 @@
-Pode ser resolvido em dupla ou trio.
