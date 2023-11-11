@@ -6,7 +6,7 @@ import json # For converting the movie object to JSON
 from colorama import Style # For coloring the terminal
 
 # Background colors:
-class backgroundColors: # Colors for the terminal
+class BackgroundColors: # Colors for the terminal
 	OKCYAN = "\033[96m" # Cyan
 	OKGREEN = "\033[92m" # Green
 	WARNING = "\033[93m" # Yellow
@@ -26,7 +26,7 @@ class MongoDatabase:
 		self.database = self.client["movies"]
 		self.collection = self.database["movies"]
 		database_name = os.getenv("DATABASE_URL")[:os.getenv("DATABASE_URL").find(".")]
-		print(f"{backgroundColors.OKGREEN}Server Connected to {backgroundColors.OKCYAN}{database_name}{backgroundColors.OKGREEN} MongoDB database using {backgroundColors.OKCYAN}{os.getenv('USERNAME')} {backgroundColors.OKGREEN}user{Style.RESET_ALL}")
+		print(f"{BackgroundColors.OKGREEN}Server Connected to {BackgroundColors.OKCYAN}{database_name}{BackgroundColors.OKGREEN} MongoDB database using {BackgroundColors.OKCYAN}{os.getenv('USERNAME')} {BackgroundColors.OKGREEN}user{Style.RESET_ALL}")
 		print("")
 
 	## Methods:
@@ -42,7 +42,7 @@ class MongoDatabase:
 		movie = json.loads(movie)
 		if movie.get('id'):
 			movie.pop('id')
-		print(f"{backgroundColors.OKGREEN}Creating movie {backgroundColors.OKCYAN}{movie}{Style.RESET_ALL}")
+		print(f"{BackgroundColors.OKGREEN}Creating movie {BackgroundColors.OKCYAN}{movie}{Style.RESET_ALL}")
 		reponse_document = self.collection.insert_one(movie)
 		if reponse_document.acknowledged: # If the movie was created
 			return SUCCESS

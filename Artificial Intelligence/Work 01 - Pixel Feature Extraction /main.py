@@ -7,7 +7,7 @@ from sklearn.preprocessing import MinMaxScaler # Import the MinMaxScaler for nor
 from tqdm import tqdm # For Generating the Progress Bars
 
 # Macros:
-class backgroundColors: # Colors for the terminal
+class BackgroundColors: # Colors for the terminal
 	CYAN = "\033[96m" # Cyan
 	GREEN = "\033[92m" # Green
 	YELLOW = "\033[93m" # Yellow
@@ -34,7 +34,7 @@ OUTPUT_INFORMATION = {".csv": "detailed", ".txt": "simplified"} # The output fil
 def verify_datasets():
 	for dataset_name, dataset_path in DATASETS_PATH.items(): # Loop through the datasets
 		if not os.path.exists(dataset_path): # If the dataset does not exists
-			print(f"{backgroundColors.RED}The {dataset_name} does not exists{Style.RESET_ALL}")
+			print(f"{BackgroundColors.RED}The {dataset_name} does not exists{Style.RESET_ALL}")
 			return False # If the dataset does not exists
 	return True # If all of the datasets exists
 
@@ -54,7 +54,7 @@ def verify_output_directory(output_path):
 # @param: None
 # @return: None
 def process_each_split():
-	with tqdm(total=len(SPLITS.items()), desc=f"{backgroundColors.GREEN}Splits{Style.RESET_ALL}") as progress_bar:
+	with tqdm(total=len(SPLITS.items()), desc=f"{BackgroundColors.GREEN}Splits{Style.RESET_ALL}") as progress_bar:
 		# Create threads for each split
 		threads = []
 		for x_grid, y_grid in SPLITS.items():
@@ -108,7 +108,7 @@ def process_each_image(digit_class_pixel_counters, digit_class, image_name, digi
 		# Process each image
 		digit_class_pixel_counters = count_pixels(image_path, x_grid, y_grid, digit_class_pixel_counters, digit_class, image_name)
 	else: # If the current file is not a bmp image
-		print(f"{backgroundColors.RED}The current file is not a bmp image{Style.RESET_ALL}")
+		print(f"{BackgroundColors.RED}The current file is not a bmp image{Style.RESET_ALL}")
 	return digit_class_pixel_counters # Return the digit_class_pixel_counters dictionary
 	
 # @brief: This function initializes the pixel counter dictionary
@@ -155,7 +155,7 @@ def count_pixels(image_path, x_grid, y_grid, digit_class_pixel_counters, digit_c
 					elif pixel_color == WHITE: # If the pixel color is white
 						pixel_colors[1] += 1 # Update the white pixel counter
 					else: # If the pixel color is not black or white
-						print(f"{backgroundColors.RED}The pixel color is not black or white{Style.RESET_ALL}")
+						print(f"{BackgroundColors.RED}The pixel color is not black or white{Style.RESET_ALL}")
 
 			# Update the black and white pixel counter dictionary
 			digit_class_pixel_counters[digit_class][image_name][split_number]["black"] += pixel_colors[0]
@@ -334,7 +334,7 @@ def normalize_data(digit_class_pixel_counters, x_grid, y_grid):
 # @return: None
 def main():
 	# Print the welcome message
-	print(f"{backgroundColors.GREEN}Welcome to the {backgroundColors.CYAN}Pixel Feature Extractor{Style.RESET_ALL}")
+	print(f"{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}Pixel Feature Extractor{Style.RESET_ALL}")
 
 	# Verify if the test and training dataset exists
 	if not verify_datasets():

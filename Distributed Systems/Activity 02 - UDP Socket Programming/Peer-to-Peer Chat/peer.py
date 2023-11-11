@@ -10,7 +10,7 @@ from colorama import Style # Library for using colors in the terminal
 
 # Macros:
 ## Colors for the terminal
-class backgroundColors: 
+class BackgroundColors: 
     OKCYAN = "\033[96m" # Cyan color
     OKGREEN = "\033[92m" # Green color
     WARNING = "\033[93m" # Yellow color
@@ -55,17 +55,17 @@ clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP socket
 # @return: None
 # @logic: This function will read user input, validate it and call the functions to manage the threads
 def main():
-    print(f"{backgroundColors.OKCYAN}Welcome to the P2P chat!{Style.RESET_ALL}")
+    print(f"{BackgroundColors.OKCYAN}Welcome to the P2P chat!{Style.RESET_ALL}")
     
     while True:
-        print(f"{backgroundColors.OKCYAN}Please enter your username:{Style.RESET_ALL}")
+        print(f"{BackgroundColors.OKCYAN}Please enter your username:{Style.RESET_ALL}")
         username = input()
         if (validateUsername(username)):
-            print(f"{backgroundColors.OKGREEN}Welcome {username}!{Style.RESET_ALL}")
+            print(f"{BackgroundColors.OKGREEN}Welcome {username}!{Style.RESET_ALL}")
             createThreads(username)
             break
         else:
-            print(f"{backgroundColors.FAIL}Invalid username. Please try again.{Style.RESET_ALL}")
+            print(f"{BackgroundColors.FAIL}Invalid username. Please try again.{Style.RESET_ALL}")
 
 # This function validates the username
 # @param username: The username to validate
@@ -83,7 +83,7 @@ def validateUsername(username):
 def createThreads(username):
     option = "undefined"
     while option != "server" and option != "client":
-        print(f"{backgroundColors.OKGREEN}Will you be acting as a server or a client?{Style.RESET_ALL}")
+        print(f"{BackgroundColors.OKGREEN}Will you be acting as a server or a client?{Style.RESET_ALL}")
         option = input().lower()
         if (option == "server"):
             # # Aqui é feita a criação do "servidor" e do "cliente" em threads diferentes
@@ -101,7 +101,7 @@ def createThreads(username):
             threading.Thread(target=server, args=(HOST, PORTS[1])).start()
             # # # threading.Thread(target=tcp_server, args=(username)).start()
         else:
-            print(f"{backgroundColors.FAIL}Invalid option. Please try again.{Style.RESET_ALL}")
+            print(f"{BackgroundColors.FAIL}Invalid option. Please try again.{Style.RESET_ALL}")
 
 # This function represents the connection with the TCP server
 # @param username: The username of the peer
@@ -113,7 +113,7 @@ def createThreads(username):
 # #     sock.send(username.encode())
 # #     while True:
 # #         data = sock.recv(1024)
-# #         print(f"{backgroundColors.OKGREEN}TCP-Server said: {data.decode()}{Style.RESET_ALL}")
+# #         print(f"{BackgroundColors.OKGREEN}TCP-Server said: {data.decode()}{Style.RESET_ALL}")
 
 # This function represents the server
 # @param HOST: The host of the peer
@@ -141,17 +141,17 @@ def server(HOST, PORT): # Receive messages
 # @logic: This function will format the messages according to the type of the message
 def messageFormat(nick, messageType, messageContent, PORT):
     if messageType == NORMALMESSAGE:
-        print(f"{backgroundColors.OKGREEN}{nick} Normal Message{backgroundColors.OKCYAN}: {messageContent}{Style.RESET_ALL}")
+        print(f"{BackgroundColors.OKGREEN}{nick} Normal Message{BackgroundColors.OKCYAN}: {messageContent}{Style.RESET_ALL}")
     elif messageType == EMOJI:
-        print(f"{backgroundColors.OKGREEN}{nick} EMOJI{backgroundColors.OKCYAN}: {emoji.emojize(messageContent)}{Style.RESET_ALL}")
+        print(f"{BackgroundColors.OKGREEN}{nick} EMOJI{BackgroundColors.OKCYAN}: {emoji.emojize(messageContent)}{Style.RESET_ALL}")
     elif messageType == URL:
-        print(f"{backgroundColors.OKGREEN}{nick} URL{backgroundColors.OKCYAN}: {messageContent}{Style.RESET_ALL}")
+        print(f"{BackgroundColors.OKGREEN}{nick} URL{BackgroundColors.OKCYAN}: {messageContent}{Style.RESET_ALL}")
     elif messageType == ECHO:
-        print(f"{backgroundColors.OKGREEN}{nick} ECHO{backgroundColors.OKCYAN}: {messageContent}{Style.RESET_ALL}")
+        print(f"{BackgroundColors.OKGREEN}{nick} ECHO{BackgroundColors.OKCYAN}: {messageContent}{Style.RESET_ALL}")
         emptyEcho(messageContent, nick)
         clientSocket.sendto(createDatagram(nick, NORMALMESSAGE, messageContent), (HOST, PORT))
     else:
-        print(f"{backgroundColors.FAIL}Invalid message type.{Style.RESET_ALL}", end=" ")
+        print(f"{BackgroundColors.FAIL}Invalid message type.{Style.RESET_ALL}", end=" ")
 
 # This function creates the datagram
 # @param nick: The nickname of the peer
@@ -205,7 +205,7 @@ def isMessageTooLong(message):
 # @logic: This function will send the datagram to the server if the message is not too long
 def sendMessage(message, messageType, username, HOST, PORT):
     if (isMessageTooLong(message)):
-            print(f"{backgroundColors.FAIL}The message is too long. Please try again.{Style.RESET_ALL}")
+            print(f"{BackgroundColors.FAIL}The message is too long. Please try again.{Style.RESET_ALL}")
             return
     clientSocket.sendto(createDatagram(username, messageType, message), (HOST, PORT))
 
@@ -217,7 +217,7 @@ def sendMessage(message, messageType, username, HOST, PORT):
 # @logic: This function will send the messages to the server according to the user input
 def client(HOST, PORT, username): # Send messages
     while True:
-        print(f"{backgroundColors.OKGREEN}Please enter your message:{Style.RESET_ALL}", end=" ")
+        print(f"{BackgroundColors.OKGREEN}Please enter your message:{Style.RESET_ALL}", end=" ")
         message = input()
 
         if (message.lower() == "exit"):

@@ -8,7 +8,7 @@ import logging
 from colorama import Style
 
 # Macros:
-class backgroundColors: # Colors for the terminal
+class BackgroundColors: # Colors for the terminal
     OKCYAN = "\033[96m"
     OKGREEN = "\033[92m"
     WARNING = "\033[93m"

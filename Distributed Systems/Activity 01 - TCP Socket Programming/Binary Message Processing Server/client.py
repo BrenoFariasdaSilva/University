@@ -5,7 +5,7 @@ import socket
 from colorama import Style
 
 # Macros:
-class backgroundColors: # Colors for the terminal
+class BackgroundColors: # Colors for the terminal
     OKCYAN = "\033[96m"
     OKGREEN = "\033[92m"
     WARNING = "\033[93m"
@@ -41,7 +41,7 @@ clientSocket.connect(serverAddress) # Connect to the server
 # It receives the user input and calls the switch function for handling user input as it should 
 def main():
     while True:
-        userInput = input(backgroundColors.OKGREEN + "Enter a command: " + Style.RESET_ALL) # User input
+        userInput = input(BackgroundColors.OKGREEN + "Enter a command: " + Style.RESET_ALL) # User input
 
         if (len(userInput.split())) > 1: # if the user input has more than one word
             command = userInput.split()[0].upper() # command
@@ -68,7 +68,7 @@ def switch(command, filename):
     elif command == validCommands[3]: # GETFILE
         getfile(filename)
     else:
-        print(backgroundColors.FAIL + "Invalid command!" + Style.RESET_ALL)
+        print(BackgroundColors.FAIL + "Invalid command!" + Style.RESET_ALL)
 
 # This function handles the EXIT command
 # This is done by sending the standard header with the EXIT command and closing the socket    
@@ -77,7 +77,7 @@ def client_exit():
     standardRequestHeader[2] = 0 # Size of the filename in the header inside position 2
     clientSocket.send(standardRequestHeader) # Send the standard header
     clientSocket.close() # Close the socket
-    print(backgroundColors.OKGREEN + "Connection closed!" + Style.RESET_ALL)
+    print(BackgroundColors.OKGREEN + "Connection closed!" + Style.RESET_ALL)
     exit(0) # Exit the program
    
 # This functions handles the ADDFILE command
@@ -99,12 +99,12 @@ def addfile(filename):
         confirmation = int(clientSocket.recv(standardResponseHeaderSize)[statusCodePosition]) # Confirmation if the file was added or not
         
         if (confirmation == SUCESS): # If the file was added
-            print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + backgroundColors.OKGREEN + " transfered!" + Style.RESET_ALL)
+            print(BackgroundColors.OKGREEN + "File " + BackgroundColors.OKCYAN + filename + BackgroundColors.OKGREEN + " transfered!" + Style.RESET_ALL)
         else: # If the file was not added
-            print(backgroundColors.FAIL + "ERROR transfering the file " + backgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
+            print(BackgroundColors.FAIL + "ERROR transfering the file " + BackgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
 
     else:
-        print(backgroundColors.FAIL + "File " + backgroundColors.OKCYAN + filename + backgroundColors.FAIL + " not found!" + Style.RESET_ALL)
+        print(BackgroundColors.FAIL + "File " + BackgroundColors.OKCYAN + filename + BackgroundColors.FAIL + " not found!" + Style.RESET_ALL)
    
 # This function handles the DELETE command
 # It receives the file filename to be deleted and sends the standard header with the DELETE command, the size of the filename and the filename 
@@ -116,9 +116,9 @@ def delete(filename):
     confirmation = clientSocket.recv(standardResponseHeaderSize)[statusCodePosition]
 
     if (confirmation == SUCESS): # If the file was deleted
-        print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + backgroundColors.OKGREEN + " deleted!" + Style.RESET_ALL)
+        print(BackgroundColors.OKGREEN + "File " + BackgroundColors.OKCYAN + filename + BackgroundColors.OKGREEN + " deleted!" + Style.RESET_ALL)
     else: # If the file was not deleted
-        print(backgroundColors.FAIL + "ERROR deleting the file " + backgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
+        print(BackgroundColors.FAIL + "ERROR deleting the file " + BackgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
        
 # This function handles the GETFILESLIST command
 # It sends the standard header with the GETFILESLIST command and waits for the server to confirm the operation
@@ -132,12 +132,12 @@ def getfileslist():
 
     if (confirmation == SUCESS):
         quantityFiles = int.from_bytes(clientSocket.recv(2), "big") # Quantity of files in the server in Big Endian
-        print(f"{backgroundColors.OKGREEN}Files in the server: {backgroundColors.OKCYAN}{quantityFiles}{Style.RESET_ALL}")
+        print(f"{BackgroundColors.OKGREEN}Files in the server: {BackgroundColors.OKCYAN}{quantityFiles}{Style.RESET_ALL}")
         for i in range(quantityFiles): # Print the files in the server
             filenameSize = int.from_bytes(clientSocket.recv(1), "big") # Size of the file in bytes in Big Endian
-            print(backgroundColors.OKCYAN + clientSocket.recv(filenameSize).decode() + Style.RESET_ALL) # Print the file name
+            print(BackgroundColors.OKCYAN + clientSocket.recv(filenameSize).decode() + Style.RESET_ALL) # Print the file name
     else:
-        print(backgroundColors.FAIL + "ERROR getting the files list: Empty Directory!" + Style.RESET_ALL)
+        print(BackgroundColors.FAIL + "ERROR getting the files list: Empty Directory!" + Style.RESET_ALL)
   
 # This function handles the GETFILE command
 # It receives the file filename to be downloaded and sends the standard header with the GETFILE command, the size of the filename and the filename
@@ -154,9 +154,9 @@ def getfile(filename):
 
         with open(CLIENTDIRECTORY + "/" + filename, "w+b") as files:
             files.write(file) # Write the file in bytes in the file created
-        print(backgroundColors.OKGREEN + "File " + backgroundColors.OKCYAN + filename + backgroundColors.OKGREEN + " transfered!" + Style.RESET_ALL)
+        print(BackgroundColors.OKGREEN + "File " + BackgroundColors.OKCYAN + filename + BackgroundColors.OKGREEN + " transfered!" + Style.RESET_ALL)
     else:
-        print(backgroundColors.FAIL + "ERROR recieving the file " + backgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
+        print(BackgroundColors.FAIL + "ERROR recieving the file " + BackgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
 
 # This function is the one who calls the main functions of the program
 if __name__ == "__main__":

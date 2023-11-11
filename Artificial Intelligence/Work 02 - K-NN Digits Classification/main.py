@@ -7,7 +7,7 @@ from colorama import Style # For coloring the terminal
 from tqdm import tqdm # For Generating the Progress Bars
 
 # Macros:
-class backgroundColors: # Colors for the terminal
+class BackgroundColors: # Colors for the terminal
 	CYAN = "\033[96m" # Cyan
 	GREEN = "\033[92m" # Green
 	YELLOW = "\033[93m" # Yellow
@@ -39,7 +39,7 @@ SOUND_FILE = "../../.assets/NotificationSound.wav" # The path to the sound file
 def verify_datasets():
 	for dataset_name, dataset_path in DATASETS_PATH.items(): # Loop through the datasets
 		if not os.path.exists(dataset_path): # If the dataset does not exists
-			print(f"{backgroundColors.RED}The {dataset_name} does not exists{Style.RESET_ALL}")
+			print(f"{BackgroundColors.RED}The {dataset_name} does not exists{Style.RESET_ALL}")
 			return False # If the dataset does not exists
 	return True # If all of the datasets exists
 
@@ -71,7 +71,7 @@ def initialize_results():
 # @return: results: The results dictionary
 def process_datasets(results):
 	# Create the progress bar
-	with tqdm(total=len(NEIGHBOURS_VALUES) * len(SPLITS) * len(TRAINING_DATASET_SIZE), desc=f"{backgroundColors.GREEN}Processing Datasets{Style.RESET_ALL}") as progress_bar:
+	with tqdm(total=len(NEIGHBOURS_VALUES) * len(SPLITS) * len(TRAINING_DATASET_SIZE), desc=f"{BackgroundColors.GREEN}Processing Datasets{Style.RESET_ALL}") as progress_bar:
 		for neighbours_value in NEIGHBOURS_VALUES: # Loop through the neighbours values: 1, 3, 5, 7, 9, 11, 13, 15, 17, 19
 			for x_split, y_split in SPLITS.items(): # Loop through the splits: 1x1, 2x2, 3x3 and 5x5.
 				for training_dataset_size in TRAINING_DATASET_SIZE: # Loop through the training dataset sizes
@@ -113,7 +113,7 @@ def read_datasets(x_split, y_split, training_dataset_size):
 # @return: results: The results dictionary
 def process_test_dataset(training_dataset, test_dataset, neighbours_value, x_split, y_split, training_dataset_size, results):
 	distances = {} # The euclidean distances dictionary
-	with tqdm(total=len(test_dataset), desc=f"{backgroundColors.GREEN}GRID: {backgroundColors.CYAN}{x_split}x{y_split}{backgroundColors.GREEN}, Training Dataset Size: {backgroundColors.CYAN}{training_dataset_size}{backgroundColors.GREEN}, K: {backgroundColors.CYAN}{neighbours_value}{Style.RESET_ALL}") as progress_bar:
+	with tqdm(total=len(test_dataset), desc=f"{BackgroundColors.GREEN}GRID: {BackgroundColors.CYAN}{x_split}x{y_split}{BackgroundColors.GREEN}, Training Dataset Size: {BackgroundColors.CYAN}{training_dataset_size}{BackgroundColors.GREEN}, K: {BackgroundColors.CYAN}{neighbours_value}{Style.RESET_ALL}") as progress_bar:
 		# For every line in the test dataset
 		for test_dataset_row in test_dataset.itertuples():
 			# For every line in the training dataset
@@ -248,9 +248,9 @@ def play_sound():
 		if platform.system() in SOUND_COMMANDS: # if the platform.system() is in the SOUND_COMMANDS dictionary
 			os.system(f"{SOUND_COMMANDS[platform.system()]} {SOUND_FILE}")
 		else: # if the platform.system() is not in the SOUND_COMMANDS dictionary
-			print(f"{backgroundColors.RED}The {backgroundColors.CYAN}platform.system(){backgroundColors.RED} is not in the {backgroundColors.CYAN}SOUND_COMMANDS dictionary{backgroundColors.RED}. Please add it!{Style.RESET_ALL}")
+			print(f"{BackgroundColors.RED}The {BackgroundColors.CYAN}platform.system(){BackgroundColors.RED} is not in the {BackgroundColors.CYAN}SOUND_COMMANDS dictionary{BackgroundColors.RED}. Please add it!{Style.RESET_ALL}")
 	else: # if the sound file does not exist
-		print(f"{backgroundColors.RED}Sound file {backgroundColors.CYAN}{SOUND_FILE}{backgroundColors.RED} not found. Make sure the file exists.{Style.RESET_ALL}")
+		print(f"{BackgroundColors.RED}Sound file {BackgroundColors.CYAN}{SOUND_FILE}{BackgroundColors.RED} not found. Make sure the file exists.{Style.RESET_ALL}")
 
 # Register the function to play a sound when the program finishes
 atexit.register(play_sound)

@@ -12,7 +12,7 @@ from colorama import Style # Library for using colors in the terminal
 
 # Macros:
 ## Colors for the terminal
-class backgroundColors:
+class BackgroundColors:
     OKCYAN = "\033[96m" # Cyan color
     OKGREEN = "\033[92m" # Green color
     WARNING = "\033[93m" # Yellow color
@@ -39,7 +39,7 @@ serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # TCP socket
 # @return: None
 # @logic: This function will wait for a connection from peers in the network
 def main():
-    print(f"{backgroundColors.OKCYAN}Welcome to the Peer List Server!{Style.RESET_ALL}")
+    print(f"{BackgroundColors.OKCYAN}Welcome to the Peer List Server!{Style.RESET_ALL}")
     serverSocket.bind((HOST, PORT)) # Bind to the port
     serverSocket.listen() # Now wait for client connection.
     while True:
@@ -58,7 +58,7 @@ def handleConnection(connection, peerAddress):
     nickname = connection.recv(64).decode("utf-8") # Receive the nickname of the peer
     peersList[nickname] = peerAddress[0] # Add the nickname and IP address of the peer to the list
     peersState[nickname] = False # Add the nickname and the state of the peer to the list. The state is False because the peer connection has not yet been announced to all the peers
-    print(f"{backgroundColors.OKGREEN}Added {nickname} to the list of connected peers{Style.RESET_ALL}")
+    print(f"{BackgroundColors.OKGREEN}Added {nickname} to the list of connected peers{Style.RESET_ALL}")
     while True:
         try:
             connection.sendall(bytes("ECHO", "utf-8")) # Send a message to the peer
@@ -67,7 +67,7 @@ def handleConnection(connection, peerAddress):
                 notifyPeers(nickname, peerAddress[0], True) # Notify the peers that the peer has joined the network
                 peersState[nickname] = True # Update the state of the peer
         except:
-            print(f"{backgroundColors.FAIL}{nickname} disconnected{Style.RESET_ALL}")
+            print(f"{BackgroundColors.FAIL}{nickname} disconnected{Style.RESET_ALL}")
             del peersList[nickname] # Remove the peer from the list
             del peersState[nickname] # Remove the peer from the list
             notifyPeers(nickname, peerAddress[0], False) # Notify the peers that the peer has left the network

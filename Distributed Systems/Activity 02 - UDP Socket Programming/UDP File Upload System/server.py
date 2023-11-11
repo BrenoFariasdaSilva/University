@@ -13,7 +13,7 @@ from tqdm import tqdm # For showing the progress bar
 from colorama import Style # For coloring the terminal
 
 # Macros:
-class backgroundColors: # Colors for the terminal
+class BackgroundColors: # Colors for the terminal
 	OKCYAN = "\033[96m" # Cyan
 	OKGREEN = "\033[92m" # Green
 	WARNING = "\033[93m" # Yellow
@@ -72,7 +72,7 @@ def write_file(filename, file_data):
 # @param file_hash: The file hash
 # @return: None
 def printFirstDatagramData(file_size, filename_size, filename, file_hash):
-	print(f"{backgroundColors.OKGREEN}File size: {file_size} bytes")
+	print(f"{BackgroundColors.OKGREEN}File size: {file_size} bytes")
 	print(f"Filename size: {filename_size} bytes")
 	print(f"Filename: {filename}")
 	print(f"File hash: {file_hash}{Style.RESET_ALL}")
@@ -142,11 +142,11 @@ def serverThread(first_datagram, client, server_socket):
 	write_file(filename, file_data) # Write the file data to the file
 
 	if validate_file(filename, file_hash): # Check if the file is valid, send OK
-		print(f"{backgroundColors.OKGREEN}File {filename} is valid. Operation was successful!{Style.RESET_ALL}")
+		print(f"{BackgroundColors.OKGREEN}File {filename} is valid. Operation was successful!{Style.RESET_ALL}")
 		logger.info(f"File is valid. Operation was successful!")
 		server_socket.sendto(b"OK", client)
 	else:
-		print(f"{backgroundColors.FAIL}File is invalid. Operation failed!{Style.RESET_ALL}")
+		print(f"{BackgroundColors.FAIL}File is invalid. Operation failed!{Style.RESET_ALL}")
 		logger.info(f"File {filename} is invalid. Operation failed!")
 		server_socket.sendto(b"ERROR", client)
 		os.remove("./server_files/" + filename)
@@ -161,13 +161,13 @@ def serverThread(first_datagram, client, server_socket):
 # @param server_socket: The server socket
 # @return: None
 def waitForFirstDatagram(server_socket):
-	print(f"{backgroundColors.OKGREEN}Waiting for file information datagram...{Style.RESET_ALL}")
+	print(f"{BackgroundColors.OKGREEN}Waiting for file information datagram...{Style.RESET_ALL}")
 	logger.info("Waiting for file information datagram...")
 	first_datagram, client = server_socket.recvfrom(DATAGRAM_SIZE) # Wait for the first datagram to be sent to the server
-	print(f"{backgroundColors.OKGREEN}Client connected with address {client[0]}:{client[1]}{Style.RESET_ALL}")
+	print(f"{BackgroundColors.OKGREEN}Client connected with address {client[0]}:{client[1]}{Style.RESET_ALL}")
 	logger.info(f"Client connected with address {client[0]}:{client[1]}")
 	serverThread(first_datagram, client, server_socket) # Create a server thread to handle the datagram
-	print(f"{backgroundColors.OKGREEN}Recieved connection from {client[0]}:{client[1]}{Style.RESET_ALL}")
+	print(f"{BackgroundColors.OKGREEN}Recieved connection from {client[0]}:{client[1]}{Style.RESET_ALL}")
 	logger.info(f"Recieved connection from {client[0]}:{client[1]}")
 
 # @brief: This the main function that will be run when the program is executed
@@ -176,9 +176,9 @@ def waitForFirstDatagram(server_socket):
 # @param: None
 # @return: None
 def main():
-	print(f"{backgroundColors.OKGREEN}Starting server...{Style.RESET_ALL}")
+	print(f"{BackgroundColors.OKGREEN}Starting server...{Style.RESET_ALL}")
 	logger.info("Starting server...")
-	print(f"{backgroundColors.OKGREEN}Server waiting for connection...{Style.RESET_ALL}")
+	print(f"{BackgroundColors.OKGREEN}Server waiting for connection...{Style.RESET_ALL}")
 	logger.info("Server waiting for connection...")
 
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Create the UDP/Datagram socket

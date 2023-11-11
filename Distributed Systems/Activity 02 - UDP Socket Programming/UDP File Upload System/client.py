@@ -13,7 +13,7 @@ from tqdm import tqdm # For showing the progress bar
 from colorama import Style # For coloring the terminal
 
 # Macros:
-class backgroundColors: # Colors for the terminal
+class BackgroundColors: # Colors for the terminal
 	OKCYAN = "\033[96m" # Cyan
 	OKGREEN = "\033[92m" # Green
 	WARNING = "\033[93m" # Yellow
@@ -53,10 +53,10 @@ def waitForServerResponse(client_socket, filename):
 	datagram, server = client_socket.recvfrom(DATAGRAM_SIZE) # Wait for the server to send a datagram
 	
 	if datagram.decode() == "OK":
-		print(f"{backgroundColors.OKGREEN}File {filename} uploaded successfully!{Style.RESET_ALL}")
+		print(f"{BackgroundColors.OKGREEN}File {filename} uploaded successfully!{Style.RESET_ALL}")
 		logger.info("File uploaded successfully!")
 	elif datagram.decode() == "ERROR":
-		print(f"{backgroundColors.FAIL}File {filename} upload failed{Style.RESET_ALL}")
+		print(f"{BackgroundColors.FAIL}File {filename} upload failed{Style.RESET_ALL}")
 		logger.error("File upload failed")
 		clientThread(client_socket)
 		# upload_file(filename, client_socket) # Re-upload the file
@@ -74,7 +74,7 @@ def verify_filename_length(filename):
 # @param file_hash: The file hash
 # @return: None
 def printFirstDatagramData(file_size, filename_size, filename, file_hash):
-	print(f"{backgroundColors.OKGREEN}File size: {file_size} bytes")
+	print(f"{BackgroundColors.OKGREEN}File size: {file_size} bytes")
 	print(f"Filename size: {filename_size} bytes")
 	print(f"Filename: {filename.encode('utf-8')}")
 	print(f"File hash: {file_hash}{Style.RESET_ALL}")
@@ -118,7 +118,7 @@ def upload_file(filename, client_socket):
  
  	# filename must be less than 956 bytes
 	if not verify_filename_length(filename):
-		print(f"{backgroundColors.FAIL}Filename must be less than {MAX_FILENAME_SIZE} bytes!{Style.RESET_ALL}")
+		print(f"{BackgroundColors.FAIL}Filename must be less than {MAX_FILENAME_SIZE} bytes!{Style.RESET_ALL}")
 		logger.error(f"Filename must be less than {MAX_FILENAME_SIZE} bytes!")
 		return
  
@@ -147,7 +147,7 @@ def upload_file(filename, client_socket):
 			if int.from_bytes(ack_datagram, 'big') == i: # If the sequence number is the same as the one sent,
 				break
 			else:
-				print(f"{backgroundColors.FAIL}Error in sending datagram {i}. Received {ack_datagram.decode()}!{Style.RESET_ALL}")
+				print(f"{BackgroundColors.FAIL}Error in sending datagram {i}. Received {ack_datagram.decode()}!{Style.RESET_ALL}")
 				logger.error(f"Error in sending datagram {i}. Received {ack_datagram.decode()}!")
 
 		# Uncomment the following line to slow down the upload so you can see the progress bar move if it is going too fast
@@ -160,7 +160,7 @@ def upload_file(filename, client_socket):
 # @return: None
 def clientThread(client_socket):
 	while True:
-		print(f"{backgroundColors.OKGREEN}Type your command here: {Style.RESET_ALL}", end="")
+		print(f"{BackgroundColors.OKGREEN}Type your command here: {Style.RESET_ALL}", end="")
 		logger.info("Type your command here: ")
 		userInput = input().split(" ") # Split the input by spaces
 		logger.info(userInput)
@@ -173,24 +173,24 @@ def clientThread(client_socket):
 			if verify_filename(userInput[1]): # File exists
 				upload_file(userInput[1], client_socket) # Upload the file
 			else: # File does not exist
-				print(f"{backgroundColors.FAIL}File \"{userInput[1]}\" does not exist!{Style.RESET_ALL}")
+				print(f"{BackgroundColors.FAIL}File \"{userInput[1]}\" does not exist!{Style.RESET_ALL}")
 			print()
 			logger.info("")
 		else:
-			print(f"{backgroundColors.FAIL}Invalid command!{Style.RESET_ALL}")
+			print(f"{BackgroundColors.FAIL}Invalid command!{Style.RESET_ALL}")
 
 # @brief: Prints the help commands
 # @param: None
 # @return: None
 def printHelpCommands():
-	print(f"{backgroundColors.OKCYAN}Valid commands:\n1. {EXIT}\n2. {UPLOAD} filenameHere\n3. {HELP}{Style.RESET_ALL}")
-	print(f"{backgroundColors.WARNING}Note: {UPLOAD} command only works with files in the client_files folder!{Style.RESET_ALL}")
+	print(f"{BackgroundColors.OKCYAN}Valid commands:\n1. {EXIT}\n2. {UPLOAD} filenameHere\n3. {HELP}{Style.RESET_ALL}")
+	print(f"{BackgroundColors.WARNING}Note: {UPLOAD} command only works with files in the client_files folder!{Style.RESET_ALL}")
 
 # @brief: Main function that runs the client program
 # @param: None
 # @return: None
 def main():
-	print(f"{backgroundColors.OKGREEN}Starting client...{Style.RESET_ALL}")
+	print(f"{BackgroundColors.OKGREEN}Starting client...{Style.RESET_ALL}")
 	logger.info("Starting client...")
 	client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Create the UDP/Datagram socket
 	printHelpCommands() # Print the help commands

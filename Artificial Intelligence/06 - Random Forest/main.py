@@ -4,7 +4,7 @@ from sklearn.ensemble import RandomForestClassifier # For the random forest clas
 from colorama import Style # For coloring the terminal
 
 # Macros:
-class backgroundColors: # Colors for the terminal
+class BackgroundColors: # Colors for the terminal
    CYAN = "\033[96m" # Cyan
    GREEN = "\033[92m" # Green
    YELLOW = "\033[93m" # Yellow
@@ -15,8 +15,8 @@ class backgroundColors: # Colors for the terminal
 
 # This function loads the data from the dataset files and returns the training and test sets
 def load_data():
-   print(f"{backgroundColors.YELLOW}Remember to remove the header line from the dataset files. They should be in the format: {backgroundColors.CYAN}label feature1 feature2 ... featureN{Style.RESET_ALL}")
-   print(f"{backgroundColors.GREEN}Loading data...{Style.RESET_ALL}")
+   print(f"{BackgroundColors.YELLOW}Remember to remove the header line from the dataset files. They should be in the format: {BackgroundColors.CYAN}label feature1 feature2 ... featureN{Style.RESET_ALL}")
+   print(f"{BackgroundColors.GREEN}Loading data...{Style.RESET_ALL}")
    tr = np.loadtxt("./dataset/digits/training/5x5-normalized-pixel_count.txt")
    ts = np.loadtxt("./dataset/digits/test/5x5-normalized-pixel_count.txt")
    test_label = ts[:, 0] # The first column is the label
@@ -27,7 +27,7 @@ def load_data():
 
 # This function trains a SVM classifier with grid search and prints the classification report
 def train_random_forest(train_features_values, train_label, test_features_values, test_label):
-   print(f"{backgroundColors.GREEN}Random Forest Classifier:{backgroundColors.CYAN}")
+   print(f"{BackgroundColors.GREEN}Random Forest Classifier:{BackgroundColors.CYAN}")
    clf = RandomForestClassifier(n_estimators=10000, max_depth=30, random_state=1) # Instantiate the classifier
    clf.fit(train_features_values, train_label) # Train the classifier
    print(clf.predict(test_features_values)) # Print the predictions

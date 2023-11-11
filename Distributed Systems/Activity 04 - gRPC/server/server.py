@@ -7,7 +7,7 @@ from google.protobuf.json_format import MessageToJson # For converting the proto
 from colorama import Style # For coloring the terminal
 
 # Background colors:
-class backgroundColors: # Colors for the terminal
+class BackgroundColors: # Colors for the terminal
 	CYAN = "\033[96m" # Cyan
 	GREEN = "\033[92m" # Green
 	YELLOW = "\033[93m" # Yellow
@@ -43,22 +43,22 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 		self.database = MongoDatabase()
 		if ERASE_DATABASE: # If the database should be erased
 			self.database.eraseAllMovies() # Erase the database
-			print(f"{backgroundColors.RED}Erased the database{Style.RESET_ALL}")
+			print(f"{BackgroundColors.RED}Erased the database{Style.RESET_ALL}")
 
 	# @brief: This function creates a movie
 	# @param request: The movie protocol buffer as an object
 	# @param context: The context
 	# @return: The message protocol buffer
 	def CreateMovie(self, request, context):
-		print(f"{backgroundColors.GREEN}Creating Movie: {backgroundColors.CYAN}{request.title}{Style.RESET_ALL}")
+		print(f"{BackgroundColors.GREEN}Creating Movie: {BackgroundColors.CYAN}{request.title}{Style.RESET_ALL}")
 		movie = MessageToJson(request) # Convert the movie to JSON
 		movie_document = self.database.createMovie(movie) # Create the movie
 		status_message = FAILURE
 		if movie_document == SUCCESS: # If the movie was created successfully
-			print(f"{backgroundColors.GREEN}Movie {backgroundColors.CYAN}{request.title}{backgroundColors.GREEN} created successfully{Style.RESET_ALL}")
+			print(f"{BackgroundColors.GREEN}Movie {BackgroundColors.CYAN}{request.title}{BackgroundColors.GREEN} created successfully{Style.RESET_ALL}")
 			status_message = SUCCESS
 		else: # If the movie was not created successfully
-			print(f"{backgroundColors.RED}Failed to create movie {backgroundColors.CYAN}{request.title}{Style.RESET_ALL}")
+			print(f"{BackgroundColors.RED}Failed to create movie {BackgroundColors.CYAN}{request.title}{Style.RESET_ALL}")
 		print()
 		return movies_pb2.Message(message=status_message) # Return the status message
 	
@@ -67,15 +67,15 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @param context: The context
 	# @return: The movie protocol buffer object
 	def GetMovie(self, request, context):
-		print(f"{backgroundColors.GREEN}Getting Movie: {backgroundColors.CYAN}{request.message}{Style.RESET_ALL}")
+		print(f"{BackgroundColors.GREEN}Getting Movie: {BackgroundColors.CYAN}{request.message}{Style.RESET_ALL}")
 		movie_document = self.database.getMovieByTitle(request.message) # Get the movie by title
-		print(f"{backgroundColors.GREEN}movie_document.: {backgroundColors.CYAN}{movie_document}{Style.RESET_ALL}")
+		print(f"{BackgroundColors.GREEN}movie_document.: {BackgroundColors.CYAN}{movie_document}{Style.RESET_ALL}")
 		movie_object = movies_pb2.Movie() # Create an empty movie object
 		if movie_document: # If the movie was found
-			print(f"{backgroundColors.GREEN}Movie {backgroundColors.CYAN}{movie_document['title']}{backgroundColors.GREEN} found{Style.RESET_ALL}")
+			print(f"{BackgroundColors.GREEN}Movie {BackgroundColors.CYAN}{movie_document['title']}{BackgroundColors.GREEN} found{Style.RESET_ALL}")
 			movie_object = convert_document_to_protocol_buffer(movie_document) # Convert the movie document to a protocol buffer
 		else: # If the movie was not found
-			print(f"{backgroundColors.RED}Movie {backgroundColors.CYAN}{request.message}{backgroundColors.RED} not found{Style.RESET_ALL}")
+			print(f"{BackgroundColors.RED}Movie {BackgroundColors.CYAN}{request.message}{BackgroundColors.RED} not found{Style.RESET_ALL}")
 		print()
 		return movie_object # Return the movie object
 	
@@ -85,15 +85,15 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @return: The message protocol buffer
 	# @note: This needs to be fixed
 	def UpdateMovie(self, request, context):
-		print(f"{backgroundColors.GREEN}Updating Movie: {backgroundColors.CYAN}{request.title}{Style.RESET_ALL}")
+		print(f"{BackgroundColors.GREEN}Updating Movie: {BackgroundColors.CYAN}{request.title}{Style.RESET_ALL}")
 		movie = MessageToJson(request) # Convert the movie to JSON
 		movie_document = self.database.updateMovie(movie) # Update the movie
 		status_message = FAILURE
 		if movie_document: # If the movie was found
-			print(f"{backgroundColors.GREEN}Movie {backgroundColors.CYAN}{request.title}{backgroundColors.GREEN} updated successfully{Style.RESET_ALL}")
+			print(f"{BackgroundColors.GREEN}Movie {BackgroundColors.CYAN}{request.title}{BackgroundColors.GREEN} updated successfully{Style.RESET_ALL}")
 			status_message = SUCCESS
 		else: # If the movie was not found
-			print(f"{backgroundColors.RED}Movie {backgroundColors.CYAN}{request.title}{backgroundColors.RED} not found{Style.RESET_ALL}")
+			print(f"{BackgroundColors.RED}Movie {BackgroundColors.CYAN}{request.title}{BackgroundColors.RED} not found{Style.RESET_ALL}")
 		print()
 		return movies_pb2.Message(message=status_message)
 	
@@ -102,14 +102,14 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @param context: The context
 	# @return: The message protocol buffer
 	def DeleteMovie(self, request, context):
-		print(f"{backgroundColors.GREEN}Deleting Movie: {backgroundColors.CYAN}{request.message}{Style.RESET_ALL}")
+		print(f"{BackgroundColors.GREEN}Deleting Movie: {BackgroundColors.CYAN}{request.message}{Style.RESET_ALL}")
 		movie_document = self.database.deleteMovie(request.message)
 		status_message = FAILURE
 		if movie_document: # If the movie was found
-			print(f"{backgroundColors.GREEN}Movie {backgroundColors.CYAN}{request.message}{backgroundColors.GREEN} deleted successfully{Style.RESET_ALL}")
+			print(f"{BackgroundColors.GREEN}Movie {BackgroundColors.CYAN}{request.message}{BackgroundColors.GREEN} deleted successfully{Style.RESET_ALL}")
 			status_message = SUCCESS
 		else: # If the movie was not found
-			print(f"{backgroundColors.RED}Movie {backgroundColors.CYAN}{request.message}{backgroundColors.RED} not found{Style.RESET_ALL}")
+			print(f"{BackgroundColors.RED}Movie {BackgroundColors.CYAN}{request.message}{BackgroundColors.RED} not found{Style.RESET_ALL}")
 		print()
 		return movies_pb2.Message(message=status_message)
 	
@@ -118,17 +118,17 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @param context: The context
 	# @return: The movie list protocol buffer object
 	def ListMoviesByActor(self, request, context):
-		print(f"{backgroundColors.GREEN}Getting Movies By Actor: {backgroundColors.CYAN}{request.message}{Style.RESET_ALL}")
+		print(f"{BackgroundColors.GREEN}Getting Movies By Actor: {BackgroundColors.CYAN}{request.message}{Style.RESET_ALL}")
 		movie_documents = self.database.listByActor(request.message)
-		print(f"{backgroundColors.GREEN}movie_documents: {backgroundColors.CYAN}{movie_documents}{Style.RESET_ALL}")
+		print(f"{BackgroundColors.GREEN}movie_documents: {BackgroundColors.CYAN}{movie_documents}{Style.RESET_ALL}")
 		movie_list = movies_pb2.MoviesList() # Create an empty movie list
 		if movie_documents: # If the movies were found
-			print(f"{backgroundColors.GREEN}Movies found{Style.RESET_ALL}")
+			print(f"{BackgroundColors.GREEN}Movies found{Style.RESET_ALL}")
 			for movie_document in movie_documents: # For each movie document
 				movie_object = convert_document_to_protocol_buffer(movie_document) # Convert the movie document to a protocol buffer
 				movie_list.movies.extend([movie_object]) # Add the movie to the movie list
 		else: # If the movies were not found
-			print(f"{backgroundColors.RED}Movies not found{Style.RESET_ALL}")
+			print(f"{BackgroundColors.RED}Movies not found{Style.RESET_ALL}")
 		print()
 		return movie_list # Return the movie list
 	
@@ -137,17 +137,17 @@ class MoviesServicer(movies_pb2_grpc.MovieServiceServicer):
 	# @param context: The context
 	# @return: The movie list protocol buffer object
 	def ListMoviesByGenre(self, request, context):
-		print(f"{backgroundColors.GREEN}Getting Movies By Genre: {backgroundColors.CYAN}{request.message}{Style.RESET_ALL}")
+		print(f"{BackgroundColors.GREEN}Getting Movies By Genre: {BackgroundColors.CYAN}{request.message}{Style.RESET_ALL}")
 		movie_documents = self.database.listByGenre(request.message)
-		print(f"{backgroundColors.GREEN}movie_documents: {backgroundColors.CYAN}{movie_documents}{Style.RESET_ALL}")
+		print(f"{BackgroundColors.GREEN}movie_documents: {BackgroundColors.CYAN}{movie_documents}{Style.RESET_ALL}")
 		movie_list = movies_pb2.MoviesList()
 		if movie_documents: # If the movies were found
-			print(f"{backgroundColors.GREEN}Movies found{Style.RESET_ALL}")
+			print(f"{BackgroundColors.GREEN}Movies found{Style.RESET_ALL}")
 			for movie_document in movie_documents: # For each movie document
 				movie_object = convert_document_to_protocol_buffer(movie_document) # Convert the movie document to a protocol buffer
 				movie_list.movies.extend([movie_object]) # Add the movie to the movie list
 		else: # If the movies were not found
-			print(f"{backgroundColors.RED}Movies not found{Style.RESET_ALL}")
+			print(f"{BackgroundColors.RED}Movies not found{Style.RESET_ALL}")
 		print()
 		return movie_list # Return the movie list
 
@@ -180,7 +180,7 @@ def convert_document_to_protocol_buffer(document):
 # @param: None
 # @return: None
 def main():
-	print(f"{backgroundColors.GREEN}Server started{Style.RESET_ALL}")
+	print(f"{BackgroundColors.GREEN}Server started{Style.RESET_ALL}")
 	# Setup the server pool of threads
 	server_pool = grpc.server(futures.ThreadPoolExecutor(max_workers=MAX_WORKERS))
 	# Add the server to the pool

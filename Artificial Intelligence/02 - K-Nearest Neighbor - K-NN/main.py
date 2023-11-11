@@ -4,7 +4,7 @@ from sklearn.metrics import classification_report # Classification report
 from colorama import Style # For coloring the terminal
 
 # Macros:
-class backgroundColors: # Colors for the terminal
+class BackgroundColors: # Colors for the terminal
 	CYAN = "\033[96m" # Cyan
 	GREEN = "\033[92m" # Green
 	YELLOW = "\033[93m" # Yellow
@@ -29,7 +29,7 @@ def main():
 		test_features_values = test[:, 1 : -1] # Get the features
 
 		# Print the data set name
-		print(f"{backgroundColors.GREEN}K-NN Classifier:{backgroundColors.CYAN}")
+		print(f"{BackgroundColors.GREEN}K-NN Classifier:{BackgroundColors.CYAN}")
 		neigh = KNeighborsClassifier(n_neighbors = 20, metric = "euclidean") # Instantiate the classifier
 		neigh.fit(train_features_values, train_label) # Train the classifier
 		print(f"{classification_report(test_label, neigh.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
