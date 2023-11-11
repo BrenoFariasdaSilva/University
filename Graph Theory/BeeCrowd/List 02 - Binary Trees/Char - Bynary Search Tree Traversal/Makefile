@@ -9,7 +9,6 @@ LINKING =
 TARGET = *
 
 all:
-	clear
 	$(CXX) $(CFLAGS) -o main $(TARGET).c $(LINKING)
 	./main
 
