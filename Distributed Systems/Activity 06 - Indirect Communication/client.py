@@ -2,7 +2,7 @@ import pika as pk # Import the pika library that is used for the Advanced Messag
 import os # Import the os library that is used to delete files
 from colorama import Style # For coloring the terminal
 
-# Background colors:
+# Macros:
 class BackgroundColors: # Colors for the terminal
    CYAN = "\033[96m" # Cyan
    GREEN = "\033[92m" # Green

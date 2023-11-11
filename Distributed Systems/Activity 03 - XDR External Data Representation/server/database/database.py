@@ -5,7 +5,7 @@ from dotenv import load_dotenv # For getting the environment variables
 import json # For converting the movie object to JSON
 from colorama import Style # For coloring the terminal
 
-# Background colors:
+# Macros:
 class BackgroundColors: # Colors for the terminal
 	OKCYAN = "\033[96m" # Cyan
 	OKGREEN = "\033[92m" # Green

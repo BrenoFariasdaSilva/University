@@ -6,7 +6,7 @@ from database.database import MongoDatabase # For the database. It is importing 
 from google.protobuf.json_format import MessageToJson # For converting the protocol buffer to JSON
 from colorama import Style # For coloring the terminal
 
-# Background colors:
+# Macros:
 class BackgroundColors: # Colors for the terminal
 	CYAN = "\033[96m" # Cyan
 	GREEN = "\033[92m" # Green

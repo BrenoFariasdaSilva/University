@@ -6,7 +6,7 @@ import structs.movies_pb2 as movies_pb2 # For the protocol buffers. It is import
 from database.database import MongoDatabase # For the database. It is importing the database.py file from the database folder
 from colorama import Style # For coloring the terminal
 
-# Background colors:
+# Macros:
 class BackgroundColors: # Colors for the terminal
 	OKCYAN = "\033[96m" # Cyan
 	OKGREEN = "\033[92m" # Green
