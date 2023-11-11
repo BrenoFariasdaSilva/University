@@ -1,21 +1,34 @@
-.DS_Store
-a.out
-# Compiled C libraries
-# Java
+# Input Files
+*.in
+
+# Output Files
+*.out
+
+# TXT Files
+*.txt
+
+# CSV Files
+*.csv
+
+# Compressed Files
+*.7z
+*.gz
+*.rar
+*.zip
+
 # IDEs and editors
 /.idea
 .project
 .classpath
 .c9/
 *.sublime-workspace
-# IDE - VSCode
-## IDE - IntelliJ
 .idea/
 *.iml
 *.ipr
-# dotfiles
+
 # Compiled Object files
 *.slo
+
 # Compiled Dynamic libraries
 # Fortran module files
 *.mod
@@ -586,35 +599,49 @@ __pycache__/
 # !tools/packages.config
 # Tabs Studio
 *.tss
+
 # Telerik's JustMock configuration file
 *.jmconfig
+
 # BizTalk build output
 *.btp.cs
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
 # OpenCover UI analysis results
 OpenCover/
+
 # Azure Stream Analytics local run output
 ASALocalRun/
+
 # MSBuild Binary and Structured Log
 *.binlog
+
 # NVidia Nsight GPU debugger configuration file
 *.nvuser
+
 # MFractors (Xamarin productivity tool) working folder
 .mfractor/
+
 # Local History for Visual Studio
 .localhistory/
+
 # Visual Studio History (VSHistory) files
 .vshistory/
+
 # BeatPulse healthcheck temp database
 healthchecksdb
+
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
+
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
 # VS Code files for those working on multiple tools
 .vscode/*
 !.vscode/settings.json
@@ -622,14 +649,17 @@ FodyWeavers.xsd
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
+
 # Local History for Visual Studio Code
 .history/
+
 # Windows Installer files from build outputs
 *.cab
 *.msi
 *.msix
 *.msm
 *.msp
+
 # JetBrains Rider
 *.sln.iml
 
@@ -643,3 +673,5 @@ processed_tweets
 **/dataset/digits/
 **/pixels_count/
 **/output/
+
+.DS_Store
