@@ -29,6 +29,6 @@ def main():
     print(f"{BackgroundColors.GREEN}Tweets sent to {BackgroundColors.CYAN}{BackgroundColors.UNDERLINE}classifier.py{Style.RESET_ALL}") # Print a message to the user
     connection.close() # Close the connection
 
-# Directive to run the main function
-if __name__ == "__main__":
-    main()
+# This is the standard boilerplate that calls the main() function.
+if __name__ == '__main__':
+   main() # Call the main function
