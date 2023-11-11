@@ -4,14 +4,13 @@ from colorama import Style # For coloring the terminal
 
 # Background colors:
 class BackgroundColors: # Colors for the terminal
-	CYAN = "\033[96m" # Cyan
-	GREEN = "\033[92m" # Green
-	RED = "\033[91m" # Red
-	YELLOW = "\033[93m" # Yellow
-	BLACK = "\033[30m" # Black
-	WHITE = "\033[97m" # White
-	BOLD = "\033[1m" # Bold
-	UNDERLINE = "\033[4m" # Underline
+    CYAN = "\033[96m" # Cyan
+    GREEN = "\033[92m" # Green
+    YELLOW = "\033[93m" # Yellow
+    RED = "\033[91m" # Red
+    BOLD = "\033[1m" # Bold
+    UNDERLINE = "\033[4m" # Underline
+    CLEAR_TERMINAL = "\033[H\033[J" # Clear the terminal
  
 # This is the Categories class of the program which stores the topics
 class Topics: 

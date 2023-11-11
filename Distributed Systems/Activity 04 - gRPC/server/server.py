@@ -10,12 +10,9 @@ from colorama import Style # For coloring the terminal
 class backgroundColors: # Colors for the terminal
 	CYAN = "\033[96m" # Cyan
 	GREEN = "\033[92m" # Green
-	RED = "\033[91m" # Red
 	YELLOW = "\033[93m" # Yellow
-	BLACK = "\033[30m" # Black
-	WHITE = "\033[97m" # White
-	BOLD = "\033[1m" # Bold
-	UNDERLINE = "\033[4m" # Underline
+	RED = "\033[91m" # Red
+	CLEAR_TERMINAL = "\033[H\033[J" # Clear the terminal
 
 # Server:
 SERVERADDRESS = ["localhost", 7070] # The server's address. The first element is the IP address, the second is the port.
