@@ -149,7 +149,11 @@ def run_clusters():
 
 # This function returns the current date and current time
 def get_current_date_and_time():
-   return time.strftime("%d/%m/%Y"), time.strftime("%H:%M") # Return the current date and current
+   date = time.strftime("%d/%m/%Y") # Get the current date
+   hour = time.strftime("%H") # Get the current time
+   minutes = time.strftime("%M") # Get the current time
+   seconds = time.strftime("%S") # Get the current time
+   return date, f"{hour}h:{minutes}m:{seconds}s" # Return the current date and current time
 
 # This is the Main function
 def main():
