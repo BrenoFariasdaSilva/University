@@ -25,7 +25,7 @@ SOUND_FILE = "./.assets/NotificationSound.wav" # The path to the sound file
 # Folder Constants:
 INPUT_DIRECTORY = "./dataset" # The path to the input directory
 OUTPUT_DIRECTORY = "./results" # The path to the output directory
-INPUT_NORMALIZED_DIRECTORY = OUTPUT_NORMALIZED_DIRECTORY = "./normalized_dataset" # The path to the normalized input directory
+NORMALIZED_DATASET_DIRECTORY = "./normalized_dataset" # The path to the normalized dataset directory
 
 # Input Files Constants:
 INPUT_FILES = ["train.txt", "test.txt"] # The input files
@@ -73,13 +73,13 @@ def save_normalized_data(features, labels, output_file):
          file.write("".join([f"{number:.5f} " for number in feature]) + f"{label:.0f}\n")
 
 # This function pre-processes the data
-def pre_process_data(features, labels, input_file):
+def pre_process_data(input_file):
    # Load the data
    features, labels = load_data(f"{INPUT_DIRECTORY}/{input_file}")
    # Normalize the data
    features = normalize_data(features)
    # Write the normalized data to a file
-   save_normalized_data(features, labels, f"{OUTPUT_NORMALIZED_DIRECTORY}/{input_file}")
+   save_normalized_data(features, labels, f"{NORMALIZED_DATASET_DIRECTORY}/{input_file}")
 
    return features, labels # Return the features and labels
 
@@ -116,13 +116,13 @@ def output_accuracy(accuracy, cluster, input_file):
    print(f"{BackgroundColors.GREEN}Accuracy for {BackgroundColors.CYAN}{input_file}{BackgroundColors.GREEN} with {BackgroundColors.CYAN}{cluster}{BackgroundColors.GREEN} clusters/neighbors: {BackgroundColors.CYAN}{accuracy:.2f}%{Style.RESET_ALL}") # Output the accuracy
 
 # This function runs the clustering algorithm
-def run_clusters(features, labels, clusters):
+def run_clusters():
    for input_file in INPUT_FILES:
       # Pre-process the data
-      features, labels = pre_process_data(features, labels, input_file)
+      features, labels = pre_process_data(f"{input_file}")
 
       # For each cluster
-      for cluster in clusters:
+      for cluster in CLUSTERS:
          output_directory = f"{OUTPUT_DIRECTORY}/{input_file.split('.')[0]}/"
          create_directory(output_directory) # Create the output directory if it does not exist
          output_file = f"{output_directory}/{cluster}-clusters.{input_file.split('.')[1]}"
@@ -141,14 +141,9 @@ def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}K-Means Clustering{BackgroundColors.GREEN}{BackgroundColors.GREEN} program!{Style.RESET_ALL}") # Output the Welcome message
 
    create_directory(OUTPUT_DIRECTORY) # Create the output directory if it does not exist
-   create_directory(INPUT_NORMALIZED_DIRECTORY) # Create the input normalized directory if it does not exist
-   create_directory(OUTPUT_NORMALIZED_DIRECTORY) # Create the output normalized directory if it does not exist
+   create_directory(NORMALIZED_DATASET_DIRECTORY) # Create the input normalized directory if it does not exist
 
-   features, labels = load_data(TRAINING_FILE) # Load the training data
-
-   normalized_features = normalize_data(features) # Normalize the features
-
-   run_clusters(normalized_features, labels, CLUSTERS) # Run the clustering algorithm
+   run_clusters() # Run the clustering algorithm
 
    print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Program finished.{Style.RESET_ALL}") # Output the end of the program message
 
