@@ -7,7 +7,7 @@ from colorama import Style  # For coloring the terminal
 from sklearn.cluster import KMeans # Import KMeans
 from sklearn.model_selection import train_test_split # Import train_test_split
 from sklearn.neighbors import KNeighborsClassifier # Import KNeighborsClassifier
-from sklearn.preprocessing import minmax_scaler # Import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler # Import MinMaxScaler
 
 # Macros:
 class BackgroundColors:  # Colors for the terminal
@@ -28,7 +28,7 @@ INPUT_DIRECTORY = "./dataset" # The path to the input directory
 OUTPUT_DIRECTORY = "./results" # The path to the output directory
 
 # Input Files Constants:
-INPUT_FILES = ["training.txt", "testing.txt"] # The input files
+INPUT_FILES = ["trai.txt", "test.txt"] # The input files
 TRAINING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[0]}" # The path to the training file
 TESTING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[1]}" # The path to the testing file
 
@@ -63,7 +63,8 @@ def load_data(file_path):
 
 # This function normalizes the data
 def normalize_data(features):
-   return minmax_scaler.fit_transform(features) # Normalize the features
+   normalizer = MinMaxScaler() # Create the MinMaxScaler object
+   return normalizer.fit_transform(features) # Normalize the features
 
 # This function generates the centroids of the class
 def generate_centroids(features, labels, current_cluster, output_file):
