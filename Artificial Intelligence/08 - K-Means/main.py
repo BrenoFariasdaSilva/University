@@ -1,4 +1,5 @@
 import atexit # For playing a sound when the program finishes
+import time # For getting the current time
 import numpy as np # Import numpy
 import os # Import os
 import platform # For getting the operating system name
@@ -146,6 +147,10 @@ def run_clusters():
 
    return accuracy_results # Return the accuracy_results list
 
+# This function returns the current date and current time
+def get_current_date_and_time():
+   return time.strftime("%d/%m/%Y"), time.strftime("%H:%M") # Return the current date and current
+
 # This is the Main function
 def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}K-Means Clustering{BackgroundColors.GREEN}{BackgroundColors.GREEN} program!{Style.RESET_ALL}") # Output the Welcome message
@@ -154,6 +159,8 @@ def main():
    create_directory(NORMALIZED_DATASET_DIRECTORY, True) # Create the input normalized directory if it does not exist
 
    accuracy_results = run_clusters() # Run the clustering algorithm
+
+   day, hour = get_current_date_and_time() # Get the current date and current time
 
    print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Program finished.{Style.RESET_ALL}") # Output the end of the program message
 
