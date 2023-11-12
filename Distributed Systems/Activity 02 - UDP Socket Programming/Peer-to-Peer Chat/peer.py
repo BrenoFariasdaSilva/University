@@ -232,7 +232,7 @@ def client(HOST, PORT, username): # Send messages
                 messageType = ECHO
                 message = emptyEcho(message, username)
             sendMessage(message, messageType, username, HOST, PORT)
-      
+
 # This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
 	main() # Call the main function

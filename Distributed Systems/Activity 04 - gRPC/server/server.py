@@ -192,5 +192,6 @@ def main():
 	# Wait for the server to terminate
 	server_pool.wait_for_termination()
 
+# This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
-	main()
+	main() # Call the main function
