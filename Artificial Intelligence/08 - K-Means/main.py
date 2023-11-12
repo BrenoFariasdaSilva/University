@@ -28,7 +28,7 @@ INPUT_DIRECTORY = "./dataset" # The path to the input directory
 OUTPUT_DIRECTORY = "./results" # The path to the output directory
 
 # Input Files Constants:
-INPUT_FILES = ["trai.txt", "test.txt"] # The input files
+INPUT_FILES = ["train.txt", "test.txt"] # The input files
 TRAINING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[0]}" # The path to the training file
 TESTING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[1]}" # The path to the testing file
 
