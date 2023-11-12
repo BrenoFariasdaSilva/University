@@ -33,6 +33,7 @@ TRAINING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[0]}" # The path to the training
 TESTING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[1]}" # The path to the testing file
 
 # Clustering Constants:
+SHOW_ACCURACY = True # Show the accuracy of the KNN algorithm
 CLUSTERS = [1, 5, 10, 20] # The number of clusters / centroids per class
 
 # This function defines the command to play a sound when the program finishes
@@ -121,6 +122,8 @@ def output_accuracy(accuracy, cluster, input_file):
 
 # This function runs the clustering algorithm
 def run_clusters():
+   accuracy_results = [] # Create the accuracy_results list
+
    for cluster in CLUSTERS:
       for input_file in INPUT_FILES:
          # Pre-process the data
@@ -135,8 +138,13 @@ def run_clusters():
          # Run the KNN algorithm
          accuracy = run_knn(output_file, cluster)
 
-         # Output the accuracy
-         output_accuracy(accuracy, cluster, input_file)
+         # Add the accuracy to the accuracy_results list
+         accuracy_results.append(f"{input_file},{cluster},{accuracy:.2f}%")
+
+         if SHOW_ACCURACY:
+            output_accuracy(accuracy, cluster, input_file)
+
+   return accuracy_results # Return the accuracy_results list
 
 # This is the Main function
 def main():
@@ -145,7 +153,7 @@ def main():
    create_directory(OUTPUT_DIRECTORY, True) # Create the output directory if it does not exist
    create_directory(NORMALIZED_DATASET_DIRECTORY, True) # Create the input normalized directory if it does not exist
 
-   run_clusters() # Run the clustering algorithm
+   accuracy_results = run_clusters() # Run the clustering algorithm
 
    print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Program finished.{Style.RESET_ALL}") # Output the end of the program message
 
