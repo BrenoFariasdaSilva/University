@@ -37,7 +37,7 @@ This code requires the following packages:
 You can install the required packages using pip:
 
 ```bash
-pip3 install atexit colorama pandas tqdm
+pip3 install colorama pandas tqdm
 # or
 make dependencies
 ```

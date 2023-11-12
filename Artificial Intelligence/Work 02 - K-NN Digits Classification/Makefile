@@ -2,4 +2,4 @@ all:
 	clear; time python3 ./main.py
 
 depencencies:
-	pip3 install atexit colorama pandas platform tqdm
+	pip3 install colorama pandas platform tqdm
