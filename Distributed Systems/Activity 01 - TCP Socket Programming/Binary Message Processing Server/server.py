@@ -198,6 +198,6 @@ def getFile(filename, connection, data, responseHeader):
         connection.send(responseHeader)
         nameLog.info('Protocol: %s','Response GETFILE sent', extra=data)
 
-# This function is the one who calls the main functions of the program
+# This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
-    main()
+	main() # Call the main function

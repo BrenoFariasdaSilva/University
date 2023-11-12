@@ -197,5 +197,6 @@ def main():
 	client_thread = threading.Thread(target=clientThread, args=(client_socket,)) # Create the client thread
 	client_thread.start() # Start the client thread
 
-if __name__ == '__main__':
-	main()
+# This is the standard boilerplate that calls the main() function.
+if __name__ == "__main__":
+	main() # Call the main function

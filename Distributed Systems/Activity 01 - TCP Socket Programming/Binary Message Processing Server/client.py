@@ -158,6 +158,6 @@ def getfile(filename):
     else:
         print(BackgroundColors.FAIL + "ERROR recieving the file " + BackgroundColors.OKCYAN + filename + "!" + Style.RESET_ALL)
 
-# This function is the one who calls the main functions of the program
+# This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
-    main()
+	main() # Call the main function
