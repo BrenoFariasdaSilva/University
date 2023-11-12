@@ -28,8 +28,12 @@ INPUT_DIRECTORY = "./dataset" # The path to the input directory
 OUTPUT_DIRECTORY = "./results" # The path to the output directory
 
 # Input Files Constants:
-TRAINING_FILE = f"{INPUT_DIRECTORY}/training.txt" # The path to the training file
-TESTING_FILE = f"{INPUT_DIRECTORY}/testing.txt" # The path to the testing file
+INPUT_FILES = ["training.txt", "testing.txt"] # The input files
+TRAINING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[0]}" # The path to the training file
+TESTING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[1]}" # The path to the testing file
+
+# Clustering Constants:
+CLUSTERS = [1, 5, 10, 20] # The number of clusters / centroids per class
 
 # This function defines the command to play a sound when the program finishes
 def play_sound():
@@ -61,6 +65,12 @@ def load_data(file_path):
 def normalize_data(features):
    return minmax_scaler.fit_transform(features) # Normalize the features
 
+# This function runs the clustering algorithm
+def run_clusters(features, labels, clusters):
+   for cluster in clusters:
+      for input_file in INPUT_FILES:
+         output_file = f"{OUTPUT_DIRECTORY}/{input_file.split('.')[0]}-{cluster}clusters.{input_file.split('.')[1]}"
+
 # This is the Main function
 def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}K-Means Clustering{BackgroundColors.GREEN}{BackgroundColors.GREEN} program!{Style.RESET_ALL}") # Output the Welcome message
@@ -72,6 +82,8 @@ def main():
    features, labels = load_data(TRAINING_FILE) # Load the training data
 
    normalized_features = normalize_data(features) # Normalize the features
+
+   run_clusters(normalized_features, labels, CLUSTERS) # Run the clustering algorithm
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
