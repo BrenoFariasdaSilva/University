@@ -23,6 +23,9 @@ class BackgroundColors:  # Colors for the terminal
 SOUND_COMMANDS = {"Darwin": "afplay", "Linux": "aplay", "Windows": "start"}
 SOUND_FILE = "./.assets/NotificationSound.wav" # The path to the sound file
 
+# Constants:
+OUTPUT_DIRECTORY = "./results" # The path to the output directory
+
 # This function defines the command to play a sound when the program finishes
 def play_sound():
    if os.path.exists(SOUND_FILE):
@@ -36,9 +39,17 @@ def play_sound():
 # Register the function to play a sound when the program finishes
 atexit.register(play_sound)
 
+# This function creates a directory if it does not exist
+def create_directory(directory):
+   # If the directory does not exist
+   if not os.path.exists(directory):
+      os.makedirs(directory) # Create the directory
+
 # This is the Main function
 def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}K-Means Clustering{BackgroundColors.GREEN}{BackgroundColors.GREEN} program!{Style.RESET_ALL}") # Output the Welcome message
+
+   create_directory(OUTPUT_DIRECTORY) # Create the output directory if it does not exist
    
    print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Program finished.{Style.RESET_ALL}") # Output the end of the program message
 
