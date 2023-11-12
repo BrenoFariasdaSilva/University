@@ -103,7 +103,7 @@ def path(G, v):
 	pathR(G, v)
 
 # main function
-if __name__ == '__main__':
+if __name__ == "__main__":
 	tests = int(input())
 	for t in range(tests):
 		# input number of nodes and edges

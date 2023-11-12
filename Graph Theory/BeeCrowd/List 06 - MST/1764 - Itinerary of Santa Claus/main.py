@@ -73,5 +73,6 @@ def prim(graph):
 			edges.sort(key = lambda x: x[1])
 	return total
 
+# This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
-	main()
+	main() # Call the main function

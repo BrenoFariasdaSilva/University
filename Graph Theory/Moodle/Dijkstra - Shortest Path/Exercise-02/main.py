@@ -38,5 +38,6 @@ def main():
 	for i in range(len(cities_name)):
 		print(cities_name[starting_vertex] + " -> " + str(cities_name[i]) + " is " + str(array_of_distances[i]) + " km")
 
-if __name__ == '__main__':
-	main ()
+# This is the standard boilerplate that calls the main() function.
+if __name__ == "__main__":
+	main() # Call the main function

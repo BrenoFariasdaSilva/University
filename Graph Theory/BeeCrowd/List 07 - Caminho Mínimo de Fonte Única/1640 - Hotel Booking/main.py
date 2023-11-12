@@ -97,5 +97,6 @@ def solve(n, h, hotels, m, roads):
 				hotelsNeeded += 1
 		return hotelsNeeded
 
-if __name__ == '__main__':
-	main()
+# This is the standard boilerplate that calls the main() function.
+if __name__ == "__main__":
+	main() # Call the main function

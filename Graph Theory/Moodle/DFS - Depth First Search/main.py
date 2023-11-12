@@ -36,5 +36,6 @@ def main():
 	g.DFS(2) 
 	# 2 0 1 3
 
-if __name__ == '__main__':
-	main()
+# This is the standard boilerplate that calls the main() function.
+if __name__ == "__main__":
+	main() # Call the main function

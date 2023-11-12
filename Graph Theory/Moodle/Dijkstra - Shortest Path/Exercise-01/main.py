@@ -37,5 +37,6 @@ def main():
 	array_of_distances = Dijkstra(Graph, starting_vertex) # Get the array_of_distances from the start edge to all the others
 	print ("shortest path from" , vertex_name[starting_vertex] , "to" , vertex_name[destination_vertex] , "is" , array_of_distances[destination_vertex])
 
-if __name__ == '__main__':
-	main ()
+# This is the standard boilerplate that calls the main() function.
+if __name__ == "__main__":
+	main() # Call the main function
