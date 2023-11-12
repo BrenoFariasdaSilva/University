@@ -23,8 +23,13 @@ class BackgroundColors:  # Colors for the terminal
 SOUND_COMMANDS = {"Darwin": "afplay", "Linux": "aplay", "Windows": "start"}
 SOUND_FILE = "./.assets/NotificationSound.wav" # The path to the sound file
 
-# Constants:
+# Folder Constants:
+INPUT_DIRECTORY = "./dataset" # The path to the input directory
 OUTPUT_DIRECTORY = "./results" # The path to the output directory
+
+# Input Files Constants:
+TRAINING_FILE = f"{INPUT_DIRECTORY}/training.txt" # The path to the training file
+TESTING_FILE = f"{INPUT_DIRECTORY}/testing.txt" # The path to the testing file
 
 # This function defines the command to play a sound when the program finishes
 def play_sound():
@@ -45,6 +50,13 @@ def create_directory(directory):
    if not os.path.exists(directory):
       os.makedirs(directory) # Create the directory
 
+# This function loads the data from a file
+def load_data(file_path):
+   data = np.loadtxt(file_path)
+   features = data[:, :-1] # Get the features
+   labels = data[:, -1] # Get the labels
+   return features, labels
+
 # This is the Main function
 def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}K-Means Clustering{BackgroundColors.GREEN}{BackgroundColors.GREEN} program!{Style.RESET_ALL}") # Output the Welcome message
@@ -52,6 +64,8 @@ def main():
    create_directory(OUTPUT_DIRECTORY) # Create the output directory if it does not exist
    
    print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Program finished.{Style.RESET_ALL}") # Output the end of the program message
+
+   features, labels = load_data(TRAINING_FILE) # Load the training data
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == '__main__':
