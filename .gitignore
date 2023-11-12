@@ -675,5 +675,6 @@ processed_tweets
 **/output/
 **/results/
 **/normalized_dataset/
+Accuracy_Results.csv
 
 .DS_Store
