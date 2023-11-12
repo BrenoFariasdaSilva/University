@@ -57,6 +57,10 @@ def load_data(file_path):
    labels = data[:, -1] # Get the labels
    return features, labels
 
+# This function normalizes the data
+def normalize_data(features):
+   return minmax_scaler.fit_transform(features) # Normalize the features
+
 # This is the Main function
 def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}K-Means Clustering{BackgroundColors.GREEN}{BackgroundColors.GREEN} program!{Style.RESET_ALL}") # Output the Welcome message
@@ -67,7 +71,9 @@ def main():
 
    features, labels = load_data(TRAINING_FILE) # Load the training data
 
+   normalized_features = normalize_data(features) # Normalize the features
+
 # This is the standard boilerplate that calls the main() function.
-if __name__ == '__main__':
+if __name__ == "__main__":
 	main() # Call the main function
     
