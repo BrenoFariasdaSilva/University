@@ -49,7 +49,11 @@ def play_sound():
 atexit.register(play_sound)
 
 # This function creates a directory if it does not exist
-def create_directory(directory):
+def create_directory(directory, ERASE=False):
+   # If the directory exists and is not empty, delete all the files in it
+   if os.path.exists(directory) and os.listdir(directory) and ERASE:
+      os.system(f"rm -rf {directory}/*")
+
    # If the directory does not exist
    if not os.path.exists(directory):
       os.makedirs(directory) # Create the directory
@@ -124,9 +128,9 @@ def run_clusters():
       # For each cluster
       for cluster in CLUSTERS:
          output_directory = f"{OUTPUT_DIRECTORY}/{input_file.split('.')[0]}/"
-         create_directory(output_directory) # Create the output directory if it does not exist
+         create_directory(output_directory, False) # Create the output directory if it does not exist
          output_file = f"{output_directory}/{cluster}-clusters.{input_file.split('.')[1]}"
-         
+
          # Generate the centroids
          generate_centroids(features, labels, cluster, output_file)
 
@@ -140,8 +144,8 @@ def run_clusters():
 def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}K-Means Clustering{BackgroundColors.GREEN}{BackgroundColors.GREEN} program!{Style.RESET_ALL}") # Output the Welcome message
 
-   create_directory(OUTPUT_DIRECTORY) # Create the output directory if it does not exist
-   create_directory(NORMALIZED_DATASET_DIRECTORY) # Create the input normalized directory if it does not exist
+   create_directory(OUTPUT_DIRECTORY, True) # Create the output directory if it does not exist
+   create_directory(NORMALIZED_DATASET_DIRECTORY, True) # Create the input normalized directory if it does not exist
 
    run_clusters() # Run the clustering algorithm
 
