@@ -142,6 +142,7 @@ def main():
 
    create_directory(OUTPUT_DIRECTORY) # Create the output directory if it does not exist
    create_directory(INPUT_NORMALIZED_DIRECTORY) # Create the input normalized directory if it does not exist
+   create_directory(OUTPUT_NORMALIZED_DIRECTORY) # Create the output normalized directory if it does not exist
 
    features, labels = load_data(TRAINING_FILE) # Load the training data
 
