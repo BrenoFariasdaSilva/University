@@ -674,5 +674,6 @@ processed_tweets
 **/pixels_count/
 **/output/
 **/results/
+**/normalized_dataset/
 
 .DS_Store
