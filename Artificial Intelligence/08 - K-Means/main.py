@@ -88,10 +88,14 @@ def run_knn(file_path, neighbors=1):
 
    predictions = knn.predict(testing_features) # Predict the testing data
 
-   # Calculate the accuracy
-   accuracy = np.sum(predictions == testing_labels) / len(testing_labels)
+   # Calculate the accuracy in percentage
+   accuracy = np.sum(predictions == testing_labels) / len(testing_labels) * 100
 
    return accuracy # Return the accuracy
+
+# This function outputs the accuracy
+def output_accuracy(accuracy, cluster, input_file):
+   print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Accuracy for {BackgroundColors.CYAN}{input_file}{BackgroundColors.GREEN} with {BackgroundColors.CYAN}{cluster}{BackgroundColors.GREEN} clusters/neighbors: {BackgroundColors.CYAN}{accuracy:.2f}%{Style.RESET_ALL}") # Output the accuracy
 
 # This function runs the clustering algorithm
 def run_clusters(features, labels, clusters):
@@ -106,6 +110,9 @@ def run_clusters(features, labels, clusters):
 
          # Run the KNN algorithm
          accuracy = run_knn(output_file, cluster)
+
+         # Output the accuracy
+         output_accuracy(accuracy, cluster, input_file)
 
 # This is the Main function
 def main():
