@@ -60,6 +60,6 @@ def main():
    train_features_values, train_label, test_features_values, test_label = load_data()
    train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier with grid search
 
-# This the boilerplate that calls the main function
+# This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
-   main() # Call the main function
+	main() # Call the main function

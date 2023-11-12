@@ -240,7 +240,7 @@ def sort_output_file(output_file_path):
 	# Save the output file
 	output_file.to_csv(output_file_path, index=False)
 
-This function defines the command to play a sound when the program finishes
+# This function defines the command to play a sound when the program finishes
 def play_sound():
 	if os.path.exists(SOUND_FILE):
 		if platform.system() in SOUND_COMMANDS: # if the platform.system() is in the SOUND_COMMANDS dictionary
@@ -275,8 +275,6 @@ def main():
 	# Sort the output file by the accuracy column
 	sort_output_file(output_file_path)
 
-# @brief: The entry point of the program
-# @param: None
-# @return: None
-if __name__ == '__main__':
+# This is the standard boilerplate that calls the main() function.
+if __name__ == "__main__":
 	main() # Call the main function

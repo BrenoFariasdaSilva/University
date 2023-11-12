@@ -346,8 +346,6 @@ def main():
 	# Process each split
 	process_each_split()
 
-# @brief: The entry point of the program
-# @param: None
-# @return: None
-if __name__ == '__main__':
+# This is the standard boilerplate that calls the main() function.
+if __name__ == "__main__":
 	main() # Call the main function

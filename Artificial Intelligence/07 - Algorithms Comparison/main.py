@@ -101,6 +101,6 @@ def main():
    train_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN - Multilayer Perceptron classifier
    train_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
 
-# This the boilerplate that calls the main function
+# This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
-   main() # Call the main function
+	main() # Call the main function
