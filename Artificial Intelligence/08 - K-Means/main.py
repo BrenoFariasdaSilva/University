@@ -95,7 +95,7 @@ def run_knn(file_path, neighbors=1):
 
 # This function outputs the accuracy
 def output_accuracy(accuracy, cluster, input_file):
-   print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Accuracy for {BackgroundColors.CYAN}{input_file}{BackgroundColors.GREEN} with {BackgroundColors.CYAN}{cluster}{BackgroundColors.GREEN} clusters/neighbors: {BackgroundColors.CYAN}{accuracy:.2f}%{Style.RESET_ALL}") # Output the accuracy
+   print(f"{BackgroundColors.GREEN}Accuracy for {BackgroundColors.CYAN}{input_file}{BackgroundColors.GREEN} with {BackgroundColors.CYAN}{cluster}{BackgroundColors.GREEN} clusters/neighbors: {BackgroundColors.CYAN}{accuracy:.2f}%{Style.RESET_ALL}") # Output the accuracy
 
 # This function runs the clustering algorithm
 def run_clusters(features, labels, clusters):
