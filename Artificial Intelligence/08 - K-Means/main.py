@@ -77,6 +77,22 @@ def generate_centroids(features, labels, current_cluster, output_file):
          for centroid in k_means.cluster_centers_:
             file.write("".join([f"{number:.5f} " for number in centroid]) + f"{class_number:.0f}\n")
 
+# This function runs the KNN algorithm
+def run_knn(file_path, neighbors=1):
+   centroids_features, centroids_labels = load_data(file_path) # Load the data
+   training_features, testing_features, training_labels, testing_labels = train_test_split(centroids_features, centroids_labels, test_size=0.2) # Split the data into training and testing data
+
+   # Create the KNN object
+   knn = KNeighborsClassifier(n_neighbors=neighbors, weights="distance")
+   knn.fit(training_features, training_labels) # Fit the KNN object
+
+   predictions = knn.predict(testing_features) # Predict the testing data
+
+   # Calculate the accuracy
+   accuracy = np.sum(predictions == testing_labels) / len(testing_labels)
+
+   return accuracy # Return the accuracy
+
 # This function runs the clustering algorithm
 def run_clusters(features, labels, clusters):
    for cluster in clusters:
@@ -87,6 +103,9 @@ def run_clusters(features, labels, clusters):
          
          # Generate the centroids
          generate_centroids(features, labels, cluster, output_file)
+
+         # Run the KNN algorithm
+         accuracy = run_knn(output_file, cluster)
 
 # This is the Main function
 def main():
