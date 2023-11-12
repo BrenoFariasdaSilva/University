@@ -30,7 +30,7 @@ DATASET_FILES_FORMAT = ".csv" # The dataset files format
 OUTPUT_FILE_FORMAT = ".csv" # The output file format
 
 # Sound Constants:
-SOUND_COMMANDS = {"Darwin": "afplay", "Linux": "aplay", "Windows": "start"} # The sound commands for each operating system
+SOUND_COMMANDS = {"Darwin": "afplay", "Linux": "aplay", "Windows": "start"} 
 SOUND_FILE = "../../.assets/NotificationSound.wav" # The path to the sound file
 
 # @brief: This function verifies if the test and training dataset exists
@@ -240,9 +240,7 @@ def sort_output_file(output_file_path):
 	# Save the output file
 	output_file.to_csv(output_file_path, index=False)
 
-# @brief: This function defines the command to play a sound when the program finishes
-# @param: None
-# @return: None
+This function defines the command to play a sound when the program finishes
 def play_sound():
 	if os.path.exists(SOUND_FILE):
 		if platform.system() in SOUND_COMMANDS: # if the platform.system() is in the SOUND_COMMANDS dictionary
