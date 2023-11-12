@@ -81,7 +81,9 @@ def generate_centroids(features, labels, current_cluster, output_file):
 def run_clusters(features, labels, clusters):
    for cluster in clusters:
       for input_file in INPUT_FILES:
-         output_file = f"{OUTPUT_DIRECTORY}/{input_file.split('.')[0]}-{cluster}clusters.{input_file.split('.')[1]}"
+         output_directory = f"{OUTPUT_DIRECTORY}/{input_file.split('.')[0]}/"
+         create_directory(output_directory) # Create the output directory if it does not exist
+         output_file = f"{output_directory}/{cluster}-clusters.{input_file.split('.')[1]}"
          
          # Generate the centroids
          generate_centroids(features, labels, cluster, output_file)
