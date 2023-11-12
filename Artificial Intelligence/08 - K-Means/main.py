@@ -66,17 +66,25 @@ def normalize_data(features):
    return minmax_scaler.fit_transform(features) # Normalize the features
 
 # This function generates the centroids of the class
-def generate_centroids(features, labels, current_cluster):
+def generate_centroids(features, labels, current_cluster, output_file):
    number_of_classes = len(np.unique(labels)) # Get the number of classes
    for class_number in range(number_of_classes):
       k_means = KMeans(n_clusters=current_cluster, n_init="auto") # Create the KMeans object
-   
+      k_means.fit(features[labels == class_number]) # Fit the KMeans object
+
+      # Write the centroids to a file
+      with open(output_file, "a") as file:
+         for centroid in k_means.cluster_centers_:
+            file.write("".join([f"{number:.5f} " for number in centroid]) + f"{class_number:.0f}\n")
 
 # This function runs the clustering algorithm
 def run_clusters(features, labels, clusters):
    for cluster in clusters:
       for input_file in INPUT_FILES:
          output_file = f"{OUTPUT_DIRECTORY}/{input_file.split('.')[0]}-{cluster}clusters.{input_file.split('.')[1]}"
+         
+         # Generate the centroids
+         generate_centroids(features, labels, cluster, output_file)
 
 # This is the Main function
 def main():
