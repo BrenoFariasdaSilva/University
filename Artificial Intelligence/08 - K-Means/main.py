@@ -155,6 +155,14 @@ def get_current_date_and_time():
    seconds = time.strftime("%S") # Get the current time
    return date, f"{hour}h:{minutes}m:{seconds}s" # Return the current date and current time
 
+# This function saves the accuracy results at the end of the csv file
+def save_accuracy_results(accuracy_results, date, time):
+   with open(f"Accuracy_Results.csv", "a") as file:
+      file.write("Time and Date, File Name,Clusters,Accuracy\n")
+      for accuracy_result in accuracy_results:
+         file.write(f"{date} at {time}, {accuracy_result}\n") # Write the accuracy results to a file
+      file.write(f"{'-' * 3},{'-' * 3},{'-' * 3},{'-' * 3}\n")
+
 # This is the Main function
 def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}K-Means Clustering{BackgroundColors.GREEN}{BackgroundColors.GREEN} program!{Style.RESET_ALL}") # Output the Welcome message
@@ -165,6 +173,8 @@ def main():
    accuracy_results = run_clusters() # Run the clustering algorithm
 
    day, time = get_current_date_and_time() # Get the current date and current time
+
+   save_accuracy_results(accuracy_results, day, time) # Save the accuracy results to a file
 
    print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Program finished.{Style.RESET_ALL}") # Output the end of the program message
 
