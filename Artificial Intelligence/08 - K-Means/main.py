@@ -164,7 +164,7 @@ def main():
 
    accuracy_results = run_clusters() # Run the clustering algorithm
 
-   day, hour = get_current_date_and_time() # Get the current date and current time
+   day, time = get_current_date_and_time() # Get the current date and current time
 
    print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Program finished.{Style.RESET_ALL}") # Output the end of the program message
 
