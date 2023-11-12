@@ -115,6 +115,6 @@ def main(argv=sys.argv):
         rest_file.close()
     dataset.close()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv)
 

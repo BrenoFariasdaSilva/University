@@ -460,7 +460,7 @@ def find_parameters(dataset_pathname, options=''):
     return best_rate, best_param
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     def exit_with_help():
         print("""\
