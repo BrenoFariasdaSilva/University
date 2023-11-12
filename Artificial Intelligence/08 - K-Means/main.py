@@ -1,5 +1,4 @@
 import atexit # For playing a sound when the program finishes
-import matplotlib.pyplot as plt # Import matplotlib
 import numpy as np # Import numpy
 import os # Import os
 import platform # For getting the operating system name
