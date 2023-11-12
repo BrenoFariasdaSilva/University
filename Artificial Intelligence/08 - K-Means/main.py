@@ -25,6 +25,7 @@ SOUND_FILE = "./.assets/NotificationSound.wav" # The path to the sound file
 # Folder Constants:
 INPUT_DIRECTORY = "./dataset" # The path to the input directory
 OUTPUT_DIRECTORY = "./results" # The path to the output directory
+INPUT_NORMALIZED_DIRECTORY = OUTPUT_NORMALIZED_DIRECTORY = "./normalized_dataset" # The path to the normalized input directory
 
 # Input Files Constants:
 INPUT_FILES = ["train.txt", "test.txt"] # The input files
@@ -65,6 +66,23 @@ def normalize_data(features):
    normalizer = MinMaxScaler() # Create the MinMaxScaler object
    return normalizer.fit_transform(features) # Normalize the features
 
+# This function saves the normalized data to a file
+def save_normalized_data(features, labels, output_file):
+   with open(f"{output_file}", "w") as file:
+      for feature, label in zip(features, labels): # For each feature and label
+         file.write("".join([f"{number:.5f} " for number in feature]) + f"{label:.0f}\n")
+
+# This function pre-processes the data
+def pre_process_data(features, labels, input_file):
+   # Load the data
+   features, labels = load_data(f"{INPUT_DIRECTORY}/{input_file}")
+   # Normalize the data
+   features = normalize_data(features)
+   # Write the normalized data to a file
+   save_normalized_data(features, labels, f"{OUTPUT_NORMALIZED_DIRECTORY}/{input_file}")
+
+   return features, labels # Return the features and labels
+
 # This function generates the centroids of the class
 def generate_centroids(features, labels, current_cluster, output_file):
    number_of_classes = len(np.unique(labels)) # Get the number of classes
@@ -99,8 +117,12 @@ def output_accuracy(accuracy, cluster, input_file):
 
 # This function runs the clustering algorithm
 def run_clusters(features, labels, clusters):
-   for cluster in clusters:
-      for input_file in INPUT_FILES:
+   for input_file in INPUT_FILES:
+      # Pre-process the data
+      features, labels = pre_process_data(features, labels, input_file)
+
+      # For each cluster
+      for cluster in clusters:
          output_directory = f"{OUTPUT_DIRECTORY}/{input_file.split('.')[0]}/"
          create_directory(output_directory) # Create the output directory if it does not exist
          output_file = f"{output_directory}/{cluster}-clusters.{input_file.split('.')[1]}"
@@ -119,6 +141,7 @@ def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}K-Means Clustering{BackgroundColors.GREEN}{BackgroundColors.GREEN} program!{Style.RESET_ALL}") # Output the Welcome message
 
    create_directory(OUTPUT_DIRECTORY) # Create the output directory if it does not exist
+   create_directory(INPUT_NORMALIZED_DIRECTORY) # Create the input normalized directory if it does not exist
 
    features, labels = load_data(TRAINING_FILE) # Load the training data
 
