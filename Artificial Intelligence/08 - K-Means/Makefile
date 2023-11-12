@@ -5,4 +5,3 @@ run:
 
 depencencies:
 	pip install colorama matplotlib numpy scikit-learn
-

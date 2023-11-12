@@ -16,3 +16,4 @@ class BackgroundColors:  # Colors for the terminal
    BOLD = "\033[1m"  # Bold
    UNDERLINE = "\033[4m"  # Underline
    CLEAR_TERMINAL = "\033[H\033[J"  # Clear the terminal
+
