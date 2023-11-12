@@ -76,14 +76,14 @@ def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}K-Means Clustering{BackgroundColors.GREEN}{BackgroundColors.GREEN} program!{Style.RESET_ALL}") # Output the Welcome message
 
    create_directory(OUTPUT_DIRECTORY) # Create the output directory if it does not exist
-   
-   print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Program finished.{Style.RESET_ALL}") # Output the end of the program message
 
    features, labels = load_data(TRAINING_FILE) # Load the training data
 
    normalized_features = normalize_data(features) # Normalize the features
 
    run_clusters(normalized_features, labels, CLUSTERS) # Run the clustering algorithm
+
+   print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Program finished.{Style.RESET_ALL}") # Output the end of the program message
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
