@@ -4,4 +4,4 @@ run:
 	clear; time python3 ./main.py
 
 depencencies:
-	pip install colorama matplotlib numpy scikit-learn
+	pip install colorama numpy scikit-learn
