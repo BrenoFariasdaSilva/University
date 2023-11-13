@@ -137,7 +137,7 @@ def run_clusters():
          generate_centroids(features, labels, cluster, output_file)
 
          # Run the KNN algorithm
-         accuracy = run_knn(output_file, cluster)
+         accuracy = run_knn(output_file)
 
          # Add the accuracy to the accuracy_results list
          accuracy_results.append(f"{input_file},{cluster},{accuracy:.2f}%")
