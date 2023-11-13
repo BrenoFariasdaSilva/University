@@ -158,9 +158,9 @@ def get_current_date_and_time():
 # This function saves the accuracy results at the end of the csv file
 def save_accuracy_results(accuracy_results, date, time):
    with open(f"Accuracy_Results.csv", "a") as file:
-      file.write("Time and Date, File Name,Clusters,Accuracy\n")
+      file.write("Time and Date,File Name,Clusters,Accuracy\n")
       for accuracy_result in accuracy_results:
-         file.write(f"{date} at {time}, {accuracy_result}\n") # Write the accuracy results to a file
+         file.write(f"{date} at {time},{accuracy_result}\n") # Write the accuracy results to a file
       file.write(f"{'-' * 3},{'-' * 3},{'-' * 3},{'-' * 3}\n")
 
 # This is the Main function
