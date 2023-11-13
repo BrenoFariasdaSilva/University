@@ -125,7 +125,9 @@ def output_accuracy(accuracy, cluster, input_file):
 def run_clusters():
    accuracy_results = [] # Create the accuracy_results list
 
+   # For each cluster
    for cluster in CLUSTERS:
+      # For each input file
       for input_file in INPUT_FILES:
          # Pre-process the data
          features, labels = pre_process_data(f"{input_file}")
