@@ -38,6 +38,10 @@ SHOW_ACCURACY = True # Show the accuracy of the KNN algorithm
 CLUSTERS = [1, 5, 10, 20] # The number of clusters / centroids per class
 SAMPLES_PER_CLASS = 100 # The number of samples per class
 
+# I/O Constants:
+SAVE_ACCURACY_RESULTS = True # Save the accuracy results to a file
+SAVE_NORMALIZED_DATA = False # Save the normalized data to a file
+
 # This function defines the command to play a sound when the program finishes
 def play_sound():
    if os.path.exists(SOUND_FILE):
@@ -86,7 +90,8 @@ def pre_process_data(input_file):
    # Normalize the data
    features = normalize_data(features)
    # Write the normalized data to a file
-   save_normalized_data(features, labels, f"{NORMALIZED_DATASET_DIRECTORY}/{input_file}")
+   if SAVE_NORMALIZED_DATA:
+      save_normalized_data(features, labels, f"{NORMALIZED_DATASET_DIRECTORY}/{input_file}")
 
    return features, labels # Return the features and labels
 
@@ -177,7 +182,8 @@ def main():
 
    day, time = get_current_date_and_time() # Get the current date and current time
 
-   save_accuracy_results(accuracy_results, day, time) # Save the accuracy results to a file
+   if SAVE_ACCURACY_RESULTS:
+      save_accuracy_results(accuracy_results, day, time) # Save the accuracy results to a file
 
    print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Program finished.{Style.RESET_ALL}") # Output the end of the program message
 
