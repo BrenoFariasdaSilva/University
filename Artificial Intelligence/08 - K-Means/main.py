@@ -95,7 +95,7 @@ def generate_centroids(features, labels, current_cluster, output_file):
    number_of_classes = len(np.unique(labels)) # Get the number of classes
    for i, class_number in enumerate(range(number_of_classes)):
       k_means = KMeans(n_clusters=current_cluster, n_init="auto") # Create the KMeans object
-      k_means.fit(features[i * SAMPLES_PER_CLASS:(i + 1) * SAMPLES_PER_CLASS])
+      k_means.fit(features[i * SAMPLES_PER_CLASS:(i + 1) * SAMPLES_PER_CLASS]) # Fit the KMeans object based on the features and labels
 
       # Write the centroids to a file
       with open(output_file, "a") as file:
