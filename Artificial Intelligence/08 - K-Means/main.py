@@ -36,6 +36,7 @@ TESTING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[1]}" # The path to the testing f
 # Clustering Constants:
 SHOW_ACCURACY = True # Show the accuracy of the KNN algorithm
 CLUSTERS = [1, 5, 10, 20] # The number of clusters / centroids per class
+SAMPLES_PER_CLASS = 100 # The number of samples per class
 
 # This function defines the command to play a sound when the program finishes
 def play_sound():
@@ -92,9 +93,9 @@ def pre_process_data(input_file):
 # This function generates the centroids of the class
 def generate_centroids(features, labels, current_cluster, output_file):
    number_of_classes = len(np.unique(labels)) # Get the number of classes
-   for class_number in range(number_of_classes):
+   for i, class_number in enumerate(range(number_of_classes)):
       k_means = KMeans(n_clusters=current_cluster, n_init="auto") # Create the KMeans object
-      k_means.fit(features[labels == class_number]) # Fit the KMeans object
+      k_means.fit(features[i * SAMPLES_PER_CLASS:(i + 1) * SAMPLES_PER_CLASS])
 
       # Write the centroids to a file
       with open(output_file, "a") as file:
@@ -183,4 +184,3 @@ def main():
 # This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
 	main() # Call the main function
-    
