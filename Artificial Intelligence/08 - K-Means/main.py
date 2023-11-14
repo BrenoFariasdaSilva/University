@@ -187,6 +187,9 @@ def main():
    create_directory(CENTROIDS_DIRECTORY, True) # Create the centroids output directory if it does not exist
    create_directory(NORMALIZED_DATASET_DIRECTORY, True) # Create the input normalized directory if it does not exist
 
+   for input_file in INPUT_FILES:
+      pre_process_data(f"{input_file}") # Pre-process the data
+
    accuracy_results = run_clusters() # Run the clustering algorithm
 
    day, time = get_current_date_and_time() # Get the current date and current time
