@@ -148,6 +148,7 @@ def run_clusters():
       for input_file in INPUT_FILES:
          # Pre-process the data
          features, labels = pre_process_data(f"{input_file}")
+         
          output_directory = f"{CENTROIDS_DIRECTORY}/{input_file.split('.')[0]}/"
          create_directory(output_directory, False) # Create the output directory if it does not exist
          output_file = f"{output_directory}/{cluster}-clusters.{input_file.split('.')[1]}"
