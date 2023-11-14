@@ -65,7 +65,7 @@ def load_data(file_path):
    data = np.loadtxt(file_path)
    features = data[:, :-1] # Get the features
    labels = data[:, -1] # Get the labels
-   return features, labels
+   return features, labels # Return the features and labels
 
 # This function normalizes the data
 def normalize_data(features):
