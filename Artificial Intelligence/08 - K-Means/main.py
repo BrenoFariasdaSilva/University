@@ -129,11 +129,6 @@ def run_knn(centroids_features, centroids_labels, neighbors=1):
 
    accuracy = knn.score(testing_features, testing_labels) * 100 # Calculate the accuracy
 
-   # print the accuracy
-   if SHOW_ACCURACY:
-      print(f"{BackgroundColors.GREEN}Accuracy: {BackgroundColors.CYAN}{accuracy:.2f}%{Style.RESET_ALL}")
-      time.sleep(5)
-
    return accuracy # Return the accuracy
 
 # This function outputs the accuracy
