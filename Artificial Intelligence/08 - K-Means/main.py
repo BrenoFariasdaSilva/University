@@ -139,29 +139,28 @@ def output_accuracy(accuracy, cluster, input_file):
 # This function runs the clustering algorithm
 def run_clusters():
    accuracy_results = [] # Create the accuracy_results list
+   normalized_testing_dataset = NORMALIZED_TESTING_FILE # Get the test dataset file name
 
    # For each cluster
    for cluster in CLUSTERS:
-      # For each input file
-      for input_file in INPUT_FILES:
-         # Pre-process the data
-         features, labels = pre_process_data(f"{input_file}")
-         
-         output_directory = f"{CENTROIDS_DIRECTORY}/{input_file.split('.')[0]}/"
-         create_directory(output_directory, False) # Create the output directory if it does not exist
-         output_file = f"{output_directory}/{cluster}-clusters.{input_file.split('.')[1]}"
+      # Pre-process the data
+      features, labels = load_data(normalized_testing_dataset)
+      
+      output_directory = f"{CENTROIDS_DIRECTORY}/{normalized_testing_dataset.split('.')[0]}"
+      create_directory(output_directory, False) # Create the output directory if it does not exist
+      output_file = f"{output_directory}{cluster}-clusters.{normalized_testing_dataset.split('.')[-1]}"
 
-         # Generate the centroids
-         centroids_features, centroids_labels = generate_centroids(features, labels, cluster, output_file)
+      # Generate the centroids
+      centroids_features, centroids_labels = generate_centroids(features, labels, cluster, output_file)
 
-         # Run the KNN algorithm
-         accuracy = run_knn(centroids_features, centroids_labels)
+      # Run the KNN algorithm
+      accuracy = run_knn(centroids_features, centroids_labels)
 
-         # Add the accuracy to the accuracy_results list
-         accuracy_results.append(f"{input_file},{cluster},{accuracy:.2f}%")
+      # Add the accuracy to the accuracy_results list
+      accuracy_results.append(f"{normalized_testing_dataset},{cluster},{accuracy:.2f}%")
 
-         if SHOW_ACCURACY:
-            output_accuracy(accuracy, cluster, input_file)
+      if SHOW_ACCURACY:
+         output_accuracy(accuracy, cluster, normalized_testing_dataset)
 
    return accuracy_results # Return the accuracy_results list
 
