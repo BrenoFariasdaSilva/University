@@ -120,8 +120,7 @@ def generate_centroids(features, labels, current_cluster, output_file):
    return centroids_features, centroids_labels # Return the centroids features and labels
 
 # This function runs the KNN algorithm
-def run_knn(file_path, neighbors=1):
-   centroids_features, centroids_labels = load_data(file_path) # Load the data
+def run_knn(centroids_features, centroids_labels, neighbors=1):
    training_features, testing_features, training_labels, testing_labels = train_test_split(centroids_features, centroids_labels, test_size=0.2) # Split the data into training and testing data
 
    # Create the KNN object
@@ -157,7 +156,7 @@ def run_clusters():
          centroids_features, centroids_labels = generate_centroids(features, labels, cluster, output_file)
 
          # Run the KNN algorithm
-         accuracy = run_knn(output_file)
+         accuracy = run_knn(centroids_features, centroids_labels)
 
          # Add the accuracy to the accuracy_results list
          accuracy_results.append(f"{input_file},{cluster},{accuracy:.2f}%")
