@@ -170,7 +170,7 @@ def save_accuracy_results(accuracy_results, date, time):
 def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}K-Means Clustering{BackgroundColors.GREEN}{BackgroundColors.GREEN} program!{Style.RESET_ALL}") # Output the Welcome message
 
-   create_directory(CENTROIDS_DIRECTORY, True) # Create the output directory if it does not exist
+   create_directory(CENTROIDS_DIRECTORY, True) # Create the centroids output directory if it does not exist
    create_directory(NORMALIZED_DATASET_DIRECTORY, True) # Create the input normalized directory if it does not exist
 
    accuracy_results = run_clusters() # Run the clustering algorithm
