@@ -25,7 +25,7 @@ SOUND_FILE = "./.assets/NotificationSound.wav" # The path to the sound file
 
 # Folder Constants:
 INPUT_DIRECTORY = "./dataset" # The path to the input directory
-OUTPUT_DIRECTORY = "./results" # The path to the output directory
+CENTROIDS_DIRECTORY = "./centroids" # The path to the output directory
 NORMALIZED_DATASET_DIRECTORY = "./normalized_dataset" # The path to the normalized dataset directory
 
 # Input Files Constants:
@@ -132,7 +132,7 @@ def run_clusters():
       for input_file in INPUT_FILES:
          # Pre-process the data
          features, labels = pre_process_data(f"{input_file}")
-         output_directory = f"{OUTPUT_DIRECTORY}/{input_file.split('.')[0]}/"
+         output_directory = f"{CENTROIDS_DIRECTORY}/{input_file.split('.')[0]}/"
          create_directory(output_directory, False) # Create the output directory if it does not exist
          output_file = f"{output_directory}/{cluster}-clusters.{input_file.split('.')[1]}"
 
@@ -170,7 +170,7 @@ def save_accuracy_results(accuracy_results, date, time):
 def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the {BackgroundColors.CYAN}K-Means Clustering{BackgroundColors.GREEN}{BackgroundColors.GREEN} program!{Style.RESET_ALL}") # Output the Welcome message
 
-   create_directory(OUTPUT_DIRECTORY, True) # Create the output directory if it does not exist
+   create_directory(CENTROIDS_DIRECTORY, True) # Create the output directory if it does not exist
    create_directory(NORMALIZED_DATASET_DIRECTORY, True) # Create the input normalized directory if it does not exist
 
    accuracy_results = run_clusters() # Run the clustering algorithm
