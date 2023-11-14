@@ -40,7 +40,8 @@ SAMPLES_PER_CLASS = 100 # The number of samples per class
 
 # I/O Constants:
 SAVE_ACCURACY_RESULTS = True # Save the accuracy results to a file
-SAVE_NORMALIZED_DATA = False # Save the normalized data to a file
+SAVE_CENTROID_DATA = True # Save the centroid data to a file
+SAVE_NORMALIZED_DATA = True # Save the normalized data to a file
 
 # This function defines the command to play a sound when the program finishes
 def play_sound():
@@ -95,17 +96,26 @@ def pre_process_data(input_file):
 
    return features, labels # Return the features and labels
 
+# This function saves the centroids to a file
+def save_centroids(centroid, label, output_file):
+   with open(f"{output_file}", "a") as file:
+      file.write("".join([f"{number:.5f} " for number in centroid]) + f"{label:.0f}\n")
+
 # This function generates the centroids of the class
 def generate_centroids(features, labels, current_cluster, output_file):
+   centroids = [] # Create the centroids list
    number_of_classes = len(np.unique(labels)) # Get the number of classes
    for i, class_number in enumerate(range(number_of_classes)):
       k_means = KMeans(n_clusters=current_cluster, n_init="auto") # Create the KMeans object
       k_means.fit(features[i * SAMPLES_PER_CLASS:(i + 1) * SAMPLES_PER_CLASS]) # Fit the KMeans object based on the features and labels
 
-      # Write the centroids to a file
-      with open(output_file, "a") as file:
-         for centroid in k_means.cluster_centers_:
-            file.write("".join([f"{number:.5f} " for number in centroid]) + f"{class_number:.0f}\n")
+      # Append the centroids to the centroids list in order to each line contain the features and the label
+      for centroid in k_means.cluster_centers_:
+         centroids.append(np.append(centroid, class_number))
+         if SAVE_CENTROID_DATA:
+            save_centroids(centroid, class_number, output_file)
+
+   return centroids # Return the centroids
 
 # This function runs the KNN algorithm
 def run_knn(file_path, neighbors=1):
@@ -142,7 +152,7 @@ def run_clusters():
          output_file = f"{output_directory}/{cluster}-clusters.{input_file.split('.')[1]}"
 
          # Generate the centroids
-         generate_centroids(features, labels, cluster, output_file)
+         centroids = generate_centroids(features, labels, cluster, output_file)
 
          # Run the KNN algorithm
          accuracy = run_knn(output_file)
