@@ -122,7 +122,7 @@ def generate_centroids(features, labels, current_cluster, output_file):
 
 # This function runs the KNN algorithm
 def run_knn(centroids_features, centroids_labels, neighbors=1):
-   testing_features, testing_labels = load_data(NORMALIZED_TESTING_FILE) # Load the testing data
+   testing_features, testing_labels = load_data(NORMALIZED_TESTING_FILE) # Load the normalized testing data
 
    # Create the KNN object
    knn = KNeighborsClassifier(n_neighbors=neighbors, weights="distance")
