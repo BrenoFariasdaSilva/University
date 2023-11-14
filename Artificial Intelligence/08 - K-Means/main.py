@@ -87,16 +87,15 @@ def save_normalized_data(features, labels, output_file):
          file.write("".join([f"{number:.5f} " for number in feature]) + f"{label:.0f}\n")
 
 # This function pre-processes the data
-def pre_process_data(input_file):
-   # Load the data
-   features, labels = load_data(f"{INPUT_DIRECTORY}/{input_file}")
-   # Normalize the data
-   features = normalize_data(features)
-   # Write the normalized data to a file
-   if SAVE_NORMALIZED_DATA:
-      save_normalized_data(features, labels, f"{NORMALIZED_DATASET_DIRECTORY}/{input_file}")
-
-   return features, labels # Return the features and labels
+def pre_process_data():
+   for input_file in INPUT_FILES:
+      # Load the data
+      features, labels = load_data(f"{INPUT_DIRECTORY}/{input_file}")
+      # Normalize the data
+      features = normalize_data(features)
+      # Write the normalized data to a file
+      if SAVE_NORMALIZED_DATA:
+         save_normalized_data(features, labels, f"{NORMALIZED_DATASET_DIRECTORY}/{input_file}")
 
 # This function saves the centroids to a file
 def save_centroids(centroid, label, output_file):
@@ -189,8 +188,7 @@ def main():
    create_directory(CENTROIDS_DIRECTORY, True) # Create the centroids output directory if it does not exist
    create_directory(NORMALIZED_DATASET_DIRECTORY, True) # Create the input normalized directory if it does not exist
 
-   for input_file in INPUT_FILES:
-      pre_process_data(f"{input_file}") # Pre-process the data
+   pre_process_data() # Pre-process the data
 
    accuracy_results = run_clusters() # Run the clustering algorithm
 
