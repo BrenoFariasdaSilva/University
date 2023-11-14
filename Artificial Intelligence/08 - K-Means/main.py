@@ -25,7 +25,7 @@ SOUND_FILE = "./.assets/NotificationSound.wav" # The path to the sound file
 
 # Folder Constants:
 INPUT_DIRECTORY = "./dataset" # The path to the input directory
-CENTROIDS_DIRECTORY = "./centroids" # The path to the output directory
+CENTROIDS_DIRECTORY = "./centroids" # The path to the centroids output directory
 NORMALIZED_DATASET_DIRECTORY = "./normalized_dataset" # The path to the normalized dataset directory
 
 # Input Files Constants:
