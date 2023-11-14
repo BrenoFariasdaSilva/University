@@ -676,5 +676,6 @@ processed_tweets
 **/results/
 **/normalized_dataset/
 Accuracy_Results.csv
+**/centroids/
 
 .DS_Store
