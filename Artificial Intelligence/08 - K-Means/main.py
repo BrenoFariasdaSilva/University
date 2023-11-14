@@ -133,8 +133,8 @@ def run_knn(centroids_features, centroids_labels, neighbors=1):
    return accuracy # Return the accuracy
 
 # This function outputs the accuracy
-def output_accuracy(accuracy, cluster, input_file):
-   print(f"{BackgroundColors.GREEN}Accuracy for {BackgroundColors.CYAN}{input_file}{BackgroundColors.GREEN} with {BackgroundColors.CYAN}{cluster}{BackgroundColors.GREEN} clusters/neighbors: {BackgroundColors.CYAN}{accuracy:.2f}%{Style.RESET_ALL}") # Output the accuracy
+def output_accuracy(accuracy, cluster):
+   print(f"{BackgroundColors.GREEN}Accuracy with {BackgroundColors.CYAN}{cluster}{BackgroundColors.GREEN} clusters/neighbors: {BackgroundColors.CYAN}{accuracy:.2f}%{Style.RESET_ALL}") # Output the accuracy
 
 # This function runs the clustering algorithm
 def run_clusters():
@@ -157,10 +157,10 @@ def run_clusters():
       accuracy = run_knn(centroids_features, centroids_labels)
 
       # Add the accuracy to the accuracy_results list
-      accuracy_results.append(f"{normalized_testing_dataset},{cluster},{accuracy:.2f}%")
+      accuracy_results.append(f"{cluster},{accuracy:.2f}%")
 
       if SHOW_ACCURACY:
-         output_accuracy(accuracy, cluster, normalized_testing_dataset)
+         output_accuracy(accuracy, cluster)
 
    return accuracy_results # Return the accuracy_results list
 
@@ -175,10 +175,10 @@ def get_current_date_and_time():
 # This function saves the accuracy results at the end of the csv file
 def save_accuracy_results(accuracy_results, date, time):
    with open(f"Accuracy_Results.csv", "a") as file:
-      file.write("Time and Date,File Name,Clusters,Accuracy\n")
+      file.write("Time and Date,Clusters,Accuracy\n")
       for accuracy_result in accuracy_results:
          file.write(f"{date} at {time},{accuracy_result}\n") # Write the accuracy results to a file
-      file.write(f"{'-' * 3},{'-' * 3},{'-' * 3},{'-' * 3}\n")
+      file.write(f"{'-' * 3},{'-' * 3},{'-' * 3}\n")
 
 # This is the Main function
 def main():
