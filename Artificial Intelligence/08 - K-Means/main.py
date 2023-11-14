@@ -122,11 +122,11 @@ def generate_centroids(features, labels, current_cluster, output_file):
 
 # This function runs the KNN algorithm
 def run_knn(centroids_features, centroids_labels, neighbors=1):
-   training_features, testing_features, training_labels, testing_labels = train_test_split(centroids_features, centroids_labels, test_size=0.2) # Split the data into training and testing data
+   testing_features, testing_labels = load_data(NORMALIZED_TESTING_FILE) # Load the testing data
 
    # Create the KNN object
    knn = KNeighborsClassifier(n_neighbors=neighbors, weights="distance")
-   knn.fit(training_features, training_labels) # Fit the KNN object
+   knn.fit(centroids_features, centroids_labels) # Fit the KNN object
 
    accuracy = knn.score(testing_features, testing_labels) * 100 # Calculate the accuracy
 
