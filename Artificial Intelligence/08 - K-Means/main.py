@@ -87,6 +87,7 @@ def save_normalized_data(features, labels, output_file):
 
 # This function pre-processes the data
 def pre_process_data():
+   # Normalize all of the input files: Training and Testing files
    for input_file in INPUT_FILES:
       # Load the data
       features, labels = load_data(f"{INPUT_DIRECTORY}/{input_file}")
