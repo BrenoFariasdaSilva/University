@@ -5,7 +5,6 @@ import os # Import os
 import platform # For getting the operating system name
 from colorama import Style # For coloring the terminal
 from sklearn.cluster import KMeans # Import KMeans
-from sklearn.model_selection import train_test_split # Import train_test_split
 from sklearn.neighbors import KNeighborsClassifier # Import KNeighborsClassifier
 from sklearn.preprocessing import MinMaxScaler # Import MinMaxScaler
 
