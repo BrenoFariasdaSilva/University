@@ -127,10 +127,12 @@ def run_knn(centroids_features, centroids_labels, neighbors=1):
    knn = KNeighborsClassifier(n_neighbors=neighbors, weights="distance")
    knn.fit(training_features, training_labels) # Fit the KNN object
 
-   predictions = knn.predict(testing_features) # Predict the testing data
+   accuracy = knn.score(testing_features, testing_labels) * 100 # Calculate the accuracy
 
-   # Calculate the accuracy in percentage
-   accuracy = np.sum(predictions == testing_labels) / len(testing_labels) * 100
+   # print the accuracy
+   if SHOW_ACCURACY:
+      print(f"{BackgroundColors.GREEN}Accuracy: {BackgroundColors.CYAN}{accuracy:.2f}%{Style.RESET_ALL}")
+      time.sleep(5)
 
    return accuracy # Return the accuracy
 
