@@ -30,8 +30,10 @@ NORMALIZED_DATASET_DIRECTORY = "./normalized_dataset" # The path to the normaliz
 
 # Input Files Constants:
 INPUT_FILES = ["train.txt", "test.txt"] # The input files
-TRAINING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[0]}" # The path to the training file
-TESTING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[1]}" # The path to the testing file
+NORMALIZED_TRAINING_FILE = f"{NORMALIZED_DATASET_DIRECTORY}/{INPUT_FILES[0]}" # The path to the normalized training file
+NORMALIZED_TESTING_FILE = f"{NORMALIZED_DATASET_DIRECTORY}/{INPUT_FILES[1]}" # The path to the normalized testing file
+STANDARD_TRAINING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[0]}" # The path to the training file
+STANDARD_TESTING_FILE = f"{INPUT_DIRECTORY}/{INPUT_FILES[1]}" # The path to the testing file
 
 # Clustering Constants:
 SHOW_ACCURACY = True # Show the accuracy of the KNN algorithm
