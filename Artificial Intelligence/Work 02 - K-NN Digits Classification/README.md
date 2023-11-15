@@ -12,17 +12,17 @@ This Python script reads training and test datasets that were gerenated by [Pixe
 
 </div>
 
-- [K-NN Digits Classification ](#k-nn-digits-classification-)
-	- [Prerequisites](#prerequisites)
-	- [Execution](#execution)
-	- [Configuration Variables](#configuration-variables)
-		- [Dataset](#dataset)
-	- [K-NN Parameters](#k-nn-parameters)
-	- [How It Works](#how-it-works)
-		- [Function Explanations](#function-explanations)
-	- [Results](#results)
-	- [Contributing](#contributing)
-	- [License](#license)
+- [K-NN Digits Classification. ](#k-nn-digits-classification-)
+  - [Prerequisites](#prerequisites)
+  - [Execution](#execution)
+  - [Configuration Variables](#configuration-variables)
+    - [Dataset](#dataset)
+  - [K-NN Parameters](#k-nn-parameters)
+  - [How It Works](#how-it-works)
+    - [Function Explanations](#function-explanations)
+  - [Results](#results)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 
 ## Prerequisites
@@ -212,7 +212,7 @@ The script records the following results for different combinations of K values,
 The recorded results are sorted by accuracy, allowing you to identify the most effective K-NN configurations for digit classification.
 
 Explore the results to gain insights into the performance of the K-NN algorithm under different settings.
-You can preview the results in the [K-NN-Digits-Classification.txt](./results/K-NN-Digits-Classification.txt) file. As you can see, my best results were for:
+My best results were for:
 
 <div align="center" style="color: rgba(148, 239, 148, 1);">
 Grid = 5x5 <br>
