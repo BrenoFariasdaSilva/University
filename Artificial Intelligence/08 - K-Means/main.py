@@ -139,18 +139,16 @@ def output_accuracy(accuracy, cluster):
 # This function runs the clustering algorithm
 def run_clusters():
    accuracy_results = [] # Create the accuracy_results list
-   normalized_testing_dataset = NORMALIZED_TESTING_FILE # Get the test dataset file name
 
    # For each cluster
    for cluster in CLUSTERS:
-      # Pre-process the data
-      features, labels = load_data(normalized_testing_dataset)
+      features, labels = load_data(NORMALIZED_TRAINING_FILE) # Load the normalized testing data
       
-      output_directory = f"{CENTROIDS_DIRECTORY}/{normalized_testing_dataset.split('.')[0]}"
+      output_directory = f"{CENTROIDS_DIRECTORY}/"
       create_directory(output_directory, False) # Create the output directory if it does not exist
-      output_file = f"{output_directory}{cluster}-clusters.{normalized_testing_dataset.split('.')[-1]}"
+      output_file = f"{output_directory}{cluster}-clusters.{NORMALIZED_TRAINING_FILE.split('.')[-1]}"
 
-      # Generate the centroids
+      # Generate the "cluster" number of centroids for each class
       centroids_features, centroids_labels = generate_centroids(features, labels, cluster, output_file)
 
       # Run the KNN algorithm
