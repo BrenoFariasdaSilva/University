@@ -67,7 +67,7 @@ def knn(train_features_values, train_label, test_features_values, test_label):
    accuracy = neigh.score(test_features_values, test_label) # Calculate the accuracy
    execution_time = time.time() - start_time # Calculate the execution time
 
-   return accuracy, {"N Neighbors": 1, "Metric": "Euclidean", "Execution Time": f"{execution_time:.5f} Seconds"} # Return the execution time
+   return accuracy, {"N Neighbors": 1, "Metric": "Euclidean", "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a Decision Tree classifier with grid search and prints the classification report
 def decision_tree(train_features_values, train_label, test_features_values, test_label):
@@ -79,7 +79,7 @@ def decision_tree(train_features_values, train_label, test_features_values, test
    accuracy = clf.score(test_features_values, test_label) # Calculate the accuracy
    execution_time = time.time() - start_time # Calculate the execution time
 
-   return accuracy, {"Criterion": "Gini", "Splitter": "Best", "Execution Time": f"{execution_time:.5f} Seconds"} # Return the execution time
+   return accuracy, {"Criterion": "Gini", "Splitter": "Best", "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a SVM classifier with grid search and prints the classification report
 def svm_with_grid_search(train_features_values, train_label, test_features_values, test_label):
@@ -109,7 +109,7 @@ def svm_with_grid_search(train_features_values, train_label, test_features_value
    accuracy = grid.score(test_features_values, test_label) # Calculate the accuracy
    execution_time = time.time() - start_time # Calculate the execution time
 
-   return accuracy, {"C": grid.best_params_["svm__C"], "Gamma": grid.best_params_["svm__gamma"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the execution time
+   return accuracy, {"C": grid.best_params_["svm__C"], "Gamma": grid.best_params_["svm__gamma"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a Multilayer Perceptron classifier and prints the classification report
 def multilayer_perceptron(train_features_values, train_label, test_features_values, test_label):
@@ -124,7 +124,7 @@ def multilayer_perceptron(train_features_values, train_label, test_features_valu
    accuracy = clf.score(test_features_values, test_label) # Calculate the accuracy
    execution_time = time.time() - start_time # Calculate the execution time
 
-   return accuracy, {"Solver": "Adam", "Alpha": 1e-5, "Hidden Layer Sizes": (500, 500, 500, 500), "Execution Time": f"{execution_time:.5f} Seconds"} # Return the execution time
+   return accuracy, {"Solver": "Adam", "Alpha": 1e-5, "Hidden Layer Sizes": (500, 500, 500, 500), "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a Random Forest classifier and prints the classification report
 def random_forest(train_features_values, train_label, test_features_values, test_label):
@@ -136,7 +136,7 @@ def random_forest(train_features_values, train_label, test_features_values, test
    accuracy = clf.score(test_features_values, test_label) # Calculate the accuracy
    execution_time = time.time() - start_time # Calculate the execution time
 
-   return accuracy, {"N Estimators": 10000, "Max Depth": 30, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the execution time
+   return accuracy, {"N Estimators": 10000, "Max Depth": 30, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function trains the Naive Bayes classifier and prints the classification report
 def naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label):
@@ -157,7 +157,7 @@ def naive_bayes_with_grid_search(train_features_values, train_label, test_featur
    accuracy = grid.score(test_features_values, test_label) # Calculate the accuracy
    execution_time = time.time() - start_time # Calculate the execution time
 
-   return accuracy, {"Var Smoothing": grid.best_params_["var_smoothing"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the execution time
+   return accuracy, {"Var Smoothing": grid.best_params_["var_smoothing"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function sort the classifiers by accuracy
 def sort_classifiers_execution(classifiers_execution):
