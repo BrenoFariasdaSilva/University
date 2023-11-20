@@ -289,7 +289,7 @@ def naive_bayes_with_grid_search(train_features_values, train_label, test_featur
 def sort_classifiers_execution(classifiers_execution):
    # Sort the classifiers by accuracy and return the sorted dictionary
    return dict(sorted(classifiers_execution.items(), key=lambda item: item[1][0], reverse=True))
-   
+
 # This function prints the execution time of the classifiers
 def print_classifiers_execution(sorted_classifiers_execution):
    print(f"\n{BackgroundColors.GREEN}Classifiers Results:{BackgroundColors.CYAN}") # Print the classifiers results
@@ -321,8 +321,7 @@ def main():
    # Print the execution time
    print_classifiers_execution(classifiers_execution)
 
-   # Print the end message
-   print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Thank you for using the Artificial Intelligence Supervised Learning Algorithms Comparison Project!{Style.RESET_ALL}")
+   print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Thank you for using the Artificial Intelligence Supervised Learning Algorithms Comparison Project!{Style.RESET_ALL}") # Print the goodbye message
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
