@@ -63,8 +63,8 @@ def load_data():
    return train_features_values, train_label, test_features_values, test_label # Return the data
 
 # This function creates a k-NN classifier and prints the classification report
-def knn(train_features_values, train_label, test_features_values, test_label):
-   print(f"{BackgroundColors.GREEN}1º {BackgroundColors.CYAN}K-NN Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
+def grid_search_knn(train_features_values, train_label, test_features_values, test_label):
+   print(f"{BackgroundColors.GREEN}1º {BackgroundColors.CYAN}K-NN Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
 
    # Define the parameter grid for the grid search
    param_grid = {
@@ -103,8 +103,8 @@ def knn(train_features_values, train_label, test_features_values, test_label):
    return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a Decision Tree classifier with grid search and prints the classification report
-def decision_tree(train_features_values, train_label, test_features_values, test_label):
-   print(f"{BackgroundColors.GREEN}2º {BackgroundColors.CYAN}Decision Tree Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
+def grid_search_decision_tree(train_features_values, train_label, test_features_values, test_label):
+   print(f"{BackgroundColors.GREEN}2º {BackgroundColors.CYAN}Decision Tree Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
 
    # Define the parameter grid for the grid search
    param_grid = {
@@ -145,7 +145,7 @@ def decision_tree(train_features_values, train_label, test_features_values, test
    return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a SVM classifier with grid search and prints the classification report
-def svm_with_grid_search(train_features_values, train_label, test_features_values, test_label):
+def grid_search_support_vector_machine(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}3º {BackgroundColors.CYAN}Support Vector Machine Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
    C_range = 2. ** np.arange(-5, 15, 2) # The range of C values
    gamma_range = 2. ** np.arange(3, -15, -2) # The range of gamma values which defines the influence of a single training example
@@ -182,8 +182,8 @@ def svm_with_grid_search(train_features_values, train_label, test_features_value
    return accuracy, {"C": grid.best_params_["svm__C"], "Gamma": grid.best_params_["svm__gamma"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a Multilayer Perceptron classifier and prints the classification report
-def multilayer_perceptron(train_features_values, train_label, test_features_values, test_label):
-   print(f"{BackgroundColors.GREEN}4º {BackgroundColors.CYAN}Artificial Neural Network/Multilayer Perceptron Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
+def grid_search_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label):
+   print(f"{BackgroundColors.GREEN}4º {BackgroundColors.CYAN}Artificial Neural Network/Multilayer Perceptron Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
 
    # Define the parameter grid for the grid search
    param_grid = {
@@ -224,8 +224,8 @@ def multilayer_perceptron(train_features_values, train_label, test_features_valu
    return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a Random Forest classifier and prints the classification report
-def random_forest(train_features_values, train_label, test_features_values, test_label):
-   print(f"{BackgroundColors.GREEN}5º {BackgroundColors.CYAN}Random Forest Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
+def grid_search_random_forest(train_features_values, train_label, test_features_values, test_label):
+   print(f"{BackgroundColors.GREEN}5º {BackgroundColors.CYAN}Random Forest Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
    
    # Define the parameter grid for the grid search
    param_grid = {
@@ -265,7 +265,7 @@ def random_forest(train_features_values, train_label, test_features_values, test
    return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function trains the Naive Bayes classifier and prints the classification report
-def naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label):
+def grid_search_naive_bayes(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}6º {BackgroundColors.CYAN}Naive Bayes Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
 
    start_time = time.time() # Start the timer
@@ -308,12 +308,12 @@ def main():
    train_features_values, train_label, test_features_values, test_label = load_data() # Load the data
    classifiers_execution = {} # Dictionary to store the classifiers execution time
 
-   classifiers_execution["K-NN"] = knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
-   classifiers_execution["Decision Tree"] = decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
-   classifiers_execution["Support Vector Machine"] = svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
-   classifiers_execution["Multilayer Perceptron Classifier"] = multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
-   classifiers_execution["Random Forest"] = random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
-   classifiers_execution["Naive Bayes"] = naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
+   classifiers_execution["K-NN"] = grid_search_knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
+   classifiers_execution["Decision Tree"] = grid_search_decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
+   classifiers_execution["Support Vector Machine"] = grid_search_support_vector_machine(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
+   classifiers_execution["Multilayer Perceptron Classifier"] = grid_search_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
+   classifiers_execution["Random Forest"] = grid_search_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
+   classifiers_execution["Naive Bayes"] = grid_search_naive_bayes(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
 
    # Sort the classifiers by execution time
    classifiers_execution = sort_classifiers_execution(classifiers_execution)
