@@ -143,7 +143,7 @@ def sort_execution_time(execution_time):
    
 # This function prints the execution time of the classifiers
 def print_execution_time(execution_time):
-   print(f"\n{BackgroundColors.GREEN}Sorted execution time:{BackgroundColors.CYAN}")
+   print(f"{BackgroundColors.GREEN}Sorted execution time:{BackgroundColors.CYAN}")
    for classifier in execution_time:
       print(f"{BackgroundColors.GREEN}{classifier[0]}: {BackgroundColors.CYAN}{classifier[1]:.5f}{BackgroundColors.GREEN} seconds{Style.RESET_ALL}")
    print(f"{Style.RESET_ALL}")
