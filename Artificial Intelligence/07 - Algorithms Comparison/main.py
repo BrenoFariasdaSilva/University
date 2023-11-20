@@ -1,3 +1,4 @@
+import time # For the timer
 import numpy as np # For the data manipulation
 from colorama import Style # For coloring the terminal
 from sklearn import svm # For the SVM classifier
@@ -39,21 +40,28 @@ def load_data():
 # This function trains a k-NN classifier and prints the classification report
 def train_knn(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}1º K-NN Classifier:{BackgroundColors.CYAN}")
+   start_time = time.time() # Start the timer
    neigh = KNeighborsClassifier(n_neighbors=1, metric="euclidean") # Instantiate the classifier
    neigh.fit(train_features_values, train_label) # Train the classifier
    print(f"{classification_report(test_label, neigh.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
+   execution_time = time.time() - start_time # Calculate the execution time
+   return execution_time # Return the execution time
 
 # This function trains a Decision Tree classifier with grid search and prints the classification report
 def train_decision_tree(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}2º Decision Tree Classifier:{BackgroundColors.CYAN}")
+   start_time = time.time() # Start the timer
    clf = tree.DecisionTreeClassifier() # Instantiate the classifier
    clf.fit(train_features_values, train_label) # Train the classifier
    print(clf.predict(test_features_values)) # Print the predictions
    print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
+   execution_time = time.time() - start_time # Calculate the execution time
+   return execution_time # Return the execution time
 
 # This function trains a SVM classifier with grid search and prints the classification report
 def train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}3º SVM Classifier with Grid Search:{BackgroundColors.CYAN}")
+   start_time = time.time() # Start the timer
    C_range = 2. ** np.arange(-5, 15, 2) # The range of C values
    gamma_range = 2. ** np.arange(3, -15, -2) # The range of gamma values which defines the influence of a single training example
    k = ["rbf"] # The kernel
@@ -76,10 +84,13 @@ def train_svm_with_grid_search(train_features_values, train_label, test_features
    # Retrieve the best model
    model = grid.best_estimator_ # Retrieve the best model
    print(f"{classification_report(test_label, model.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
+   execution_time = time.time() - start_time # Calculate the execution time
+   return execution_time # Return the execution time
 
 # This function trains a Multilayer Perceptron classifier and prints the classification report
 def train_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}4º Artificial Neural Network/Multilayer Perceptron Classifier:{BackgroundColors.CYAN}")
+   start_time = time.time() # Start the timer
    scaler = StandardScaler() # Instantiate the standard scaler
    train_features_values = scaler.fit_transform(train_features_values) # Scale the training features
    test_features_values = scaler.fit_transform(test_features_values) # Scale the test features
@@ -87,19 +98,25 @@ def train_multilayer_perceptron(train_features_values, train_label, test_feature
    clf.fit(train_features_values, train_label) # Train the classifier
    print(clf.predict(test_features_values)) # Print the predictions
    print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
+   execution_time = time.time() - start_time # Calculate the execution time
+   return execution_time # Return the execution time
 
 # This function trains a Random Forest classifier and prints the classification report
 def train_random_forest(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}5º Random Forest Classifier:{BackgroundColors.CYAN}")
+   start_time = time.time() # Start the timer
    clf = RandomForestClassifier(n_estimators=10000, max_depth=30, random_state=1) # Instantiate the classifier
    clf.fit(train_features_values, train_label) # Train the classifier
    print(clf.predict(test_features_values)) # Print the predictions
    print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
+   execution_time = time.time() - start_time # Calculate the execution time
+   return execution_time # Return the execution time
 
 # This function trains the Naive Bayes classifier and prints the classification report
 def train_naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}6º Naive Bayes Classifier with Grid Search:{BackgroundColors.CYAN}")
 
+   start_time = time.time() # Start the timer
    # Define the parameters for the grid search
    param_grid = {'var_smoothing': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5]}
 
@@ -112,21 +129,41 @@ def train_naive_bayes_with_grid_search(train_features_values, train_label, test_
    # Train the model with grid search
    grid.fit(train_features_values, train_label)
 
-
    # Print the classification report
    print("Best Hyperparameters:", grid.best_params_)
    print("Best Accuracy:", grid.best_score_)
    print(f"{classification_report(test_label, grid.best_estimator_.predict(test_features_values))}")
+   execution_time = time.time() - start_time # Calculate the execution time
+   return execution_time # Return the execution time
+
+# This function sort the execution time of the classifiers
+def sort_execution_time(execution_time):
+   sorted_execution_time = sorted(execution_time.items(), key=lambda x: x[1]) # Sort the classifiers by execution time
+   return sorted_execution_time # Return the sorted execution time
+   
+# This function prints the execution time of the classifiers
+def print_execution_time(execution_time):
+   print(f"\n{BackgroundColors.GREEN}Sorted execution time:{BackgroundColors.CYAN}")
+   for classifier in execution_time:
+      print(f"{BackgroundColors.GREEN}{classifier[0]}: {BackgroundColors.CYAN}{classifier[1]:.5f}{BackgroundColors.GREEN} seconds{Style.RESET_ALL}")
+   print(f"{Style.RESET_ALL}")
 
 # This is the main function. It calls the other functions, building the project workflow
 def main():
    train_features_values, train_label, test_features_values, test_label = load_data() # Load the data
-   train_knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
-   train_decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
-   train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
-   train_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN - Multilayer Perceptron classifier
-   train_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
-   train_naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
+   execution_time = {}
+   execution_time["K-NN"] = train_knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
+   execution_time["Decision Tree"] = train_decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
+   execution_time["SVM"] = train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
+   execution_time["MLP"] = train_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
+   execution_time["Random Forest"] = train_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
+   execution_time["Naive Bayes"] = train_naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
+
+   # Sort the classifiers by execution time
+   execution_time = sort_execution_time(execution_time)
+
+   # Print the execution time
+   print_execution_time(execution_time)
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
