@@ -20,14 +20,17 @@ class BackgroundColors: # Colors for the terminal
    UNDERLINE = "\033[4m" # Underline
    CLEAR_TERMINAL = "\033[H\033[J" # Clear the terminal
 
+# Constants:
+INPUT_FILES = ["./dataset/digits/training/5x5-normalized-pixel_count.txt", "./dataset/digits/test/5x5-normalized-pixel_count.txt"] # The input files
+
 # This function loads the data from the dataset files and returns the training and test sets
 def load_data():
    print(f"{BackgroundColors.YELLOW}Remember to remove the header line from the dataset files. They should be in the format: {BackgroundColors.CYAN}label feature1 feature2 ... featureN{Style.RESET_ALL}")
    print(f"{BackgroundColors.GREEN}Loading data...{Style.RESET_ALL}")
-   tr = np.loadtxt("./dataset/digits/training/5x5-normalized-pixel_count.txt")
-   ts = np.loadtxt("./dataset/digits/test/5x5-normalized-pixel_count.txt")
-   test_label = ts[:, 0] # The first column is the label
+   tr = np.loadtxt(f"{INPUT_FILES[0]}") # Load the training data
+   ts = np.loadtxt(f"{INPUT_FILES[1]}") # Load the test data
    train_label = tr[:, 0] # The first column is the label
+   test_label = ts[:, 0] # The first column is the label
    train_features_values = tr[:, 1:] # The second column to the last is the feature vector
    test_features_values = ts[:, 1:] # The second column to the last is the feature vector
    return train_features_values, train_label, test_features_values, test_label # Return the data
