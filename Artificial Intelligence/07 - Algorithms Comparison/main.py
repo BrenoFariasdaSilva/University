@@ -147,7 +147,6 @@ def decision_tree(train_features_values, train_label, test_features_values, test
 # This function creates a SVM classifier with grid search and prints the classification report
 def svm_with_grid_search(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}3º {BackgroundColors.CYAN}Support Vector Machine Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
-   start_time = time.time() # Start the timer
    C_range = 2. ** np.arange(-5, 15, 2) # The range of C values
    gamma_range = 2. ** np.arange(3, -15, -2) # The range of gamma values which defines the influence of a single training example
    k = ["rbf"] # The kernel
@@ -165,12 +164,20 @@ def svm_with_grid_search(train_features_values, train_label, test_features_value
 
    # Perform Grid Search
    grid = GridSearchCV(pipeline, param_grid, n_jobs=-1, verbose=0) # Instantiate the grid search
+   start_time = time.time() # Start the timer
    grid.fit(train_features_values, train_label) # Train the classifier
+   execution_time = time.time() - start_time # Calculate the execution time
 
    # Retrieve the best model
    y_pred = grid.predict(test_features_values) # Predict the test set
    accuracy = grid.score(test_features_values, test_label) # Calculate the accuracy
-   execution_time = time.time() - start_time # Calculate the execution time
+
+   if SHOW_CLASSIFICATION_REPORT: # Show the classification report if it is set to True
+      print(f"{classification_report(test_label, y_pred)}{Style.RESET_ALL}")
+
+   if SHOW_CONFUSION_MATRIX: # Show the confusion matrix if it is set to True
+      conf_matrix = confusion_matrix(test_label, y_pred)
+      print(f"{BackgroundColors.GREEN}Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}")
 
    return accuracy, {"C": grid.best_params_["svm__C"], "Gamma": grid.best_params_["svm__gamma"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
