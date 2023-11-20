@@ -5,6 +5,7 @@ from sklearn import tree # For the decision tree classifier
 from sklearn.ensemble import RandomForestClassifier # For the random forest classifier
 from sklearn.metrics import classification_report # For the classification report
 from sklearn.model_selection import GridSearchCV # For the grid search
+from sklearn.naive_bayes import GaussianNB # For the Naive Bayes classifier
 from sklearn.neighbors import KNeighborsClassifier # For the k-NN classifier
 from sklearn.neural_network import MLPClassifier # For the MLP classifier
 from sklearn.pipeline import Pipeline # For the pipeline
@@ -95,6 +96,13 @@ def train_random_forest(train_features_values, train_label, test_features_values
    print(clf.predict(test_features_values)) # Print the predictions
    print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
 
+# This function trains the Naive Bayes classifier and prints the classification report
+def train_naive_bayes(train_features_values, train_label, test_features_values, test_label):
+   print(f"{BackgroundColors.GREEN}6º Naive Bayes Classifier:{BackgroundColors.CYAN}")
+   nb = GaussianNB()
+   nb.fit(train_features_values, train_label)
+   print(f"{classification_report(test_label, nb.predict(test_features_values))}")
+
 # This is the main function. It calls the other functions, building the project workflow
 def main():
    train_features_values, train_label, test_features_values, test_label = load_data() # Load the data
@@ -103,6 +111,7 @@ def main():
    train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
    train_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN - Multilayer Perceptron classifier
    train_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
+   train_naive_bayes(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
