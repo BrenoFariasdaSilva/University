@@ -1,5 +1,8 @@
-import time # For the timer
+import atexit # For playing a sound when the program finishes
 import numpy as np # For the data manipulation
+import os # For running a command in the terminal
+import platform # For getting the operating system name
+import time # For the timer
 from colorama import Style # For coloring the terminal
 from sklearn import svm # For the SVM classifier
 from sklearn import tree # For the decision tree classifier
@@ -22,13 +25,30 @@ class BackgroundColors: # Colors for the terminal
    UNDERLINE = "\033[4m" # Underline
    CLEAR_TERMINAL = "\033[H\033[J" # Clear the terminal
 
+# Sound Constants:
+SOUND_COMMANDS = {"Darwin": "afplay", "Linux": "aplay", "Windows": "start"}
+SOUND_FILE = "./.assets/NotificationSound.wav" # The path to the sound file
+
 # Constants:
 INPUT_FILES = ["./dataset/digits/training/5x5-normalized-pixel_count.txt", "./dataset/digits/test/5x5-normalized-pixel_count.txt"] # The input files
+
+# This function defines the command to play a sound when the program finishes
+def play_sound():
+   if os.path.exists(SOUND_FILE):
+      if platform.system() in SOUND_COMMANDS: # If the platform.system() is in the SOUND_COMMANDS dictionary
+         os.system(f"{SOUND_COMMANDS[platform.system()]} {SOUND_FILE}")
+      else: # If the platform.system() is not in the SOUND_COMMANDS dictionary
+         print(f"{BackgroundColors.RED}The {BackgroundColors.CYAN}platform.system(){BackgroundColors.RED} is not in the {BackgroundColors.CYAN}SOUND_COMMANDS dictionary{BackgroundColors.RED}. Please add it!{Style.RESET_ALL}")
+   else: # If the sound file does not exist
+      print(f"{BackgroundColors.RED}Sound file {BackgroundColors.CYAN}{SOUND_FILE}{BackgroundColors.RED} not found. Make sure the file exists.{Style.RESET_ALL}")
+
+# Register the function to play a sound when the program finishes
+atexit.register(play_sound)
 
 # This function loads the data from the dataset files and returns the training and test sets
 def load_data():
    print(f"{BackgroundColors.BOLD}{BackgroundColors.YELLOW}Remember to remove the header line from the dataset files. They should be in the format: {BackgroundColors.CYAN}label feature1 feature2 ... featureN{Style.RESET_ALL}")
-   print(f"{BackgroundColors.GREEN}Loading data...{Style.RESET_ALL}")
+   print(f"\n{BackgroundColors.GREEN}Loading data...{Style.RESET_ALL}")
    tr = np.loadtxt(f"{INPUT_FILES[0]}") # Load the training data
    ts = np.loadtxt(f"{INPUT_FILES[1]}") # Load the test data
    train_label = tr[:, 0] # The first column is the label
