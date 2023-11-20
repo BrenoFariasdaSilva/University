@@ -33,6 +33,9 @@ SOUND_FILE = "./.assets/NotificationSound.wav" # The path to the sound file
 # Constants:
 INPUT_FILES = ["./dataset/digits/training/5x5-normalized-pixel_count.txt", "./dataset/digits/test/5x5-normalized-pixel_count.txt"] # The input files
 
+# Output Constants:
+SHOW_CONFUSION_MATRIX = True # If True, show the confusion matrix
+
 # This function defines the command to play a sound when the program finishes
 def play_sound():
    if os.path.exists(SOUND_FILE):
@@ -92,8 +95,9 @@ def knn(train_features_values, train_label, test_features_values, test_label):
 
    # print(f"{classification_report(test_label, y_pred)}{Style.RESET_ALL}") # Print the classification report
 
-   conf_matrix = confusion_matrix(test_label, y_pred) # Calculate the confusion matrix
-   print(f"{BackgroundColors.GREEN}Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}") # Print the confusion matrix
+   if SHOW_CONFUSION_MATRIX: # Show the confusion matrix if it is set to True
+      conf_matrix = confusion_matrix(test_label, y_pred) # Calculate the confusion matrix
+      print(f"{BackgroundColors.GREEN}Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}") # Print the confusion matrix
    
    return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
