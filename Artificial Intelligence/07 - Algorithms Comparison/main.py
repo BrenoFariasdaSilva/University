@@ -27,7 +27,7 @@ INPUT_FILES = ["./dataset/digits/training/5x5-normalized-pixel_count.txt", "./da
 
 # This function loads the data from the dataset files and returns the training and test sets
 def load_data():
-   print(f"{BackgroundColors.YELLOW}Remember to remove the header line from the dataset files. They should be in the format: {BackgroundColors.CYAN}label feature1 feature2 ... featureN{Style.RESET_ALL}")
+   print(f"{BackgroundColors.BOLD}{BackgroundColors.YELLOW}Remember to remove the header line from the dataset files. They should be in the format: {BackgroundColors.CYAN}label feature1 feature2 ... featureN{Style.RESET_ALL}")
    print(f"{BackgroundColors.GREEN}Loading data...{Style.RESET_ALL}")
    tr = np.loadtxt(f"{INPUT_FILES[0]}") # Load the training data
    ts = np.loadtxt(f"{INPUT_FILES[1]}") # Load the test data
