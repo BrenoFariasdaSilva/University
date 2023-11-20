@@ -15,6 +15,12 @@ from sklearn.neighbors import KNeighborsClassifier # For the k-NN classifier
 from sklearn.neural_network import MLPClassifier # For the MLP classifier
 from sklearn.pipeline import Pipeline # For the pipeline
 from sklearn.preprocessing import StandardScaler # For the standard scaler
+import warnings
+from sklearn.exceptions import ConvergenceWarning
+
+# Ignore all warnings from scikit-learn
+warnings.filterwarnings("ignore", category=ConvergenceWarning)
+
 
 # Macros:
 class BackgroundColors: # Colors for the terminal
@@ -193,7 +199,7 @@ def grid_search_multilayer_perceptron(train_features_values, train_label, test_f
    }
 
    # Instantiate the Multilayer Perceptron classifier
-   clf = MLPClassifier(random_state=1)
+   clf = MLPClassifier(random_state=1, max_iter=2000)
 
    # Instantiate GridSearchCV
    grid_search = GridSearchCV(clf, param_grid, scoring="accuracy", cv=5, n_jobs=-1)
@@ -308,12 +314,12 @@ def main():
    train_features_values, train_label, test_features_values, test_label = load_data() # Load the data
    classifiers_execution = {} # Dictionary to store the classifiers execution time
 
-   classifiers_execution["K-NN"] = grid_search_knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
-   classifiers_execution["Decision Tree"] = grid_search_decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
-   classifiers_execution["Support Vector Machine"] = grid_search_support_vector_machine(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
+   # classifiers_execution["K-NN"] = grid_search_knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
+   # classifiers_execution["Decision Tree"] = grid_search_decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
+   # classifiers_execution["Support Vector Machine"] = grid_search_support_vector_machine(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
    classifiers_execution["Multilayer Perceptron Classifier"] = grid_search_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
-   classifiers_execution["Random Forest"] = grid_search_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
-   classifiers_execution["Naive Bayes"] = grid_search_naive_bayes(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
+   # classifiers_execution["Random Forest"] = grid_search_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
+   # classifiers_execution["Naive Bayes"] = grid_search_naive_bayes(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
 
    # Sort the classifiers by execution time
    classifiers_execution = sort_classifiers_execution(classifiers_execution)
