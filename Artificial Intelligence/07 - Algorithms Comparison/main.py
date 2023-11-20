@@ -34,7 +34,7 @@ SOUND_FILE = "./.assets/NotificationSound.wav" # The path to the sound file
 INPUT_FILES = ["./dataset/digits/training/5x5-normalized-pixel_count.txt", "./dataset/digits/test/5x5-normalized-pixel_count.txt"] # The input files
 
 # Output Constants:
-SHOW_CONFUSION_MATRIX = True # If True, show the confusion matrix
+SHOW_CONFUSION_MATRIX = False # If True, show the confusion matrix
 SHOW_CLASSIFICATION_REPORT = False # If True, show the classification report
 
 # This function defines the command to play a sound when the program finishes
