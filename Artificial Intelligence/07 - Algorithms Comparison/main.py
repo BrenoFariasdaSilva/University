@@ -8,6 +8,7 @@ from sklearn import svm # For the SVM classifier
 from sklearn import tree # For the decision tree classifier
 from sklearn.ensemble import RandomForestClassifier # For the random forest classifier
 from sklearn.metrics import classification_report # For the classification report
+from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import GridSearchCV # For the grid search
 from sklearn.naive_bayes import GaussianNB # For the Naive Bayes classifier
 from sklearn.neighbors import KNeighborsClassifier # For the k-NN classifier
@@ -91,6 +92,9 @@ def knn(train_features_values, train_label, test_features_values, test_label):
 
    # print(f"{classification_report(test_label, y_pred)}{Style.RESET_ALL}") # Print the classification report
 
+   conf_matrix = confusion_matrix(test_label, y_pred) # Calculate the confusion matrix
+   print(f"{BackgroundColors.GREEN}Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}") # Print the confusion matrix
+   
    return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a Decision Tree classifier with grid search and prints the classification report
@@ -207,11 +211,11 @@ def main():
    classifiers_execution = {} # Dictionary to store the classifiers execution time
 
    classifiers_execution["K-NN"] = knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
-   # classifiers_execution["Decision Tree"] = decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
-   # classifiers_execution["Support Vector Machine"] = svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
-   # classifiers_execution["Multilayer Perceptron Classifier"] = multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
-   # classifiers_execution["Random Forest"] = random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
-   # classifiers_execution["Naive Bayes"] = naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
+   classifiers_execution["Decision Tree"] = decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
+   classifiers_execution["Support Vector Machine"] = svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
+   classifiers_execution["Multilayer Perceptron Classifier"] = multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
+   classifiers_execution["Random Forest"] = random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
+   classifiers_execution["Naive Bayes"] = naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
 
    # Sort the classifiers by execution time
    classifiers_execution = sort_classifiers_execution(classifiers_execution)
