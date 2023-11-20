@@ -8,7 +8,7 @@ from sklearn import svm # For the SVM classifier
 from sklearn import tree # For the decision tree classifier
 from sklearn.ensemble import RandomForestClassifier # For the random forest classifier
 from sklearn.metrics import classification_report # For the classification report
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix # For the confusion matrix
 from sklearn.model_selection import GridSearchCV # For the grid search
 from sklearn.naive_bayes import GaussianNB # For the Naive Bayes classifier
 from sklearn.neighbors import KNeighborsClassifier # For the k-NN classifier
