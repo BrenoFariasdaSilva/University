@@ -157,6 +157,8 @@ def print_classifiers_execution(sorted_classifiers_execution):
 
 # This is the main function. It calls the other functions, building the project workflow
 def main():
+   print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the Artificial Intelligence Supervised Learning Algorithms Comparison Project!{Style.RESET_ALL}") # Print the welcome message
+
    train_features_values, train_label, test_features_values, test_label = load_data() # Load the data
    classifiers_execution = {} # Dictionary to store the classifiers execution time
 
@@ -172,6 +174,9 @@ def main():
 
    # Print the execution time
    print_classifiers_execution(classifiers_execution)
+
+   # Print the end message
+   print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Thank you for using the Artificial Intelligence Supervised Learning Algorithms Comparison Project!{Style.RESET_ALL}")
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
