@@ -61,13 +61,37 @@ def load_data():
 def knn(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}1º {BackgroundColors.CYAN}K-NN Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
    start_time = time.time() # Start the timer
-   neigh = KNeighborsClassifier(n_neighbors=1, metric="euclidean") # Instantiate the classifier
-   neigh.fit(train_features_values, train_label) # Train the classifier
-   y_pred = neigh.predict(test_features_values) # Predict the test set
-   accuracy = neigh.score(test_features_values, test_label) # Calculate the accuracy
+
+   # Define the parameter grid for the grid search
+   param_grid = {
+      "n_neighbors": [1, 3, 5, 7], # Neighbors to use
+      "metric": ["euclidean", "manhattan"], # Distance metric to use
+   }
+
+   knn = KNeighborsClassifier() # Instantiate the classifier
+
+   # Instantiate GridSearchCV
+   grid_search = GridSearchCV(knn, param_grid, scoring="accuracy", cv=5, n_jobs=-1)
+
+   start_time = time.time() # Start the timer
+   grid_search.fit(train_features_values, train_label) # Train the classifier with grid search
    execution_time = time.time() - start_time # Calculate the execution time
 
-   return accuracy, {"N Neighbors": 1, "Metric": "Euclidean", "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
+   # Get the best model from the grid search
+   best_knn = grid_search.best_estimator_
+
+   # Predict the test set using the best model
+   y_pred = best_knn.predict(test_features_values)
+
+   # Calculate the accuracy
+   accuracy = best_knn.score(test_features_values, test_label)
+
+   # Get the best parameters from the grid search
+   best_params = grid_search.best_params_
+
+   # print(f"{classification_report(test_label, y_pred)}{Style.RESET_ALL}") # Print the classification report
+
+   return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a Decision Tree classifier with grid search and prints the classification report
 def decision_tree(train_features_values, train_label, test_features_values, test_label):
@@ -183,11 +207,11 @@ def main():
    classifiers_execution = {} # Dictionary to store the classifiers execution time
 
    classifiers_execution["K-NN"] = knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
-   classifiers_execution["Decision Tree"] = decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
-   classifiers_execution["Support Vector Machine"] = svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
-   classifiers_execution["Multilayer Perceptron Classifier"] = multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
-   classifiers_execution["Random Forest"] = random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
-   classifiers_execution["Naive Bayes"] = naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
+   # classifiers_execution["Decision Tree"] = decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
+   # classifiers_execution["Support Vector Machine"] = svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
+   # classifiers_execution["Multilayer Perceptron Classifier"] = multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
+   # classifiers_execution["Random Forest"] = random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
+   # classifiers_execution["Naive Bayes"] = naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
 
    # Sort the classifiers by execution time
    classifiers_execution = sort_classifiers_execution(classifiers_execution)
