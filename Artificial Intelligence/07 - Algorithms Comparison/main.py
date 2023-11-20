@@ -97,11 +97,26 @@ def train_random_forest(train_features_values, train_label, test_features_values
    print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
 
 # This function trains the Naive Bayes classifier and prints the classification report
-def train_naive_bayes(train_features_values, train_label, test_features_values, test_label):
-   print(f"{BackgroundColors.GREEN}6º Naive Bayes Classifier:{BackgroundColors.CYAN}")
+def train_naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label):
+   print(f"{BackgroundColors.GREEN}6º Naive Bayes Classifier with Grid Search:{BackgroundColors.CYAN}")
+
+   # Define the parameters for the grid search
+   param_grid = {'var_smoothing': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5]}
+
+   # Instantiate Naive Bayes classifier
    nb = GaussianNB()
-   nb.fit(train_features_values, train_label)
-   print(f"{classification_report(test_label, nb.predict(test_features_values))}")
+
+   # Instantiate GridSearchCV
+   grid = GridSearchCV(nb, param_grid, cv=5, scoring='accuracy', verbose=1, n_jobs=-1)
+
+   # Train the model with grid search
+   grid.fit(train_features_values, train_label)
+
+
+   # Print the classification report
+   print("Best Hyperparameters:", grid.best_params_)
+   print("Best Accuracy:", grid.best_score_)
+   print(f"{classification_report(test_label, grid.best_estimator_.predict(test_features_values))}")
 
 # This is the main function. It calls the other functions, building the project workflow
 def main():
@@ -111,7 +126,7 @@ def main():
    train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
    train_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN - Multilayer Perceptron classifier
    train_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
-   train_naive_bayes(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
+   train_naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
 
 # This is the standard boilerplate that calls the main() function.
 if __name__ == "__main__":
