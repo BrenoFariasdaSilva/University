@@ -226,14 +226,43 @@ def multilayer_perceptron(train_features_values, train_label, test_features_valu
 # This function creates a Random Forest classifier and prints the classification report
 def random_forest(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}5º {BackgroundColors.CYAN}Random Forest Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
+   
+   # Define the parameter grid for the grid search
+   param_grid = {
+      "n_estimators": [100, 500, 1000], # Add more values if needed
+      "max_depth": [None, 10, 30], # Add more values if needed
+   }
+
+   # Instantiate the Random Forest classifier
+   clf = RandomForestClassifier(random_state=1)
+
+   # Instantiate GridSearchCV
+   grid_search = GridSearchCV(clf, param_grid, scoring="accuracy", cv=5, n_jobs=-1)
+
    start_time = time.time() # Start the timer
-   clf = RandomForestClassifier(n_estimators=10000, max_depth=30, random_state=1) # Instantiate the classifier
-   clf.fit(train_features_values, train_label) # Train the classifier
-   y_pred = clf.predict(test_features_values) # Predict the test set
-   accuracy = clf.score(test_features_values, test_label) # Calculate the accuracy
+   grid_search.fit(train_features_values, train_label) # Train the classifier with grid search
    execution_time = time.time() - start_time # Calculate the execution time
 
-   return accuracy, {"N Estimators": 10000, "Max Depth": 30, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
+   # Get the best model from the grid search
+   best_clf = grid_search.best_estimator_
+
+   # Predict the test set using the best model
+   y_pred = best_clf.predict(test_features_values)
+
+   # Calculate the accuracy
+   accuracy = best_clf.score(test_features_values, test_label)
+
+   # Get the best parameters from the grid search
+   best_params = grid_search.best_params_
+
+   if SHOW_CLASSIFICATION_REPORT: # Show the classification report if it is set to True
+      print(f"{classification_report(test_label, y_pred)}{Style.RESET_ALL}") # Print the classification report
+
+   if SHOW_CONFUSION_MATRIX: # Show the confusion matrix if it is set to True
+      conf_matrix = confusion_matrix(test_label, y_pred) # Calculate the confusion matrix
+      print(f"{BackgroundColors.GREEN}Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}") # Print the confusion matrix
+
+   return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function trains the Naive Bayes classifier and prints the classification report
 def naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label):
