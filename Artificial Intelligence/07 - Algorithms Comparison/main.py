@@ -35,6 +35,7 @@ INPUT_FILES = ["./dataset/digits/training/5x5-normalized-pixel_count.txt", "./da
 
 # Output Constants:
 SHOW_CONFUSION_MATRIX = True # If True, show the confusion matrix
+SHOW_CLASSIFICATION_REPORT = False # If True, show the classification report
 
 # This function defines the command to play a sound when the program finishes
 def play_sound():
@@ -64,7 +65,6 @@ def load_data():
 # This function creates a k-NN classifier and prints the classification report
 def knn(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}1º {BackgroundColors.CYAN}K-NN Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
-   start_time = time.time() # Start the timer
 
    # Define the parameter grid for the grid search
    param_grid = {
@@ -93,7 +93,8 @@ def knn(train_features_values, train_label, test_features_values, test_label):
    # Get the best parameters from the grid search
    best_params = grid_search.best_params_
 
-   # print(f"{classification_report(test_label, y_pred)}{Style.RESET_ALL}") # Print the classification report
+   if SHOW_CLASSIFICATION_REPORT: # Show the classification report if it is set to True
+      print(f"{classification_report(test_label, y_pred)}{Style.RESET_ALL}") # Print the classification report
 
    if SHOW_CONFUSION_MATRIX: # Show the confusion matrix if it is set to True
       conf_matrix = confusion_matrix(test_label, y_pred) # Calculate the confusion matrix
