@@ -39,7 +39,7 @@ def train_knn(train_features_values, train_label, test_features_values, test_lab
    neigh.fit(train_features_values, train_label) # Train the classifier
    print(f"{classification_report(test_label, neigh.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
 
-# This function trains a SVM classifier with grid search and prints the classification report
+# This function trains a Decision Tree classifier with grid search and prints the classification report
 def train_decision_tree(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}2º Decision Tree Classifier:{BackgroundColors.CYAN}")
    clf = tree.DecisionTreeClassifier() # Instantiate the classifier
@@ -73,7 +73,7 @@ def train_svm_with_grid_search(train_features_values, train_label, test_features
    model = grid.best_estimator_ # Retrieve the best model
    print(f"{classification_report(test_label, model.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
 
-# This function trains a SVM classifier with grid search and prints the classification report
+# This function trains a Multilayer Perceptron classifier and prints the classification report
 def train_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}4º Artificial Neural Network/Multilayer Perceptron Classifier:{BackgroundColors.CYAN}")
    scaler = StandardScaler() # Instantiate the standard scaler
@@ -84,7 +84,7 @@ def train_multilayer_perceptron(train_features_values, train_label, test_feature
    print(clf.predict(test_features_values)) # Print the predictions
    print(f"{classification_report(test_label, clf.predict(test_features_values))}{Style.RESET_ALL}") # Print the classification report
 
-# This function trains a SVM classifier with grid search and prints the classification report
+# This function trains a Random Forest classifier and prints the classification report
 def train_random_forest(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}5º Random Forest Classifier:{BackgroundColors.CYAN}")
    clf = RandomForestClassifier(n_estimators=10000, max_depth=30, random_state=1) # Instantiate the classifier
