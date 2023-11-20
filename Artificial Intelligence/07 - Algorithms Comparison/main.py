@@ -83,7 +83,7 @@ def train_decision_tree(train_features_values, train_label, test_features_values
 
 # This function trains a SVM classifier with grid search and prints the classification report
 def train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label):
-   print(f"{BackgroundColors.GREEN}3º {BackgroundColors.CYAN}SVM Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
+   print(f"{BackgroundColors.GREEN}3º {BackgroundColors.CYAN}Support Vector Machine Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
    start_time = time.time() # Start the timer
    C_range = 2. ** np.arange(-5, 15, 2) # The range of C values
    gamma_range = 2. ** np.arange(3, -15, -2) # The range of gamma values which defines the influence of a single training example
@@ -144,13 +144,13 @@ def train_naive_bayes_with_grid_search(train_features_values, train_label, test_
 
    start_time = time.time() # Start the timer
    # Define the parameters for the grid search
-   param_grid = {'var_smoothing': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5]}
+   param_grid = {"var_smoothing": [1e-9, 1e-8, 1e-7, 1e-6, 1e-5]}
 
    # Instantiate Naive Bayes classifier
    nb = GaussianNB()
 
    # Instantiate GridSearchCV
-   grid = GridSearchCV(nb, param_grid, cv=5, scoring='accuracy', verbose=0, n_jobs=-1)
+   grid = GridSearchCV(nb, param_grid, cv=5, scoring="accuracy", verbose=0, n_jobs=-1)
 
    grid.fit(train_features_values, train_label) # Train the classifier
    y_pred = grid.predict(test_features_values) # Predict the test set
@@ -184,8 +184,8 @@ def main():
 
    classifiers_execution["K-NN"] = train_knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
    classifiers_execution["Decision Tree"] = train_decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
-   classifiers_execution["SVM"] = train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
-   classifiers_execution["MLP"] = train_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
+   classifiers_execution["Support Vector Machine"] = train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
+   classifiers_execution["Multilayer Perceptron Classifier"] = train_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
    classifiers_execution["Random Forest"] = train_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
    classifiers_execution["Naive Bayes"] = train_naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
 
