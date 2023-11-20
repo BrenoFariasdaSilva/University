@@ -105,14 +105,44 @@ def knn(train_features_values, train_label, test_features_values, test_label):
 # This function creates a Decision Tree classifier with grid search and prints the classification report
 def decision_tree(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}2º {BackgroundColors.CYAN}Decision Tree Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
+
+   # Define the parameter grid for the grid search
+   param_grid = {
+      "criterion": ["gini", "entropy"], # Add more criteria if needed
+      "splitter": ["best", "random"], # Add more splitters if needed
+      "max_depth": [None, 10, 20, 30], # Add more depth values if needed
+   }
+
+   # Instantiate the Decision Tree classifier
+   clf = tree.DecisionTreeClassifier()
+
+   # Instantiate GridSearchCV
+   grid_search = GridSearchCV(clf, param_grid, scoring="accuracy", cv=5, n_jobs=-1)
+
    start_time = time.time() # Start the timer
-   clf = tree.DecisionTreeClassifier() # Instantiate the classifier
-   clf.fit(train_features_values, train_label) # Train the classifier
-   y_pred = clf.predict(test_features_values) # Predict the test set
-   accuracy = clf.score(test_features_values, test_label) # Calculate the accuracy
+   grid_search.fit(train_features_values, train_label) # Train the classifier with grid search
    execution_time = time.time() - start_time # Calculate the execution time
 
-   return accuracy, {"Criterion": "Gini", "Splitter": "Best", "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
+   # Get the best model from the grid search
+   best_clf = grid_search.best_estimator_
+
+   # Predict the test set using the best model
+   y_pred = best_clf.predict(test_features_values)
+
+   # Calculate the accuracy
+   accuracy = best_clf.score(test_features_values, test_label)
+
+   # Get the best parameters from the grid search
+   best_params = grid_search.best_params_
+
+   if SHOW_CLASSIFICATION_REPORT: # Show the classification report if it is set to True
+      print(f"{classification_report(test_label, y_pred)}{Style.RESET_ALL}")
+   
+   if SHOW_CONFUSION_MATRIX: # Show the confusion matrix if it is set to True
+      conf_matrix = confusion_matrix(test_label, y_pred) 
+      print(f"{BackgroundColors.GREEN}Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}")
+
+   return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a SVM classifier with grid search and prints the classification report
 def svm_with_grid_search(train_features_values, train_label, test_features_values, test_label):
