@@ -57,8 +57,8 @@ def load_data():
    test_features_values = ts[:, 1:] # The second column to the last is the feature vector
    return train_features_values, train_label, test_features_values, test_label # Return the data
 
-# This function trains a k-NN classifier and prints the classification report
-def train_knn(train_features_values, train_label, test_features_values, test_label):
+# This function creates a k-NN classifier and prints the classification report
+def knn(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}1º {BackgroundColors.CYAN}K-NN Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
    start_time = time.time() # Start the timer
    neigh = KNeighborsClassifier(n_neighbors=1, metric="euclidean") # Instantiate the classifier
@@ -69,8 +69,8 @@ def train_knn(train_features_values, train_label, test_features_values, test_lab
 
    return accuracy, {"N Neighbors": 1, "Metric": "Euclidean", "Execution Time": f"{execution_time:.5f} Seconds"} # Return the execution time
 
-# This function trains a Decision Tree classifier with grid search and prints the classification report
-def train_decision_tree(train_features_values, train_label, test_features_values, test_label):
+# This function creates a Decision Tree classifier with grid search and prints the classification report
+def decision_tree(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}2º {BackgroundColors.CYAN}Decision Tree Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
    start_time = time.time() # Start the timer
    clf = tree.DecisionTreeClassifier() # Instantiate the classifier
@@ -81,8 +81,8 @@ def train_decision_tree(train_features_values, train_label, test_features_values
 
    return accuracy, {"Criterion": "Gini", "Splitter": "Best", "Execution Time": f"{execution_time:.5f} Seconds"} # Return the execution time
 
-# This function trains a SVM classifier with grid search and prints the classification report
-def train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label):
+# This function creates a SVM classifier with grid search and prints the classification report
+def svm_with_grid_search(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}3º {BackgroundColors.CYAN}Support Vector Machine Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
    start_time = time.time() # Start the timer
    C_range = 2. ** np.arange(-5, 15, 2) # The range of C values
@@ -111,8 +111,8 @@ def train_svm_with_grid_search(train_features_values, train_label, test_features
 
    return accuracy, {"C": grid.best_params_["svm__C"], "Gamma": grid.best_params_["svm__gamma"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the execution time
 
-# This function trains a Multilayer Perceptron classifier and prints the classification report
-def train_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label):
+# This function creates a Multilayer Perceptron classifier and prints the classification report
+def multilayer_perceptron(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}4º {BackgroundColors.CYAN}Artificial Neural Network/Multilayer Perceptron Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
    start_time = time.time() # Start the timer
    scaler = StandardScaler() # Instantiate the standard scaler
@@ -126,8 +126,8 @@ def train_multilayer_perceptron(train_features_values, train_label, test_feature
 
    return accuracy, {"Solver": "Adam", "Alpha": 1e-5, "Hidden Layer Sizes": (500, 500, 500, 500), "Execution Time": f"{execution_time:.5f} Seconds"} # Return the execution time
 
-# This function trains a Random Forest classifier and prints the classification report
-def train_random_forest(train_features_values, train_label, test_features_values, test_label):
+# This function creates a Random Forest classifier and prints the classification report
+def random_forest(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}5º {BackgroundColors.CYAN}Random Forest Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
    start_time = time.time() # Start the timer
    clf = RandomForestClassifier(n_estimators=10000, max_depth=30, random_state=1) # Instantiate the classifier
@@ -139,7 +139,7 @@ def train_random_forest(train_features_values, train_label, test_features_values
    return accuracy, {"N Estimators": 10000, "Max Depth": 30, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the execution time
 
 # This function trains the Naive Bayes classifier and prints the classification report
-def train_naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label):
+def naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}6º {BackgroundColors.CYAN}Naive Bayes Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
 
    start_time = time.time() # Start the timer
@@ -182,12 +182,12 @@ def main():
    train_features_values, train_label, test_features_values, test_label = load_data() # Load the data
    classifiers_execution = {} # Dictionary to store the classifiers execution time
 
-   classifiers_execution["K-NN"] = train_knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
-   classifiers_execution["Decision Tree"] = train_decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
-   classifiers_execution["Support Vector Machine"] = train_svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
-   classifiers_execution["Multilayer Perceptron Classifier"] = train_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
-   classifiers_execution["Random Forest"] = train_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
-   classifiers_execution["Naive Bayes"] = train_naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
+   classifiers_execution["K-NN"] = knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
+   classifiers_execution["Decision Tree"] = decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
+   classifiers_execution["Support Vector Machine"] = svm_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
+   classifiers_execution["Multilayer Perceptron Classifier"] = multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
+   classifiers_execution["Random Forest"] = random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
+   classifiers_execution["Naive Bayes"] = naive_bayes_with_grid_search(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
 
    # Sort the classifiers by execution time
    classifiers_execution = sort_classifiers_execution(classifiers_execution)
