@@ -5,3 +5,4 @@ run:
 
 dependencies:
 	pip install colorama numpy scikit-learn
+	pip install --upgrade threadpoolctl
