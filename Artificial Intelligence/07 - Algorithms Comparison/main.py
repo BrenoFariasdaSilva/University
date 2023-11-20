@@ -184,17 +184,44 @@ def svm_with_grid_search(train_features_values, train_label, test_features_value
 # This function creates a Multilayer Perceptron classifier and prints the classification report
 def multilayer_perceptron(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}4º {BackgroundColors.CYAN}Artificial Neural Network/Multilayer Perceptron Classifier{BackgroundColors.GREEN}.{Style.RESET_ALL}")
+
+   # Define the parameter grid for the grid search
+   param_grid = {
+      "solver": ["adam", "lbfgs"], # Add more solvers if needed
+      "alpha": [1e-5, 1e-4, 1e-3], # Add more alpha values if needed
+      "hidden_layer_sizes": [(100,), (100, 100), (500, 500, 500, 500)], # Add more hidden layer sizes if needed
+   }
+
+   # Instantiate the Multilayer Perceptron classifier
+   clf = MLPClassifier(random_state=1)
+
+   # Instantiate GridSearchCV
+   grid_search = GridSearchCV(clf, param_grid, scoring="accuracy", cv=5, n_jobs=-1)
+
    start_time = time.time() # Start the timer
-   scaler = StandardScaler() # Instantiate the standard scaler
-   train_features_values = scaler.fit_transform(train_features_values) # Scale the training features
-   test_features_values = scaler.fit_transform(test_features_values) # Scale the test features
-   clf = MLPClassifier(solver="adam", alpha=1e-5, hidden_layer_sizes=(500, 500, 500, 500), random_state=1) # Instantiate the classifier
-   clf.fit(train_features_values, train_label) # Train the classifier
-   y_pred = clf.predict(test_features_values) # Predict the test set
-   accuracy = clf.score(test_features_values, test_label) # Calculate the accuracy
+   grid_search.fit(train_features_values, train_label) # Train the classifier with grid search
    execution_time = time.time() - start_time # Calculate the execution time
 
-   return accuracy, {"Solver": "Adam", "Alpha": 1e-5, "Hidden Layer Sizes": (500, 500, 500, 500), "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
+   # Get the best model from the grid search
+   best_clf = grid_search.best_estimator_
+
+   # Predict the test set using the best model
+   y_pred = best_clf.predict(test_features_values)
+
+   # Calculate the accuracy
+   accuracy = best_clf.score(test_features_values, test_label)
+
+   # Get the best parameters from the grid search
+   best_params = grid_search.best_params_
+
+   if SHOW_CLASSIFICATION_REPORT: # Show the classification report if it is set to True
+      print(f"{classification_report(test_label, y_pred)}{Style.RESET_ALL}") # Print the classification report
+
+   if SHOW_CONFUSION_MATRIX: # Show the confusion matrix if it is set to True
+      conf_matrix = confusion_matrix(test_label, y_pred)
+      print(f"{BackgroundColors.GREEN}Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}") # Print the confusion matrix
+
+   return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a Random Forest classifier and prints the classification report
 def random_forest(train_features_values, train_label, test_features_values, test_label):
