@@ -70,7 +70,7 @@ def train_svm_with_grid_search(train_features_values, train_label, test_features
    }
 
    # Perform Grid Search
-   grid = GridSearchCV(pipeline, param_grid, n_jobs=-1, verbose=True) # Instantiate the grid search
+   grid = GridSearchCV(pipeline, param_grid, n_jobs=-1, verbose=0) # Instantiate the grid search
    grid.fit(train_features_values, train_label) # Train the classifier
 
    # Retrieve the best model
@@ -107,7 +107,7 @@ def train_naive_bayes_with_grid_search(train_features_values, train_label, test_
    nb = GaussianNB()
 
    # Instantiate GridSearchCV
-   grid = GridSearchCV(nb, param_grid, cv=5, scoring='accuracy', verbose=1, n_jobs=-1)
+   grid = GridSearchCV(nb, param_grid, cv=5, scoring='accuracy', verbose=0, n_jobs=-1)
 
    # Train the model with grid search
    grid.fit(train_features_values, train_label)
