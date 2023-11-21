@@ -5,6 +5,7 @@ import platform # For getting the operating system name
 import time # For the timer
 from collections import Counter # For the majority voting
 from colorama import Style # For coloring the terminal
+from itertools import combinations # For the combinations
 from sklearn import svm # For the SVM classifier
 from sklearn import tree # For the decision tree classifier
 from sklearn.ensemble import RandomForestClassifier # For the random forest classifier
@@ -39,6 +40,16 @@ INPUT_FILES = ["./dataset/digits/training/5x5-normalized-pixel_count.txt", "./da
 SHOW_CONFUSION_MATRIX = False # If True, show the confusion matrix
 SHOW_CLASSIFICATION_REPORT = False # If True, show the classification report
 
+# Classifiers Constants:
+CLASSIFIERS = {
+   "K-Nearest Neighbors": "grid_search_k_nearest_neighbors",
+   "Decision Tree": "grid_search_decision_tree",
+   "Support Vector Machine": "grid_search_support_vector_machine",
+   "Multilayer Perceptron": "grid_search_multilayer_perceptron",
+   "Random Forest": "grid_search_random_forest",
+   "Naive Bayes": "grid_search_naive_bayes",
+}
+
 # Grid Search Constants:
 CROSS_VALIDATION = None # The number of cross validation folds
 
@@ -68,7 +79,7 @@ def load_data():
    return train_features_values, train_label, test_features_values, test_label # Return the data
 
 # This function creates a k-NN classifier and prints the classification report
-def grid_search_knn(train_features_values, train_label, test_features_values, test_label):
+def grid_search_k_nearest_neighbors(train_features_values, train_label, test_features_values, test_label):
    # Define the parameter grid for the grid search
    param_grid = {
       "metric": ["euclidean", "manhattan", "minkowski"], # Distance metric to use.
@@ -304,56 +315,31 @@ def print_classifiers_execution(sorted_classifiers_execution):
 def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the Artificial Intelligence Supervised Learning Algorithms Comparison Project!{Style.RESET_ALL}") # Print the welcome message
 
-   train_features_values, train_label, test_features_values, test_label = load_data() # Load the data
+   train_features, train_labels, test_features, test_labels = load_data() # Load the data
    classifiers_execution = {} # Dictionary to store the classifiers execution time
    classifiers_predictions = {} # Dictionary to store the classifiers predictions
 
-   # Train the K-NN classifier
-   accuracy, y_pred, parameters = grid_search_knn(train_features_values, train_label, test_features_values, test_label)
-   # Store results in dictionaries
-   classifiers_execution["K-Nearest Neighbors"] = (accuracy, parameters)
-   classifiers_predictions["K-Nearest Neighbors"] = y_pred
+   # Train each classifier and store the results in dictionaries
+   for classifier_name, classifier_function in CLASSIFIERS.items():
+      classifier_function = globals()[classifier_function] # Use globals() to get the function object from its name
+      accuracy, y_pred, parameters = classifier_function(train_features, train_labels, test_features, test_labels)
 
-   # Train the Decision Tree classifier
-   accuracy, y_pred, parameters = grid_search_decision_tree(train_features_values, train_label, test_features_values, test_label)
-   # Store results in dictionaries
-   classifiers_execution["Decision Tree"] = (accuracy, parameters)
-   classifiers_predictions["Decision Tree"] = y_pred
-
-   # Train the Support Vector Machine classifier
-   accuracy, y_pred, parameters = grid_search_support_vector_machine(train_features_values, train_label, test_features_values, test_label)
-   # Store results in dictionaries
-   classifiers_execution["Support Vector Machine"] = (accuracy, parameters)
-   classifiers_predictions["Support Vector Machine"] = y_pred
-
-   # Train the Multilayer Perceptron classifier
-   accuracy, y_pred, parameters = grid_search_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label)
-   # Store results in dictionaries
-   classifiers_execution["Multilayer Perceptron"] = (accuracy, parameters)
-   classifiers_predictions["Multilayer Perceptron"] = y_pred
-
-   # Train the Random Forest classifier
-   accuracy, y_pred, parameters = grid_search_random_forest(train_features_values, train_label, test_features_values, test_label)
-   # Store results in dictionaries
-   classifiers_execution["Random Forest"] = (accuracy, parameters)
-
-   # Train the Naive Bayes classifier
-   accuracy, y_pred, parameters = grid_search_naive_bayes(train_features_values, train_label, test_features_values, test_label)
-   # Store results in dictionaries
-   classifiers_execution["Naive Bayes"] = (accuracy, parameters)
-   classifiers_predictions["Naive Bayes"] = y_pred
+      classifiers_execution[classifier_name] = (accuracy, parameters)
+      classifiers_predictions[classifier_name] = y_pred
 
    # Calculate majority vote predictions
    majority_vote_predictions_result = majority_vote_predictions(classifiers_predictions)
 
    # Calculate accuracy for majority vote predictions
-   majority_vote_accuracy = accuracy_score(test_label, majority_vote_predictions_result)
+   majority_vote_accuracy = accuracy_score(test_labels, majority_vote_predictions_result)
+
+   # Print the majority vote accuracy
+   print(f"{BackgroundColors.GREEN}Majority Vote Accuracy: {BackgroundColors.CYAN}{majority_vote_accuracy * 100:.2f}%{Style.RESET_ALL}")
 
    # Add majority vote to the classifiers execution dictionary
    classifiers_execution["Majority Vote"] = (majority_vote_accuracy, {})
 
-   # # Print the execution time
-   print_classifiers_execution(classifiers_execution)
+   print_classifiers_execution(classifiers_execution) # Print the classifiers accuracy, parameters and execution time
 
    print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Thank you for using the Artificial Intelligence Supervised Learning Algorithms Comparison Project!{Style.RESET_ALL}") # Print the goodbye message
 
