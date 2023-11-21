@@ -320,7 +320,7 @@ def main():
    train_features_values, train_label, test_features_values, test_label = load_data() # Load the data
    classifiers_execution = {} # Dictionary to store the classifiers execution time
 
-   classifiers_execution["K-NN"] = grid_search_knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
+   classifiers_execution["K-Nearest Neighbors"] = grid_search_knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
    classifiers_execution["Decision Tree"] = grid_search_decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
    classifiers_execution["Support Vector Machine"] = grid_search_support_vector_machine(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
    classifiers_execution["Multilayer Perceptron"] = grid_search_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
