@@ -155,17 +155,17 @@ def grid_search_support_vector_machine(train_features_values, train_label, test_
    print(f"{BackgroundColors.GREEN}3º {BackgroundColors.CYAN}Support Vector Machine Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
    C_range = 2. ** np.arange(-5, 15, 2) # The range of C values
    gamma_range = 2. ** np.arange(3, -15, -2) # The range of gamma values which defines the influence of a single training example
-   k = ["rbf"] # The kernel
+   k = ["linear", "rbf", "poly", "sigmoid"] # The kernel
 
-   # Instantiate the classifier with probability
-   srv = svm.SVC(probability=True, kernel="rbf") # Instantiate the classifier
+   srv = svm.SVC(probability=True) # Instantiate the classifier with probability
    ss = StandardScaler() # Instantiate the standard scaler
    pipeline = Pipeline([("scaler", ss), ("svm", srv)]) # Instantiate the pipeline
 
    # Define the parameters for the grid search
    param_grid = {
       "svm__C": C_range,
-      "svm__gamma": gamma_range
+      "svm__gamma": gamma_range,
+      "svm__kernel": k,
    }
 
    # Perform Grid Search
