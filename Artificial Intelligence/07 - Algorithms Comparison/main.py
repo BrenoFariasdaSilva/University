@@ -3,10 +3,12 @@ import numpy as np # For the data manipulation
 import os # For running a command in the terminal
 import platform # For getting the operating system name
 import time # For the timer
+from collections import Counter # For the majority voting
 from colorama import Style # For coloring the terminal
 from sklearn import svm # For the SVM classifier
 from sklearn import tree # For the decision tree classifier
 from sklearn.ensemble import RandomForestClassifier # For the random forest classifier
+from sklearn.metrics import accuracy_score # For the accuracy score
 from sklearn.metrics import classification_report # For the classification report
 from sklearn.metrics import confusion_matrix # For the confusion matrix
 from sklearn.model_selection import GridSearchCV # For the grid search
@@ -103,7 +105,7 @@ def grid_search_knn(train_features_values, train_label, test_features_values, te
       conf_matrix = confusion_matrix(test_label, y_pred) # Calculate the confusion matrix
       print(f"{BackgroundColors.GREEN}Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}") # Print the confusion matrix
    
-   return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
+   return accuracy, y_pred, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a Decision Tree classifier with grid search and prints the classification report
 def grid_search_decision_tree(train_features_values, train_label, test_features_values, test_label):
@@ -145,7 +147,7 @@ def grid_search_decision_tree(train_features_values, train_label, test_features_
       conf_matrix = confusion_matrix(test_label, y_pred) 
       print(f"{BackgroundColors.GREEN}Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}")
 
-   return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
+   return accuracy, y_pred, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a SVM classifier with grid search and prints the classification report
 def grid_search_support_vector_machine(train_features_values, train_label, test_features_values, test_label):
@@ -183,7 +185,7 @@ def grid_search_support_vector_machine(train_features_values, train_label, test_
       conf_matrix = confusion_matrix(test_label, y_pred)
       print(f"{BackgroundColors.GREEN}Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}")
 
-   return accuracy, {"C": grid.best_params_["svm__C"], "Gamma": grid.best_params_["svm__gamma"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
+   return accuracy, y_pred, {"C": grid.best_params_["svm__C"], "Gamma": grid.best_params_["svm__gamma"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a Multilayer Perceptron classifier and prints the classification report
 def grid_search_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label):
@@ -225,7 +227,7 @@ def grid_search_multilayer_perceptron(train_features_values, train_label, test_f
       conf_matrix = confusion_matrix(test_label, y_pred)
       print(f"{BackgroundColors.GREEN}Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}") # Print the confusion matrix
 
-   return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
+   return accuracy, y_pred, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function creates a Random Forest classifier and prints the classification report
 def grid_search_random_forest(train_features_values, train_label, test_features_values, test_label):
@@ -266,7 +268,7 @@ def grid_search_random_forest(train_features_values, train_label, test_features_
       conf_matrix = confusion_matrix(test_label, y_pred) # Calculate the confusion matrix
       print(f"{BackgroundColors.GREEN}Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}") # Print the confusion matrix
 
-   return accuracy, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
+   return accuracy, y_pred, {"Best Parameters": best_params, "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function trains the Naive Bayes classifier and prints the classification report
 def grid_search_naive_bayes(train_features_values, train_label, test_features_values, test_label):
@@ -290,7 +292,13 @@ def grid_search_naive_bayes(train_features_values, train_label, test_features_va
    execution_time = time.time() - start_time # Calculate the execution time
    accuracy = grid.score(test_features_values, test_label) # Calculate the accuracy
 
-   return accuracy, {"Var Smoothing": grid.best_params_["var_smoothing"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
+   return accuracy, y_pred, {"Var Smoothing": grid.best_params_["var_smoothing"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
+
+# This function performs majority voting on the classifiers' predictions
+def majority_vote_predictions(classifiers_predictions):
+   transposed_predictions = list(map(list, zip(*classifiers_predictions.values()))) # Transpose the predictions
+   final_predictions = [Counter(instance_predictions).most_common(1)[0][0] for instance_predictions in transposed_predictions] # Calculate the majority vote predictions
+   return final_predictions # Return the majority vote predictions
 
 # This function sort the classifiers by accuracy
 def sort_classifiers_execution(classifiers_execution):
@@ -314,18 +322,56 @@ def main():
 
    train_features_values, train_label, test_features_values, test_label = load_data() # Load the data
    classifiers_execution = {} # Dictionary to store the classifiers execution time
+   classifiers_predictions = {} # Dictionary to store the classifiers predictions
 
-   classifiers_execution["K-Nearest Neighbors"] = grid_search_knn(train_features_values, train_label, test_features_values, test_label) # Train the K-NN classifier
-   classifiers_execution["Decision Tree"] = grid_search_decision_tree(train_features_values, train_label, test_features_values, test_label) # Train the Decision Tree classifier
-   classifiers_execution["Support Vector Machine"] = grid_search_support_vector_machine(train_features_values, train_label, test_features_values, test_label) # Train the SVM classifier
-   classifiers_execution["Multilayer Perceptron"] = grid_search_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label) # Train the ANN/MLP classifier
-   classifiers_execution["Random Forest"] = grid_search_random_forest(train_features_values, train_label, test_features_values, test_label) # Train the Random Forest classifier
-   classifiers_execution["Naive Bayes"] = grid_search_naive_bayes(train_features_values, train_label, test_features_values, test_label) # Train the Naive Bayes classifier
+   # Train the K-NN classifier
+   accuracy, y_pred, parameters = grid_search_knn(train_features_values, train_label, test_features_values, test_label)
+   # Store results in dictionaries
+   classifiers_execution["K-Nearest Neighbors"] = (accuracy, parameters)
+   classifiers_predictions["K-Nearest Neighbors"] = y_pred
 
-   # Sort the classifiers by execution time
-   classifiers_execution = sort_classifiers_execution(classifiers_execution)
+   # Train the Decision Tree classifier
+   accuracy, y_pred, parameters = grid_search_decision_tree(train_features_values, train_label, test_features_values, test_label)
+   # Store results in dictionaries
+   classifiers_execution["Decision Tree"] = (accuracy, parameters)
+   classifiers_predictions["Decision Tree"] = y_pred
 
-   # Print the execution time
+   # Train the Support Vector Machine classifier
+   accuracy, y_pred, parameters = grid_search_support_vector_machine(train_features_values, train_label, test_features_values, test_label)
+   # Store results in dictionaries
+   classifiers_execution["Support Vector Machine"] = (accuracy, parameters)
+   classifiers_predictions["Support Vector Machine"] = y_pred
+
+   # Train the Multilayer Perceptron classifier
+   accuracy, y_pred, parameters = grid_search_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label)
+   # Store results in dictionaries
+   classifiers_execution["Multilayer Perceptron"] = (accuracy, parameters)
+   classifiers_predictions["Multilayer Perceptron"] = y_pred
+
+   # Train the Random Forest classifier
+   accuracy, y_pred, parameters = grid_search_random_forest(train_features_values, train_label, test_features_values, test_label)
+   # Store results in dictionaries
+   classifiers_execution["Random Forest"] = (accuracy, parameters)
+
+   # Train the Naive Bayes classifier
+   accuracy, y_pred, parameters = grid_search_naive_bayes(train_features_values, train_label, test_features_values, test_label)
+   # Store results in dictionaries
+   classifiers_execution["Naive Bayes"] = (accuracy, parameters)
+   classifiers_predictions["Naive Bayes"] = y_pred
+
+   # Calculate majority vote predictions
+   majority_vote_predictions_result = majority_vote_predictions(classifiers_predictions)
+
+   # Calculate accuracy for majority vote predictions
+   majority_vote_accuracy = accuracy_score(test_label, majority_vote_predictions_result)
+
+   # print the majority vote accuracy
+   print(f"{BackgroundColors.GREEN}Majority Vote Accuracy: {BackgroundColors.CYAN}{majority_vote_accuracy * 100:.2f}%{Style.RESET_ALL}")
+
+   # Add majority vote to the classifiers execution dictionary
+   classifiers_execution["Majority Vote"] = (majority_vote_accuracy, {})
+
+   # # Print the execution time
    print_classifiers_execution(classifiers_execution)
 
    print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Thank you for using the Artificial Intelligence Supervised Learning Algorithms Comparison Project!{Style.RESET_ALL}") # Print the goodbye message
