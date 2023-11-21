@@ -42,6 +42,9 @@ INPUT_FILES = ["./dataset/digits/training/5x5-normalized-pixel_count.txt", "./da
 SHOW_CONFUSION_MATRIX = False # If True, show the confusion matrix
 SHOW_CLASSIFICATION_REPORT = False # If True, show the classification report
 
+# Grid Search Constants:
+cross_validation = 10 # The number of cross validation folds
+
 # This function defines the command to play a sound when the program finishes
 def play_sound():
    if os.path.exists(SOUND_FILE):
@@ -80,7 +83,7 @@ def grid_search_knn(train_features_values, train_label, test_features_values, te
    knn = KNeighborsClassifier() # Instantiate the classifier
 
    # Instantiate GridSearchCV
-   grid_search = GridSearchCV(knn, param_grid, scoring="accuracy", cv=5, n_jobs=-1)
+   grid_search = GridSearchCV(knn, param_grid, scoring="accuracy", cv=cross_validation, n_jobs=-1)
 
    start_time = time.time() # Start the timer
    grid_search.fit(train_features_values, train_label) # Train the classifier with grid search
@@ -122,7 +125,7 @@ def grid_search_decision_tree(train_features_values, train_label, test_features_
    clf = tree.DecisionTreeClassifier()
 
    # Instantiate GridSearchCV
-   grid_search = GridSearchCV(clf, param_grid, scoring="accuracy", cv=5, n_jobs=-1)
+   grid_search = GridSearchCV(clf, param_grid, scoring="accuracy", cv=cross_validation, n_jobs=-1)
 
    start_time = time.time() # Start the timer
    grid_search.fit(train_features_values, train_label) # Train the classifier with grid search
@@ -169,7 +172,7 @@ def grid_search_support_vector_machine(train_features_values, train_label, test_
    }
 
    # Perform Grid Search
-   grid = GridSearchCV(pipeline, param_grid, n_jobs=-1, verbose=0) # Instantiate the grid search
+   grid = GridSearchCV(pipeline, param_grid, scoring="accuracy", cv=cross_validation, verbose=0, n_jobs=-1)
    start_time = time.time() # Start the timer
    grid.fit(train_features_values, train_label) # Train the classifier
 
@@ -202,7 +205,7 @@ def grid_search_multilayer_perceptron(train_features_values, train_label, test_f
    clf = MLPClassifier(random_state=1, max_iter=2000)
 
    # Instantiate GridSearchCV
-   grid_search = GridSearchCV(clf, param_grid, scoring="accuracy", cv=5, n_jobs=-1)
+   grid_search = GridSearchCV(clf, param_grid, scoring="accuracy", cv=cross_validation, n_jobs=-1)
 
    start_time = time.time() # Start the timer
    grid_search.fit(train_features_values, train_label) # Train the classifier with grid search
@@ -243,7 +246,7 @@ def grid_search_random_forest(train_features_values, train_label, test_features_
    clf = RandomForestClassifier(random_state=1)
 
    # Instantiate GridSearchCV
-   grid_search = GridSearchCV(clf, param_grid, scoring="accuracy", cv=5, n_jobs=-1)
+   grid_search = GridSearchCV(clf, param_grid, scoring="accuracy", cv=cross_validation, n_jobs=-1)
 
    start_time = time.time() # Start the timer
    grid_search.fit(train_features_values, train_label) # Train the classifier with grid search
@@ -284,7 +287,7 @@ def grid_search_naive_bayes(train_features_values, train_label, test_features_va
    nb = GaussianNB()
 
    # Instantiate GridSearchCV
-   grid = GridSearchCV(nb, param_grid, cv=5, scoring="accuracy", verbose=0, n_jobs=-1)
+   grid = GridSearchCV(nb, param_grid, scoring="accuracy", cv=cross_validation, verbose=0, n_jobs=-1)
 
    start_time = time.time() # Start the timer
    grid.fit(train_features_values, train_label) # Train the classifier
