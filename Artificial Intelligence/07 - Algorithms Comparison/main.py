@@ -69,8 +69,6 @@ def load_data():
 
 # This function creates a k-NN classifier and prints the classification report
 def grid_search_knn(train_features_values, train_label, test_features_values, test_label):
-   print(f"{BackgroundColors.GREEN}1º {BackgroundColors.CYAN}K-NN Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
-
    # Define the parameter grid for the grid search
    param_grid = {
       "metric": ["euclidean", "manhattan", "minkowski"], # Distance metric to use.
@@ -109,8 +107,6 @@ def grid_search_knn(train_features_values, train_label, test_features_values, te
 
 # This function creates a Decision Tree classifier with grid search and prints the classification report
 def grid_search_decision_tree(train_features_values, train_label, test_features_values, test_label):
-   print(f"{BackgroundColors.GREEN}2º {BackgroundColors.CYAN}Decision Tree Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
-
    # Define the parameter grid for the grid search
    param_grid = {
       "criterion": ["gini", "entropy"], # The function to measure the quality of a split.
@@ -151,8 +147,6 @@ def grid_search_decision_tree(train_features_values, train_label, test_features_
 
 # This function creates a SVM classifier with grid search and prints the classification report
 def grid_search_support_vector_machine(train_features_values, train_label, test_features_values, test_label):
-   print(f"{BackgroundColors.GREEN}3º {BackgroundColors.CYAN}Support Vector Machine Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
-
    srv = svm.SVC(probability=True) # Instantiate the classifier with probability
    ss = StandardScaler() # Instantiate the standard scaler
    pipeline = Pipeline([("scaler", ss), ("svm", srv)]) # Instantiate the pipeline
@@ -185,8 +179,6 @@ def grid_search_support_vector_machine(train_features_values, train_label, test_
 
 # This function creates a Multilayer Perceptron classifier and prints the classification report
 def grid_search_multilayer_perceptron(train_features_values, train_label, test_features_values, test_label):
-   print(f"{BackgroundColors.GREEN}4º {BackgroundColors.CYAN}Artificial Neural Network/Multilayer Perceptron Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
-
    # Define the parameter grid for the grid search
    param_grid = {
       "alpha": [1e-5, 1e-4, 1e-3], # L2 penalty (regularization term) parameter.
@@ -227,8 +219,6 @@ def grid_search_multilayer_perceptron(train_features_values, train_label, test_f
 
 # This function creates a Random Forest classifier and prints the classification report
 def grid_search_random_forest(train_features_values, train_label, test_features_values, test_label):
-   print(f"{BackgroundColors.GREEN}5º {BackgroundColors.CYAN}Random Forest Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
-   
    # Define the parameter grid for the grid search
    param_grid = {
       "max_depth": [None, 10, 20, 30], # The maximum depth of the tree.
@@ -268,8 +258,6 @@ def grid_search_random_forest(train_features_values, train_label, test_features_
 
 # This function trains the Naive Bayes classifier and prints the classification report
 def grid_search_naive_bayes(train_features_values, train_label, test_features_values, test_label):
-   print(f"{BackgroundColors.GREEN}6º {BackgroundColors.CYAN}Naive Bayes Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
-
    # Define the parameters for the grid search
    param_grid = {
       "priors": [None, [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]], # Prior probabilities of the classes.
