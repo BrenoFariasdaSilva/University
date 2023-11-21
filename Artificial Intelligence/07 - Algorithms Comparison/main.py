@@ -21,7 +21,6 @@ from sklearn.exceptions import ConvergenceWarning
 # Ignore all warnings from scikit-learn
 warnings.filterwarnings("ignore", category=ConvergenceWarning)
 
-
 # Macros:
 class BackgroundColors: # Colors for the terminal
    CYAN = "\033[96m" # Cyan
@@ -74,8 +73,8 @@ def grid_search_knn(train_features_values, train_label, test_features_values, te
 
    # Define the parameter grid for the grid search
    param_grid = {
-      "n_neighbors": [1, 3, 5, 7], # Neighbors to use
-      "metric": ["euclidean", "manhattan"], # Distance metric to use
+      "metric": ["euclidean", "manhattan", "minkowski"], # Distance metric to use.
+      "n_neighbors": [1, 3, 5, 7], # Neighbors to use.
    }
 
    knn = KNeighborsClassifier() # Instantiate the classifier
@@ -85,13 +84,13 @@ def grid_search_knn(train_features_values, train_label, test_features_values, te
 
    start_time = time.time() # Start the timer
    grid_search.fit(train_features_values, train_label) # Train the classifier with grid search
-   execution_time = time.time() - start_time # Calculate the execution time
 
    # Get the best model from the grid search
    best_knn = grid_search.best_estimator_
 
    # Predict the test set using the best model
    y_pred = best_knn.predict(test_features_values)
+   execution_time = time.time() - start_time # Calculate the execution time
 
    # Calculate the accuracy
    accuracy = best_knn.score(test_features_values, test_label)
@@ -114,9 +113,9 @@ def grid_search_decision_tree(train_features_values, train_label, test_features_
 
    # Define the parameter grid for the grid search
    param_grid = {
-      "criterion": ["gini", "entropy"], # Add more criteria if needed
-      "splitter": ["best", "random"], # Add more splitters if needed
-      "max_depth": [None, 10, 20, 30], # Add more depth values if needed
+      "criterion": ["gini", "entropy"], # The function to measure the quality of a split.
+      "max_depth": [None, 10, 20, 30], # The maximum depth of the tree.
+      "splitter": ["best", "random"], # The strategy used to choose the split at each node.
    }
 
    # Instantiate the Decision Tree classifier
@@ -127,13 +126,13 @@ def grid_search_decision_tree(train_features_values, train_label, test_features_
 
    start_time = time.time() # Start the timer
    grid_search.fit(train_features_values, train_label) # Train the classifier with grid search
-   execution_time = time.time() - start_time # Calculate the execution time
 
    # Get the best model from the grid search
    best_clf = grid_search.best_estimator_
 
    # Predict the test set using the best model
    y_pred = best_clf.predict(test_features_values)
+   execution_time = time.time() - start_time # Calculate the execution time
 
    # Calculate the accuracy
    accuracy = best_clf.score(test_features_values, test_label)
@@ -153,6 +152,7 @@ def grid_search_decision_tree(train_features_values, train_label, test_features_
 # This function creates a SVM classifier with grid search and prints the classification report
 def grid_search_support_vector_machine(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}3º {BackgroundColors.CYAN}Support Vector Machine Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
+
    C_range = 2. ** np.arange(-5, 15, 2) # The range of C values
    gamma_range = 2. ** np.arange(3, -15, -2) # The range of gamma values which defines the influence of a single training example
    k = ["linear", "rbf", "poly", "sigmoid"] # The kernel
@@ -163,19 +163,19 @@ def grid_search_support_vector_machine(train_features_values, train_label, test_
 
    # Define the parameters for the grid search
    param_grid = {
-      "svm__C": C_range,
-      "svm__gamma": gamma_range,
-      "svm__kernel": k,
+      "svm__C": C_range, # The range of C values.
+      "svm__gamma": gamma_range, # The range of gamma values. The gamma defines the influence of a single training example.
+      "svm__kernel": k, # The kernel to use.
    }
 
    # Perform Grid Search
    grid = GridSearchCV(pipeline, param_grid, n_jobs=-1, verbose=0) # Instantiate the grid search
    start_time = time.time() # Start the timer
    grid.fit(train_features_values, train_label) # Train the classifier
-   execution_time = time.time() - start_time # Calculate the execution time
 
    # Retrieve the best model
    y_pred = grid.predict(test_features_values) # Predict the test set
+   execution_time = time.time() - start_time # Calculate the execution time
    accuracy = grid.score(test_features_values, test_label) # Calculate the accuracy
 
    if SHOW_CLASSIFICATION_REPORT: # Show the classification report if it is set to True
@@ -193,9 +193,9 @@ def grid_search_multilayer_perceptron(train_features_values, train_label, test_f
 
    # Define the parameter grid for the grid search
    param_grid = {
-      "solver": ["adam", "lbfgs"], # Add more solvers if needed
-      "alpha": [1e-5, 1e-4, 1e-3], # Add more alpha values if needed
-      "hidden_layer_sizes": [(100,), (100, 100), (500, 500, 500, 500)], # Add more hidden layer sizes if needed
+      "alpha": [1e-5, 1e-4, 1e-3], # L2 penalty (regularization term) parameter.
+      "hidden_layer_sizes": [(100,), (100, 100), (500, 500, 500, 500)], # Define the number of neurons in each hidden layer.
+      "solver": ["adam", "lbfgs"], # The solver for weight optimization.
    }
 
    # Instantiate the Multilayer Perceptron classifier
@@ -206,13 +206,13 @@ def grid_search_multilayer_perceptron(train_features_values, train_label, test_f
 
    start_time = time.time() # Start the timer
    grid_search.fit(train_features_values, train_label) # Train the classifier with grid search
-   execution_time = time.time() - start_time # Calculate the execution time
 
    # Get the best model from the grid search
    best_clf = grid_search.best_estimator_
 
    # Predict the test set using the best model
    y_pred = best_clf.predict(test_features_values)
+   execution_time = time.time() - start_time # Calculate the execution time
 
    # Calculate the accuracy
    accuracy = best_clf.score(test_features_values, test_label)
@@ -235,8 +235,8 @@ def grid_search_random_forest(train_features_values, train_label, test_features_
    
    # Define the parameter grid for the grid search
    param_grid = {
-      "n_estimators": [100, 500, 1000], # Add more values if needed
-      "max_depth": [None, 10, 30], # Add more values if needed
+      "max_depth": [None, 10, 20, 30], # The maximum depth of the tree.
+      "n_estimators": [100, 500, 1000], # The number of trees in the forest. 
    }
 
    # Instantiate the Random Forest classifier
@@ -247,13 +247,13 @@ def grid_search_random_forest(train_features_values, train_label, test_features_
 
    start_time = time.time() # Start the timer
    grid_search.fit(train_features_values, train_label) # Train the classifier with grid search
-   execution_time = time.time() - start_time # Calculate the execution time
 
    # Get the best model from the grid search
    best_clf = grid_search.best_estimator_
 
    # Predict the test set using the best model
    y_pred = best_clf.predict(test_features_values)
+   execution_time = time.time() - start_time # Calculate the execution time
 
    # Calculate the accuracy
    accuracy = best_clf.score(test_features_values, test_label)
@@ -274,9 +274,11 @@ def grid_search_random_forest(train_features_values, train_label, test_features_
 def grid_search_naive_bayes(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}6º {BackgroundColors.CYAN}Naive Bayes Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
 
-   start_time = time.time() # Start the timer
    # Define the parameters for the grid search
-   param_grid = {"var_smoothing": [1e-9, 1e-8, 1e-7, 1e-6, 1e-5]}
+   param_grid = {
+      "priors": [None, [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]], # Prior probabilities of the classes.
+      "var_smoothing": [1e-9, 1e-8, 1e-7, 1e-6, 1e-5], # The var_smoothing parameter is the value added to the variance for calculation stability to avoid division by zero.
+   }
 
    # Instantiate Naive Bayes classifier
    nb = GaussianNB()
@@ -284,10 +286,11 @@ def grid_search_naive_bayes(train_features_values, train_label, test_features_va
    # Instantiate GridSearchCV
    grid = GridSearchCV(nb, param_grid, cv=5, scoring="accuracy", verbose=0, n_jobs=-1)
 
+   start_time = time.time() # Start the timer
    grid.fit(train_features_values, train_label) # Train the classifier
    y_pred = grid.predict(test_features_values) # Predict the test set
-   accuracy = grid.score(test_features_values, test_label) # Calculate the accuracy
    execution_time = time.time() - start_time # Calculate the execution time
+   accuracy = grid.score(test_features_values, test_label) # Calculate the accuracy
 
    return accuracy, {"Var Smoothing": grid.best_params_["var_smoothing"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
