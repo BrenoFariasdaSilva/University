@@ -153,19 +153,15 @@ def grid_search_decision_tree(train_features_values, train_label, test_features_
 def grid_search_support_vector_machine(train_features_values, train_label, test_features_values, test_label):
    print(f"{BackgroundColors.GREEN}3º {BackgroundColors.CYAN}Support Vector Machine Classifier with Grid Search{BackgroundColors.GREEN}.{Style.RESET_ALL}")
 
-   C_range = 2. ** np.arange(-5, 15, 2) # The range of C values
-   gamma_range = 2. ** np.arange(3, -15, -2) # The range of gamma values which defines the influence of a single training example
-   k = ["linear", "rbf", "poly", "sigmoid"] # The kernel
-
    srv = svm.SVC(probability=True) # Instantiate the classifier with probability
    ss = StandardScaler() # Instantiate the standard scaler
    pipeline = Pipeline([("scaler", ss), ("svm", srv)]) # Instantiate the pipeline
 
    # Define the parameters for the grid search
    param_grid = {
-      "svm__C": C_range, # The range of C values.
-      "svm__gamma": gamma_range, # The range of gamma values. The gamma defines the influence of a single training example.
-      "svm__kernel": k, # The kernel to use.
+      "svm__C": [0.01, 0.1, 1, 10, 100], # The range of C values.
+      "svm__gamma": [0.001, 0.01, 0.1, 1, 10], # The range of gamma values. The gamma defines the influence of a single training example.
+      "svm__kernel": ["linear", "rbf", "poly", "sigmoid"], # The kernel to use.
    }
 
    # Perform Grid Search
@@ -364,9 +360,6 @@ def main():
 
    # Calculate accuracy for majority vote predictions
    majority_vote_accuracy = accuracy_score(test_label, majority_vote_predictions_result)
-
-   # print the majority vote accuracy
-   print(f"{BackgroundColors.GREEN}Majority Vote Accuracy: {BackgroundColors.CYAN}{majority_vote_accuracy * 100:.2f}%{Style.RESET_ALL}")
 
    # Add majority vote to the classifiers execution dictionary
    classifiers_execution["Majority Vote"] = (majority_vote_accuracy, {})
