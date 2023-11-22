@@ -40,10 +40,10 @@ SHOW_CLASSIFICATION_REPORT = False # If True, show the classification report
 # Classifiers Constants:
 CLASSIFIERS = {
    "K-Nearest Neighbors": "grid_search_k_nearest_neighbors",
-   # "Decision Tree": "grid_search_decision_tree",
-   # "Support Vector Machine": "grid_search_support_vector_machine",
-   # "Multilayer Perceptron": "grid_search_multilayer_perceptron",
-   # "Random Forest": "grid_search_random_forest",
+   "Decision Tree": "grid_search_decision_tree",
+   "Support Vector Machine": "grid_search_support_vector_machine",
+   "Multilayer Perceptron": "grid_search_multilayer_perceptron",
+   "Random Forest": "grid_search_random_forest",
    "Naive Bayes": "grid_search_naive_bayes",
 }
 
