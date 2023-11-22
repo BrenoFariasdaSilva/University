@@ -18,6 +18,7 @@ from sklearn.neighbors import KNeighborsClassifier # For the k-NN classifier
 from sklearn.neural_network import MLPClassifier # For the MLP classifier
 from sklearn.pipeline import Pipeline # For the pipeline
 from sklearn.preprocessing import StandardScaler # For the standard scaler
+import tqdm # For the progress bar
 
 # Macros:
 class BackgroundColors: # Colors for the terminal
@@ -296,7 +297,82 @@ def grid_search_naive_bayes(train_features_values, train_label, test_features_va
 
    return accuracy, y_pred, {"Var Smoothing": grid.best_params_["var_smoothing"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
-# This function performs majority voting on the classifiers' predictions
+# This function trains and evaluates a classifier
+def train_and_evaluate_classifier(classifier_function, train_features, train_labels, test_features, test_labels):
+   classifier_function = globals()[classifier_function] # Use globals() to get the function object from its name
+   accuracy, y_pred, parameters = classifier_function(train_features, train_labels, test_features, test_labels) # Train the classifier and get the accuracy, predictions and parameters
+   return accuracy, y_pred, parameters # Return the accuracy, predictions and parameters
+
+# This function gets the number of iterations for the progress bar
+def get_progress_bar_iterations(classifiers):
+   iterations = 0 # Initialize the iterations variable
+   for classifiers_quantity in range(1, len(classifiers) + 1):
+      for classifier_combination in combinations(classifiers.keys(), classifiers_quantity):
+         for i in range(1, len(classifier_combination) + 1):
+            iterations += 1
+   return iterations # Return the iterations
+
+# This function finds the best combination of classifiers
+def find_best_combination(classifiers, train_features, train_labels, test_features, test_labels):
+   # Initialize the best combination dictionary
+   best_combination = {
+      "Classifiers": None,
+      "Execution Time": 0.0,
+      "Majority Vote Accuracy": 0.0,
+   }
+
+   # Create progress bar
+   with tqdm.tqdm(total=get_progress_bar_iterations(classifiers), desc=f"{BackgroundColors.GREEN}Finding Best Combination{Style.RESET_ALL}", bar_format="{l_bar}{bar:20}{r_bar}{bar:-20b}") as pbar:
+      # Loop through the number of classifiers
+      for classifiers_quantity in range(1, len(classifiers) + 1):
+         # Loop through the combinations
+         for classifier_combination in combinations(classifiers.keys(), classifiers_quantity):
+            classifiers_execution = {}
+            classifiers_predictions = {}
+
+            start_time = time.time() # Start the timer
+            
+            # Loop through the classifiers
+            for classifier_name in classifier_combination:
+               classifier_function = classifiers[classifier_name] # Get the classifier function
+               # Train and evaluate the classifier
+               accuracy, y_pred, parameters = train_and_evaluate_classifier(classifier_function, train_features, train_labels, test_features, test_labels)
+               execution_time = time.time() - start_time # Calculate the execution time
+
+               classifiers_execution[classifier_name] = (accuracy, parameters) # Add the classifier execution to the dictionary
+               classifiers_predictions[classifier_name] = y_pred # Add the classifier predictions to the dictionary
+
+            # Calculate majority vote predictions for the classifiers
+            majority_vote_predictions_result = majority_vote_predictions(classifiers_predictions)
+            majority_vote_accuracy = accuracy_score(test_labels, majority_vote_predictions_result)
+
+            # If the majority vote accuracy is greater than the best combination accuracy, update the best combination
+            if majority_vote_accuracy > best_combination["Majority Vote Accuracy"]:
+               best_combination["Classifiers"] = classifier_combination # Update the best combination
+               best_combination["Majority Vote Accuracy"] = majority_vote_accuracy # Update the best combination accuracy
+               best_combination["Execution Time"] = execution_time
+
+            pbar.update(1) # Update the progress bar
+
+   return best_combination # Return the best combination dictionary
+
+# This function trains the selected classifiers
+def train_selected_classifiers(classifiers, selected_classifiers, train_features, train_labels, test_features, test_labels):
+   classifiers_execution = {} # Initialize the classifiers execution dictionary
+   classifiers_predictions = {} # Initialize the classifiers predictions dictionary
+
+   # Create progress bar that shows the training progress and the current classifier
+   with tqdm.tqdm(total=len(selected_classifiers), desc=f"{BackgroundColors.GREEN}Training Classifiers{Style.RESET_ALL}", bar_format="{l_bar}{bar:20}{r_bar}{bar:-20b}") as pbar:
+      # Loop through the selected classifiers
+      for classifier_name in selected_classifiers:
+         classifier_function = classifiers[classifier_name] # Get the classifier function
+         accuracy, y_pred, parameters = train_and_evaluate_classifier(classifier_function, train_features, train_labels, test_features, test_labels) # Train and evaluate the classifier
+         classifiers_execution[classifier_name] = (accuracy, parameters) # Add the classifier execution to the dictionary
+         classifiers_predictions[classifier_name] = y_pred # Add the classifier predictions to the dictionary
+
+   return classifiers_execution, classifiers_predictions # Return the classifiers execution and predictions dictionaries
+
+# This function performs majority voting on the classifiers predictions
 def majority_vote_predictions(classifiers_predictions):
    transposed_predictions = list(map(list, zip(*classifiers_predictions.values()))) # Transpose the predictions
    final_predictions = [Counter(instance_predictions).most_common(1)[0][0] for instance_predictions in transposed_predictions] # Calculate the majority vote predictions
@@ -323,30 +399,20 @@ def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the Artificial Intelligence Supervised Learning Algorithms Comparison Project!{Style.RESET_ALL}") # Print the welcome message
 
    train_features, train_labels, test_features, test_labels = load_data() # Load the data
-   classifiers_execution = {} # Dictionary to store the classifiers execution time
-   classifiers_predictions = {} # Dictionary to store the classifiers predictions
 
-   # Train each classifier and store the results in dictionaries
-   for classifier_name, classifier_function in CLASSIFIERS.items():
-      classifier_function = globals()[classifier_function] # Use globals() to get the function object from its name
-      accuracy, y_pred, parameters = classifier_function(train_features, train_labels, test_features, test_labels)
+   # Find the best combination
+   best_combination = find_best_combination(CLASSIFIERS, train_features, train_labels, test_features, test_labels)
 
-      classifiers_execution[classifier_name] = (accuracy, parameters)
-      classifiers_predictions[classifier_name] = y_pred
-
-   # Calculate majority vote predictions
-   majority_vote_predictions_result = majority_vote_predictions(classifiers_predictions)
-
-   # Calculate accuracy for majority vote predictions
-   majority_vote_accuracy = accuracy_score(test_labels, majority_vote_predictions_result)
-
-   # Print the majority vote accuracy
-   print(f"{BackgroundColors.GREEN}Majority Vote Accuracy: {BackgroundColors.CYAN}{majority_vote_accuracy * 100:.2f}%{Style.RESET_ALL}")
+   # Train the selected classifiers from the best combination
+   selected_classifiers_execution, selected_classifiers_predictions = train_selected_classifiers(CLASSIFIERS, best_combination["Classifiers"], train_features, train_labels, test_features, test_labels)
 
    # Add majority vote to the classifiers execution dictionary
-   classifiers_execution["Majority Vote"] = (majority_vote_accuracy, {})
+   selected_classifiers_execution["Majority Vote"] = (best_combination["Majority Vote Accuracy"], {"Best Combination": best_combination["Classifiers"], "Execution Time": f"{best_combination['Execution Time']:.5f} Seconds"})
 
-   print_classifiers_execution(classifiers_execution) # Print the classifiers accuracy, parameters and execution time
+   # Sort the classifiers by accuracy
+   selected_classifiers_execution = sort_classifiers_execution(selected_classifiers_execution)
+
+   print_classifiers_execution(selected_classifiers_execution) # Print the classifiers accuracy, parameters and execution time
 
    print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Thank you for using the Artificial Intelligence Supervised Learning Algorithms Comparison Project!{Style.RESET_ALL}") # Print the goodbye message
 
