@@ -40,10 +40,10 @@ SHOW_CLASSIFICATION_REPORT = False # If True, show the classification report
 # Classifiers Constants:
 CLASSIFIERS = {
    "K-Nearest Neighbors": "grid_search_k_nearest_neighbors",
-   "Decision Tree": "grid_search_decision_tree",
-   "Support Vector Machine": "grid_search_support_vector_machine",
-   "Multilayer Perceptron": "grid_search_multilayer_perceptron",
-   "Random Forest": "grid_search_random_forest",
+   # "Decision Tree": "grid_search_decision_tree",
+   # "Support Vector Machine": "grid_search_support_vector_machine",
+   # "Multilayer Perceptron": "grid_search_multilayer_perceptron",
+   # "Random Forest": "grid_search_random_forest",
    "Naive Bayes": "grid_search_naive_bayes",
 }
 
@@ -303,7 +303,7 @@ def grid_search_naive_bayes(train_features_values, train_label, test_features_va
       conf_matrix = confusion_matrix(test_label, y_pred) # Calculate the confusion matrix
       print(f"{BackgroundColors.GREEN}Naive Bayes Confusion Matrix:\n{BackgroundColors.CYAN}{conf_matrix}{Style.RESET_ALL}") # Print the confusion matrix
 
-   return accuracy, y_pred, {"Var Smoothing": grid.best_params_["var_smoothing"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
+   return accuracy, {"Best Parameters": grid.best_params_["var_smoothing"], "Execution Time": f"{execution_time:.5f} Seconds"} # Return the Accuracy and the Parameters
 
 # This function sort the classifiers by accuracy
 def sort_classifiers_execution(classifiers_execution):
@@ -315,11 +315,11 @@ def print_classifiers_execution(sorted_classifiers_execution):
    print(f"\n{BackgroundColors.GREEN}Classifiers Results:{BackgroundColors.CYAN}") # Print the classifiers results
 
    # loop through the classifiers name, accuracy and parameters
-   for classifier, accuracy in sorted_classifiers_execution.items():
-      print(f"{BackgroundColors.GREEN}{classifier}: {BackgroundColors.CYAN}{accuracy[0]*100:.2f}%{Style.RESET_ALL}")
-      for parameter, value in accuracy[1].items():
-         print(f"{BackgroundColors.GREEN}{parameter}: {BackgroundColors.CYAN}{value}{Style.RESET_ALL}")
-      print(f"{Style.RESET_ALL}")
+   for classifier, execution_options in sorted_classifiers_execution.items():
+      print(f"{BackgroundColors.GREEN}Classifier: {BackgroundColors.CYAN}{classifier}{Style.RESET_ALL}")
+      print(f"{BackgroundColors.GREEN}Accuracy: {BackgroundColors.CYAN}{(execution_options[0] * 100):.2f}%{Style.RESET_ALL}")
+      print(f"{BackgroundColors.GREEN}Parameters: {BackgroundColors.CYAN}{execution_options[1]['Best Parameters']}{Style.RESET_ALL}")
+      print(f"{BackgroundColors.GREEN}Execution Time: {BackgroundColors.CYAN}{execution_options[1]['Execution Time']}{Style.RESET_ALL}", end="\n\n")
 
 # This is the main function. It calls the other functions, building the project workflow
 def main():
@@ -332,10 +332,10 @@ def main():
    classifiers_execution = run_classifiers(train_features, train_labels, test_features, test_labels)
 
    # Sort the classifiers by execution time
-   classifiers_execution = sort_classifiers_execution(classifiers_execution)
+   sorted_classifiers_execution = sort_classifiers_execution(classifiers_execution)
 
    # Print the execution time
-   print_classifiers_execution(classifiers_execution)
+   print_classifiers_execution(sorted_classifiers_execution)
 
    print(f"{BackgroundColors.BOLD}{BackgroundColors.GREEN}Thank you for using the Artificial Intelligence Supervised Learning Algorithms Comparison Project!{Style.RESET_ALL}") # Print the goodbye message
 
