@@ -9,7 +9,6 @@
 ---
 
 This Python script reads training and test datasets, splitting each image into sections according to different grid sizes (1x1, 2x2, 3x3, and 5x5), and calculates the number of black and white pixels in each region of the split image. The results are stored in CSV files.
-TODO: Normalize the number of pixels by the total number of pixels in the image.
 
 </div>
 
