@@ -36,6 +36,7 @@ INPUT_FILES = ["./dataset/digits/training/5x5-normalized-pixel_count.txt", "./da
 # Output Constants:
 SHOW_CONFUSION_MATRIX = False # If True, show the confusion matrix
 SHOW_CLASSIFICATION_REPORT = False # If True, show the classification report
+SHOW_DATASET_INFORMATION = True # If True, show the dataset information
 
 # Classifiers Constants:
 CLASSIFIERS = {
@@ -62,6 +63,24 @@ def play_sound():
 
 # Register the function to play a sound when the program finishes
 atexit.register(play_sound)
+
+# This function prints if the dataset is balanced or not
+def dataset_balance(train_labels, test_labels):
+   # Calculate the number of samples per class in the training and test sets
+   qtd_labels_per_class_train = [np.count_nonzero(train_labels == label) for label in np.unique(train_labels)]
+   qtd_labels_per_class_test = [np.count_nonzero(test_labels == label) for label in np.unique(test_labels)]
+   if qtd_labels_per_class_train == qtd_labels_per_class_test:
+      print(f"{BackgroundColors.GREEN}The dataset is {BackgroundColors.CYAN}balanced{BackgroundColors.GREEN}, as there are same amounts of samples per class.{Style.RESET_ALL}", end="\n\n")
+   else:
+      print(f"{BackgroundColors.GREEN}The dataset is {BackgroundColors.RED}not balanced{BackgroundColors.GREEN}, as there are different amounts of samples per class.{Style.RESET_ALL}", end="\n\n")
+
+
+# This function prints the dataset information
+def print_dataset_information(train_features, train_labels, test_features):
+   print(f"{BackgroundColors.GREEN}Number of features: {BackgroundColors.CYAN}{train_features.shape[1]}{Style.RESET_ALL}")
+   print(f"{BackgroundColors.GREEN}Number of training instances: {BackgroundColors.CYAN}{train_features.shape[0]}{Style.RESET_ALL}")
+   print(f"{BackgroundColors.GREEN}Number of test instances: {BackgroundColors.CYAN}{test_features.shape[0]}{Style.RESET_ALL}")
+   print(f"{BackgroundColors.GREEN}Number of classes: {BackgroundColors.CYAN}{len(np.unique(train_labels))}{Style.RESET_ALL}")
 
 # This function loads the data from the dataset files and returns the training and test sets
 def load_data():
@@ -327,10 +346,14 @@ def main():
    print(f"{BackgroundColors.CLEAR_TERMINAL}{BackgroundColors.BOLD}{BackgroundColors.GREEN}Welcome to the Artificial Intelligence Supervised Learning Algorithms Comparison Project!{Style.RESET_ALL}") # Print the welcome message
 
    # Load the data
-   train_features, train_labelss, test_features, test_labelss = load_data()
+   train_features, train_labels, test_features, test_labels = load_data()
+
+   if SHOW_DATASET_INFORMATION: # Show the dataset information if it is set to True
+      print_dataset_information(train_features, train_labels, test_features) # Print the dataset information
+      dataset_balance(train_labels, test_labels) # Print if the dataset is balanced or not
    
    # Run the classifiers
-   classifiers_execution = run_classifiers(train_features, train_labelss, test_features, test_labelss)
+   classifiers_execution = run_classifiers(train_features, train_labels, test_features, test_labels)
 
    # Sort the classifiers by execution time
    sorted_classifiers_execution = sort_classifiers_execution(classifiers_execution)
