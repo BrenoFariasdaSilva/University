@@ -167,9 +167,9 @@ def grid_search_decision_tree(train_features, train_labels, test_features, test_
 
 # This function creates a SVM classifier with grid search and prints the classification report
 def grid_search_support_vector_machine(train_features, train_labels, test_features, test_labels):
-   svm = svm.SVC(probability=True) # Instantiate the classifier with probability
+   svmVar = svm.SVC(probability=True) # Instantiate the classifier with probability
    ss = StandardScaler() # Instantiate the standard scaler
-   pipeline = Pipeline([("scaler", ss), ("svm", svm)]) # Instantiate the pipeline
+   pipeline = Pipeline([("scaler", ss), ("svm", svmVar)]) # Instantiate the pipeline
 
    # Define the parameters for the grid search
    param_grid = {
