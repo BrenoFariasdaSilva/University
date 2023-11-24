@@ -315,11 +315,12 @@ def print_classifiers_execution(sorted_classifiers_execution):
    print(f"\n{BackgroundColors.GREEN}Classifiers Results:{BackgroundColors.CYAN}") # Print the classifiers results
 
    # loop through the classifiers name, accuracy and parameters
-   for classifier, execution_options in sorted_classifiers_execution.items():
-      print(f"{BackgroundColors.GREEN}Classifier: {BackgroundColors.CYAN}{classifier}{Style.RESET_ALL}")
-      print(f"{BackgroundColors.GREEN}Accuracy: {BackgroundColors.CYAN}{(execution_options[0] * 100):.2f}%{Style.RESET_ALL}")
-      print(f"{BackgroundColors.GREEN}Parameters: {BackgroundColors.CYAN}{execution_options[1]['Best Parameters']}{Style.RESET_ALL}")
-      print(f"{BackgroundColors.GREEN}Execution Time: {BackgroundColors.CYAN}{execution_options[1]['Execution Time']}{Style.RESET_ALL}", end="\n\n")
+   for classifier, accuracy in sorted_classifiers_execution.items():
+      print(f"{BackgroundColors.GREEN}{classifier}: {BackgroundColors.CYAN}{accuracy[0]*100:.2f}%{Style.RESET_ALL}")
+      for parameter, value in accuracy[1].items():
+         print(f"{BackgroundColors.GREEN}{parameter}: {BackgroundColors.CYAN}{value}{Style.RESET_ALL}")
+      print(f"{Style.RESET_ALL}")
+
 
 # This is the main function. It calls the other functions, building the project workflow
 def main():
