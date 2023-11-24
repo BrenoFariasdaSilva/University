@@ -299,7 +299,7 @@ def grid_search_random_forest(train_features, train_labels, test_features, test_
 def grid_search_naive_bayes(train_features, train_labels, test_features, test_labels):
    # Define the parameters for the grid search
    param_grid = {
-      "priors": [None, [0.2, 0.2, 0.2, 0.2, 0.2]], # Prior probabilities of the classes.
+      "priors": [None, [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]], # Prior probabilities of the classes.
       "var_smoothing": [1e-9, 1e-8, 1e-7, 1e-6, 1e-5], # The var_smoothing parameter is the value added to the variance for calculation stability to avoid division by zero.
    }
 
