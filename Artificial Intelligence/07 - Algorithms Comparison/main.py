@@ -336,7 +336,7 @@ def print_classifiers_execution(sorted_classifiers_execution):
    # loop through the classifiers name, accuracy and parameters
    for classifier, accuracy in sorted_classifiers_execution.items():
       print(f"{BackgroundColors.GREEN}{classifier}: {BackgroundColors.CYAN}{accuracy[0]*100:.2f}%{Style.RESET_ALL}")
-      for parameter, value in accuracy[1].items():
+      for parameter, value in accuracy[2].items():
          print(f"{BackgroundColors.GREEN}{parameter}: {BackgroundColors.CYAN}{value}{Style.RESET_ALL}")
       print(f"{Style.RESET_ALL}")
 
