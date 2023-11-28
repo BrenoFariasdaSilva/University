@@ -55,5 +55,5 @@ iptables -A OUTPUT -p tcp --dport 23 -j DROP
 
 echo "Only Allow LAN1 and LAN2 Access DNS from 8.8.8.8"
 # 09 - Todos os hosts da LAN1 e LAN2 devem obrigatoriamente utilizar o 8.8.8.8 como servidor DNS.
-iptables -A FORWARD -p tcp --sport 53 -d !8.8.8.8 -j DROP # Block DNS from other servers
-iptables -t nat -A PREROUTING -p tcp --sport 53 -d !8.8.8.8 -j DNAT --to 8.8.8.8 # Redirect DNS from other IPs to 8.8.8.8
+iptables -A FORWARD -p tcp --sport 53 ! -d 8.8.8.8 -j DROP # Block DNS from other servers
+iptables -t nat -A PREROUTING -p tcp --sport 53 -j DNAT --to 8.8.8.8 # Redirect DNS from other IPs to 8.8.8.8
