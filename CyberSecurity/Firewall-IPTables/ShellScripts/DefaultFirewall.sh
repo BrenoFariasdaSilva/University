@@ -5,7 +5,7 @@ iptables -F
 iptables -t nat -F
 iptables -t mangle -F
 
-echo "Setting Policies"
+echo "Setting Up Firewall Policies"
 iptables -P INPUT ACCEPT 
 iptables -P OUTPUT ACCEPT
 iptables -P FORWARD ACCEPT
