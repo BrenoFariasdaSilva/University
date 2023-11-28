@@ -1,12 +1,12 @@
 #!/usr/bin/bash
 
-echo "Cleaning the Firewall"
+echo "Cleaning the Firewall Rules"
 
 iptables -F
 iptables -t nat -F
 iptables -t mangle -F
 
-echo "Setting Policies"
+echo "Setting Up Firewall Policies as DROP Everything"
 
 iptables -P INPUT DROP
 iptables -P OUTPUT DROP
