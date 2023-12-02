@@ -1,9 +1,9 @@
 #!/usr/bin/bash
 
 echo "Cleaning the Firewall"
-iptables -F
-iptables -t nat -F
-iptables -t mangle -F
+iptables -F # Clean the Filter Table
+iptables -t nat -F # Clean the NAT Table
+iptables -t mangle -F # Clean the Mangle Table
 
 echo "Setting Policies"
 # 01 - Utilizar o política de liberar tudo em todas as situações, exceto na INPUT, que deve ser DROP;

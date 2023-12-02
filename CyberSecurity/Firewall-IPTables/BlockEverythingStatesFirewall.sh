@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 echo "Cleaning Tables"
-iptables -F
-iptables -t nat -F
-iptables -t mangle -F
+iptables -F # Clean the Filter Table
+iptables -t nat -F # Clean the NAT Table
+iptables -t mangle -F # Clean the Mangle Table
 
 echo "Setting Up Firewall Policies"
 

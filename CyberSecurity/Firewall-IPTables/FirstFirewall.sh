@@ -1,9 +1,9 @@
 #!/usr/bin/bash
 
 echo "Cleaning the Firewall Rules"
-iptables -F
-iptables -t nat -F
-iptables -t mangle -F
+iptables -F # Clean the Filter Table
+iptables -t nat -F # Clean the NAT Table
+iptables -t mangle -F # Clean the Mangle Table
 
 echo "Setting Up Firewall Policies as ACCEPT Everything"
 iptables -P INPUT ACCEPT
