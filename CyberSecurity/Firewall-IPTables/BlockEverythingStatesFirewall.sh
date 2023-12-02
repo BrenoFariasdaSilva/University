@@ -27,7 +27,7 @@ iptables -A FORWARD -d 10.2.0.4 -p tcp --dport 443 -m state --state NEW,ESTABLIS
 iptables -A FORWARD -s 10.2.0.4 -m state --state ESTABLISHED,RELATED -j ACCEPT
 
 echo "HOST 1 Can Access Firewall by SSH controlled by MAC Address"
-iptables -A INPUT -p tcp --dport 22 -m mac --mac-source  fe:61:6b:46:da:a0 -j ACCEPT
+iptables -A INPUT -p tcp --dport 22 -m mac --mac-source fe:61:6b:46:da:a0 -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
 
 echo "Ping Firewall 4 Times"

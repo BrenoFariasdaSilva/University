@@ -30,5 +30,5 @@ iptables -t nat -A PREROUTING -i eth1 -p tcp --dport 80 -j REDIRECT
 
 echo "Filtering Rules"
 
-iptables -A FORWARD -i eth2  -o eth0 -p tcp --dport 80 -d 10.2.0.3 -j ACCEPT
+iptables -A FORWARD -i eth2 -o eth0 -p tcp --dport 80 -d 10.2.0.3 -j ACCEPT
 iptables -A FORWARD -p tcp --dport 80 -s 10.2.0.3 -j ACCEPT
