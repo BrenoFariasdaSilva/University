@@ -6,23 +6,23 @@ iptables -t nat -F # Clean the NAT Table
 iptables -t mangle -F # Clean the Mangle Table
 
 echo "Setting Policies"
-# 01 - Utilizar o política de liberar tudo em todas as situações, exceto na INPUT, que deve ser DROP;
+# 01 - Utilizar o política de liberar tudo em todas as situações, exceto na INPUT, que deve ser DROP.
 iptables -P INPUT DROP
 iptables -P OUTPUT ACCEPT
 iptables -P FORWARD ACCEPT
 
 echo "NAT Rules"
-# 02- A LAN1 deve ser uma LAN screened
+# 02 - A LAN1 deve ser uma LAN Screened, ou seja, uma LAN que pode acessar a Internet, mas não pode ser acessada da Internet.
 # Nat faz isso, mas para as duas LANs.
 iptables -t nat -A POSTROUTING -o eth2 -j MASQUERADE
 
-echo "Allow Host C be Accessed via HTTP/HTTPS from WANs"
-# 03 - O Host C deve ser acessado via HTTP/HTTPS de qualquer rede, inclusive da Internet;
+echo "Allow Host C to be Accessed via HTTP/HTTPS from WANs"
+# 03 - O Host C deve ser acessado via HTTP/HTTPS de qualquer rede, inclusive da Internet.
 # A saída não precisa ser alterada, pois o NAT já faz isso, basta redirecionar o pacote que chegou.
 iptables -t nat -A PREROUTING -i eth2 -p tcp --dport 80 -j DNAT --to 10.2.0.3
 iptables -t nat -A PREROUTING -i eth2 -p tcp --dport 443 -j DNAT --to 10.2.0.3
 
-echo "Allow Host D Be Accessed via DNS, SMTP and POP3 from WANs"
+echo "Allow Host D to be Accessed via DNS, SMTP and POP3 from WANs"
 # 04 - O Host D deve ser acessado via DNS, SMTP e POP3 de qualquer rede, inclusive da Internet;
 # A saída não precisa ser alterada, pois o NAT já faz isso, basta redirecionar o pacote que chegou.
 iptables -t nat -A PREROUTING -i eth2 -p tcp --dport 53 -j DNAT --to 10.2.0.4
