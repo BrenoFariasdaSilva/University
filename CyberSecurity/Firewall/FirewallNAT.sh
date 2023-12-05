@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 
 echo "Cleaning the Firewall Rules"
-
 iptables -F # Clean the Filter Table
 iptables -t nat -F # Clean the NAT Table
 iptables -t mangle -F # Clean the Mangle Table

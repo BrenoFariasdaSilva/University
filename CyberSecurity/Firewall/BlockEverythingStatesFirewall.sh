@@ -5,7 +5,6 @@ iptables -t nat -F # Clean the NAT Table
 iptables -t mangle -F # Clean the Mangle Table
 
 echo "Setting Up Firewall Policies"
-
 iptables -P INPUT DROP
 iptables -P OUTPUT DROP
 iptables -P FORWARD DROP
