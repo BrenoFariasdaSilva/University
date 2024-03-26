@@ -1,5 +1,5 @@
 setup:
-	sudo apt-get build-dep python3 -y
+	sudo apt build-dep python3 -y
 
 run:
 	python3 main.py

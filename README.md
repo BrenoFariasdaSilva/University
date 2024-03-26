@@ -73,7 +73,7 @@ You can use this repository as a way to measure your learning to ensure you know
   ```bash
   # C:
   sudo apt install build-essential -y
-  sudo apt-get install manpages-dev -y
+  sudo apt install manpages-dev -y
   ```
 
 * C++:
@@ -85,16 +85,16 @@ You can use this repository as a way to measure your learning to ensure you know
 * Python:
   ```bash
   # Python:
-  sudo apt-get install python3 python3-venv python3-pip -y
+  sudo apt install python3 python3-venv python3-pip -y
   ```
 
 * Zip and Unzip Tools: Zip and Unzip might be some necessary tools to install SDKMAN
   ```bash
   # Unzip:
-  sudo apt-get install unzip -y
+  sudo apt install unzip -y
 
   # Zip:
-  sudo apt-get install zip -y
+  sudo apt install zip -y
   ```
 
 * SDKMAN Tool: SDKMAN is a tool for managing parallel versions of multiple Software Development Kits on most Unix based systems. \
