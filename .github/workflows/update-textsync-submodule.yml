@@ -35,6 +35,6 @@ jobs:
 
       - name: Commit and push if changes are detected
         run: |
-          git add TextSync
+          git add "Distributed Systems/TextSync"
           git diff --cached --quiet || git commit -m "UPDATE: Automatically Updating the TextSync SubModule to Latest Version."
           git push || echo "No changes to push."
