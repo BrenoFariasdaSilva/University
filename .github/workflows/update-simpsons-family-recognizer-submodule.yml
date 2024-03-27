@@ -35,6 +35,6 @@ jobs:
 
       - name: Commit and push if changes are detected
         run: |
-          git add Simpsons-Family-Recognizer
+          git add "Artificial Intelligence/Simpsons-Family-Recognizer"
           git diff --cached --quiet || git commit -m "UPDATE: Automatically Updating the Simpsons-Family-Recognizer SubModule to Latest Version."
           git push || echo "No changes to push."
