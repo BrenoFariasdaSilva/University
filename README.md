@@ -18,6 +18,7 @@ You can use this repository as a way to measure your learning to ensure you know
 
 <div align="center">
 
+![GitHub Build/WorkFlow](https://img.shields.io/github/actions/workflow/status/BrenoFariasDaSilva/University/update-scientific-research-submodule.yml)
 ![Build Status](https://github.com/BrenoFariasdaSilva/University-Exercises/actions/workflows/build.yml/badge.svg)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/BrenoFariasdaSilva/University)
 ![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/BrenoFariasdaSilva/University)
