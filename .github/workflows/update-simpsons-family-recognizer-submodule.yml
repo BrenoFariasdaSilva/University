@@ -29,7 +29,7 @@ jobs:
 
       - name: Forcefully update Simpsons-Family-Recognizer submodule to latest
         run: |
-          cd Simpsons-Family-Recognizer
+          cd "Artificial Intelligence/Simpsons-Family-Recognizer"
           git fetch origin main
           git reset --hard origin/main
 
