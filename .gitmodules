@@ -7,3 +7,6 @@
 [submodule "Research-Methodology"]
 	path = Research-Methodology
 	url = https://github.com/BrenoFariasdaSilva/Research-Methodology
+[submodule "DataBase"]
+	path = DataBase
+	url = https://github.com/BrenoFariasdaSilva/DataBase
