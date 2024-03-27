@@ -1,0 +1,3 @@
+[submodule "Distributed Systems/TextSync"]
+	path = Distributed Systems/TextSync
+	url = https://github.com/BrenoFariasdaSilva/TextSync
