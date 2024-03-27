@@ -29,7 +29,7 @@ jobs:
 
       - name: Forcefully update TextSync submodule to latest
         run: |
-          cd TextSync
+          cd "Distributed Systems/TextSync"
           git fetch origin main
           git reset --hard origin/main
 
