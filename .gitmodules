@@ -1,3 +1,6 @@
 [submodule "Distributed Systems/TextSync"]
 	path = Distributed Systems/TextSync
 	url = https://github.com/BrenoFariasdaSilva/TextSync
+[submodule "Artificial Intelligence/Simpsons-Family-Recognizer"]
+	path = Artificial Intelligence/Simpsons-Family-Recognizer
+	url = https://github.com/BrenoFariasdaSilva/Simpsons-Family-Recognizer
