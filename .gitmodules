@@ -10,3 +10,6 @@
 [submodule "DataBase"]
 	path = DataBase
 	url = https://github.com/BrenoFariasdaSilva/DataBase
+[submodule "Scientific-Research"]
+	path = Scientific-Research
+	url = https://github.com/BrenoFariasdaSilva/Scientific-Research
