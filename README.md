@@ -41,7 +41,7 @@ You can use this repository as a way to measure your learning to ensure you know
   - [Table of Contents](#table-of-contents)
   - [Languages:](#languages)
   - [Setup](#setup)
-    - [Clone without Submodule](#clone-without-submodule)
+    - [Clone without Submodules](#clone-without-submodules)
     - [Clone with Submodule](#clone-with-submodule)
     - [Clone Submodule](#clone-submodule)
   - [Installation](#installation)
@@ -73,9 +73,9 @@ You can use this repository as a way to measure your learning to ensure you know
 
 ## Setup
 
-### Clone without Submodule
+### Clone without Submodules
 
-In order to clone this repository without the submodule (Worked-Example-Miner), you can use the following command:
+In order to clone this repository without the submodules (DataBase, Research-Methodology, Scientific Research, Simpsons-Family-Recognizer, TextSync, Worked-Example-Miner), you can use the following command:
 
 ```bash
 git clone https://github.com/BrenoFariasdaSilva/University.git
@@ -83,7 +83,7 @@ git clone https://github.com/BrenoFariasdaSilva/University.git
 
 ### Clone with Submodule
 
-In order to clone this repository with the submodule (Worked-Example-Miner), you can use the following command:
+In order to clone this repository with the submodules (DataBase, Research-Methodology, Scientific Research, Simpsons-Family-Recognizer, TextSync, Worked-Example-Miner), you can use the following command:
 
 ```bash
 git clone --recurse-submodules https://github.com/BrenoFariasdaSilva/University.git
@@ -91,7 +91,7 @@ git clone --recurse-submodules https://github.com/BrenoFariasdaSilva/University.
 
 ### Clone Submodule
 
-In case you have already cloned the repository and forgot to clone the submodule, you can use the following command to clone the submodule:
+In case you have already cloned the repository and forgot to clone the submodules, you can use the following command to clone the submodule:
 
 ```bash
 git submodule init
