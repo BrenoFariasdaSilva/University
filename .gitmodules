@@ -4,3 +4,6 @@
 [submodule "Artificial Intelligence/Simpsons-Family-Recognizer"]
 	path = Artificial Intelligence/Simpsons-Family-Recognizer
 	url = https://github.com/BrenoFariasdaSilva/Simpsons-Family-Recognizer
+[submodule "Research-Methodology"]
+	path = Research-Methodology
+	url = https://github.com/BrenoFariasdaSilva/Research-Methodology
