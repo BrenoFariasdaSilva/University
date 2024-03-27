@@ -40,6 +40,10 @@ You can use this repository as a way to measure your learning to ensure you know
 - [University. ](#university-)
   - [Table of Contents](#table-of-contents)
   - [Languages:](#languages)
+  - [Setup](#setup)
+    - [Clone without Submodule](#clone-without-submodule)
+    - [Clone with Submodule](#clone-with-submodule)
+    - [Clone Submodule](#clone-submodule)
   - [Installation](#installation)
   - [How to Run](#how-to-run)
   - [Contributing](#contributing)
@@ -66,6 +70,33 @@ You can use this repository as a way to measure your learning to ensure you know
     &nbsp;
   </p>
 </div>
+
+## Setup
+
+### Clone without Submodule
+
+In order to clone this repository without the submodule (Worked-Example-Miner), you can use the following command:
+
+```bash
+git clone https://github.com/BrenoFariasdaSilva/University.git
+```
+
+### Clone with Submodule
+
+In order to clone this repository with the submodule (Worked-Example-Miner), you can use the following command:
+
+```bash
+git clone --recurse-submodules https://github.com/BrenoFariasdaSilva/University.git
+```
+
+### Clone Submodule
+
+In case you have already cloned the repository and forgot to clone the submodule, you can use the following command to clone the submodule:
+
+```bash
+git submodule init
+git submodule update
+```
 
 ## Installation
 
